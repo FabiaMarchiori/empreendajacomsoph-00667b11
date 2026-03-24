@@ -8,31 +8,31 @@
   :root {
     /* Base: #0A192F = hsl(217, 65%, 11%) */
     --background: 217 65% 11%;
-    --foreground: 210 40% 92%;
+    --foreground: 0 0% 100%;
 
     /* Secondary: #102A43 = hsl(210, 63%, 16%) */
     --card: 210 63% 16%;
-    --card-foreground: 210 40% 92%;
+    --card-foreground: 0 0% 100%;
 
     --popover: 210 63% 16%;
-    --popover-foreground: 210 40% 92%;
+    --popover-foreground: 0 0% 100%;
 
     /* Primary: #00FFFF = hsl(180, 100%, 50%) */
     --primary: 180 100% 50%;
     --primary-foreground: 217 65% 11%;
 
     --secondary: 210 63% 16%;
-    --secondary-foreground: 210 40% 92%;
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 210 50% 20%;
-    --muted-foreground: 210 20% 55%;
+    --muted-foreground: 0 0% 80%;
 
     /* Tertiary: #007A7A = hsl(180, 100%, 24%) */
     --accent: 180 100% 24%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
     --border: 210 40% 22%;
     --input: 210 40% 22%;
@@ -40,14 +40,14 @@
 
     --radius: 0.75rem;
 
-    /* Sidebar uses #0A192F base, slightly darker */
-    --sidebar-background: 217 68% 9%;
-    --sidebar-foreground: 210 20% 70%;
+    /* Sidebar */
+    --sidebar-background: 210 63% 16%;
+    --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 180 100% 50%;
     --sidebar-primary-foreground: 217 65% 11%;
-    --sidebar-accent: 210 63% 16%;
-    --sidebar-accent-foreground: 210 40% 92%;
-    --sidebar-border: 210 40% 18%;
+    --sidebar-accent: 210 50% 20%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 210 40% 22%;
     --sidebar-ring: 180 100% 50%;
 
     /* Custom tokens */
@@ -64,7 +64,6 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
-    /* Real gradient background using exact palette */
     background: linear-gradient(135deg, #0A192F 0%, #102A43 55%, #0A192F 100%);
     background-attachment: fixed;
     min-height: 100vh;
@@ -72,6 +71,15 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', 'Inter', sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  h1 { @apply text-2xl lg:text-3xl font-bold leading-tight; }
+  h2 { @apply text-lg lg:text-xl font-semibold leading-snug; }
+  h3 { @apply text-base font-semibold leading-snug; }
+
+  p {
+    @apply leading-relaxed;
   }
 }
 
@@ -90,11 +98,11 @@
   }
 
   .shadow-glow {
-    box-shadow: 0 0 20px -5px hsl(180 100% 50% / 0.12);
+    box-shadow: 0 0 24px -6px hsl(180 100% 50% / 0.15);
   }
 
   .shadow-glow-sm {
-    box-shadow: 0 0 10px -3px hsl(180 100% 50% / 0.08);
+    box-shadow: 0 0 12px -3px hsl(180 100% 50% / 0.1);
   }
 
   /* Gradient: cards / hero / premium blocks — #102A43 → #0A192F */
@@ -118,5 +126,10 @@
   /* Primary button gradient — #00FFFF → #00CFCF */
   .bg-gradient-primary-btn {
     background: linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%);
+  }
+
+  /* Sidebar gradient */
+  .bg-gradient-sidebar {
+    background: linear-gradient(180deg, #102A43 0%, #0A192F 100%);
   }
 }
