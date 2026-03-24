@@ -52,17 +52,18 @@ export default function HomePage() {
           <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[80px] -translate-y-1/3 translate-x-1/4 opacity-20" style={{ background: 'radial-gradient(circle, #007A7A 0%, transparent 70%)' }} />
 
           {/* Soph hero image - right side, integrated */}
-          <div className="absolute right-4 bottom-0 top-0 w-[38%] lg:w-[35%] pointer-events-none hidden md:flex items-center justify-center">
+          <div className="absolute right-0 bottom-0 top-0 w-[40%] lg:w-[36%] pointer-events-none hidden md:flex items-end justify-center">
             <img
               src={sophHero}
               alt=""
-              className="h-[90%] w-auto max-w-full object-contain opacity-60"
+              className="h-[95%] w-auto max-w-full object-contain object-bottom opacity-70"
               style={{
-                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 20%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.5) 100%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 20%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.5) 100%)',
+                maskImage: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 85%, transparent 100%), linear-gradient(to right, transparent 0%, rgba(0,0,0,0.7) 15%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.7) 90%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 85%, transparent 100%), linear-gradient(to right, transparent 0%, rgba(0,0,0,0.7) 15%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.7) 90%, transparent 100%)',
+                maskComposite: 'intersect',
+                WebkitMaskComposite: 'destination-in',
               }}
             />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,25,47,0.6) 0%, rgba(0,122,122,0.1) 100%)' }} />
           </div>
 
           <div className="relative z-10 max-w-lg">
