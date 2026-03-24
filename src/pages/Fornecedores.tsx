@@ -170,23 +170,23 @@ export default function FornecedoresPage() {
         className="flex flex-wrap gap-2.5"
       >
         {categories.map((cat) => {
-          const isActive = activeCategory === cat;
+          const isActive = activeCategory === cat.key;
           return (
             <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 border ${
+              key={cat.key}
+              onClick={() => setActiveCategory(cat.key)}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 ${
                 isActive
-                  ? "text-[#0A192F] border-primary shadow-[0_0_12px_-2px_rgba(0,255,255,0.4)]"
-                  : "border-[#102A43] text-white hover:border-[#007A7A]/60"
+                  ? "text-[#0A192F] shadow-[0_0_16px_-2px_rgba(0,255,255,0.5)]"
+                  : "text-white border-2 border-[#1E3A5F] hover:border-[#007A7A]"
               }`}
               style={
                 isActive
-                  ? { background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)" }
+                  ? { background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)", border: "2px solid #00FFFF" }
                   : { background: "#102A43" }
               }
             >
-              {cat}
+              {cat.label}
             </button>
           );
         })}
