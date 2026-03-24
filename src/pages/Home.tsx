@@ -78,7 +78,7 @@ export default function HomePage() {
               Você tem <span className="font-bold text-[#00FFFF]">3 acessos ativos</span> e <span className="font-bold text-[#00FFFF]">2 próximos passos</span> recomendados.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button onClick={() => navigate("/estruture")} className="px-5 py-2.5 rounded-xl text-[#0A192F] text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_0_20px_-4px_rgba(0,255,255,0.4)]" style={{ background: 'linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)' }}>
+              <button onClick={() => navigate("/estruture")} className="px-5 py-2.5 rounded-xl text-[#0A192F] text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_0_20px_-4px_rgba(0,255,255,0.4)]" style={{ background: 'linear-gradient(90deg, #007A7A 0%, #00FFFF 100%)' }}>
                 Continuar jornada <ArrowRight className="h-4 w-4" />
               </button>
               <button onClick={() => navigate("/acessos")} className="px-5 py-2.5 rounded-xl border-2 border-white/40 text-white text-sm font-bold hover:bg-white/10 hover:border-white/60 transition-all">
