@@ -37,8 +37,8 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
         </div>
         <StatusBadge status={status} />
       </div>
-      <h3 className="font-display font-semibold text-sm text-foreground mb-1.5">{title}</h3>
-      <p className="text-xs text-foreground/70 leading-relaxed mb-5">{description}</p>
+      <h3 className="font-display font-bold text-sm text-foreground mb-1.5 leading-snug">{title}</h3>
+      <p className="text-xs text-white/80 leading-relaxed mb-5">{description}</p>
       <div className="flex items-center text-xs font-semibold">
         {isAccessible ? (
           <span className="text-primary flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
