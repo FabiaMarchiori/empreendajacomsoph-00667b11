@@ -46,6 +46,34 @@ export function AppSidebar() {
   const isActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
+  const renderItem = (item: typeof mainItems[0]) => {
+    const active = isActive(item.url);
+    return (
+      <SidebarMenuItem key={item.title}>
+        <SidebarMenuButton asChild tooltip={item.title} isActive={active}>
+          <NavLink
+            to={item.url}
+            end={item.url === "/"}
+            className={`flex items-center gap-3 px-3 py-3.5 rounded-xl text-sm transition-all ${
+              active
+                ? "text-white font-bold border-2 border-[#00FFFF] shadow-[0_0_16px_-3px_rgba(0,255,255,0.4)]"
+                : "text-white font-semibold hover:bg-white/5"
+            }`}
+            activeClassName=""
+            style={
+              active
+                ? { background: 'linear-gradient(90deg, #007A7A 0%, #00FFFF 100%)' }
+                : undefined
+            }
+          >
+            <item.icon className="h-8 w-8 flex-shrink-0" strokeWidth={2.2} />
+            {!collapsed && <span className="text-[15px]">{item.title}</span>}
+          </NavLink>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    );
+  };
+
   return (
     <Sidebar
       collapsible="icon"
@@ -60,14 +88,14 @@ export function AppSidebar() {
             className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: 'linear-gradient(135deg, #00FFFF 0%, #007A7A 100%)' }}
           >
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <Sparkles className="h-5 w-5 text-[#0A192F]" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="font-display font-bold text-sm text-foreground tracking-tight">
+              <span className="font-display font-bold text-sm text-white tracking-tight">
                 EmpreendaJá
               </span>
-              <span className="text-[10px] text-foreground/60 font-medium">com Soph</span>
+              <span className="text-[10px] text-white/70 font-semibold">com Soph</span>
             </div>
           )}
         </div>
@@ -76,70 +104,15 @@ export function AppSidebar() {
       <SidebarContent className="px-2">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {mainItems.map((item) => {
-                const active = isActive(item.url);
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={item.title}
-                      isActive={active}
-                    >
-                      <NavLink
-                        to={item.url}
-                        end={item.url === "/"}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm transition-all ${
-                          active
-                            ? ""
-                            : "text-foreground/70 hover:text-foreground hover:bg-foreground/5"
-                        }`}
-                        activeClassName="text-primary font-semibold border border-primary/30 shadow-glow-sm"
-                        style={active ? { background: 'linear-gradient(135deg, rgba(0,255,255,0.12) 0%, rgba(0,122,122,0.08) 100%)' } : undefined}
-                      >
-                        <item.icon className="h-6 w-6 flex-shrink-0" />
-                        {!collapsed && <span>{item.title}</span>}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
+            <SidebarMenu>{mainItems.map(renderItem)}</SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="mx-3 my-3 border-t border-foreground/10" />
+        <div className="mx-3 my-3 border-t border-white/10" />
 
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {secondaryItems.map((item) => {
-                const active = isActive(item.url);
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={item.title}
-                      isActive={active}
-                    >
-                      <NavLink
-                        to={item.url}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm transition-all ${
-                          active
-                            ? ""
-                            : "text-foreground/70 hover:text-foreground hover:bg-foreground/5"
-                        } ${item.url === "/soph" && !active ? "text-primary/90" : ""}`}
-                        activeClassName="text-primary font-semibold border border-primary/30 shadow-glow-sm"
-                        style={active ? { background: 'linear-gradient(135deg, rgba(0,255,255,0.12) 0%, rgba(0,122,122,0.08) 100%)' } : undefined}
-                      >
-                        <item.icon className="h-6 w-6 flex-shrink-0" />
-                        {!collapsed && <span>{item.title}</span>}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
+            <SidebarMenu>{secondaryItems.map(renderItem)}</SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -147,16 +120,19 @@ export function AppSidebar() {
       <SidebarFooter className="p-3">
         {!collapsed && (
           <div
-            className="rounded-xl p-4 border border-primary/15"
+            className="rounded-xl p-4 border border-[#00FFFF]/20"
             style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}
           >
             <div className="flex items-center gap-2.5 mb-2">
-              <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/20">
-                <MessageCircle className="h-4 w-4 text-primary" />
+              <div
+                className="h-8 w-8 rounded-lg flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #00FFFF 0%, #007A7A 100%)' }}
+              >
+                <MessageCircle className="h-4 w-4 text-[#0A192F]" />
               </div>
-              <span className="text-xs font-semibold text-foreground">Soph diz:</span>
+              <span className="text-xs font-bold text-white">Soph diz:</span>
             </div>
-            <p className="text-[11px] text-foreground/90 leading-relaxed">
+            <p className="text-[11px] text-white/90 leading-relaxed font-medium">
               "Precisa de ajuda? Estou aqui para te orientar!"
             </p>
           </div>
