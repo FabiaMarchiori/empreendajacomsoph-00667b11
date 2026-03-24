@@ -66,7 +66,7 @@ export function AppSidebar() {
                 : undefined
             }
           >
-            <item.icon className="h-10 w-10 flex-shrink-0" strokeWidth={2.2} />
+            <item.icon className="h-12 w-12 flex-shrink-0" strokeWidth={2.2} />
             {!collapsed && <span className="text-[15px]">{item.title}</span>}
           </NavLink>
         </SidebarMenuButton>
