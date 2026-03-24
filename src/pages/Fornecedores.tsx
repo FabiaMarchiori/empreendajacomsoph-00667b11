@@ -4,12 +4,12 @@ import { ProductCard } from "@/components/ProductCard";
 import { useState } from "react";
 
 const categories = [
-  "Todos",
-  "Importadoras 25 de Março",
-  "Moda Brás",
-  "Calçados Atacadistas",
-  "Semi-jóias de Limeira",
-  "Fabricantes Nacionais",
+  { label: "Todos", key: "Todos" },
+  { label: "25 de Março", key: "Importadoras 25 de Março" },
+  { label: "Moda Brás", key: "Moda Brás" },
+  { label: "Calçados", key: "Calçados Atacadistas" },
+  { label: "Semi-jóias", key: "Semi-jóias de Limeira" },
+  { label: "Fabricantes Nacionais", key: "Fabricantes Nacionais" },
 ];
 
 const suppliers = [
