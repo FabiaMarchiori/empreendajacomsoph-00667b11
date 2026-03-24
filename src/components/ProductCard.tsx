@@ -20,7 +20,7 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
       whileHover={{ y: -3 }}
       onClick={isComingSoon ? undefined : onClick}
       className={cn(
-        "group relative rounded-2xl border p-6 transition-all duration-200",
+        "group relative rounded-2xl border p-6 transition-all duration-200 flex flex-col h-full min-h-[220px]",
         isComingSoon ? "cursor-default" : "cursor-pointer",
         isPremium
           ? "bg-gradient-card border-primary/15 hover:border-primary/40 shadow-glow-sm hover:shadow-glow"
