@@ -12,11 +12,14 @@ import {
   Star,
   Zap,
   Check,
-  Loader2,
   Lock,
+  Gem,
+  Factory,
+  ShoppingBag,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ProductCard } from "@/components/ProductCard";
+import sophHero from "@/assets/soph-hero.png";
 
 const container = {
   hidden: { opacity: 0 },
@@ -45,22 +48,38 @@ export default function HomePage() {
     <div className="p-6 lg:p-10 max-w-6xl mx-auto space-y-10">
       {/* Bloco 1 — Hero / Boas-vindas */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="bg-gradient-hero rounded-2xl p-8 lg:p-10 border border-border/60 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[80px] -translate-y-1/3 translate-x-1/4 opacity-30" style={{ background: 'radial-gradient(circle, #007A7A 0%, transparent 70%)' }} />
-          <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-[60px] translate-y-1/3 -translate-x-1/4 opacity-20" style={{ background: 'radial-gradient(circle, #00FFFF 0%, transparent 70%)' }} />
-          <div className="relative">
+        <motion.div variants={item} className="bg-gradient-hero rounded-2xl p-8 lg:p-10 border border-border/60 relative overflow-hidden min-h-[260px]">
+          {/* Background ambient glows */}
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[80px] -translate-y-1/3 translate-x-1/4 opacity-20" style={{ background: 'radial-gradient(circle, #007A7A 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-[60px] translate-y-1/3 -translate-x-1/4 opacity-15" style={{ background: 'radial-gradient(circle, #00FFFF 0%, transparent 70%)' }} />
+          
+          {/* Soph hero image - right side, integrated */}
+          <div className="absolute right-0 bottom-0 top-0 w-[45%] lg:w-[40%] pointer-events-none hidden md:block">
+            <img
+              src={sophHero}
+              alt=""
+              className="absolute right-0 bottom-0 h-full w-full object-cover object-top opacity-40"
+              style={{
+                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.6) 70%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.6) 70%)',
+              }}
+            />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,25,47,0.7) 0%, rgba(0,122,122,0.15) 100%)' }} />
+          </div>
+
+          <div className="relative z-10 max-w-lg">
             <p className="text-xs font-medium tracking-widest uppercase text-primary mb-3">Seu Ecossistema Empreendedor</p>
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-3">
               Olá, Empreendedora! <span className="inline-block">👋</span>
             </h1>
-            <p className="text-foreground/90 text-base max-w-lg mb-2 leading-relaxed">
+            <p className="text-foreground text-base max-w-lg mb-2 leading-relaxed">
               Bem-vinda ao <span className="text-gradient-primary font-semibold">EmpreendaJá</span>. Tudo o que você precisa para empreender, em um só lugar.
             </p>
-            <p className="text-sm text-foreground/80 mb-8">
+            <p className="text-sm text-foreground mb-8">
               Você tem <span className="font-semibold text-primary">3 acessos ativos</span> e <span className="font-semibold text-primary">2 próximos passos</span> recomendados.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button onClick={() => navigate("/estruture")} className="px-5 py-2.5 rounded-xl bg-gradient-primary-btn text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-glow-sm">
+              <button onClick={() => navigate("/estruture")} className="px-5 py-2.5 rounded-xl text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-glow-sm" style={{ background: 'linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)' }}>
                 Continuar jornada <ArrowRight className="h-4 w-4" />
               </button>
               <button onClick={() => navigate("/acessos")} className="px-5 py-2.5 rounded-xl border border-foreground/20 bg-secondary/60 text-foreground text-sm font-medium hover:bg-secondary transition-colors backdrop-blur-sm">
@@ -99,8 +118,9 @@ export default function HomePage() {
         <motion.div variants={item} className="bg-gradient-card rounded-2xl border border-border/60 p-6 lg:p-8">
           <h2 className="font-display text-xl font-semibold text-foreground mb-8">Sua jornada empreendedora</h2>
           <div className="relative">
-            {/* Progress line */}
+            {/* Background progress line */}
             <div className="absolute top-5 left-0 right-0 h-0.5 bg-border mx-8" />
+            {/* Active progress line */}
             <div
               className="absolute top-5 left-0 h-0.5 mx-8"
               style={{
@@ -109,21 +129,28 @@ export default function HomePage() {
               }}
             />
             <div className="relative flex justify-between">
-              {journeySteps.map((step, i) => (
+              {journeySteps.map((step) => (
                 <div key={step.label} className="flex flex-col items-center text-center" style={{ width: `${100 / journeySteps.length}%` }}>
                   <div
-                    className={`h-10 w-10 rounded-full flex items-center justify-center border-2 relative z-10 ${
+                    className={`h-10 w-10 rounded-full flex items-center justify-center border-2 relative z-10 transition-all ${
                       step.status === "concluido"
-                        ? "bg-primary border-primary text-primary-foreground"
+                        ? "border-primary text-primary-foreground"
                         : step.status === "em_andamento"
-                        ? "bg-accent border-accent text-foreground"
+                        ? "border-primary/60 text-primary"
                         : "bg-secondary border-border text-foreground/50"
                     }`}
+                    style={
+                      step.status === "concluido"
+                        ? { background: 'linear-gradient(135deg, #00FFFF 0%, #007A7A 100%)' }
+                        : step.status === "em_andamento"
+                        ? { background: 'linear-gradient(135deg, rgba(0,255,255,0.15) 0%, rgba(0,122,122,0.1) 100%)', boxShadow: '0 0 12px -2px rgba(0,255,255,0.25)' }
+                        : undefined
+                    }
                   >
                     {step.status === "concluido" ? (
                       <Check className="h-4 w-4" />
                     ) : step.status === "em_andamento" ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Sparkles className="h-4 w-4" />
                     ) : (
                       <Lock className="h-3.5 w-3.5" />
                     )}
@@ -153,34 +180,24 @@ export default function HomePage() {
         </motion.div>
       </motion.section>
 
-      {/* Bloco 4 — Insight da Soph */}
+      {/* Bloco 4 — Insight da Soph (compacto) */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="bg-gradient-highlight rounded-2xl border border-accent/40 p-6 lg:p-8 shadow-glow relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 opacity-20" style={{ background: '#00FFFF' }} />
-          <div className="relative">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/20">
-                <Sparkles className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h2 className="font-display text-lg font-semibold text-foreground">Insight da Soph</h2>
-                <p className="text-xs text-foreground/70">Recomendação personalizada para você</p>
-              </div>
+        <motion.div variants={item} className="rounded-2xl border border-primary/20 p-6 lg:p-8 shadow-glow relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}>
+          <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 opacity-15" style={{ background: '#00FFFF' }} />
+          <div className="relative flex items-start gap-4">
+            <div className="h-11 w-11 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/20 flex-shrink-0">
+              <Sparkles className="h-5 w-5 text-primary" />
             </div>
-            <div className="space-y-3 mb-5">
-              {[
-                "Você já acessou fornecedores. Agora o próximo passo ideal é revisar sua precificação.",
-                "Quer ajuda para decidir por onde começar? Posso montar um plano para você.",
-                "Com base no seu perfil, recomendo avançar em presença digital.",
-              ].map((msg, i) => (
-                <div key={i} className="bg-secondary/50 rounded-xl p-4 border border-foreground/10">
-                  <p className="text-sm text-foreground leading-relaxed">💡 {msg}</p>
-                </div>
-              ))}
+            <div className="flex-1 min-w-0">
+              <h2 className="font-display text-lg font-semibold text-foreground mb-1">Insight da Soph</h2>
+              <p className="text-xs text-foreground/70 mb-3">Recomendação personalizada para você</p>
+              <p className="text-sm text-foreground leading-relaxed mb-5">
+                💡 Com base no seu progresso, o próximo passo ideal é revisar sua precificação para proteger sua margem.
+              </p>
+              <button onClick={() => navigate("/gestao")} className="px-5 py-2.5 rounded-xl text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-glow-sm" style={{ background: 'linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)' }}>
+                Revisar agora <ArrowRight className="h-4 w-4" />
+              </button>
             </div>
-            <button onClick={() => navigate("/soph")} className="px-5 py-2.5 rounded-xl bg-gradient-primary-btn text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-glow-sm">
-              Conversar com a Soph <ArrowRight className="h-4 w-4" />
-            </button>
           </div>
         </motion.div>
       </motion.section>
@@ -192,12 +209,12 @@ export default function HomePage() {
         </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
-            { title: "Fornecedores de Semi-jóias de Limeira", desc: "Acesse fabricantes direto de Limeira" },
-            { title: "Fornecedores de Calçados dos Polos", desc: "Conecte-se com fábricas de calçados" },
-            { title: "Fabricantes Nacionais", desc: "Brinquedos, decoração, eletrônicos e mais" },
+            { title: "Fornecedores de Semi-jóias de Limeira", desc: "Acesse fabricantes direto de Limeira", icon: <Gem className="h-5 w-5" /> },
+            { title: "Fornecedores de Calçados dos Polos", desc: "Conecte-se com fábricas de calçados", icon: <ShoppingBag className="h-5 w-5" /> },
+            { title: "Fabricantes Nacionais", desc: "Brinquedos, decoração, eletrônicos e mais", icon: <Factory className="h-5 w-5" /> },
           ].map((p) => (
             <motion.div key={p.title} variants={item}>
-              <ProductCard title={p.title} description={p.desc} status="disponivel" icon={<Zap className="h-5 w-5" />} />
+              <ProductCard title={p.title} description={p.desc} status="disponivel" icon={p.icon} />
             </motion.div>
           ))}
         </div>
