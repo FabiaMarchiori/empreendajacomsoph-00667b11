@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Search, Package, Gem, Factory, Shirt, Footprints } from "lucide-react";
+import { Search, Package, Gem, Factory, Shirt, Footprints, ShoppingBag, Baby, Heart, Dumbbell, MapPin } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { useState } from "react";
 
@@ -13,6 +13,7 @@ const categories = [
 ];
 
 const suppliers = [
+  // Importadoras
   {
     title: "Importadoras 25 de Março",
     desc: "Produtos importados direto das melhores importadoras de SP",
@@ -21,22 +22,81 @@ const suppliers = [
     icon: <Package className="h-5 w-5" />,
     isPremium: true,
   },
+  // Moda Brás subcards
   {
-    title: "Moda Brás",
-    desc: "Fornecedores de moda no maior polo atacadista do Brasil",
+    title: "Moda Feminina",
+    desc: "Fornecedores de moda feminina no Brás",
     status: "em_breve" as const,
     cat: "Moda Brás",
     icon: <Shirt className="h-5 w-5" />,
     isPremium: false,
   },
   {
-    title: "Calçados Atacadistas",
-    desc: "Fábricas de calçados dos principais polos: Jaú, Nova Serrana, Birigui e Região Sul",
+    title: "Moda Masculina",
+    desc: "Fornecedores de moda masculina no Brás",
+    status: "em_breve" as const,
+    cat: "Moda Brás",
+    icon: <ShoppingBag className="h-5 w-5" />,
+    isPremium: false,
+  },
+  {
+    title: "Moda Infantil",
+    desc: "Fornecedores de moda infantil no Brás",
+    status: "em_breve" as const,
+    cat: "Moda Brás",
+    icon: <Baby className="h-5 w-5" />,
+    isPremium: false,
+  },
+  {
+    title: "Moda Íntima",
+    desc: "Fornecedores de moda íntima no Brás",
+    status: "em_breve" as const,
+    cat: "Moda Brás",
+    icon: <Heart className="h-5 w-5" />,
+    isPremium: false,
+  },
+  {
+    title: "Moda Fitness",
+    desc: "Fornecedores de moda fitness no Brás",
+    status: "em_breve" as const,
+    cat: "Moda Brás",
+    icon: <Dumbbell className="h-5 w-5" />,
+    isPremium: false,
+  },
+  // Calçados subcards
+  {
+    title: "Jaú",
+    desc: "Polo calçadista de Jaú — SP",
     status: "em_breve" as const,
     cat: "Calçados Atacadistas",
     icon: <Footprints className="h-5 w-5" />,
     isPremium: false,
   },
+  {
+    title: "Nova Serrana",
+    desc: "Polo calçadista de Nova Serrana — MG",
+    status: "em_breve" as const,
+    cat: "Calçados Atacadistas",
+    icon: <Footprints className="h-5 w-5" />,
+    isPremium: false,
+  },
+  {
+    title: "Birigui",
+    desc: "Polo calçadista de Birigui — SP",
+    status: "em_breve" as const,
+    cat: "Calçados Atacadistas",
+    icon: <Footprints className="h-5 w-5" />,
+    isPremium: false,
+  },
+  {
+    title: "Região Sul",
+    desc: "Polo calçadista da Região Sul do Brasil",
+    status: "em_breve" as const,
+    cat: "Calçados Atacadistas",
+    icon: <MapPin className="h-5 w-5" />,
+    isPremium: false,
+  },
+  // Semi-jóias
   {
     title: "Semi-jóias de Limeira",
     desc: "Fabricantes de semi-jóias direto do polo de Limeira",
@@ -45,6 +105,7 @@ const suppliers = [
     icon: <Gem className="h-5 w-5" />,
     isPremium: false,
   },
+  // Fabricantes Nacionais
   {
     title: "Fabricantes Nacionais",
     desc: "Brinquedos, Decoração, Eletrônicos e outros nichos nacionais",
@@ -78,8 +139,9 @@ export default function FornecedoresPage() {
     <div className="p-6 lg:p-10 max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-2">
-          Central de Fornecedores
+        <h1 className="font-display text-2xl lg:text-3xl font-bold mb-2">
+          <span className="text-white">Central de </span>
+          <span className="text-primary">Fornecedores</span>
         </h1>
         <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
           Acesse as maiores importadoras, fornecedores, e polos calçadistas para ampliar suas margens e encontrar novas oportunidades para o seu negócio.
@@ -109,24 +171,19 @@ export default function FornecedoresPage() {
       >
         {categories.map((cat) => {
           const isActive = activeCategory === cat;
-          const isLast = cat === "Fabricantes Nacionais";
           return (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 border ${
                 isActive
-                  ? "text-primary-foreground border-[#007A7A]/60 shadow-glow-sm"
-                  : isLast
-                  ? "bg-card border-border text-white/70 hover:text-white hover:border-white/30"
-                  : "text-primary-foreground border-[#007A7A]/40 hover:border-[#007A7A]/60 hover:shadow-glow-sm"
+                  ? "text-[#0A192F] border-primary shadow-[0_0_12px_-2px_rgba(0,255,255,0.4)]"
+                  : "border-[#102A43] text-white hover:border-[#007A7A]/60"
               }`}
               style={
                 isActive
-                  ? { background: "linear-gradient(90deg, #007A7A 0%, #00FFFF 100%)" }
-                  : isLast
-                  ? undefined
-                  : { background: "linear-gradient(90deg, #007A7A 0%, #00CFCF 100%)" }
+                  ? { background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)" }
+                  : { background: "#102A43" }
               }
             >
               {cat}
@@ -140,6 +197,7 @@ export default function FornecedoresPage() {
         variants={container}
         initial="hidden"
         animate="show"
+        key={activeCategory}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
       >
         {filtered.map((s) => (
