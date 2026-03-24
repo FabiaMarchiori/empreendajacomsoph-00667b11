@@ -213,7 +213,7 @@ export default function HomePage() {
             { title: "Fabricantes Nacionais", desc: "Brinquedos, decoração, eletrônicos e mais", icon: <Factory className="h-5 w-5" /> },
           ].map((p) => (
             <motion.div key={p.title} variants={item}>
-              <ProductCard title={p.title} description={p.desc} status="disponivel" icon={p.icon} />
+              <ProductCard title={p.title} description={p.desc} status="em_breve" icon={p.icon} />
             </motion.div>
           ))}
         </div>
