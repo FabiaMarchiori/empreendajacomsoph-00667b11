@@ -3,8 +3,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { AppLayout } from "@/components/AppLayout";
+import HomePage from "./pages/Home";
+import FornecedoresPage from "./pages/Fornecedores";
+import EstruturePage from "./pages/Estruture";
+import VendasPage from "./pages/Vendas";
+import GestaoPage from "./pages/Gestao";
+import SophPage from "./pages/Soph";
+import AcessosPage from "./pages/Acessos";
+import ContaPage from "./pages/Conta";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +23,16 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/fornecedores" element={<FornecedoresPage />} />
+            <Route path="/estruture" element={<EstruturePage />} />
+            <Route path="/vendas" element={<VendasPage />} />
+            <Route path="/gestao" element={<GestaoPage />} />
+            <Route path="/soph" element={<SophPage />} />
+            <Route path="/acessos" element={<AcessosPage />} />
+            <Route path="/conta" element={<ContaPage />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
