@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 interface ProductCardProps {
   title: string;
   description: string;
-  status: "liberado" | "bonus" | "disponivel";
+  status: "liberado" | "bonus" | "disponivel" | "em_breve";
   icon: React.ReactNode;
   isPremium?: boolean;
   onClick?: () => void;
