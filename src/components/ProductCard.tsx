@@ -20,7 +20,7 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
       whileHover={{ y: -3 }}
       onClick={isComingSoon ? undefined : onClick}
       className={cn(
-        "group relative rounded-2xl border p-6 transition-all duration-200",
+        "group relative rounded-2xl border p-6 transition-all duration-200 flex flex-col h-full min-h-[220px]",
         isComingSoon ? "cursor-default" : "cursor-pointer",
         isPremium
           ? "bg-gradient-card border-primary/15 hover:border-primary/40 shadow-glow-sm hover:shadow-glow"
@@ -40,19 +40,19 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
         <StatusBadge status={status} />
       </div>
       <h3 className="font-display font-bold text-sm text-foreground mb-1.5 leading-snug">{title}</h3>
-      <p className="text-xs text-white/80 leading-relaxed mb-5">{description}</p>
+      <p className="text-xs text-white/80 leading-relaxed mb-5 flex-1">{description}</p>
       <div className="flex items-center text-xs font-semibold mt-auto">
         {isAccessible ? (
           <span
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
             style={{ background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)" }}
           >
             Acessar <ArrowRight className="h-3.5 w-3.5" />
           </span>
         ) : isComingSoon ? (
           <span
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white font-bold border border-primary/40 transition-all hover:border-primary/70"
-            style={{ background: "linear-gradient(90deg, #007A7A 0%, #005F5F 100%)" }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold transition-all"
+            style={{ background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)" }}
           >
             Avise-me <ArrowRight className="h-3.5 w-3.5" />
           </span>

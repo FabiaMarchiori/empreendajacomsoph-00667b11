@@ -4,12 +4,12 @@ import { ProductCard } from "@/components/ProductCard";
 import { useState } from "react";
 
 const categories = [
-  "Todos",
-  "Importadoras 25 de Março",
-  "Moda Brás",
-  "Calçados Atacadistas",
-  "Semi-jóias de Limeira",
-  "Fabricantes Nacionais",
+  { label: "Todos", key: "Todos" },
+  { label: "25 de Março", key: "Importadoras 25 de Março" },
+  { label: "Moda Brás", key: "Moda Brás" },
+  { label: "Calçados", key: "Calçados Atacadistas" },
+  { label: "Semi-jóias", key: "Semi-jóias de Limeira" },
+  { label: "Fabricantes Nacionais", key: "Fabricantes Nacionais" },
 ];
 
 const suppliers = [
@@ -139,9 +139,9 @@ export default function FornecedoresPage() {
     <div className="p-6 lg:p-10 max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-2xl lg:text-3xl font-bold mb-2">
+        <h1 className="font-display text-3xl lg:text-4xl font-extrabold mb-3 tracking-tight">
           <span className="text-white">Central de </span>
-          <span className="text-primary">Fornecedores</span>
+          <span style={{ color: "#00FFFF" }}>Fornecedores</span>
         </h1>
         <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
           Acesse as maiores importadoras, fornecedores, e polos calçadistas para ampliar suas margens e encontrar novas oportunidades para o seu negócio.
@@ -170,23 +170,23 @@ export default function FornecedoresPage() {
         className="flex flex-wrap gap-2.5"
       >
         {categories.map((cat) => {
-          const isActive = activeCategory === cat;
+          const isActive = activeCategory === cat.key;
           return (
             <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 border ${
+              key={cat.key}
+              onClick={() => setActiveCategory(cat.key)}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 ${
                 isActive
-                  ? "text-[#0A192F] border-primary shadow-[0_0_12px_-2px_rgba(0,255,255,0.4)]"
-                  : "border-[#102A43] text-white hover:border-[#007A7A]/60"
+                  ? "text-[#0A192F] shadow-[0_0_16px_-2px_rgba(0,255,255,0.5)]"
+                  : "text-white border-2 border-[#1E3A5F] hover:border-[#007A7A]"
               }`}
               style={
                 isActive
-                  ? { background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)" }
+                  ? { background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)", border: "2px solid #00FFFF" }
                   : { background: "#102A43" }
               }
             >
-              {cat}
+              {cat.label}
             </button>
           );
         })}
