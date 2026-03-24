@@ -6,20 +6,22 @@ import { motion } from "framer-motion";
 interface ProductCardProps {
   title: string;
   description: string;
-  status: "liberado" | "bonus" | "disponivel";
+  status: "liberado" | "bonus" | "disponivel" | "em_breve";
   icon: React.ReactNode;
   isPremium?: boolean;
   onClick?: () => void;
 }
 
 export function ProductCard({ title, description, status, icon, isPremium, onClick }: ProductCardProps) {
-  const isAccessible = status !== "disponivel";
+  const isAccessible = status === "liberado" || status === "bonus";
+  const isComingSoon = status === "em_breve";
   return (
     <motion.div
       whileHover={{ y: -3 }}
-      onClick={onClick}
+      onClick={isComingSoon ? undefined : onClick}
       className={cn(
-        "group relative rounded-2xl border p-6 cursor-pointer transition-all duration-200",
+        "group relative rounded-2xl border p-6 transition-all duration-200",
+        isComingSoon ? "cursor-default" : "cursor-pointer",
         isPremium
           ? "bg-gradient-card border-primary/15 hover:border-primary/40 shadow-glow-sm hover:shadow-glow"
           : "bg-gradient-card border-border/60 hover:border-primary/20",
@@ -41,8 +43,12 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
       <p className="text-xs text-white/80 leading-relaxed mb-5">{description}</p>
       <div className="flex items-center text-xs font-semibold">
         {isAccessible ? (
-          <span className="text-primary flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-            Acessar <ArrowRight className="h-3.5 w-3.5" />
+          <span className="text-primary flex items-center gap-1.5 group-hover:gap-2.5 transition-all" style={{ background: 'linear-gradient(90deg, #007A7A 0%, #00FFFF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Acessar <ArrowRight className="h-3.5 w-3.5 text-primary" style={{ WebkitTextFillColor: 'unset' }} />
+          </span>
+        ) : isComingSoon ? (
+          <span className="text-[#00FFFF]/70 flex items-center gap-1.5">
+            Avise-me <ArrowRight className="h-3.5 w-3.5" />
           </span>
         ) : (
           <span className="text-foreground/50 flex items-center gap-1.5">

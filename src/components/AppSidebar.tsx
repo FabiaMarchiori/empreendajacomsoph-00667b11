@@ -54,7 +54,7 @@ export function AppSidebar() {
           <NavLink
             to={item.url}
             end={item.url === "/"}
-            className={`flex items-center gap-3 px-3 py-3.5 rounded-xl text-sm transition-all ${
+            className={`flex items-center gap-4 px-4 py-4 rounded-xl text-sm transition-all ${
               active
                 ? "text-white font-bold border-2 border-[#00FFFF] shadow-[0_0_16px_-3px_rgba(0,255,255,0.4)]"
                 : "text-white font-semibold hover:bg-white/5"
@@ -66,7 +66,7 @@ export function AppSidebar() {
                 : undefined
             }
           >
-            <item.icon className="h-10 w-10 flex-shrink-0" strokeWidth={2.2} />
+            <item.icon className="h-12 w-12 flex-shrink-0" strokeWidth={2.2} />
             {!collapsed && <span className="text-[15px]">{item.title}</span>}
           </NavLink>
         </SidebarMenuButton>
