@@ -33,7 +33,7 @@ export default function HomePage() {
       {/* Bloco 1 — Boas-vindas */}
       <motion.section variants={container} initial="hidden" animate="show">
         <motion.div variants={item} className="bg-gradient-hero rounded-2xl p-8 border border-border relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" style={{ background: 'radial-gradient(circle, rgba(0,255,255,0.06) 0%, transparent 70%)' }} />
           <div className="relative">
             <h1 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-2">
               Olá, Empreendedora! 👋
@@ -45,10 +45,10 @@ export default function HomePage() {
               Você tem <span className="font-semibold text-primary">3 acessos ativos</span> e <span className="font-semibold text-primary">2 próximos passos</span> recomendados.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button onClick={() => navigate("/estruture")} className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
+              <button onClick={() => navigate("/estruture")} className="px-4 py-2 rounded-lg bg-gradient-primary-btn text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
                 Continuar jornada <ArrowRight className="h-3.5 w-3.5" />
               </button>
-              <button onClick={() => navigate("/acessos")} className="px-4 py-2 rounded-lg border border-border bg-card text-foreground text-sm font-medium hover:bg-muted transition-colors">
+              <button onClick={() => navigate("/acessos")} className="px-4 py-2 rounded-lg border border-border bg-secondary text-foreground text-sm font-medium hover:bg-muted transition-colors">
                 Ver meus acessos
               </button>
               <button onClick={() => navigate("/soph")} className="px-4 py-2 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-colors flex items-center gap-2">
@@ -79,9 +79,9 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* Bloco 3 — Jornada */}
+      {/* Bloco 3 — Jornada + Recomendado pela Soph */}
       <motion.section variants={container} initial="hidden" animate="show" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div variants={item} className="bg-card rounded-xl border border-border p-6">
+        <motion.div variants={item} className="bg-gradient-card rounded-xl border border-border p-6">
           <h2 className="font-display text-lg font-semibold text-foreground mb-5">Sua jornada empreendedora</h2>
           <div className="space-y-0">
             {[
@@ -97,8 +97,8 @@ export default function HomePage() {
           </div>
         </motion.div>
 
-        {/* Bloco 4 — Recomendado pela Soph */}
-        <motion.div variants={item} className="bg-gradient-card rounded-xl border border-primary/15 p-6 shadow-glow-sm">
+        {/* Bloco 4 — Recomendado pela Soph — destaque com gradient #007A7A → #102A43 */}
+        <motion.div variants={item} className="bg-gradient-highlight rounded-xl border border-accent/30 p-6 shadow-glow-sm">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
               <Sparkles className="h-4 w-4 text-primary" />
@@ -111,7 +111,7 @@ export default function HomePage() {
               "Quer ajuda para decidir por onde começar?",
               "Com base no seu perfil, recomendo avançar em presença digital.",
             ].map((msg, i) => (
-              <div key={i} className="bg-muted/30 rounded-lg p-3 border border-border">
+              <div key={i} className="bg-secondary/40 rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-foreground/80 leading-relaxed">💡 {msg}</p>
               </div>
             ))}
@@ -151,7 +151,7 @@ export default function HomePage() {
               { label: "Materiais salvos", icon: <BookOpen className="h-4 w-4" /> },
               { label: "Suporte", icon: <HelpCircle className="h-4 w-4" /> },
             ].map((a) => (
-              <button key={a.label} className="flex items-center gap-2 p-3 rounded-lg bg-card border border-border text-xs text-muted-foreground hover:text-foreground hover:border-primary/20 transition-colors">
+              <button key={a.label} className="flex items-center gap-2 p-3 rounded-lg bg-secondary border border-border text-xs text-muted-foreground hover:text-foreground hover:border-primary/20 transition-colors">
                 {a.icon} {a.label}
               </button>
             ))}

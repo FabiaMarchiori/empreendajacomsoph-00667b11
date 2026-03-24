@@ -7,7 +7,6 @@ import {
   MessageCircle,
   Key,
   User,
-  ChevronLeft,
   Sparkles,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
@@ -48,7 +47,7 @@ export function AppSidebar() {
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border">
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border" style={{ background: '#102A43' }}>
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -92,7 +91,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="mx-3 my-2 border-t border-border" />
+        <div className="mx-3 my-2 border-t border-sidebar-border" />
 
         <SidebarGroup>
           <SidebarGroupContent>
@@ -124,14 +123,14 @@ export function AppSidebar() {
 
       <SidebarFooter className="p-3">
         {!collapsed && (
-          <div className="bg-gradient-card rounded-lg p-3 border border-border">
+          <div className="bg-gradient-highlight rounded-lg p-3 border border-accent/20">
             <div className="flex items-center gap-2 mb-1">
               <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
                 <MessageCircle className="h-3 w-3 text-primary" />
               </div>
               <span className="text-xs font-medium text-foreground">Soph diz:</span>
             </div>
-            <p className="text-[11px] text-muted-foreground leading-relaxed">
+            <p className="text-[11px] text-foreground/70 leading-relaxed">
               "Precisa de ajuda? Estou aqui para te orientar!"
             </p>
           </div>
