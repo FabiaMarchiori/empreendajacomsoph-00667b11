@@ -36,18 +36,18 @@ export default function ContaPage() {
         {/* Plano */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-6">
           <div className="bg-gradient-card rounded-xl border border-primary/20 p-6 shadow-glow-sm relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #9EEBFF, #00EFFF, transparent)' }} />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-primary-line opacity-80" />
             <h2 className="font-display font-semibold text-base text-foreground mb-2 flex items-center gap-2">
               <CreditCard className="h-4 w-4 text-primary" /> Plano Atual
             </h2>
-            <div className="bg-primary/10 rounded-lg px-4 py-3 border border-primary/20 mb-3">
-              <p className="font-display font-bold text-primary text-lg">Ecossistema Completo</p>
+            <div className="bg-gradient-primary-soft rounded-lg px-4 py-3 border border-primary/20 mb-3">
+              <p className="font-display font-bold text-lg text-gradient-primary inline-block">Ecossistema Completo</p>
               <p className="text-xs text-muted-foreground">Acesso total a todas as ferramentas e módulos</p>
             </div>
             <div className="space-y-2 text-xs text-muted-foreground">
               <p>Próxima renovação: <span className="text-foreground">15/04/2026</span></p>
-              <p>Acessos ativos: <span className="text-primary font-medium">5 produtos</span></p>
-              <p>Bônus inclusos: <span className="text-primary font-medium">2 itens</span></p>
+              <p>Acessos ativos: <span className="text-gradient-primary inline-block font-medium">5 produtos</span></p>
+              <p>Bônus inclusos: <span className="text-gradient-primary inline-block font-medium">2 itens</span></p>
             </div>
           </div>
 

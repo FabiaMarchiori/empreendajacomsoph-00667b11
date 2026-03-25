@@ -175,7 +175,7 @@ export default function EstruturePage() {
                             <CheckCircle2 className="h-3.5 w-3.5 text-[#0A192F]" />
                           </div>
                         ) : (
-                          <div className="h-5 w-5 rounded-full border-2 flex items-center justify-center group-hover:border-[#00EFFF]/50 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
+                          <div className="h-5 w-5 rounded-full border-2 flex items-center justify-center group-hover:border-primary/50 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
                             <Circle className="h-2.5 w-2.5 text-transparent" />
                           </div>
                         )}
@@ -209,8 +209,8 @@ export default function EstruturePage() {
                     className="w-full flex flex-col gap-4 p-5 text-left hover:bg-white/[0.02] transition-colors"
                   >
                     <div className="flex items-start justify-between w-full">
-                      <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0, 239, 255, 0.12)' }}>
-                        <span style={{ color: '#00EFFF' }}>{guide.icon}</span>
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-primary-soft border border-primary/15 text-white">
+                        <span>{guide.icon}</span>
                       </div>
                       <ChevronDown className={`h-4 w-4 text-white transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
                     </div>
@@ -255,7 +255,7 @@ export default function EstruturePage() {
                                   <CheckCircle2 className="h-3 w-3 text-[#0A192F]" />
                                 </div>
                               ) : (
-                                <div className="h-4 w-4 rounded-full border-2 group-hover:border-[#00EFFF]/40 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.15)' }} />
+                                  <div className="h-4 w-4 rounded-full border-2 group-hover:border-primary/40 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.15)' }} />
                               )}
                             </div>
                             <span className={`text-xs font-medium ${steps[sIdx] ? 'text-white/60 line-through' : 'text-white'}`}>
@@ -300,7 +300,7 @@ export default function EstruturePage() {
               </div>
             </div>
 
-            <div className="rounded-xl p-3.5 space-y-2" style={{ background: 'rgba(0, 239, 255, 0.04)', border: '1px solid rgba(0, 239, 255, 0.08)' }}>
+            <div className="rounded-xl p-3.5 space-y-2 bg-gradient-primary-soft border border-primary/10">
               <p className="text-xs text-white leading-relaxed">
                 "Comece pelo <strong className="text-foreground">MEI</strong>. É o passo mais importante para vender legalmente e acessar fornecedores com CNPJ."
               </p>
@@ -310,15 +310,15 @@ export default function EstruturePage() {
               <p className="text-[10px] text-white font-semibold uppercase tracking-wider">Recomendações</p>
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 text-xs text-white">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00EFFF' }} />
+                  <div className="h-1.5 w-1.5 rounded-full bg-gradient-primary-btn" />
                   Abra o MEI antes de comprar estoque
                 </div>
                 <div className="flex items-center gap-2 text-xs text-white">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00EFFF' }} />
+                  <div className="h-1.5 w-1.5 rounded-full bg-gradient-primary-btn" />
                   Defina sua identidade visual cedo
                 </div>
                 <div className="flex items-center gap-2 text-xs text-white">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00EFFF' }} />
+                  <div className="h-1.5 w-1.5 rounded-full bg-gradient-primary-btn" />
                   Proteja sua marca no INPI
                 </div>
               </div>

@@ -38,18 +38,18 @@ function AccessSection({ title, subtitle, items }: { title: string; subtitle: st
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-3">
         {items.map((a) => (
           <motion.div key={a.title} variants={item} className="bg-card rounded-xl border border-border p-4 flex items-center gap-4 hover:border-primary/20 transition-colors">
-            <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">{a.icon}</div>
+            <div className="h-10 w-10 rounded-lg bg-gradient-primary-soft border border-primary/15 text-white flex items-center justify-center flex-shrink-0">{a.icon}</div>
             <div className="flex-1 min-w-0">
               <h3 className="font-medium text-sm text-foreground">{a.title}</h3>
               <p className="text-xs text-muted-foreground">{a.description}</p>
             </div>
             <StatusBadge status={a.status} />
             {a.status !== "disponivel" ? (
-              <button className="px-3 py-1.5 rounded-lg text-xs font-medium text-primary hover:bg-primary/10 transition-colors flex items-center gap-1">
+              <button className="px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-primary-btn text-primary-foreground hover:brightness-110 transition-all flex items-center gap-1">
                 Acessar <ArrowRight className="h-3 w-3" />
               </button>
             ) : (
-              <button className="px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-primary border border-border hover:border-primary/30 transition-colors flex items-center gap-1">
+              <button className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-gradient-primary-soft border border-primary/20 hover:brightness-110 transition-all flex items-center gap-1">
                 <Lock className="h-3 w-3" /> Ativar
               </button>
             )}

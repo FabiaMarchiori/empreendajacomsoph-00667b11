@@ -17,7 +17,7 @@
     --popover: 210 63% 16%;
     --popover-foreground: 0 0% 100%;
 
-    /* Primary: #00EFFF = hsl(180, 100%, 50%) */
+    /* Primary: #00EFFF = hsl(184, 100%, 50%) */
     --primary: 184 100% 50%;
     --primary-foreground: 217 65% 11%;
 
@@ -53,6 +53,9 @@
     /* Custom tokens */
     --surface-elevated: 210 55% 14%;
     --glow-primary: 184 100% 50%;
+    --gradient-primary-start: 198 100% 97%;
+    --gradient-primary-mid: 192 100% 81%;
+    --gradient-primary-end: 184 100% 50%;
   }
 }
 
@@ -86,7 +89,31 @@
 @layer utilities {
   .text-gradient-primary {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%);
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--gradient-primary-start)) 0%,
+      hsl(var(--gradient-primary-mid)) 40%,
+      hsl(var(--gradient-primary-end)) 100%
+    );
+  }
+
+  .bg-gradient-primary-soft {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gradient-primary-start) / 0.14) 0%,
+      hsl(var(--gradient-primary-mid) / 0.12) 42%,
+      hsl(var(--gradient-primary-end) / 0.18) 100%
+    );
+  }
+
+  .bg-gradient-primary-line {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--gradient-primary-start)) 18%,
+      hsl(var(--gradient-primary-mid)) 52%,
+      hsl(var(--gradient-primary-end)) 100%
+    );
   }
 
   .bg-surface-elevated {
@@ -125,7 +152,12 @@
 
   /* Primary button gradient — claro → ciano vibrante */
   .bg-gradient-primary-btn {
-    background: linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%);
+    background: linear-gradient(
+      90deg,
+      hsl(var(--gradient-primary-start)) 0%,
+      hsl(var(--gradient-primary-mid)) 40%,
+      hsl(var(--gradient-primary-end)) 100%
+    );
   }
 
   /* Sidebar gradient */

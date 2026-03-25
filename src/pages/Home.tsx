@@ -67,15 +67,15 @@ export default function HomePage() {
           </div>
 
           <div className="relative z-10 max-w-lg">
-            <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#00EFFF] mb-3">Seu Ecossistema Empreendedor</p>
+            <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-gradient-primary inline-block mb-3">Seu Ecossistema Empreendedor</p>
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">
               Olá, Empreendedora! <span className="inline-block">👋</span>
             </h1>
             <p className="text-white text-base max-w-lg mb-2 leading-relaxed">
-              Bem-vinda ao <span className="font-bold text-[#00EFFF]">EmpreendaJá</span>. Tudo o que você precisa para empreender, em um só lugar.
+              Bem-vinda ao <span className="font-bold text-gradient-primary inline-block">EmpreendaJá</span>. Tudo o que você precisa para empreender, em um só lugar.
             </p>
             <p className="text-sm text-white mb-8 leading-relaxed">
-              Você tem <span className="font-bold text-[#00EFFF]">3 acessos ativos</span> e <span className="font-bold text-[#00EFFF]">2 próximos passos</span> recomendados.
+              Você tem <span className="font-bold text-gradient-primary inline-block">3 acessos ativos</span> e <span className="font-bold text-gradient-primary inline-block">2 próximos passos</span> recomendados.
             </p>
             <div className="flex flex-wrap gap-3">
               <button onClick={() => navigate("/estruture")} className="px-5 py-2.5 rounded-xl text-[#0A192F] text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_0_20px_-4px_rgba(0,239,255,0.4)]" style={{ background: GRAD }}>
@@ -84,7 +84,7 @@ export default function HomePage() {
               <button onClick={() => navigate("/acessos")} className="px-5 py-2.5 rounded-xl border-2 border-white/40 text-white text-sm font-bold hover:bg-white/10 hover:border-white/60 transition-all">
                 Ver meus acessos
               </button>
-              <button onClick={() => navigate("/soph")} className="px-5 py-2.5 rounded-xl border-2 border-[#00EFFF]/50 text-[#00EFFF] text-sm font-bold hover:bg-[#00EFFF]/10 transition-all flex items-center gap-2">
+              <button onClick={() => navigate("/soph")} className="px-5 py-2.5 rounded-xl bg-gradient-primary-btn text-primary-foreground text-sm font-bold hover:brightness-110 transition-all flex items-center gap-2 shadow-glow-sm">
                 <MessageCircle className="h-4 w-4" /> Falar com a Soph
               </button>
             </div>
@@ -96,7 +96,7 @@ export default function HomePage() {
       <motion.section variants={container} initial="hidden" animate="show">
         <motion.div variants={item} className="flex items-center justify-between mb-6">
           <h2 className="font-display text-xl font-bold text-white tracking-tight">Seus acessos principais</h2>
-          <button onClick={() => navigate("/acessos")} className="text-xs text-[#00EFFF] hover:underline font-bold tracking-wide">Ver todos</button>
+          <button onClick={() => navigate("/acessos")} className="text-xs text-gradient-primary inline-block hover:underline font-bold tracking-wide">Ver todos</button>
         </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
@@ -119,10 +119,9 @@ export default function HomePage() {
           <div className="relative">
             <div className="absolute top-5 left-0 right-0 h-0.5 bg-white/10 mx-8" />
             <div
-              className="absolute top-5 left-0 h-0.5 mx-8"
+              className="absolute top-5 left-0 h-0.5 mx-8 bg-gradient-primary-btn"
               style={{
                 width: `${(1 / (journeySteps.length - 1)) * 100}%`,
-                background: GRAD,
               }}
             />
             <div className="relative flex justify-between">
@@ -131,18 +130,11 @@ export default function HomePage() {
                   <div
                     className={`h-10 w-10 rounded-full flex items-center justify-center border-2 relative z-10 ${
                       step.status === "concluido"
-                        ? "border-[#00EFFF] text-[#0A192F]"
+                        ? "border-primary/50 text-primary-foreground bg-gradient-primary-btn"
                         : step.status === "em_andamento"
-                        ? "border-[#00EFFF] text-[#00EFFF]"
+                        ? "border-primary/40 text-white bg-gradient-primary-soft shadow-glow-sm"
                         : "bg-[#102A43] border-white/15 text-white/40"
                     }`}
-                    style={
-                      step.status === "concluido"
-                        ? { background: GRAD }
-                        : step.status === "em_andamento"
-                        ? { background: 'linear-gradient(135deg, rgba(0,239,255,0.2) 0%, rgba(158,235,255,0.15) 100%)', boxShadow: '0 0 14px -2px rgba(0,239,255,0.35)' }
-                        : undefined
-                    }
                   >
                     {step.status === "concluido" ? (
                       <Check className="h-4 w-4" />
@@ -154,7 +146,7 @@ export default function HomePage() {
                   </div>
                   <span className={`text-xs font-bold mt-3 ${
                     step.status === "concluido"
-                      ? "text-[#00EFFF]"
+                      ? "text-transparent bg-clip-text bg-gradient-primary-btn"
                       : step.status === "em_andamento"
                       ? "text-white"
                       : "text-white/40"
@@ -163,9 +155,9 @@ export default function HomePage() {
                   </span>
                   <span className={`text-[10px] mt-1 font-semibold ${
                     step.status === "concluido"
-                      ? "text-[#00EFFF]/80"
+                      ? "text-transparent bg-clip-text bg-gradient-primary-btn"
                       : step.status === "em_andamento"
-                      ? "text-[#00EFFF]/70"
+                      ? "text-white/80"
                       : "text-white/25"
                   }`}>
                     {step.status === "concluido" ? "Concluído" : step.status === "em_andamento" ? "Em andamento" : "Bloqueado"}
@@ -179,8 +171,8 @@ export default function HomePage() {
 
       {/* Bloco 4 — Insight da Soph */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="rounded-2xl border border-[#00EFFF]/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}>
-          <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-[70px] -translate-y-1/2 translate-x-1/3 opacity-12" style={{ background: '#00EFFF' }} />
+        <motion.div variants={item} className="rounded-2xl border border-primary/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}>
+          <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-[70px] -translate-y-1/2 translate-x-1/3 opacity-12 bg-gradient-primary-btn" />
           <div className="relative flex items-start gap-4">
             <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: GRAD }}>
               <Sparkles className="h-5 w-5 text-[#0A192F]" />
@@ -191,7 +183,7 @@ export default function HomePage() {
               <p className="text-sm text-white leading-relaxed mb-4">
                 💡 Com base no seu progresso, o próximo passo ideal é revisar sua precificação para proteger sua margem.
               </p>
-              <button onClick={() => navigate("/gestao")} className="px-5 py-2 rounded-xl text-[#0A192F] text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_0_20px_-4px_rgba(0,239,255,0.4)]" style={{ background: GRAD }}>
+              <button onClick={() => navigate("/gestao")} className="px-5 py-2 rounded-xl bg-gradient-primary-btn text-primary-foreground text-sm font-bold hover:brightness-110 transition-all flex items-center gap-2 shadow-[0_0_20px_-4px_rgba(0,239,255,0.4)]">
                 Revisar agora <ArrowRight className="h-4 w-4" />
               </button>
             </div>
