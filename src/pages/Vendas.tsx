@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Globe, ShoppingBag, ArrowRight, CheckCircle2, Camera, Star, Target, Sparkles, TrendingUp, Users } from "lucide-react";
+import { Globe, ShoppingBag, ArrowRight, Circle, Camera, Star, Target, Sparkles, TrendingUp, Users } from "lucide-react";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
@@ -77,18 +77,28 @@ export default function VendasPage() {
           >
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
-            <div className="h-12 w-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "linear-gradient(135deg, #007A7A, #00FFFF)" }}>
-              <span className="text-white">{card.icon}</span>
+            <div className="h-12 w-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "#00FFFF" }}>
+              <span style={{ color: "#0A192F" }}>{card.icon}</span>
             </div>
 
             <h3 className="font-display font-bold text-lg text-white mb-2">{card.title}</h3>
             <p className="text-white text-sm leading-relaxed mb-5">{card.description}</p>
 
-            <div className="space-y-3 mb-6 flex-1">
+            <div className="space-y-4 mb-6 flex-1">
               {card.steps.map((step, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#00FFFF" }} />
-                  <span className="text-white text-sm">{step}</span>
+                <div key={idx} className="flex items-start gap-3">
+                  <div className="flex flex-col items-center">
+                    <div className="h-7 w-7 rounded-full border flex items-center justify-center flex-shrink-0" style={{ borderColor: "#00FFFF" }}>
+                      <Circle className="h-3 w-3" style={{ color: "#00FFFF" }} />
+                    </div>
+                    {idx < card.steps.length - 1 && (
+                      <div className="w-px h-4 mt-1" style={{ background: "#007A7A" }} />
+                    )}
+                  </div>
+                  <div className="pt-1">
+                    <span className="text-white text-sm font-medium">{step}</span>
+                    <p className="text-white text-xs mt-0.5">Não iniciado</p>
+                  </div>
                 </div>
               ))}
             </div>
