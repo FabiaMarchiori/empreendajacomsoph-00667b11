@@ -253,7 +253,7 @@ export default function VendasMarketplacesPage() {
           <span
             className="bg-clip-text text-transparent"
             style={{
-              backgroundImage: "linear-gradient(90deg, #00FFFF 0%, #007A7A 50%, #00FFFF 100%)",
+              backgroundImage: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)",
             }}
           >
             Marketplaces
@@ -318,7 +318,7 @@ export default function VendasMarketplacesPage() {
             <div
               className="absolute top-[2.25rem] left-[calc(16.66%)] h-0.5 transition-all duration-500"
               style={{
-                background: "#00FFFF",
+                background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)",
                 width: progressPct >= 100
                   ? "calc(66.66%)"
                   : stageProgress(0).done === stageProgress(0).total && stageProgress(1).done === stageProgress(1).total
