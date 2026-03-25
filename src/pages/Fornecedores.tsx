@@ -141,7 +141,7 @@ export default function FornecedoresPage() {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="font-display text-3xl lg:text-4xl font-extrabold mb-3 tracking-tight">
           <span className="text-white">Central de </span>
-          <span style={{ color: "#00FFFF" }}>Fornecedores</span>
+          <span style={{ color: "#00EFFF" }}>Fornecedores</span>
         </h1>
         <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
           Acesse as maiores importadoras, fornecedores, e polos calçadistas para ampliar suas margens e encontrar novas oportunidades para o seu negócio.
