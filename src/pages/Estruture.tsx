@@ -88,7 +88,7 @@ export default function EstruturePage() {
           <span className="text-foreground">Estruture seu </span>
           <span style={{ color: '#00FFFF' }}>Negócio</span>
         </h1>
-        <p className="text-sm lg:text-base text-white/80 max-w-2xl leading-relaxed">
+        <p className="text-sm lg:text-base text-white max-w-2xl leading-relaxed">
           O alicerce do seu sucesso começa aqui. Siga nossa jornada guiada para formalizar sua empresa, proteger sua marca e construir uma identidade profissional.
         </p>
       </motion.div>
