@@ -12,6 +12,7 @@ const pathCards = [
     icon: <Globe className="h-6 w-6" />,
     steps: ["Configurar Google Meu Negócio", "Identidade visual no Instagram", "Landing page de conversão"],
     cta: "Iniciar Jornada Digital",
+    link: "",
   },
   {
     title: "Como Vender em Marketplaces",
@@ -19,6 +20,7 @@ const pathCards = [
     icon: <ShoppingBag className="h-6 w-6" />,
     steps: ["Pré-requisitos e documentação", "Anúncios de alta performance", "Logística e expedição"],
     cta: "Escalar em Marketplaces",
+    link: "/vendas/marketplaces",
   },
 ];
 
