@@ -88,7 +88,7 @@ export default function EstruturePage() {
           <span className="text-foreground">Estruture seu </span>
           <span style={{ color: '#00FFFF' }}>Negócio</span>
         </h1>
-        <p className="text-sm lg:text-base text-white/80 max-w-2xl leading-relaxed">
+        <p className="text-sm lg:text-base text-white max-w-2xl leading-relaxed">
           O alicerce do seu sucesso começa aqui. Siga nossa jornada guiada para formalizar sua empresa, proteger sua marca e construir uma identidade profissional.
         </p>
       </motion.div>
@@ -130,7 +130,7 @@ export default function EstruturePage() {
                     PRIORIDADE
                   </span>
                 </div>
-                <p className="text-xs text-white/70">{primaryGuide.description}</p>
+                <p className="text-xs text-white">{primaryGuide.description}</p>
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
                 <div className="text-right">
@@ -145,7 +145,7 @@ export default function EstruturePage() {
                     />
                   </div>
                 </div>
-                <ChevronDown className={`h-4 w-4 text-white/50 transition-transform duration-200 ${isPrimaryOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-4 w-4 text-white transition-transform duration-200 ${isPrimaryOpen ? 'rotate-180' : ''}`} />
               </div>
             </button>
 
@@ -164,7 +164,7 @@ export default function EstruturePage() {
                       className="w-full flex items-center gap-4 text-left group py-2.5 px-3 rounded-lg hover:bg-white/[0.03] transition-colors"
                     >
                       <div className="flex items-center gap-3 flex-shrink-0">
-                        <span className="text-[10px] font-bold text-white/30 w-4 text-center">{sIdx + 1}</span>
+                        <span className="text-[10px] font-bold text-white w-4 text-center">{sIdx + 1}</span>
                         {primarySteps[sIdx] ? (
                           <div
                             className="h-5 w-5 rounded-full flex items-center justify-center"
@@ -178,7 +178,7 @@ export default function EstruturePage() {
                           </div>
                         )}
                       </div>
-                      <span className={`text-sm font-medium transition-colors ${primarySteps[sIdx] ? 'text-white/40 line-through' : 'text-foreground group-hover:text-white'}`}>
+                      <span className={`text-sm font-medium transition-colors ${primarySteps[sIdx] ? 'text-white/60 line-through' : 'text-white'}`}>
                         {step}
                       </span>
                     </button>
@@ -210,14 +210,14 @@ export default function EstruturePage() {
                       <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0, 255, 255, 0.12)' }}>
                         <span style={{ color: '#00FFFF' }}>{guide.icon}</span>
                       </div>
-                      <ChevronDown className={`h-4 w-4 text-white/40 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-4 w-4 text-white transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
                     </div>
                     <div>
                       <h3 className="font-display font-semibold text-sm text-foreground mb-1">{guide.title}</h3>
-                      <p className="text-xs text-white/60">{guide.description}</p>
+                      <p className="text-xs text-white">{guide.description}</p>
                     </div>
                     <div className="flex items-center gap-2 w-full">
-                      <span className="text-xs font-semibold text-white/60">{done}/{guide.steps.length}</span>
+                      <span className="text-xs font-semibold text-white">{done}/{guide.steps.length}</span>
                       <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#102A43' }}>
                         <div
                           className="h-full rounded-full transition-all duration-500"
@@ -244,7 +244,7 @@ export default function EstruturePage() {
                             className="w-full flex items-center gap-3 text-left group py-2 px-2 rounded-lg hover:bg-white/[0.03] transition-colors"
                           >
                             <div className="flex items-center gap-2.5 flex-shrink-0">
-                              <span className="text-[10px] font-bold text-white/25 w-3 text-center">{sIdx + 1}</span>
+                              <span className="text-[10px] font-bold text-white w-3 text-center">{sIdx + 1}</span>
                               {steps[sIdx] ? (
                                 <div
                                   className="h-4.5 w-4.5 rounded-full flex items-center justify-center"
@@ -256,7 +256,7 @@ export default function EstruturePage() {
                                 <div className="h-4 w-4 rounded-full border-2 group-hover:border-[#00FFFF]/40 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.15)' }} />
                               )}
                             </div>
-                            <span className={`text-xs font-medium ${steps[sIdx] ? 'text-white/35 line-through' : 'text-white/80 group-hover:text-white'}`}>
+                            <span className={`text-xs font-medium ${steps[sIdx] ? 'text-white/60 line-through' : 'text-white'}`}>
                               {step}
                             </span>
                           </button>
@@ -294,28 +294,28 @@ export default function EstruturePage() {
               </div>
               <div>
                 <h3 className="font-display font-bold text-sm text-foreground">Soph</h3>
-                <p className="text-[10px] text-white/50">Assistente estratégica</p>
+                <p className="text-[10px] text-white">Assistente estratégica</p>
               </div>
             </div>
 
             <div className="rounded-xl p-3.5 space-y-2" style={{ background: 'rgba(0, 255, 255, 0.04)', border: '1px solid rgba(0, 255, 255, 0.08)' }}>
-              <p className="text-xs text-white/90 leading-relaxed">
+              <p className="text-xs text-white leading-relaxed">
                 "Comece pelo <strong className="text-foreground">MEI</strong>. É o passo mais importante para vender legalmente e acessar fornecedores com CNPJ."
               </p>
             </div>
 
             <div className="space-y-2">
-              <p className="text-[10px] text-white/40 font-semibold uppercase tracking-wider">Recomendações</p>
+              <p className="text-[10px] text-white font-semibold uppercase tracking-wider">Recomendações</p>
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2 text-xs text-white/70">
+                <div className="flex items-center gap-2 text-xs text-white">
                   <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00FFFF' }} />
                   Abra o MEI antes de comprar estoque
                 </div>
-                <div className="flex items-center gap-2 text-xs text-white/70">
+                <div className="flex items-center gap-2 text-xs text-white">
                   <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00FFFF' }} />
                   Defina sua identidade visual cedo
                 </div>
-                <div className="flex items-center gap-2 text-xs text-white/70">
+                <div className="flex items-center gap-2 text-xs text-white">
                   <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00FFFF' }} />
                   Proteja sua marca no INPI
                 </div>
@@ -357,8 +357,8 @@ export default function EstruturePage() {
                 </div>
               </div>
               <div className="flex-1">
-                <p className="text-xs text-white/60">{totalAllDone} de {totalAllSteps} etapas</p>
-                <p className="text-[10px] text-white/40 mt-0.5">Complete todas as etapas para estruturar seu negócio</p>
+                <p className="text-xs text-white">{totalAllDone} de {totalAllSteps} etapas</p>
+                <p className="text-[10px] text-white mt-0.5">Complete todas as etapas para estruturar seu negócio</p>
               </div>
             </div>
 
@@ -370,8 +370,8 @@ export default function EstruturePage() {
                 return (
                   <div key={g.title} className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] text-white/60 truncate">{g.title}</span>
-                      <span className="text-[10px] text-white/40">{d}/{g.steps.length}</span>
+                      <span className="text-[11px] text-white truncate">{g.title}</span>
+                      <span className="text-[10px] text-white">{d}/{g.steps.length}</span>
                     </div>
                     <div className="h-1 rounded-full overflow-hidden" style={{ background: '#102A43' }}>
                       <div
