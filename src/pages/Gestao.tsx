@@ -21,7 +21,7 @@ export default function GestaoPage() {
         <motion.div variants={item} className="bg-gradient-card rounded-xl border border-primary/20 p-6 shadow-glow-sm relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
           <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-xl bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">
+            <div className="h-12 w-12 rounded-xl bg-gradient-primary-soft border border-primary/15 text-white flex items-center justify-center flex-shrink-0">
               <BarChart3 className="h-6 w-6" />
             </div>
             <div className="flex-1">
@@ -30,7 +30,7 @@ export default function GestaoPage() {
                 <StatusBadge status="liberado" />
               </div>
               <p className="text-sm text-muted-foreground mb-4">Calcule o preço ideal dos seus produtos com margem, custos e competitividade. Ferramenta essencial para lucrar de verdade.</p>
-              <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
+              <button className="px-4 py-2 rounded-lg bg-gradient-primary-btn text-primary-foreground text-sm font-medium hover:brightness-110 transition-all flex items-center gap-2">
                 Abrir Precificação <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -41,7 +41,7 @@ export default function GestaoPage() {
         <motion.div variants={item} className="bg-gradient-card rounded-xl border border-primary/20 p-6 shadow-glow-sm relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
           <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-xl bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">
+            <div className="h-12 w-12 rounded-xl bg-gradient-primary-soft border border-primary/15 text-white flex items-center justify-center flex-shrink-0">
               <Star className="h-6 w-6" />
             </div>
             <div className="flex-1">
@@ -50,7 +50,7 @@ export default function GestaoPage() {
                 <StatusBadge status="bonus" />
               </div>
               <p className="text-sm text-muted-foreground mb-4">Gerencie estoque, vendas, clientes e financeiro em uma única ferramenta. O braço direito do seu negócio.</p>
-              <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
+              <button className="px-4 py-2 rounded-lg bg-gradient-primary-btn text-primary-foreground text-sm font-medium hover:brightness-110 transition-all flex items-center gap-2">
                 Abrir ERP <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -60,7 +60,7 @@ export default function GestaoPage() {
         {/* Soph */}
         <motion.div variants={item} className="bg-gradient-card rounded-xl border border-accent/30 p-6">
           <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-xl bg-primary/15 text-primary flex items-center justify-center flex-shrink-0 animate-float">
+            <div className="h-12 w-12 rounded-xl bg-gradient-primary-soft border border-primary/15 text-white flex items-center justify-center flex-shrink-0 animate-float">
               <Sparkles className="h-6 w-6" />
             </div>
             <div className="flex-1">
@@ -71,10 +71,10 @@ export default function GestaoPage() {
               <p className="text-sm text-muted-foreground mb-4">Tire dúvidas, peça sugestões e receba orientação inteligente para cada fase do seu negócio.</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {["Como precificar?", "Dúvidas sobre MEI", "Dicas de vendas"].map((q) => (
-                  <span key={q} className="px-3 py-1.5 rounded-full bg-muted border border-border text-xs text-muted-foreground hover:text-primary hover:border-primary/30 cursor-pointer transition-colors">{q}</span>
+                  <span key={q} className="px-3 py-1.5 rounded-full bg-muted border border-border text-xs text-muted-foreground hover:text-white hover:border-primary/30 cursor-pointer transition-colors">{q}</span>
                 ))}
               </div>
-              <button onClick={() => navigate("/soph")} className="px-4 py-2 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-colors flex items-center gap-2">
+              <button onClick={() => navigate("/soph")} className="px-4 py-2 rounded-lg bg-gradient-primary-btn text-primary-foreground text-sm font-medium hover:brightness-110 transition-all flex items-center gap-2">
                 <MessageCircle className="h-3.5 w-3.5" /> Conversar com a Soph
               </button>
             </div>
