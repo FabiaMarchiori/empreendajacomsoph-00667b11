@@ -590,10 +590,10 @@ export default function VendasMarketplacesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         className="rounded-2xl border border-primary/20 p-8 text-center space-y-5"
-        style={{ background: "linear-gradient(135deg, #007A7A 0%, #102A43 100%)" }}
+        style={{ background: "linear-gradient(135deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}
       >
-        <h2 className="font-display font-extrabold text-2xl lg:text-3xl text-white">Pronto para começar?</h2>
-        <p className="text-white text-base max-w-lg mx-auto leading-relaxed">
+        <h2 className="font-display font-extrabold text-2xl lg:text-3xl text-primary-foreground">Pronto para começar?</h2>
+        <p className="text-primary-foreground text-base max-w-lg mx-auto leading-relaxed">
           Você está a um passo de colocar seu negócio no radar de milhões de compradores.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
