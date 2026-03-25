@@ -86,7 +86,7 @@
 @layer utilities {
   .text-gradient-primary {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #00FFFF, #007A7A);
+    background-image: linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%);
   }
 
   .bg-surface-elevated {
@@ -123,9 +123,9 @@
     background: linear-gradient(135deg, #007A7A 0%, #102A43 100%);
   }
 
-  /* Primary button gradient — #00FFFF → #00CFCF */
+  /* Primary button gradient — claro → ciano vibrante */
   .bg-gradient-primary-btn {
-    background: linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%);
+    background: linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%);
   }
 
   /* Sidebar gradient */

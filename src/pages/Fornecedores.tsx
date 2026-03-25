@@ -177,12 +177,12 @@ export default function FornecedoresPage() {
               onClick={() => setActiveCategory(cat.key)}
               className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 ${
                 isActive
-                  ? "text-[#0A192F] shadow-[0_0_16px_-2px_rgba(0,255,255,0.5)]"
+                  ? "text-[#0A192F] shadow-[0_0_16px_-2px_rgba(0,239,255,0.5)]"
                   : "text-white border-2 border-[#1E3A5F] hover:border-[#007A7A]"
               }`}
               style={
                 isActive
-                  ? { background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)", border: "2px solid #00FFFF" }
+                  ? { background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)", border: "2px solid #00EFFF" }
                   : { background: "#102A43" }
               }
             >

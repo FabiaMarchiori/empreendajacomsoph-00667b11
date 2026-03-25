@@ -45,14 +45,14 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
         {isAccessible ? (
           <span
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
-            style={{ background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)" }}
+            style={{ background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}
           >
             Acessar <ArrowRight className="h-3.5 w-3.5" />
           </span>
         ) : isComingSoon ? (
           <span
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold transition-all"
-            style={{ background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)" }}
+            style={{ background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}
           >
             Avise-me <ArrowRight className="h-3.5 w-3.5" />
           </span>

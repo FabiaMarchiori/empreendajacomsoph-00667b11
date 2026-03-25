@@ -36,7 +36,7 @@ export default function ContaPage() {
         {/* Plano */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-6">
           <div className="bg-gradient-card rounded-xl border border-primary/20 p-6 shadow-glow-sm relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #9EEBFF, #00EFFF, transparent)' }} />
             <h2 className="font-display font-semibold text-base text-foreground mb-2 flex items-center gap-2">
               <CreditCard className="h-4 w-4 text-primary" /> Plano Atual
             </h2>
