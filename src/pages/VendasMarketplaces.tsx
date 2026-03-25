@@ -5,7 +5,7 @@ import {
   ArrowLeft, ArrowRight, CheckCircle2, Circle, Sparkles, ExternalLink,
   ShoppingBag, Camera, FileText, Truck, AlertTriangle, TrendingUp,
   Package, Star, Search, BarChart3, Zap, Shield, Clock, Users,
-  Target, MessageSquare, Wrench, CalendarDays, ChevronDown, ChevronUp,
+  Target, MessageSquare, Wrench, ChevronDown, ChevronUp,
   Image, Type, DollarSign, Boxes, Send, HeartHandshake, Megaphone,
   Palette, Bot, BookOpen, Calculator
 } from "lucide-react";
@@ -18,51 +18,63 @@ const item = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } };
 const marketplaces = [
   {
     name: "Mercado Livre",
+    badge: "LÍDER LATAM",
     desc: "O maior marketplace da América Latina, com alto volume e grande visibilidade.",
     bestFor: "Produtos de alto giro e marcas conhecidas",
-    pros: ["Alto tráfego", "Mercado Envios integrado", "Programa de reputação"],
+    pros: ["Tráfego massivo e alta conversão", "Sistema logístico impecável", "Regras de reputação rígidas"],
     con: "Comissão pode chegar a 17% + frete",
     url: "https://www.mercadolivre.com.br",
+    cta: "Acessar Guia ML",
   },
   {
     name: "Shopee",
+    badge: "CRESCIMENTO VIRAL",
     desc: "Marketplace popular com foco em preço acessível e frete grátis.",
     bestFor: "Produtos de ticket baixo e volume alto",
-    pros: ["Frete grátis subsidiado", "Cupons e promoções", "Crescimento acelerado"],
+    pros: ["Cupons de frete grátis agressivos", "App extremamente viciante", "Competição forte por preço baixo"],
     con: "Público muito sensível a preço",
     url: "https://shopee.com.br",
+    cta: "Acessar Guia Shopee",
   },
   {
-    name: "Amazon",
+    name: "Amazon Brasil",
+    badge: "PADRÃO GLOBAL",
     desc: "Gigante global com logística própria e forte credibilidade.",
     bestFor: "Produtos premium, eletrônicos e livros",
-    pros: ["FBA (Fulfillment by Amazon)", "Prime", "Confiança do consumidor"],
+    pros: ["Público com alto ticket médio", "FBA (Logística Amazon) premium", "Interface de cadastro completa"],
     con: "Regras rigorosas de cadastro e compliance",
     url: "https://www.amazon.com.br",
+    cta: "Acessar Guia Amazon",
   },
   {
     name: "Magazine Luiza",
+    badge: "FORÇA NACIONAL",
     desc: "Grande varejista brasileira com marketplace integrado.",
     bestFor: "Eletrodomésticos, eletrônicos e casa",
-    pros: ["Marca forte", "Magalu Entregas", "Suporte ao seller"],
+    pros: ["Marca forte no Brasil", "Magalu Entregas integrado", "Suporte ao seller dedicado"],
     con: "Menor volume que ML e Shopee em algumas categorias",
     url: "https://www.magazineluiza.com.br",
+    cta: "Acessar Guia Magalu",
   },
   {
     name: "Americanas / B2W",
+    badge: "TRADIÇÃO",
     desc: "Plataforma tradicional com público fiel e grande alcance.",
     bestFor: "Variedade de categorias e público diversificado",
-    pros: ["Base de clientes grande", "Estrutura logística", "Promoções frequentes"],
+    pros: ["Base de clientes grande", "Estrutura logística robusta", "Promoções frequentes"],
     con: "Processo de onboarding pode ser mais burocrático",
     url: "https://www.americanas.com.br",
+    cta: "Acessar Guia",
   },
   {
     name: "OLX / Facebook",
+    badge: "VENDA DIRETA",
     desc: "Plataformas de venda direta, sem intermediário logístico.",
     bestFor: "Produtos usados, locais e de nicho",
-    pros: ["Sem comissão (OLX)", "Contato direto", "Fácil de começar"],
+    pros: ["Sem comissão (OLX)", "Contato direto com comprador", "Fácil de começar"],
     con: "Sem estrutura logística ou proteção ao vendedor",
     url: "https://www.olx.com.br",
+    cta: "Acessar Guia",
   },
 ];
 
@@ -75,7 +87,7 @@ interface StageData {
   title: string;
   icon: React.ReactNode;
   items: CheckItem[];
-  tools: { name: string; url: string; icon: React.ReactNode }[];
+  tools: { name: string; url: string; icon: React.ReactNode; desc: string }[];
   sophTip: string;
 }
 
@@ -85,18 +97,17 @@ const stages: StageData[] = [
     icon: <FileText className="h-5 w-5" />,
     items: [
       { id: "doc-1", label: "Documentos pessoais (RG/CPF ou CNPJ)" },
-      { id: "doc-2", label: "Conta bancária vinculada" },
+      { id: "doc-2", label: "Conta bancária vinculada ao titular" },
       { id: "doc-3", label: "Dados do negócio (nome, endereço, contato)" },
-      { id: "doc-4", label: "Informações básicas dos produtos" },
+      { id: "doc-4", label: "Produção de fotos (fundo branco e contextualizadas)" },
       { id: "doc-5", label: "Definição de categorias" },
-      { id: "doc-6", label: "Imagens e fotos dos produtos" },
-      { id: "doc-7", label: "Cálculo de preço e margem" },
+      { id: "doc-6", label: "Cálculo de precificação com margem e taxas" },
     ],
     tools: [
-      { name: "Canva", url: "https://www.canva.com", icon: <Palette className="h-4 w-4" /> },
-      { name: "Remove.bg", url: "https://www.remove.bg", icon: <Image className="h-4 w-4" /> },
-      { name: "Calculadora Sebrae", url: "https://www.sebrae.com.br/sites/PortalSebrae/recursos-online", icon: <Calculator className="h-4 w-4" /> },
-      { name: "Google Sheets", url: "https://sheets.google.com", icon: <BarChart3 className="h-4 w-4" /> },
+      { name: "Canva", url: "https://www.canva.com", icon: <Palette className="h-4 w-4" />, desc: "Criar artes e imagens para anúncios" },
+      { name: "Remove.bg", url: "https://www.remove.bg", icon: <Image className="h-4 w-4" />, desc: "Remover fundo das fotos dos produtos" },
+      { name: "Calculadora Sebrae", url: "https://www.sebrae.com.br/sites/PortalSebrae/recursos-online", icon: <Calculator className="h-4 w-4" />, desc: "Calcular preços e margens de lucro" },
+      { name: "Google Sheets", url: "https://sheets.google.com", icon: <BarChart3 className="h-4 w-4" />, desc: "Acompanhar estoque e vendas" },
     ],
     sophTip: "Comece organizando seus documentos e calculando suas margens antes de cadastrar qualquer produto.",
   },
@@ -104,20 +115,18 @@ const stages: StageData[] = [
     title: "Anúncios de Alta Performance",
     icon: <Megaphone className="h-5 w-5" />,
     items: [
-      { id: "ad-1", label: "Criar título campeão com palavras-chave" },
-      { id: "ad-2", label: "Escrever descrição clara e completa" },
-      { id: "ad-3", label: "Usar palavras-chave estratégicas" },
-      { id: "ad-4", label: "Organizar fotos profissionais" },
+      { id: "ad-1", label: "Título Campeão: [Produto] + [Marca] + [Atributo] + [Diferencial]" },
+      { id: "ad-2", label: "Descrição persuasiva e técnica completa" },
+      { id: "ad-3", label: "Mapeamento de Palavras-Chave (SEO do Marketplace)" },
+      { id: "ad-4", label: "Gestão de Estoque e variação de SKU" },
       { id: "ad-5", label: "Cadastrar variações (cor, tamanho)" },
       { id: "ad-6", label: "Definir preço competitivo" },
-      { id: "ad-7", label: "Revisar estoque disponível" },
-      { id: "ad-8", label: "Publicar anúncio otimizado" },
+      { id: "ad-7", label: "Publicar anúncio otimizado" },
     ],
     tools: [
-      { name: "ChatGPT", url: "https://chat.openai.com", icon: <Bot className="h-4 w-4" /> },
-      { name: "Claude", url: "https://claude.ai", icon: <Bot className="h-4 w-4" /> },
-      { name: "Canva", url: "https://www.canva.com", icon: <Palette className="h-4 w-4" /> },
-      { name: "Remove.bg", url: "https://www.remove.bg", icon: <Image className="h-4 w-4" /> },
+      { name: "ChatGPT & Claude", url: "https://chat.openai.com", icon: <Bot className="h-4 w-4" />, desc: "Criar títulos e descrições otimizadas" },
+      { name: "Canva", url: "https://www.canva.com", icon: <Palette className="h-4 w-4" />, desc: "Design profissional para anúncios" },
+      { name: "Remove.bg", url: "https://www.remove.bg", icon: <Image className="h-4 w-4" />, desc: "Fundo limpo para fotos de produto" },
     ],
     sophTip: "Seu anúncio vende melhor quando título, foto e frete conversam entre si.",
   },
@@ -139,61 +148,62 @@ const stages: StageData[] = [
 ];
 
 const strategies = [
-  { icon: <Search />, title: "SEO do anúncio", desc: "Use palavras-chave que o cliente realmente busca." },
-  { icon: <Camera />, title: "Fotos profissionais", desc: "Imagens claras e com fundo limpo vendem mais." },
-  { icon: <DollarSign />, title: "Preço competitivo", desc: "Pesquise concorrentes e posicione com inteligência." },
-  { icon: <Zap />, title: "Promoções", desc: "Participe de campanhas do marketplace para ganhar visibilidade." },
-  { icon: <Boxes />, title: "Estoque organizado", desc: "Evite vender o que não tem e perder reputação." },
-  { icon: <Clock />, title: "Velocidade de resposta", desc: "Responda perguntas em minutos, não horas." },
-  { icon: <Star />, title: "Reputação", desc: "Cuide de cada venda como se fosse a primeira." },
-  { icon: <Target />, title: "Anúncios patrocinados", desc: "Invista em destaque para produtos com boa margem." },
-  { icon: <ShoppingBag />, title: "Diversificação", desc: "Não dependa de um único marketplace." },
-  { icon: <BarChart3 />, title: "Análise de dados", desc: "Use os relatórios da plataforma para decidir melhor." },
+  { icon: <Search />, title: "SEO do Anúncio", desc: "Usam todas as 60 letras do título com as palavras que o cliente realmente busca.", action: "Pesquise os termos mais buscados no seu nicho" },
+  { icon: <Camera />, title: "Fotos Profissionais", desc: "Imagens claras com fundo limpo e contextualizadas convertem até 3x mais.", action: "Tire fotos com luz natural e fundo branco" },
+  { icon: <DollarSign />, title: "Preço Competitivo", desc: "Posicione seu preço com inteligência, considerando comissão e frete.", action: "Compare preços dos 5 principais concorrentes" },
+  { icon: <Zap />, title: "Promoções Estratégicas", desc: "Participe de campanhas do marketplace para ganhar visibilidade rápida.", action: "Ative promoções nos primeiros 30 dias" },
+  { icon: <Boxes />, title: "Estoque Organizado", desc: "Vender sem ter o produto derruba reputação e gera cancelamentos.", action: "Use planilha para controlar entradas e saídas" },
+  { icon: <Clock />, title: "Velocidade de Resposta", desc: "Responda perguntas em minutos, não horas. Velocidade gera confiança.", action: "Ative notificações do app do marketplace" },
+  { icon: <Star />, title: "Reputação Impecável", desc: "Despacham o produto em menos de 24h para ganhar selo de bom vendedor.", action: "Cuide de cada venda como se fosse a primeira" },
+  { icon: <Target />, title: "Anúncios Patrocinados", desc: "Invista em destaque para produtos com boa margem e alto potencial.", action: "Comece com R$10/dia nos seus top 3 produtos" },
+  { icon: <ShoppingBag />, title: "Diversificação", desc: "Não dependa de um único marketplace. Distribua risco e alcance.", action: "Cadastre-se em pelo menos 2 plataformas" },
+  { icon: <BarChart3 />, title: "Análise de Dados", desc: "Use os relatórios da plataforma para tomar decisões baseadas em números.", action: "Revise métricas semanalmente" },
 ];
 
 const commonErrors = [
-  { icon: <Camera />, title: "Fotos ruins", desc: "Imagens escuras, tremidas ou com fundo sujo afastam compradores." },
-  { icon: <FileText />, title: "Descrição incompleta", desc: "Falta de informações gera dúvidas e perda de vendas." },
-  { icon: <DollarSign />, title: "Preço errado", desc: "Não calcular comissão e frete leva a prejuízo." },
-  { icon: <Send />, title: "Demora no envio", desc: "Atrasos derrubam sua reputação rapidamente." },
-  { icon: <MessageSquare />, title: "Atendimento ruim", desc: "Ignorar perguntas é perder vendas garantidas." },
-  { icon: <Boxes />, title: "Estoque desorganizado", desc: "Vender sem ter o produto é o erro mais grave." },
-  { icon: <Star />, title: "Ignorar avaliações", desc: "Feedback negativo sem resposta prejudica sua loja." },
-  { icon: <AlertTriangle />, title: "Vender tudo de uma vez", desc: "Comece com poucos produtos e escale com dados." },
+  { icon: <Camera />, title: "Fotos Amadoras", desc: "Fotos escuras ou com poluição visual transmitem desconfiança e diminuem o clique." },
+  { icon: <FileText />, title: "Descrição Incompleta", desc: "Falta de informações gera dúvidas e o cliente compra do concorrente." },
+  { icon: <DollarSign />, title: "Preço Errado", desc: "Não calcular comissão e frete leva a prejuízo em cada venda." },
+  { icon: <Send />, title: "Demora no Envio", desc: "Atrasos derrubam sua reputação rapidamente nos algoritmos." },
+  { icon: <MessageSquare />, title: "Atendimento Demorado", desc: "Levar mais de 10 min para responder uma pergunta reduz em 80% a chance de venda." },
+  { icon: <Boxes />, title: "Estoque Desorganizado", desc: "Vender sem ter o produto é o erro mais grave em marketplaces." },
+  { icon: <Star />, title: "Ignorar Avaliações", desc: "Feedback negativo sem resposta prejudica sua loja publicamente." },
+  { icon: <AlertTriangle />, title: "Vender Tudo de Uma Vez", desc: "Comece com poucos produtos e escale com base em dados reais." },
 ];
 
-const toolsSections = [
+const toolsDetailed = [
   {
     category: "Marketplaces",
-    tools: [
-      { name: "Mercado Livre", url: "https://www.mercadolivre.com.br" },
-      { name: "Shopee", url: "https://shopee.com.br" },
-      { name: "Amazon", url: "https://www.amazon.com.br" },
-      { name: "Magalu", url: "https://www.magazineluiza.com.br" },
-      { name: "Americanas", url: "https://www.americanas.com.br" },
-      { name: "OLX", url: "https://www.olx.com.br" },
+    items: [
+      { name: "Mercado Livre", url: "https://www.mercadolivre.com.br", desc: "Cadastre sua loja no maior marketplace da América Latina", icon: <ShoppingBag className="h-4 w-4" /> },
+      { name: "Shopee", url: "https://shopee.com.br", desc: "Comece a vender com frete subsidiado e cupons", icon: <ShoppingBag className="h-4 w-4" /> },
+      { name: "Amazon", url: "https://www.amazon.com.br", desc: "Acesse o marketplace global com logística FBA", icon: <ShoppingBag className="h-4 w-4" /> },
+      { name: "Magalu", url: "https://www.magazineluiza.com.br", desc: "Venda na plataforma com força de marca nacional", icon: <ShoppingBag className="h-4 w-4" /> },
+      { name: "Americanas", url: "https://www.americanas.com.br", desc: "Alcance público diversificado em grande escala", icon: <ShoppingBag className="h-4 w-4" /> },
+      { name: "OLX", url: "https://www.olx.com.br", desc: "Venda direta sem comissão e com contato local", icon: <ShoppingBag className="h-4 w-4" /> },
     ],
   },
   {
     category: "Imagem e Design",
-    tools: [
-      { name: "Canva", url: "https://www.canva.com" },
-      { name: "Remove.bg", url: "https://www.remove.bg" },
+    items: [
+      { name: "Canva", url: "https://www.canva.com", desc: "Criar artes e imagens profissionais para anúncios", icon: <Palette className="h-4 w-4" /> },
+      { name: "Remove.bg", url: "https://www.remove.bg", desc: "Remover fundo das fotos dos produtos automaticamente", icon: <Image className="h-4 w-4" /> },
     ],
   },
   {
     category: "IA e Texto",
-    tools: [
-      { name: "ChatGPT", url: "https://chat.openai.com" },
-      { name: "Claude", url: "https://claude.ai" },
+    items: [
+      { name: "ChatGPT", url: "https://chat.openai.com", desc: "Criar títulos, descrições e textos otimizados com IA", icon: <Bot className="h-4 w-4" /> },
+      { name: "Claude", url: "https://claude.ai", desc: "Assistente de IA para estratégia e conteúdo avançado", icon: <Bot className="h-4 w-4" /> },
     ],
   },
   {
     category: "Gestão e Aprendizado",
-    tools: [
-      { name: "Google Sheets", url: "https://sheets.google.com" },
-      { name: "Sebrae Cursos", url: "https://www.sebrae.com.br/sites/PortalSebrae/cursosonline" },
-      { name: "Mercado Livre University", url: "https://universidade.mercadolivre.com.br" },
+    items: [
+      { name: "Google Sheets", url: "https://sheets.google.com", desc: "Acompanhar estoque, vendas e métricas em planilhas", icon: <BarChart3 className="h-4 w-4" /> },
+      { name: "Calculadora Sebrae", url: "https://www.sebrae.com.br/sites/PortalSebrae/recursos-online", desc: "Calcular preços, margens e viabilidade do negócio", icon: <Calculator className="h-4 w-4" /> },
+      { name: "Sebrae Cursos", url: "https://www.sebrae.com.br/sites/PortalSebrae/cursosonline", desc: "Cursos gratuitos sobre vendas e empreendedorismo", icon: <BookOpen className="h-4 w-4" /> },
+      { name: "ML University", url: "https://universidade.mercadolivre.com.br", desc: "Treinamentos oficiais do Mercado Livre para sellers", icon: <BookOpen className="h-4 w-4" /> },
     ],
   },
 ];
@@ -211,106 +221,185 @@ export default function VendasMarketplacesPage() {
   const stageProgress = (idx: number) => {
     const s = stages[idx];
     const done = s.items.filter((i) => checked[i.id]).length;
-    return { done, total: s.items.length };
+    return { done, total: s.items.length, pct: s.items.length > 0 ? Math.round((done / s.items.length) * 100) : 0 };
+  };
+
+  const getStageStatus = (idx: number) => {
+    const sp = stageProgress(idx);
+    if (sp.done === sp.total) return "done";
+    if (sp.done > 0) return "active";
+    // If previous stage is done, this is next
+    if (idx === 0) return "active";
+    const prevSp = stageProgress(idx - 1);
+    if (prevSp.done === prevSp.total) return "active";
+    return "pending";
   };
 
   return (
-    <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-10 pb-20">
+    <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-12 pb-20">
       {/* BACK */}
       <Link to="/vendas" className="inline-flex items-center gap-2 text-white text-sm hover:text-primary transition-colors">
         <ArrowLeft className="h-4 w-4" /> Voltar para Vendas e Presença
       </Link>
 
       {/* HERO */}
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
-        <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
-          <span className="text-white">Como vender em </span>
-          <span className="text-primary">Marketplaces</span>
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+        <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#00FFFF" }}>
+          MÓDULO ESTRATÉGICO
+        </p>
+        <h1 className="font-display text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]">
+          <span className="text-white">Como vender em{" "}</span>
+          <br />
+          <span
+            className="bg-clip-text text-transparent"
+            style={{
+              backgroundImage: "linear-gradient(90deg, #00FFFF 0%, #007A7A 50%, #00FFFF 100%)",
+            }}
+          >
+            Marketplaces
+          </span>
+          <span className="text-white">{" "}com a Soph</span>
         </h1>
-        <p className="text-white text-sm lg:text-base max-w-2xl leading-relaxed">
+        <p className="text-white text-base lg:text-lg max-w-2xl leading-relaxed">
           Aprenda a estruturar sua operação, cadastrar produtos, anunciar melhor e vender em marketplaces como Mercado Livre, Shopee e Amazon.
         </p>
 
-        {/* Marketplace chips */}
+        {/* Marketplace buttons */}
         <div className="flex flex-wrap gap-2">
-          {["Mercado Livre", "Shopee", "Amazon", "Magalu", "Americanas", "OLX"].map((m) => (
-            <span key={m} className="px-3 py-1.5 rounded-full text-xs font-semibold bg-card border border-border text-white">
-              {m}
+          {[
+            { icon: "🛒", name: "Mercado Livre" },
+            { icon: "🛍️", name: "Shopee" },
+            { icon: "📦", name: "Amazon" },
+            { icon: "🏪", name: "Magalu" },
+            { icon: "🏬", name: "Americanas" },
+            { icon: "📱", name: "OLX" },
+          ].map((m) => (
+            <span
+              key={m.name}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white border border-primary/40 hover:border-primary hover:bg-primary/10 transition-all cursor-default"
+              style={{ background: "rgba(0, 255, 255, 0.08)" }}
+            >
+              {m.icon} {m.name}
             </span>
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-3 pt-1">
-          <a href="#etapas" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-primary-foreground" style={{ background: "linear-gradient(90deg, hsl(180 100% 24%) 0%, hsl(180 100% 50%) 100%)" }}>
+        <div className="flex flex-wrap gap-3 pt-2">
+          <a
+            href="#etapas"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110"
+            style={{ background: "#00FFFF", color: "#0A192F" }}
+          >
             Continuar jornada <ArrowRight className="h-4 w-4" />
           </a>
-          <a href="#ferramentas" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm border border-primary/30 text-white hover:border-primary/60 transition-colors">
+          <a
+            href="#ferramentas"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 border-white/20 text-white hover:border-primary/60 transition-colors"
+          >
             <Wrench className="h-4 w-4" /> Ver ferramentas
           </a>
         </div>
       </motion.div>
 
-      {/* PROGRESS BAR */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-2xl border border-border p-5 bg-card space-y-3" id="etapas">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display font-bold text-base text-white">Progresso da Jornada</h2>
-          <span className="text-white text-sm font-semibold">{doneItems}/{totalItems} etapas · {progressPct}%</span>
-        </div>
-        <Progress value={progressPct} className="h-2.5 bg-muted" />
-        <div className="grid grid-cols-3 gap-3 pt-1">
-          {stages.map((s, i) => {
-            const sp = stageProgress(i);
-            return (
-              <div key={i} className="flex items-center gap-2">
-                <div className="h-7 w-7 rounded-full flex items-center justify-center bg-primary/20 text-primary flex-shrink-0">
-                  {s.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-white text-xs font-medium truncate">{s.title}</p>
-                  <p className="text-white text-[11px]">{sp.done}/{sp.total}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </motion.div>
-
-      {/* SOPH HERO TIP */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-2xl border border-primary/20 p-5 bg-card">
-        <div className="flex items-start gap-4">
-          <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-primary">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+      {/* PROGRESS TIMELINE */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} id="etapas" className="space-y-6">
+        {/* Progress bar */}
+        <div className="rounded-2xl border border-border p-6 space-y-5" style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}>
+          <div className="flex items-center justify-between">
+            <h2 className="font-display font-bold text-lg text-white">Progresso da Jornada</h2>
+            <span className="text-white text-base font-bold">{progressPct}%</span>
           </div>
-          <div className="space-y-1">
-            <h3 className="font-display font-bold text-sm text-white">Soph recomenda</h3>
-            <p className="text-white text-sm leading-relaxed">
-              "Comece pela Shopee se quiser validar mais rápido. Ela tem menor barreira de entrada e frete subsidiado para novos sellers."
-            </p>
+          <Progress value={progressPct} className="h-3 bg-muted" />
+
+          {/* Timeline steps */}
+          <div className="relative flex items-start justify-between pt-4">
+            {/* Connecting line */}
+            <div className="absolute top-[2.25rem] left-[calc(16.66%)] right-[calc(16.66%)] h-0.5 bg-border" />
+            <div
+              className="absolute top-[2.25rem] left-[calc(16.66%)] h-0.5 transition-all duration-500"
+              style={{
+                background: "#00FFFF",
+                width: progressPct >= 100
+                  ? "calc(66.66%)"
+                  : stageProgress(0).done === stageProgress(0).total && stageProgress(1).done === stageProgress(1).total
+                    ? "calc(66.66%)"
+                    : stageProgress(0).done === stageProgress(0).total
+                      ? "calc(33.33%)"
+                      : "0%",
+              }}
+            />
+
+            {stages.map((s, i) => {
+              const status = getStageStatus(i);
+              const sp = stageProgress(i);
+              return (
+                <div key={i} className="flex flex-col items-center text-center flex-1 relative z-10">
+                  <div
+                    className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-bold mb-3 border-2 transition-all ${
+                      status === "done"
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : status === "active"
+                          ? "border-primary bg-primary/20 text-white"
+                          : "border-border bg-card text-white/60"
+                    }`}
+                  >
+                    {status === "done" ? <CheckCircle2 className="h-5 w-5" /> : i + 1}
+                  </div>
+                  <p className={`text-sm font-bold mb-1 ${status === "pending" ? "text-white/60" : "text-white"}`}>
+                    {s.title}
+                  </p>
+                  <p className={`text-xs ${status === "pending" ? "text-white/40" : "text-white"}`}>
+                    {sp.done}/{sp.total}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </motion.div>
 
       {/* ONDE VENDER */}
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
-        <h2 className="font-display font-bold text-xl text-white">Onde vender?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="font-display font-bold text-2xl text-white">Onde começar a vender?</h2>
+          <span className="text-xs text-white font-medium hidden md:block">Deslize para ver todos →</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {marketplaces.map((mp) => (
-            <motion.div key={mp.name} variants={item} className="rounded-2xl border border-border p-5 bg-card hover:border-primary/30 transition-all space-y-3">
-              <h3 className="font-display font-bold text-base text-white">{mp.name}</h3>
-              <p className="text-white text-sm leading-relaxed">{mp.desc}</p>
-              <div className="text-white text-xs"><span className="font-semibold text-primary">Melhor para:</span> {mp.bestFor}</div>
-              <ul className="space-y-1">
+            <motion.div
+              key={mp.name}
+              variants={item}
+              className="rounded-2xl border border-border p-6 hover:border-primary/40 transition-all space-y-4 flex flex-col"
+              style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                  <ShoppingBag className="h-5 w-5" style={{ color: "#0A192F" }} />
+                </div>
+                <span
+                  className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider"
+                  style={{ background: "rgba(0, 255, 255, 0.15)", color: "#00FFFF" }}
+                >
+                  {mp.badge}
+                </span>
+              </div>
+              <h3 className="font-display font-bold text-lg text-white">{mp.name}</h3>
+              <ul className="space-y-2 flex-1">
                 {mp.pros.map((p) => (
-                  <li key={p} className="flex items-center gap-2 text-white text-xs">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-primary flex-shrink-0" /> {p}
+                  <li key={p} className="flex items-start gap-2 text-white text-sm">
+                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: "#00FFFF" }} />
+                    {p}
                   </li>
                 ))}
               </ul>
-              <div className="flex items-center gap-2 text-white text-xs">
-                <AlertTriangle className="h-3.5 w-3.5 text-yellow-400 flex-shrink-0" /> {mp.con}
-              </div>
-              <a href={mp.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary text-xs font-semibold hover:underline">
-                Acessar plataforma <ExternalLink className="h-3 w-3" />
+              <a
+                href={mp.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:brightness-110 mt-auto"
+                style={{ background: "#00FFFF", color: "#0A192F" }}
+              >
+                {mp.cta}
               </a>
             </motion.div>
           ))}
@@ -319,68 +408,93 @@ export default function VendasMarketplacesPage() {
 
       {/* ETAPAS / CHECKLISTS */}
       <div className="space-y-5">
-        <h2 className="font-display font-bold text-xl text-white">Etapas da Jornada</h2>
+        <h2 className="font-display font-bold text-2xl text-white">Etapas da Jornada</h2>
         {stages.map((stage, idx) => {
           const sp = stageProgress(idx);
           const isOpen = openStages[idx] ?? false;
+          const status = getStageStatus(idx);
           return (
             <Collapsible key={idx} open={isOpen} onOpenChange={(v) => setOpenStages((p) => ({ ...p, [idx]: v }))}>
               <CollapsibleTrigger asChild>
-                <button className="w-full rounded-2xl border border-border p-5 bg-card hover:border-primary/30 transition-all text-left">
+                <button className="w-full rounded-2xl border border-border p-5 hover:border-primary/30 transition-all text-left" style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-primary text-primary-foreground flex-shrink-0">
-                        {stage.icon}
-                      </div>
-                      <div>
-                        <h3 className="font-display font-bold text-base text-white">Etapa {idx + 1}: {stage.title}</h3>
-                        <p className="text-white text-xs">{sp.done}/{sp.total} concluídos</p>
-                      </div>
+                      <span
+                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider"
+                        style={{ background: "rgba(0, 255, 255, 0.15)", color: "#00FFFF" }}
+                      >
+                        ETAPA {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="font-display font-bold text-base text-white">{stage.title}</h3>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Progress value={sp.total > 0 ? (sp.done / sp.total) * 100 : 0} className="w-20 h-2 bg-muted" />
-                      {isOpen ? <ChevronUp className="h-4 w-4 text-white" /> : <ChevronDown className="h-4 w-4 text-white" />}
+                      <span className="text-white text-sm font-semibold">{sp.done}/{sp.total}</span>
+                      {isOpen ? <ChevronUp className="h-5 w-5 text-white" /> : <ChevronDown className="h-5 w-5 text-white" />}
                     </div>
                   </div>
                 </button>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="rounded-2xl border border-border border-t-0 rounded-t-none p-5 bg-card space-y-4 -mt-2">
+                <div className="rounded-2xl border border-border border-t-0 rounded-t-none p-6 space-y-5 -mt-2" style={{ background: "linear-gradient(180deg, #0A192F 0%, #102A43 100%)" }}>
                   {/* Checklist */}
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {stage.items.map((ci) => (
-                      <button key={ci.id} onClick={() => toggle(ci.id)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-muted/30 transition-colors text-left">
-                        {checked[ci.id] ? (
-                          <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                        ) : (
-                          <Circle className="h-5 w-5 text-white flex-shrink-0" />
-                        )}
-                        <span className={`text-sm font-medium ${checked[ci.id] ? "text-primary line-through" : "text-white"}`}>{ci.label}</span>
+                      <button key={ci.id} onClick={() => toggle(ci.id)} className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors text-left">
+                        <div
+                          className={`h-5 w-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                            checked[ci.id]
+                              ? "border-primary bg-primary"
+                              : "border-white/40 bg-transparent"
+                          }`}
+                        >
+                          {checked[ci.id] && <CheckCircle2 className="h-3.5 w-3.5 text-primary-foreground" />}
+                        </div>
+                        <span className={`text-sm font-medium ${checked[ci.id] ? "text-white/50 line-through" : "text-white"}`}>{ci.label}</span>
                       </button>
                     ))}
                   </div>
 
-                  {/* Soph tip */}
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/20 border border-primary/10">
-                    <Sparkles className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                    <p className="text-white text-xs leading-relaxed">
-                      <span className="font-semibold text-primary">Soph:</span> {stage.sophTip}
-                    </p>
-                  </div>
-
                   {/* Tools */}
                   {stage.tools.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-white text-xs font-semibold">Ferramentas úteis:</p>
-                      <div className="flex flex-wrap gap-2">
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4" style={{ color: "#00FFFF" }} />
+                        <p className="text-white text-sm font-bold">Ferramentas Úteis</p>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {stage.tools.map((t) => (
-                          <a key={t.name} href={t.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/30 border border-border text-white text-xs font-medium hover:border-primary/40 transition-colors">
-                            {t.icon} {t.name} <ExternalLink className="h-3 w-3" />
+                          <a
+                            key={t.name}
+                            href={t.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/40 transition-colors"
+                            style={{ background: "rgba(16, 42, 67, 0.6)" }}
+                          >
+                            <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                              <span style={{ color: "#0A192F" }}>{t.icon}</span>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-white text-sm font-bold">{t.name}</p>
+                              <p className="text-white text-xs truncate">{t.desc}</p>
+                            </div>
+                            <ExternalLink className="h-3.5 w-3.5 text-white flex-shrink-0" />
                           </a>
                         ))}
                       </div>
                     </div>
                   )}
+
+                  {/* Soph tip */}
+                  <div className="flex items-start gap-3 p-4 rounded-xl border border-primary/20" style={{ background: "rgba(0, 255, 255, 0.05)" }}>
+                    <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                      <Sparkles className="h-4 w-4" style={{ color: "#0A192F" }} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "#00FFFF" }}>DICA DA SOPH</p>
+                      <p className="text-white text-sm leading-relaxed">{stage.sophTip}</p>
+                    </div>
+                  </div>
                 </div>
               </CollapsibleContent>
             </Collapsible>
@@ -389,67 +503,85 @@ export default function VendasMarketplacesPage() {
       </div>
 
       {/* ESTRATÉGIAS */}
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
+      <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
         <div className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-primary" />
-          <h2 className="font-display font-bold text-xl text-white">Estratégias para Vender Mais</h2>
+          <TrendingUp className="h-5 w-5" style={{ color: "#00FFFF" }} />
+          <h2 className="font-display font-bold text-2xl text-white">Estratégias para Vencer</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {strategies.map((s) => (
-            <motion.div key={s.title} variants={item} className="rounded-xl border border-border p-4 bg-card hover:border-primary/30 transition-all">
-              <div className="h-9 w-9 rounded-lg flex items-center justify-center bg-primary text-primary-foreground mb-2">
-                {s.icon}
-              </div>
-              <h4 className="font-display font-bold text-sm text-white mb-1">{s.title}</h4>
-              <p className="text-white text-xs leading-relaxed">{s.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
 
-      {/* ERROS COMUNS */}
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-yellow-400" />
-          <h2 className="font-display font-bold text-xl text-white">Erros Comuns para Evitar</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Top sellers */}
+          <div className="rounded-2xl border border-border p-6 space-y-4" style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" style={{ color: "#00FFFF" }} />
+              <h3 className="font-display font-bold text-lg text-white">O que os Top Sellers fazem</h3>
+            </div>
+            <div className="space-y-3">
+              {strategies.slice(0, 5).map((s) => (
+                <div key={s.title} className="p-3 rounded-xl border border-border/50 hover:border-primary/20 transition-all">
+                  <h4 className="font-bold text-sm text-white mb-1" style={{ color: "#00FFFF" }}>{s.title}</h4>
+                  <p className="text-white text-sm leading-relaxed">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Errors that kill sales */}
+          <div className="rounded-2xl border border-border p-6 space-y-4" style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}>
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-yellow-400" />
+              <h3 className="font-display font-bold text-lg text-white">Erros que matam suas vendas</h3>
+            </div>
+            <div className="space-y-3">
+              {commonErrors.slice(0, 5).map((e) => (
+                <div key={e.title} className="p-3 rounded-xl border border-border/50 hover:border-yellow-500/20 transition-all">
+                  <h4 className="font-bold text-sm text-yellow-400 mb-1">{e.title}</h4>
+                  <p className="text-white text-sm leading-relaxed">{e.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {commonErrors.map((e) => (
-            <motion.div key={e.title} variants={item} className="rounded-xl border border-border p-4 bg-card flex items-start gap-3">
-              <div className="h-9 w-9 rounded-lg flex items-center justify-center bg-destructive/20 text-destructive flex-shrink-0">
-                {e.icon}
-              </div>
-              <div>
-                <h4 className="font-display font-bold text-sm text-white mb-0.5">{e.title}</h4>
-                <p className="text-white text-xs leading-relaxed">{e.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-        <div className="rounded-xl border border-yellow-500/30 p-4 bg-yellow-500/5 flex items-start gap-3">
+
+        {/* Fraud warning */}
+        <div className="rounded-xl border border-yellow-500/30 p-5 flex items-start gap-3" style={{ background: "rgba(234, 179, 8, 0.05)" }}>
           <Shield className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
           <div>
-            <h4 className="font-display font-bold text-sm text-white mb-0.5">Cuidado com fraudes</h4>
-            <p className="text-white text-xs leading-relaxed">
+            <h4 className="font-display font-bold text-base text-white mb-1">Cuidado com fraudes</h4>
+            <p className="text-white text-sm leading-relaxed">
               Desconfie de propostas fora da plataforma, links suspeitos e pedidos de pagamento externo. Venda sempre pelo canal oficial do marketplace.
             </p>
           </div>
         </div>
       </motion.div>
 
-      {/* FERRAMENTAS */}
-      <div className="space-y-4" id="ferramentas">
+      {/* FERRAMENTAS ÚTEIS */}
+      <div className="space-y-6" id="ferramentas">
         <div className="flex items-center gap-2">
-          <Wrench className="h-5 w-5 text-primary" />
-          <h2 className="font-display font-bold text-xl text-white">Ferramentas Úteis</h2>
+          <Wrench className="h-5 w-5" style={{ color: "#00FFFF" }} />
+          <h2 className="font-display font-bold text-2xl text-white">Ferramentas Úteis</h2>
         </div>
-        {toolsSections.map((sec) => (
-          <div key={sec.category} className="space-y-2">
-            <h3 className="font-display font-semibold text-sm text-primary">{sec.category}</h3>
-            <div className="flex flex-wrap gap-2">
-              {sec.tools.map((t) => (
-                <a key={t.name} href={t.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-card border border-border text-white text-sm font-medium hover:border-primary/40 transition-colors">
-                  {t.name} <ExternalLink className="h-3.5 w-3.5 text-primary" />
+        {toolsDetailed.map((sec) => (
+          <div key={sec.category} className="space-y-3">
+            <h3 className="font-display font-bold text-base" style={{ color: "#00FFFF" }}>{sec.category}</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {sec.items.map((t) => (
+                <a
+                  key={t.name}
+                  href={t.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-4 rounded-xl border border-border hover:border-primary/40 transition-all group"
+                  style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}
+                >
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                    <span style={{ color: "#0A192F" }}>{t.icon}</span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-white text-sm font-bold">{t.name}</p>
+                    <p className="text-white text-xs leading-relaxed">{t.desc}</p>
+                  </div>
+                  <ExternalLink className="h-4 w-4 text-white group-hover:text-primary transition-colors flex-shrink-0" />
                 </a>
               ))}
             </div>
@@ -457,63 +589,46 @@ export default function VendasMarketplacesPage() {
         ))}
       </div>
 
-      {/* PRÓXIMOS PASSOS */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-4">
-        <h2 className="font-display font-bold text-xl text-white">Próximos Passos</h2>
-
-        <div className="rounded-2xl border border-border p-5 bg-card space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-3">
-              <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-primary" /> Checklist de Lançamento
-              </h3>
-              <ul className="space-y-1.5 text-white text-xs">
-                <li className="flex items-center gap-2"><Circle className="h-3 w-3 text-white flex-shrink-0" /> Escolher 1-2 marketplaces para começar</li>
-                <li className="flex items-center gap-2"><Circle className="h-3 w-3 text-white flex-shrink-0" /> Cadastrar os 5 primeiros produtos</li>
-                <li className="flex items-center gap-2"><Circle className="h-3 w-3 text-white flex-shrink-0" /> Monitorar métricas na primeira semana</li>
-                <li className="flex items-center gap-2"><Circle className="h-3 w-3 text-white flex-shrink-0" /> Ajustar preços e fotos com base nos dados</li>
-              </ul>
-            </div>
-            <div className="space-y-3">
-              <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-primary" /> Cronograma de 30 dias
-              </h3>
-              <ul className="space-y-1.5 text-white text-xs">
-                <li><span className="font-semibold text-primary">Semana 1:</span> Documentação + cadastro na plataforma</li>
-                <li><span className="font-semibold text-primary">Semana 2:</span> Primeiros anúncios publicados</li>
-                <li><span className="font-semibold text-primary">Semana 3:</span> Otimizar títulos, fotos e preços</li>
-                <li><span className="font-semibold text-primary">Semana 4:</span> Avaliar resultados e escalar</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Soph final */}
-        <div className="rounded-2xl border border-primary/20 p-5 bg-card">
-          <div className="flex items-start gap-4">
-            <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-primary text-primary-foreground flex-shrink-0">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-display font-bold text-sm text-white">Quer que a Soph te ajude?</h3>
-              <p className="text-white text-sm leading-relaxed">
-                "Posso te ajudar a escolher o primeiro marketplace, montar seus anúncios e acompanhar seus resultados. É só pedir."
-              </p>
-              <Link to="/soph" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-primary-foreground" style={{ background: "linear-gradient(90deg, hsl(180 100% 24%) 0%, hsl(180 100% 50%) 100%)" }}>
-                Falar com a Soph <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom buttons */}
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link to="/vendas" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm border border-border text-white hover:border-primary/40 transition-colors">
-            <ArrowLeft className="h-4 w-4" /> Voltar para Vendas
-          </Link>
-          <a href="#etapas" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-primary-foreground" style={{ background: "linear-gradient(90deg, hsl(180 100% 24%) 0%, hsl(180 100% 50%) 100%)" }}>
+      {/* PRONTO PARA COMEÇAR - CTA FINAL */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="rounded-2xl border border-primary/20 p-8 text-center space-y-5"
+        style={{ background: "linear-gradient(135deg, #007A7A 0%, #102A43 100%)" }}
+      >
+        <h2 className="font-display font-extrabold text-2xl lg:text-3xl text-white">Pronto para começar?</h2>
+        <p className="text-white text-base max-w-lg mx-auto leading-relaxed">
+          Você está a um passo de colocar seu negócio no radar de milhões de compradores.
+        </p>
+        <div className="flex flex-wrap justify-center gap-3 pt-2">
+          <a
+            href="#etapas"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110"
+            style={{ background: "#00FFFF", color: "#0A192F" }}
+          >
             Continuar jornada <ArrowRight className="h-4 w-4" />
           </a>
+          <Link
+            to="/vendas"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 border-white/30 text-white hover:border-white/60 transition-colors"
+          >
+            Voltar para Vendas
+          </Link>
+        </div>
+
+        {/* Stats */}
+        <div className="flex justify-center gap-10 pt-4">
+          {[
+            { value: "45min", label: "TEMPO MÉDIO" },
+            { value: "8", label: "AULAS EM VÍDEO" },
+            { value: "03", label: "CHECKLISTS PDF" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <p className="font-display font-extrabold text-2xl text-white">{stat.value}</p>
+              <p className="text-white text-[10px] font-semibold uppercase tracking-wider mt-1">{stat.label}</p>
+            </div>
+          ))}
         </div>
       </motion.div>
     </div>
