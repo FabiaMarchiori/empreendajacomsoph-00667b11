@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Globe, ShoppingBag, ArrowRight, Circle, Camera, Star, Target, Sparkles, TrendingUp, Users } from "lucide-react";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
@@ -103,12 +104,15 @@ export default function VendasPage() {
               ))}
             </div>
 
-            <button
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm group-hover:gap-3 transition-all"
-              style={{ background: "#00FFFF", color: "#0A192F" }}
-            >
-              {card.cta} <ArrowRight className="h-4 w-4" />
-            </button>
+            {card.link ? (
+              <Link to={card.link} className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm group-hover:gap-3 transition-all" style={{ background: "#00FFFF", color: "#0A192F" }}>
+                {card.cta} <ArrowRight className="h-4 w-4" />
+              </Link>
+            ) : (
+              <button className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm group-hover:gap-3 transition-all" style={{ background: "#00FFFF", color: "#0A192F" }}>
+                {card.cta} <ArrowRight className="h-4 w-4" />
+              </button>
+            )}
           </motion.div>
         ))}
       </motion.div>

@@ -8,6 +8,7 @@ import HomePage from "./pages/Home";
 import FornecedoresPage from "./pages/Fornecedores";
 import EstruturePage from "./pages/Estruture";
 import VendasPage from "./pages/Vendas";
+import VendasMarketplacesPage from "./pages/VendasMarketplaces";
 import GestaoPage from "./pages/Gestao";
 import SophPage from "./pages/Soph";
 import AcessosPage from "./pages/Acessos";
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/fornecedores" element={<FornecedoresPage />} />
             <Route path="/estruture" element={<EstruturePage />} />
             <Route path="/vendas" element={<VendasPage />} />
+            <Route path="/vendas/marketplaces" element={<VendasMarketplacesPage />} />
             <Route path="/gestao" element={<GestaoPage />} />
             <Route path="/soph" element={<SophPage />} />
             <Route path="/acessos" element={<AcessosPage />} />
