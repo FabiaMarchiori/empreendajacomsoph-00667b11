@@ -171,7 +171,7 @@ export default function HomePage() {
 
       {/* Bloco 4 — Insight da Soph */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="rounded-2xl border border-primary/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" <motion.div variants={item} className="rounded-2xl border border-primary/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' }}>
+        <motion.div variants={item} className="rounded-2xl border border-primary/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' }}>
           <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-[70px] -translate-y-1/2 translate-x-1/3 opacity-12 bg-gradient-primary-btn" />
           <div className="relative flex items-start gap-4">
             <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: GRAD }}>
