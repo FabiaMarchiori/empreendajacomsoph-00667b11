@@ -244,7 +244,7 @@ export default function VendasMarketplacesPage() {
 
       {/* HERO */}
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-        <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#00FFFF" }}>
+        <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#00EFFF" }}>
           MÓDULO ESTRATÉGICO
         </p>
         <h1 className="font-display text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]">
@@ -277,7 +277,7 @@ export default function VendasMarketplacesPage() {
             <span
               key={m.name}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white border border-primary/40 hover:border-primary hover:bg-primary/10 transition-all cursor-default"
-              style={{ background: "rgba(0, 255, 255, 0.08)" }}
+              style={{ background: "rgba(0, 239, 255, 0.08)" }}
             >
               {m.icon} {m.name}
             </span>
@@ -288,7 +288,7 @@ export default function VendasMarketplacesPage() {
           <a
             href="#etapas"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110"
-            style={{ background: "#00FFFF", color: "#0A192F" }}
+            style={{ background: "#00EFFF", color: "#0A192F" }}
           >
             Continuar jornada <ArrowRight className="h-4 w-4" />
           </a>
@@ -373,12 +373,12 @@ export default function VendasMarketplacesPage() {
               style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}
             >
               <div className="flex items-center justify-between">
-                <div className="h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#00EFFF" }}>
                   <ShoppingBag className="h-5 w-5" style={{ color: "#0A192F" }} />
                 </div>
                 <span
                   className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider"
-                  style={{ background: "rgba(0, 255, 255, 0.15)", color: "#00FFFF" }}
+                  style={{ background: "rgba(0, 239, 255, 0.15)", color: "#00EFFF" }}
                 >
                   {mp.badge}
                 </span>
@@ -387,7 +387,7 @@ export default function VendasMarketplacesPage() {
               <ul className="space-y-2 flex-1">
                 {mp.pros.map((p) => (
                   <li key={p} className="flex items-start gap-2 text-white text-sm">
-                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: "#00FFFF" }} />
+                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: "#00EFFF" }} />
                     {p}
                   </li>
                 ))}
@@ -397,7 +397,7 @@ export default function VendasMarketplacesPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:brightness-110 mt-auto"
-                style={{ background: "#00FFFF", color: "#0A192F" }}
+                style={{ background: "#00EFFF", color: "#0A192F" }}
               >
                 {mp.cta}
               </a>
@@ -421,7 +421,7 @@ export default function VendasMarketplacesPage() {
                     <div className="flex items-center gap-3">
                       <span
                         className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider"
-                        style={{ background: "rgba(0, 255, 255, 0.15)", color: "#00FFFF" }}
+                        style={{ background: "rgba(0, 239, 255, 0.15)", color: "#00EFFF" }}
                       >
                         ETAPA {String(idx + 1).padStart(2, "0")}
                       </span>
@@ -458,7 +458,7 @@ export default function VendasMarketplacesPage() {
                   {stage.tools.length > 0 && (
                     <div className="space-y-3 pt-2">
                       <div className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4" style={{ color: "#00FFFF" }} />
+                        <Sparkles className="h-4 w-4" style={{ color: "#00EFFF" }} />
                         <p className="text-white text-sm font-bold">Ferramentas Úteis</p>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -471,7 +471,7 @@ export default function VendasMarketplacesPage() {
                             className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/40 transition-colors"
                             style={{ background: "rgba(16, 42, 67, 0.6)" }}
                           >
-                            <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                            <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#00EFFF" }}>
                               <span style={{ color: "#0A192F" }}>{t.icon}</span>
                             </div>
                             <div className="min-w-0 flex-1">
@@ -486,12 +486,12 @@ export default function VendasMarketplacesPage() {
                   )}
 
                   {/* Soph tip */}
-                  <div className="flex items-start gap-3 p-4 rounded-xl border border-primary/20" style={{ background: "rgba(0, 255, 255, 0.05)" }}>
-                    <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                  <div className="flex items-start gap-3 p-4 rounded-xl border border-primary/20" style={{ background: "rgba(0, 239, 255, 0.05)" }}>
+                    <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "#00EFFF" }}>
                       <Sparkles className="h-4 w-4" style={{ color: "#0A192F" }} />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "#00FFFF" }}>DICA DA SOPH</p>
+                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "#00EFFF" }}>DICA DA SOPH</p>
                       <p className="text-white text-sm leading-relaxed">{stage.sophTip}</p>
                     </div>
                   </div>
@@ -505,7 +505,7 @@ export default function VendasMarketplacesPage() {
       {/* ESTRATÉGIAS */}
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
         <div className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5" style={{ color: "#00FFFF" }} />
+          <TrendingUp className="h-5 w-5" style={{ color: "#00EFFF" }} />
           <h2 className="font-display font-bold text-2xl text-white">Estratégias para Vencer</h2>
         </div>
 
@@ -513,13 +513,13 @@ export default function VendasMarketplacesPage() {
           {/* Top sellers */}
           <div className="rounded-2xl border border-border p-6 space-y-4" style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}>
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" style={{ color: "#00FFFF" }} />
+              <TrendingUp className="h-5 w-5" style={{ color: "#00EFFF" }} />
               <h3 className="font-display font-bold text-lg text-white">O que os Top Sellers fazem</h3>
             </div>
             <div className="space-y-3">
               {strategies.slice(0, 5).map((s) => (
                 <div key={s.title} className="p-3 rounded-xl border border-border/50 hover:border-primary/20 transition-all">
-                  <h4 className="font-bold text-sm text-white mb-1" style={{ color: "#00FFFF" }}>{s.title}</h4>
+                  <h4 className="font-bold text-sm text-white mb-1" style={{ color: "#00EFFF" }}>{s.title}</h4>
                   <p className="text-white text-sm leading-relaxed">{s.desc}</p>
                 </div>
               ))}
@@ -558,12 +558,12 @@ export default function VendasMarketplacesPage() {
       {/* FERRAMENTAS ÚTEIS */}
       <div className="space-y-6" id="ferramentas">
         <div className="flex items-center gap-2">
-          <Wrench className="h-5 w-5" style={{ color: "#00FFFF" }} />
+          <Wrench className="h-5 w-5" style={{ color: "#00EFFF" }} />
           <h2 className="font-display font-bold text-2xl text-white">Ferramentas Úteis</h2>
         </div>
         {toolsDetailed.map((sec) => (
           <div key={sec.category} className="space-y-3">
-            <h3 className="font-display font-bold text-base" style={{ color: "#00FFFF" }}>{sec.category}</h3>
+            <h3 className="font-display font-bold text-base" style={{ color: "#00EFFF" }}>{sec.category}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {sec.items.map((t) => (
                 <a
@@ -574,7 +574,7 @@ export default function VendasMarketplacesPage() {
                   className="flex items-center gap-3 p-4 rounded-xl border border-border hover:border-primary/40 transition-all group"
                   style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}
                 >
-                  <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#00FFFF" }}>
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#00EFFF" }}>
                     <span style={{ color: "#0A192F" }}>{t.icon}</span>
                   </div>
                   <div className="min-w-0 flex-1">
@@ -605,7 +605,7 @@ export default function VendasMarketplacesPage() {
           <a
             href="#etapas"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110"
-            style={{ background: "#00FFFF", color: "#0A192F" }}
+            style={{ background: "#00EFFF", color: "#0A192F" }}
           >
             Continuar jornada <ArrowRight className="h-4 w-4" />
           </a>

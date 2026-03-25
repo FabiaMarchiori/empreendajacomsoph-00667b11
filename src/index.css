@@ -17,8 +17,8 @@
     --popover: 210 63% 16%;
     --popover-foreground: 0 0% 100%;
 
-    /* Primary: #00FFFF = hsl(180, 100%, 50%) */
-    --primary: 180 100% 50%;
+    /* Primary: #00EFFF = hsl(180, 100%, 50%) */
+    --primary: 184 100% 50%;
     --primary-foreground: 217 65% 11%;
 
     --secondary: 210 63% 16%;
@@ -36,23 +36,23 @@
 
     --border: 210 40% 22%;
     --input: 210 40% 22%;
-    --ring: 180 100% 50%;
+    --ring: 184 100% 50%;
 
     --radius: 0.75rem;
 
     /* Sidebar */
     --sidebar-background: 210 63% 16%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 180 100% 50%;
+    --sidebar-primary: 184 100% 50%;
     --sidebar-primary-foreground: 217 65% 11%;
     --sidebar-accent: 210 50% 20%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 210 40% 22%;
-    --sidebar-ring: 180 100% 50%;
+    --sidebar-ring: 184 100% 50%;
 
     /* Custom tokens */
     --surface-elevated: 210 55% 14%;
-    --glow-primary: 180 100% 50%;
+    --glow-primary: 184 100% 50%;
   }
 }
 
@@ -98,11 +98,11 @@
   }
 
   .shadow-glow {
-    box-shadow: 0 0 24px -6px hsl(180 100% 50% / 0.15);
+    box-shadow: 0 0 24px -6px hsl(184 100% 50% / 0.15);
   }
 
   .shadow-glow-sm {
-    box-shadow: 0 0 12px -3px hsl(180 100% 50% / 0.1);
+    box-shadow: 0 0 12px -3px hsl(184 100% 50% / 0.1);
   }
 
   /* Gradient: cards / hero / premium blocks — #102A43 → #0A192F */

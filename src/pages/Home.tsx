@@ -67,15 +67,15 @@ export default function HomePage() {
           </div>
 
           <div className="relative z-10 max-w-lg">
-            <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#00FFFF] mb-3">Seu Ecossistema Empreendedor</p>
+            <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#00EFFF] mb-3">Seu Ecossistema Empreendedor</p>
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">
               Olá, Empreendedora! <span className="inline-block">👋</span>
             </h1>
             <p className="text-white text-base max-w-lg mb-2 leading-relaxed">
-              Bem-vinda ao <span className="font-bold text-[#00FFFF]">EmpreendaJá</span>. Tudo o que você precisa para empreender, em um só lugar.
+              Bem-vinda ao <span className="font-bold text-[#00EFFF]">EmpreendaJá</span>. Tudo o que você precisa para empreender, em um só lugar.
             </p>
             <p className="text-sm text-white mb-8 leading-relaxed">
-              Você tem <span className="font-bold text-[#00FFFF]">3 acessos ativos</span> e <span className="font-bold text-[#00FFFF]">2 próximos passos</span> recomendados.
+              Você tem <span className="font-bold text-[#00EFFF]">3 acessos ativos</span> e <span className="font-bold text-[#00EFFF]">2 próximos passos</span> recomendados.
             </p>
             <div className="flex flex-wrap gap-3">
               <button onClick={() => navigate("/estruture")} className="px-5 py-2.5 rounded-xl text-[#0A192F] text-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_0_20px_-4px_rgba(0,239,255,0.4)]" style={{ background: GRAD }}>
@@ -84,7 +84,7 @@ export default function HomePage() {
               <button onClick={() => navigate("/acessos")} className="px-5 py-2.5 rounded-xl border-2 border-white/40 text-white text-sm font-bold hover:bg-white/10 hover:border-white/60 transition-all">
                 Ver meus acessos
               </button>
-              <button onClick={() => navigate("/soph")} className="px-5 py-2.5 rounded-xl border-2 border-[#00FFFF]/50 text-[#00FFFF] text-sm font-bold hover:bg-[#00FFFF]/10 transition-all flex items-center gap-2">
+              <button onClick={() => navigate("/soph")} className="px-5 py-2.5 rounded-xl border-2 border-[#00EFFF]/50 text-[#00EFFF] text-sm font-bold hover:bg-[#00EFFF]/10 transition-all flex items-center gap-2">
                 <MessageCircle className="h-4 w-4" /> Falar com a Soph
               </button>
             </div>
@@ -96,7 +96,7 @@ export default function HomePage() {
       <motion.section variants={container} initial="hidden" animate="show">
         <motion.div variants={item} className="flex items-center justify-between mb-6">
           <h2 className="font-display text-xl font-bold text-white tracking-tight">Seus acessos principais</h2>
-          <button onClick={() => navigate("/acessos")} className="text-xs text-[#00FFFF] hover:underline font-bold tracking-wide">Ver todos</button>
+          <button onClick={() => navigate("/acessos")} className="text-xs text-[#00EFFF] hover:underline font-bold tracking-wide">Ver todos</button>
         </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
@@ -179,7 +179,7 @@ export default function HomePage() {
 
       {/* Bloco 4 — Insight da Soph */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="rounded-2xl border border-[#00FFFF]/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}>
+        <motion.div variants={item} className="rounded-2xl border border-[#00EFFF]/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}>
           <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-[70px] -translate-y-1/2 translate-x-1/3 opacity-12" style={{ background: '#00EFFF' }} />
           <div className="relative flex items-start gap-4">
             <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: GRAD }}>
