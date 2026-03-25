@@ -589,23 +589,24 @@ export default function VendasMarketplacesPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="rounded-2xl border border-primary/20 p-8 text-center space-y-5"
-        style={{ background: "linear-gradient(135deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}
+        className="rounded-2xl border border-[#00EFFF]/25 p-8 text-center space-y-5"
+        style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}
       >
-        <h2 className="font-display font-extrabold text-2xl lg:text-3xl text-primary-foreground">Pronto para começar?</h2>
-        <p className="text-primary-foreground text-base max-w-lg mx-auto leading-relaxed">
+        <h2 className="font-display font-extrabold text-2xl lg:text-3xl text-white">Pronto para começar?</h2>
+        <p className="text-white text-base max-w-lg mx-auto leading-relaxed">
           Você está a um passo de colocar seu negócio no radar de milhões de compradores.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           <a
             href="#etapas"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-primary-foreground text-primary transition-all hover:brightness-110"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-[#0A192F] transition-all hover:opacity-90 shadow-[0_0_20px_-4px_rgba(0,239,255,0.4)]"
+            style={{ background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}
           >
             Continuar jornada <ArrowRight className="h-4 w-4" />
           </a>
           <Link
             to="/vendas"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 border-primary-foreground/30 text-primary-foreground hover:border-primary-foreground/60 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 border-white/30 text-white hover:border-white/60 transition-colors"
           >
             Voltar para Vendas
           </Link>
@@ -619,7 +620,7 @@ export default function VendasMarketplacesPage() {
             { value: "03", label: "CHECKLISTS PDF" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <p className="font-display font-extrabold text-2xl text-white">{stat.value}</p>
+              <p className="font-display font-extrabold text-2xl text-gradient-primary">{stat.value}</p>
               <p className="text-white text-[10px] font-semibold uppercase tracking-wider mt-1">{stat.label}</p>
             </div>
           ))}

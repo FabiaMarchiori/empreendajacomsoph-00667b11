@@ -56,9 +56,10 @@ export function AppSidebar() {
             end={item.url === "/"}
             className={`flex items-center gap-4 px-4 py-4 rounded-xl text-sm transition-all ${
               active
-                ? "bg-gradient-primary-btn text-primary-foreground font-bold border border-primary/50 shadow-glow"
+                ? "text-[#0A192F] font-bold border border-[#00EFFF]/40 shadow-[0_0_20px_-4px_rgba(0,239,255,0.35)]"
                 : "text-white font-semibold hover:bg-white/5"
             }`}
+            style={active ? { background: 'linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' } : undefined}
             activeClassName=""
           >
             <item.icon className="h-12 w-12 flex-shrink-0" strokeWidth={2.2} />
@@ -74,7 +75,7 @@ export function AppSidebar() {
       collapsible="icon"
       className="border-r border-border/40"
       style={{
-        background: 'linear-gradient(180deg, #102A43 0%, #0A192F 60%, #0A192F 100%)',
+        background: 'linear-gradient(180deg, #0F2336 0%, #0A192F 50%, #081525 100%)',
       }}
     >
       <SidebarHeader className="p-4">
@@ -114,8 +115,8 @@ export function AppSidebar() {
       <SidebarFooter className="p-3">
         {!collapsed && (
           <div
-            className="rounded-xl p-4 border border-primary/20"
-            style={{ background: 'linear-gradient(135deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' }}
+            className="rounded-xl p-4 border border-[#00EFFF]/20"
+            style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}
           >
             <div className="flex items-center gap-2.5 mb-2">
               <div
@@ -123,9 +124,9 @@ export function AppSidebar() {
               >
                 <MessageCircle className="h-4 w-4 text-primary-foreground" />
               </div>
-              <span className="text-xs font-bold text-primary-foreground">Soph diz:</span>
+              <span className="text-xs font-bold text-white">Soph diz:</span>
             </div>
-            <p className="text-[11px] text-primary-foreground/80 leading-relaxed font-medium">
+            <p className="text-[11px] text-white/80 leading-relaxed font-medium">
               "Precisa de ajuda? Estou aqui para te orientar!"
             </p>
           </div>
