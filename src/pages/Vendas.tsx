@@ -1,104 +1,152 @@
 import { motion } from "framer-motion";
-import { Globe, ShoppingBag, ArrowRight, CheckCircle2, Circle, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { Globe, ShoppingBag, ArrowRight, CheckCircle2, Camera, Star, Target, Sparkles, TrendingUp, Users } from "lucide-react";
 
-const sections = [
+const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
+const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
+
+const pathCards = [
   {
     title: "Criar Site e Presença Online",
-    description: "O essencial para sua marca existir no digital",
-    icon: <Globe className="h-5 w-5" />,
-    steps: [
-      "Definir objetivos da presença digital",
-      "Escolher plataforma (Instagram, site, marketplace)",
-      "Criar perfis profissionais nas redes sociais",
-      "Definir identidade visual para o digital",
-      "Criar conteúdo inicial (fotos, textos, vídeos)",
-      "Configurar link na bio e catálogo online",
-    ],
+    description: "Construa sua base digital, fortaleça sua marca e prepare seu negócio para ser encontrado.",
+    icon: <Globe className="h-6 w-6" />,
+    steps: ["Configurar Google Meu Negócio", "Identidade visual no Instagram", "Landing page de conversão"],
+    cta: "Iniciar Jornada Digital",
   },
   {
     title: "Como Vender em Marketplaces",
-    description: "Venda no Mercado Livre, Shopee, Amazon e mais",
-    icon: <ShoppingBag className="h-5 w-5" />,
-    steps: [
-      "Escolher os marketplaces mais adequados",
-      "Criar conta de vendedor",
-      "Cadastrar produtos com boas fotos e descrições",
-      "Definir preços competitivos",
-      "Configurar frete e logística",
-      "Acompanhar métricas e avaliações",
-    ],
+    description: "Aprenda a estruturar sua operação para vender em grandes marketplaces com mais clareza e eficiência.",
+    icon: <ShoppingBag className="h-6 w-6" />,
+    steps: ["Pré-requisitos e documentação", "Anúncios de alta performance", "Logística e expedição"],
+    cta: "Escalar em Marketplaces",
   },
 ];
 
-const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
-const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
+const tips = [
+  {
+    icon: <Camera className="h-5 w-5" />,
+    title: "Fotos que Vendem",
+    description: "Aprenda a criar imagens profissionais que convertem visitantes em compradores reais.",
+  },
+  {
+    icon: <Star className="h-5 w-5" />,
+    title: "Prova Social",
+    description: "Use depoimentos, avaliações e números para gerar confiança imediata no seu público.",
+  },
+  {
+    icon: <Target className="h-5 w-5" />,
+    title: "Anúncios Estratégicos",
+    description: "Invista de forma inteligente em tráfego pago para escalar suas vendas com previsibilidade.",
+  },
+];
 
 export default function VendasPage() {
-  const [openSection, setOpenSection] = useState<number | null>(null);
-  const [completed, setCompleted] = useState<Record<string, boolean[]>>({});
-
-  const toggleStep = (title: string, idx: number, total: number) => {
-    setCompleted((prev) => {
-      const c = prev[title] || Array(total).fill(false);
-      const u = [...c]; u[idx] = !u[idx];
-      return { ...prev, [title]: u };
-    });
-  };
-
   return (
-    <div className="p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-2xl font-bold text-foreground mb-1">Vendas e Presença</h1>
-        <p className="text-sm text-muted-foreground">Construa sua presença digital e aprenda a vender mais.</p>
+    <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-10">
+      {/* HERO */}
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+        <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
+          <span className="text-white">Domine sua </span>
+          <span style={{ color: "#00FFFF" }}>Presença Digital</span>
+          <br />
+          <span className="text-white">& Venda Mais</span>
+        </h1>
+        <p className="text-white text-sm lg:text-base max-w-2xl leading-relaxed">
+          Não basta estar online. É preciso ser encontrado, gerar confiança e transformar presença digital em vendas reais.
+        </p>
+        <div className="flex items-center gap-2 pt-1">
+          <div className="flex -space-x-2">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="h-7 w-7 rounded-full border-2 border-background flex items-center justify-center" style={{ background: "linear-gradient(135deg, #007A7A, #00FFFF)" }}>
+                <Users className="h-3 w-3 text-white" />
+              </div>
+            ))}
+          </div>
+          <p className="text-white text-xs font-medium">
+            Empreendedores já estão fortalecendo sua presença digital esta semana.
+          </p>
+        </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }} className="bg-gradient-card rounded-xl border border-primary/15 p-4 flex items-start gap-3 shadow-glow-sm">
-        <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-          <MessageCircle className="h-4 w-4 text-primary" />
-        </div>
-        <div>
-          <p className="text-xs text-foreground/80 font-medium">Soph diz:</p>
-          <p className="text-xs text-muted-foreground leading-relaxed">"Ter presença online é essencial. Comece pelo Instagram e depois expanda!"</p>
-        </div>
+      {/* DOIS CAMINHOS */}
+      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {pathCards.map((card) => (
+          <motion.div
+            key={card.title}
+            variants={item}
+            className="relative rounded-2xl border border-primary/20 p-6 flex flex-col bg-gradient-card hover:border-primary/40 transition-all group"
+          >
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
+            <div className="h-12 w-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "linear-gradient(135deg, #007A7A, #00FFFF)" }}>
+              <span className="text-white">{card.icon}</span>
+            </div>
+
+            <h3 className="font-display font-bold text-lg text-white mb-2">{card.title}</h3>
+            <p className="text-white text-sm leading-relaxed mb-5">{card.description}</p>
+
+            <div className="space-y-3 mb-6 flex-1">
+              {card.steps.map((step, idx) => (
+                <div key={idx} className="flex items-center gap-3">
+                  <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#00FFFF" }} />
+                  <span className="text-white text-sm">{step}</span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm group-hover:gap-3 transition-all"
+              style={{ background: "linear-gradient(90deg, #007A7A 0%, #00FFFF 100%)", color: "#0A192F" }}
+            >
+              {card.cta} <ArrowRight className="h-4 w-4" />
+            </button>
+          </motion.div>
+        ))}
       </motion.div>
 
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
-        {sections.map((sec, idx) => {
-          const steps = completed[sec.title] || Array(sec.steps.length).fill(false);
-          const done = steps.filter(Boolean).length;
-          const isOpen = openSection === idx;
-          return (
-            <motion.div key={sec.title} variants={item} className="bg-card rounded-xl border border-border overflow-hidden">
-              <button onClick={() => setOpenSection(isOpen ? null : idx)} className="w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors">
-                <div className="h-10 w-10 rounded-lg bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">{sec.icon}</div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-display font-semibold text-sm text-foreground">{sec.title}</h3>
-                  <p className="text-xs text-muted-foreground">{sec.description}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-muted-foreground">{done}/{sec.steps.length}</span>
-                  <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${(done / sec.steps.length) * 100}%` }} />
-                  </div>
-                  <ArrowRight className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`} />
-                </div>
+      {/* SOPH ESTRATÉGICA */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="relative rounded-2xl border border-primary/20 p-6 bg-gradient-card overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
+        <div className="flex items-start gap-4">
+          <div className="h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "linear-gradient(135deg, #007A7A, #00FFFF)" }}>
+            <Sparkles className="h-5 w-5 text-white" />
+          </div>
+          <div className="flex-1 space-y-3">
+            <h3 className="font-display font-bold text-base text-white">Soph sugere para seu nicho</h3>
+            <p className="text-white text-sm leading-relaxed">
+              "Pelo seu perfil, começar pelo Instagram Shopping e por marketplaces pode gerar retorno mais rápido. Quer que eu monte um roteiro inicial para você?"
+            </p>
+            <div className="flex items-center gap-3 pt-1">
+              <button
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all"
+                style={{ background: "linear-gradient(90deg, #007A7A 0%, #00FFFF 100%)", color: "#0A192F" }}
+              >
+                Criar roteiro <ArrowRight className="h-3.5 w-3.5" />
               </button>
-              {isOpen && (
-                <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} className="border-t border-border">
-                  <div className="p-5 space-y-3">
-                    {sec.steps.map((step, sIdx) => (
-                      <button key={sIdx} onClick={() => toggleStep(sec.title, sIdx, sec.steps.length)} className="w-full flex items-center gap-3 text-left group">
-                        {steps[sIdx] ? <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" /> : <Circle className="h-4 w-4 text-muted-foreground flex-shrink-0 group-hover:text-primary/50" />}
-                        <span className={`text-sm ${steps[sIdx] ? "text-muted-foreground line-through" : "text-foreground"}`}>{step}</span>
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
-          );
-        })}
+              <span className="text-white text-xs">Baseado no seu perfil e segmento</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* DICAS DE ESPECIALISTA */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="space-y-4">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="h-5 w-5" style={{ color: "#00FFFF" }} />
+          <h2 className="font-display font-bold text-lg text-white">Dicas de Especialista</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {tips.map((tip) => (
+            <div key={tip.title} className="rounded-xl border border-border/60 p-5 bg-gradient-card hover:border-primary/20 transition-all">
+              <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3" style={{ background: "linear-gradient(135deg, #007A7A, #00FFFF)" }}>
+                <span className="text-white">{tip.icon}</span>
+              </div>
+              <h4 className="font-display font-bold text-sm text-white mb-1.5">{tip.title}</h4>
+              <p className="text-white text-xs leading-relaxed">{tip.description}</p>
+            </div>
+          ))}
+        </div>
       </motion.div>
     </div>
   );
