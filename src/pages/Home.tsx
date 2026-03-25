@@ -171,19 +171,19 @@ export default function HomePage() {
 
       {/* Bloco 4 — Insight da Soph */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="rounded-2xl border border-primary/20 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.12)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' }}>
-          <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-[70px] -translate-y-1/2 translate-x-1/3 opacity-12 bg-gradient-primary-btn" />
+        <motion.div variants={item} className="rounded-2xl border border-[#00EFFF]/25 p-6 shadow-[0_0_25px_-8px_rgba(0,239,255,0.15)] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
+          <div className="absolute top-0 right-0 w-40 h-40 rounded-full blur-[70px] -translate-y-1/2 translate-x-1/3 opacity-20" style={{ background: 'radial-gradient(circle, #00EFFF 0%, transparent 70%)' }} />
           <div className="relative flex items-start gap-4">
             <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: GRAD }}>
               <Sparkles className="h-5 w-5 text-[#0A192F]" />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="font-display text-base font-bold text-primary-foreground mb-0.5 tracking-tight">Insight da Soph</h2>
-              <p className="text-[11px] text-primary-foreground/70 font-medium mb-3">Recomendação personalizada para você</p>
-              <p className="text-sm text-primary-foreground leading-relaxed mb-4">
+              <h2 className="font-display text-base font-bold text-white mb-0.5 tracking-tight">Insight da Soph</h2>
+              <p className="text-[11px] text-white/70 font-medium mb-3">Recomendação personalizada para você</p>
+              <p className="text-sm text-white leading-relaxed mb-4">
                 💡 Com base no seu progresso, o próximo passo ideal é revisar sua precificação para proteger sua margem.
               </p>
-              <button onClick={() => navigate("/gestao")} className="px-5 py-2 rounded-xl bg-primary-foreground text-primary text-sm font-bold hover:brightness-110 transition-all flex items-center gap-2 shadow-md">
+              <button onClick={() => navigate("/gestao")} className="px-5 py-2 rounded-xl text-[#0A192F] text-sm font-bold hover:opacity-90 transition-all flex items-center gap-2 shadow-[0_0_20px_-4px_rgba(0,239,255,0.4)]" style={{ background: GRAD }}>
                 Revisar agora <ArrowRight className="h-4 w-4" />
               </button>
             </div>
