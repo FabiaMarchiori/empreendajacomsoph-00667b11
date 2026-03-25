@@ -54,6 +54,8 @@ const guides: GuideItem[] = [
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
+const GRAD = "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)";
+
 export default function EstruturePage() {
   const [openGuide, setOpenGuide] = useState<number | null>(0);
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean[]>>({});
@@ -86,7 +88,7 @@ export default function EstruturePage() {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
         <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
           <span className="text-foreground">Estruture seu </span>
-          <span style={{ color: '#00FFFF' }}>Negócio</span>
+          <span className="bg-clip-text text-transparent" style={{ backgroundImage: GRAD }}>Negócio</span>
         </h1>
         <p className="text-sm lg:text-base text-white max-w-2xl leading-relaxed">
           O alicerce do seu sucesso começa aqui. Siga nossa jornada guiada para formalizar sua empresa, proteger sua marca e construir uma identidade profissional.
@@ -104,11 +106,11 @@ export default function EstruturePage() {
             className="rounded-2xl border overflow-hidden"
             style={{
               background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)',
-              borderColor: 'rgba(0, 255, 255, 0.2)',
+              borderColor: 'rgba(0, 239, 255, 0.2)',
             }}
           >
             {/* Top glow line */}
-            <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, #00FFFF, transparent)' }} />
+            <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, #9EEBFF, #00EFFF, transparent)' }} />
 
             <button
               onClick={() => setOpenGuide(isPrimaryOpen ? null : 0)}
@@ -116,7 +118,7 @@ export default function EstruturePage() {
             >
               <div
                 className="h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg, #007A7A, #00FFFF)' }}
+                style={{ background: GRAD }}
               >
                 <FileCheck className="h-6 w-6 text-[#0A192F]" />
               </div>
@@ -124,8 +126,8 @@ export default function EstruturePage() {
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-display font-bold text-base text-foreground">{primaryGuide.title}</h3>
                   <span
-                    className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                    style={{ background: 'linear-gradient(90deg, #007A7A, #00FFFF)', color: '#0A192F' }}
+                    className="text-[10px] font-bold px-2 py-0.5 rounded-full text-[#0A192F]"
+                    style={{ background: GRAD }}
                   >
                     PRIORIDADE
                   </span>
@@ -140,7 +142,7 @@ export default function EstruturePage() {
                       className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${(primaryDone / primaryGuide.steps.length) * 100}%`,
-                        background: 'linear-gradient(90deg, #007A7A, #00FFFF)',
+                        background: GRAD,
                       }}
                     />
                   </div>
@@ -154,7 +156,7 @@ export default function EstruturePage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="border-t px-6 pb-6 pt-4"
-                style={{ borderColor: 'rgba(0, 255, 255, 0.1)' }}
+                style={{ borderColor: 'rgba(0, 239, 255, 0.1)' }}
               >
                 <div className="space-y-1">
                   {primaryGuide.steps.map((step, sIdx) => (
@@ -168,12 +170,12 @@ export default function EstruturePage() {
                         {primarySteps[sIdx] ? (
                           <div
                             className="h-5 w-5 rounded-full flex items-center justify-center"
-                            style={{ background: 'linear-gradient(135deg, #007A7A, #00FFFF)' }}
+                            style={{ background: GRAD }}
                           >
                             <CheckCircle2 className="h-3.5 w-3.5 text-[#0A192F]" />
                           </div>
                         ) : (
-                          <div className="h-5 w-5 rounded-full border-2 flex items-center justify-center group-hover:border-[#00FFFF]/50 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
+                          <div className="h-5 w-5 rounded-full border-2 flex items-center justify-center group-hover:border-[#00EFFF]/50 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
                             <Circle className="h-2.5 w-2.5 text-transparent" />
                           </div>
                         )}
@@ -207,8 +209,8 @@ export default function EstruturePage() {
                     className="w-full flex flex-col gap-4 p-5 text-left hover:bg-white/[0.02] transition-colors"
                   >
                     <div className="flex items-start justify-between w-full">
-                      <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0, 255, 255, 0.12)' }}>
-                        <span style={{ color: '#00FFFF' }}>{guide.icon}</span>
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0, 239, 255, 0.12)' }}>
+                        <span style={{ color: '#00EFFF' }}>{guide.icon}</span>
                       </div>
                       <ChevronDown className={`h-4 w-4 text-white transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
                     </div>
@@ -223,7 +225,7 @@ export default function EstruturePage() {
                           className="h-full rounded-full transition-all duration-500"
                           style={{
                             width: `${(done / guide.steps.length) * 100}%`,
-                            background: 'linear-gradient(90deg, #007A7A, #00FFFF)',
+                            background: GRAD,
                           }}
                         />
                       </div>
@@ -248,12 +250,12 @@ export default function EstruturePage() {
                               {steps[sIdx] ? (
                                 <div
                                   className="h-4.5 w-4.5 rounded-full flex items-center justify-center"
-                                  style={{ background: 'linear-gradient(135deg, #007A7A, #00FFFF)' }}
+                                  style={{ background: GRAD }}
                                 >
                                   <CheckCircle2 className="h-3 w-3 text-[#0A192F]" />
                                 </div>
                               ) : (
-                                <div className="h-4 w-4 rounded-full border-2 group-hover:border-[#00FFFF]/40 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.15)' }} />
+                                <div className="h-4 w-4 rounded-full border-2 group-hover:border-[#00EFFF]/40 transition-colors" style={{ borderColor: 'rgba(255,255,255,0.15)' }} />
                               )}
                             </div>
                             <span className={`text-xs font-medium ${steps[sIdx] ? 'text-white/60 line-through' : 'text-white'}`}>
@@ -282,13 +284,13 @@ export default function EstruturePage() {
             className="rounded-2xl border p-5 space-y-4"
             style={{
               background: 'linear-gradient(145deg, #102A43, #0A192F)',
-              borderColor: 'rgba(0, 255, 255, 0.15)',
+              borderColor: 'rgba(0, 239, 255, 0.15)',
             }}
           >
             <div className="flex items-center gap-3">
               <div
                 className="h-9 w-9 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #007A7A, #00FFFF)' }}
+                style={{ background: GRAD }}
               >
                 <Sparkles className="h-4 w-4 text-[#0A192F]" />
               </div>
@@ -298,7 +300,7 @@ export default function EstruturePage() {
               </div>
             </div>
 
-            <div className="rounded-xl p-3.5 space-y-2" style={{ background: 'rgba(0, 255, 255, 0.04)', border: '1px solid rgba(0, 255, 255, 0.08)' }}>
+            <div className="rounded-xl p-3.5 space-y-2" style={{ background: 'rgba(0, 239, 255, 0.04)', border: '1px solid rgba(0, 239, 255, 0.08)' }}>
               <p className="text-xs text-white leading-relaxed">
                 "Comece pelo <strong className="text-foreground">MEI</strong>. É o passo mais importante para vender legalmente e acessar fornecedores com CNPJ."
               </p>
@@ -308,15 +310,15 @@ export default function EstruturePage() {
               <p className="text-[10px] text-white font-semibold uppercase tracking-wider">Recomendações</p>
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 text-xs text-white">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00FFFF' }} />
+                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00EFFF' }} />
                   Abra o MEI antes de comprar estoque
                 </div>
                 <div className="flex items-center gap-2 text-xs text-white">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00FFFF' }} />
+                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00EFFF' }} />
                   Defina sua identidade visual cedo
                 </div>
                 <div className="flex items-center gap-2 text-xs text-white">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00FFFF' }} />
+                  <div className="h-1.5 w-1.5 rounded-full" style={{ background: '#00EFFF' }} />
                   Proteja sua marca no INPI
                 </div>
               </div>
@@ -347,8 +349,9 @@ export default function EstruturePage() {
                   />
                   <defs>
                     <linearGradient id="progressGrad" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor="#007A7A" />
-                      <stop offset="100%" stopColor="#00FFFF" />
+                      <stop offset="0%" stopColor="#F2FBFF" />
+                      <stop offset="40%" stopColor="#9EEBFF" />
+                      <stop offset="100%" stopColor="#00EFFF" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -371,14 +374,14 @@ export default function EstruturePage() {
                   <div key={g.title} className="space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-white truncate">{g.title}</span>
-                      <span className="text-[10px] text-white">{d}/{g.steps.length}</span>
+                      <span className="text-[10px] font-semibold text-white">{d}/{g.steps.length}</span>
                     </div>
                     <div className="h-1 rounded-full overflow-hidden" style={{ background: '#102A43' }}>
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{
                           width: `${pct}%`,
-                          background: 'linear-gradient(90deg, #007A7A, #00FFFF)',
+                          background: GRAD,
                         }}
                       />
                     </div>

@@ -182,7 +182,7 @@ export default function FornecedoresPage() {
               }`}
               style={
                 isActive
-                  ? { background: "linear-gradient(90deg, #00FFFF 0%, #00CFCF 100%)", border: "2px solid #00FFFF" }
+                  ? { background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)", border: "2px solid #00EFFF" }
                   : { background: "#102A43" }
               }
             >

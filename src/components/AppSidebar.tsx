@@ -38,6 +38,8 @@ const secondaryItems = [
   { title: "Conta / Plano", url: "/conta", icon: User },
 ];
 
+const GRAD = "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)";
+
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
@@ -56,13 +58,13 @@ export function AppSidebar() {
             end={item.url === "/"}
             className={`flex items-center gap-4 px-4 py-4 rounded-xl text-sm transition-all ${
               active
-                ? "text-white font-bold border-2 border-[#00FFFF] shadow-[0_0_16px_-3px_rgba(0,255,255,0.4)]"
+                ? "text-[#0A192F] font-bold border-2 border-[#00EFFF] shadow-[0_0_16px_-3px_rgba(0,239,255,0.4)]"
                 : "text-white font-semibold hover:bg-white/5"
             }`}
             activeClassName=""
             style={
               active
-                ? { background: 'linear-gradient(90deg, #007A7A 0%, #00FFFF 100%)' }
+                ? { background: GRAD }
                 : undefined
             }
           >
@@ -86,7 +88,7 @@ export function AppSidebar() {
         <div className="flex items-center gap-3">
           <div
             className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #00FFFF 0%, #007A7A 100%)' }}
+            style={{ background: GRAD }}
           >
             <Sparkles className="h-5 w-5 text-[#0A192F]" />
           </div>
@@ -120,13 +122,13 @@ export function AppSidebar() {
       <SidebarFooter className="p-3">
         {!collapsed && (
           <div
-            className="rounded-xl p-4 border border-[#00FFFF]/20"
+            className="rounded-xl p-4 border border-[#00EFFF]/20"
             style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}
           >
             <div className="flex items-center gap-2.5 mb-2">
               <div
                 className="h-8 w-8 rounded-lg flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #00FFFF 0%, #007A7A 100%)' }}
+                style={{ background: GRAD }}
               >
                 <MessageCircle className="h-4 w-4 text-[#0A192F]" />
               </div>
