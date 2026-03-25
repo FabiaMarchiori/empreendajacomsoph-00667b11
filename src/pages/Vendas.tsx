@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Globe, ShoppingBag, ArrowRight, Circle, Camera, Star, Target, Sparkles, TrendingUp, Users } from "lucide-react";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
@@ -11,6 +12,7 @@ const pathCards = [
     icon: <Globe className="h-6 w-6" />,
     steps: ["Configurar Google Meu Negócio", "Identidade visual no Instagram", "Landing page de conversão"],
     cta: "Iniciar Jornada Digital",
+    link: "",
   },
   {
     title: "Como Vender em Marketplaces",
@@ -18,6 +20,7 @@ const pathCards = [
     icon: <ShoppingBag className="h-6 w-6" />,
     steps: ["Pré-requisitos e documentação", "Anúncios de alta performance", "Logística e expedição"],
     cta: "Escalar em Marketplaces",
+    link: "/vendas/marketplaces",
   },
 ];
 
@@ -103,12 +106,15 @@ export default function VendasPage() {
               ))}
             </div>
 
-            <button
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm group-hover:gap-3 transition-all"
-              style={{ background: "#00FFFF", color: "#0A192F" }}
-            >
-              {card.cta} <ArrowRight className="h-4 w-4" />
-            </button>
+            {card.link ? (
+              <Link to={card.link} className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm group-hover:gap-3 transition-all" style={{ background: "#00FFFF", color: "#0A192F" }}>
+                {card.cta} <ArrowRight className="h-4 w-4" />
+              </Link>
+            ) : (
+              <button className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm group-hover:gap-3 transition-all" style={{ background: "#00FFFF", color: "#0A192F" }}>
+                {card.cta} <ArrowRight className="h-4 w-4" />
+              </button>
+            )}
           </motion.div>
         ))}
       </motion.div>
