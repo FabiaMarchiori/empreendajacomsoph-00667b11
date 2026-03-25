@@ -599,13 +599,13 @@ export default function VendasMarketplacesPage() {
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           <a
             href="#etapas"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-gradient-primary-btn text-primary-foreground transition-all hover:brightness-110"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-primary-foreground text-primary transition-all hover:brightness-110"
           >
             Continuar jornada <ArrowRight className="h-4 w-4" />
           </a>
           <Link
             to="/vendas"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 border-white/30 text-white hover:border-white/60 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 border-primary-foreground/30 text-primary-foreground hover:border-primary-foreground/60 transition-colors"
           >
             Voltar para Vendas
           </Link>
