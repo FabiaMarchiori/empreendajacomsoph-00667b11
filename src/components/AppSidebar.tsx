@@ -115,7 +115,7 @@ export function AppSidebar() {
         {!collapsed && (
           <div
             className="rounded-xl p-4 border border-primary/20"
-            style={{ background: 'linear-gradient(135deg, #007A7A 0%, #102A43 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' }}
           >
             <div className="flex items-center gap-2.5 mb-2">
               <div
@@ -123,9 +123,9 @@ export function AppSidebar() {
               >
                 <MessageCircle className="h-4 w-4 text-primary-foreground" />
               </div>
-              <span className="text-xs font-bold text-white">Soph diz:</span>
+              <span className="text-xs font-bold text-primary-foreground">Soph diz:</span>
             </div>
-            <p className="text-[11px] text-white/90 leading-relaxed font-medium">
+            <p className="text-[11px] text-primary-foreground/80 leading-relaxed font-medium">
               "Precisa de ajuda? Estou aqui para te orientar!"
             </p>
           </div>
