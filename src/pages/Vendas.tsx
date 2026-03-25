@@ -7,12 +7,12 @@ const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 const pathCards = [
   {
-    title: "Criar Site e Presença Online",
-    description: "Construa sua base digital, fortaleça sua marca e prepare seu negócio para ser encontrado.",
+    title: "Criar seu Domínio e Site",
+    description: "Aprenda a criar seu site e domínio próprio usando ferramentas gratuitas e inteligência artificial.",
     icon: <Globe className="h-6 w-6" />,
-    steps: ["Configurar Google Meu Negócio", "Identidade visual no Instagram", "Landing page de conversão"],
+    steps: ["Entender domínio e hospedagem", "Escolher nome e registrar", "Criar site com IA"],
     cta: "Iniciar Jornada Digital",
-    link: "",
+    link: "/vendas/dominio-site",
   },
   {
     title: "Como Vender em Marketplaces",
