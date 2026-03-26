@@ -195,7 +195,6 @@ export default function EstruturePage() {
               </motion.div>
             )}
           </motion.div>
-          </motion.div>
 
           {/* Cards Secundários */}
           <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
