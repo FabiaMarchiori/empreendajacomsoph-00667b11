@@ -1,6 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SophFloatingButton } from "@/components/SophFloatingButton";
+import { Footer } from "@/components/Footer";
 import { Outlet } from "react-router-dom";
 
 export function AppLayout() {
@@ -15,6 +16,7 @@ export function AppLayout() {
           <main className="flex-1 overflow-y-auto">
             <Outlet />
           </main>
+          <Footer />
         </div>
         <SophFloatingButton />
       </div>
