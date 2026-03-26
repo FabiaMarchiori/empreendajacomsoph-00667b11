@@ -12,6 +12,7 @@ import VendasMarketplacesPage from "./pages/VendasMarketplaces";
 import DominioSitePage from "./pages/DominioSite";
 import AbrirMeiPage from "./pages/AbrirMei";
 import LogoMarcaPage from "./pages/LogoMarca";
+import RegistrarMarcaPage from "./pages/RegistrarMarca";
 import GestaoPage from "./pages/Gestao";
 import SophPage from "./pages/Soph";
 import AcessosPage from "./pages/Acessos";
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/vendas/dominio-site" element={<DominioSitePage />} />
             <Route path="/estrutura/abrir-mei" element={<AbrirMeiPage />} />
             <Route path="/estrutura/logo-marca" element={<LogoMarcaPage />} />
+            <Route path="/estrutura/registrar-marca" element={<RegistrarMarcaPage />} />
             <Route path="/gestao" element={<GestaoPage />} />
             <Route path="/soph" element={<SophPage />} />
             <Route path="/acessos" element={<AcessosPage />} />
