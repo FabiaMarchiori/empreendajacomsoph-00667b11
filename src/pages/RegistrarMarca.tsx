@@ -210,14 +210,13 @@ export default function RegistrarMarcaPage() {
         </p>
       </motion.div>
 
-        <div className="flex flex-wrap gap-3">
-          <button onClick={() => scrollTo("etapa-1")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-primary-foreground hover:brightness-110 transition-all" style={{ background: GRAD }}>
-            Continuar jornada <ArrowRight className="h-4 w-4" />
-          </button>
-          <button onClick={() => scrollTo("ferramentas")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm border transition-all hover:bg-white/5" style={{ borderColor: 'rgba(0,239,255,0.3)', color: '#9EEBFF' }}>
-            <Wrench className="h-4 w-4" /> Ver ferramentas
-          </button>
-        </div>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="flex flex-wrap gap-3">
+        <button onClick={() => scrollTo("etapa-1")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-primary-foreground hover:brightness-110 transition-all" style={{ background: GRAD }}>
+          Continuar jornada <ArrowRight className="h-4 w-4" />
+        </button>
+        <button onClick={() => scrollTo("ferramentas")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm border transition-all hover:bg-white/5" style={{ borderColor: 'rgba(0,239,255,0.3)', color: '#9EEBFF' }}>
+          <Wrench className="h-4 w-4" /> Ver ferramentas
+        </button>
       </motion.div>
 
       {/* PROGRESS */}
