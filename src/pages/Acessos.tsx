@@ -26,11 +26,11 @@ const produtoPrincipal: AccessItem[] = [
 const brindes: AccessItem[] = [
   { title: "Sistema de Precificação", description: "Margens, markup e preço ideal", status: "brinde", icon: <BarChart3 className="h-5 w-5" />, route: "/gestao" },
   { title: "Soph, sua Sócia Digital", description: "Assistente estratégica para seu negócio", status: "brinde", icon: <MessageCircle className="h-5 w-5" />, route: "/soph" },
-  { title: "Abrir CNPJ / MEI", description: "Passo a passo para formalizar", status: "brinde", icon: <FileText className="h-5 w-5" />, route: "/abrir-mei" },
-  { title: "Criar sua Logo Marca", description: "Identidade visual profissional", status: "brinde", icon: <Star className="h-5 w-5" />, route: "/logo-marca" },
-  { title: "Registrar sua Marca", description: "Proteja seu nome legalmente", status: "brinde", icon: <FileText className="h-5 w-5" />, route: "/registrar-marca" },
-  { title: "Domínio e Site", description: "Presença digital profissional", status: "brinde", icon: <Globe className="h-5 w-5" />, route: "/dominio-site" },
-  { title: "Vender em Marketplaces", description: "Mercado Livre, Shopee e mais", status: "brinde", icon: <ShoppingBag className="h-5 w-5" />, route: "/vendas-marketplaces" },
+  { title: "Abrir CNPJ / MEI", description: "Passo a passo para formalizar", status: "brinde", icon: <FileText className="h-5 w-5" />, route: "/estrutura/abrir-mei" },
+  { title: "Criar sua Logo Marca", description: "Identidade visual profissional", status: "brinde", icon: <Star className="h-5 w-5" />, route: "/estrutura/logo-marca" },
+  { title: "Registrar sua Marca", description: "Proteja seu nome legalmente", status: "brinde", icon: <FileText className="h-5 w-5" />, route: "/estrutura/registrar-marca" },
+  { title: "Domínio e Site", description: "Presença digital profissional", status: "brinde", icon: <Globe className="h-5 w-5" />, route: "/vendas/dominio-site" },
+  { title: "Vender em Marketplaces", description: "Mercado Livre, Shopee e mais", status: "brinde", icon: <ShoppingBag className="h-5 w-5" />, route: "/vendas/marketplaces" },
   { title: "ERP – Soph Gestão", description: "Estoque, vendas e financeiro", status: "brinde", icon: <Database className="h-5 w-5" />, route: "/gestao" },
 ];
 
