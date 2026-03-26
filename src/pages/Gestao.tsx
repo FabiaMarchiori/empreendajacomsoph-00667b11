@@ -25,22 +25,18 @@ export default function GestaoPage() {
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
       {/* ── HERO ── */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-card p-8 lg:p-10 shadow-glow">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-        <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-primary/5 blur-3xl" />
-        <div className="relative z-10">
-          <div className="flex flex-wrap gap-2 mb-4">
-            {["ERP", "Precificação", "Fluxo de Caixa", "Estoque", "DRE"].map(t => (
-              <span key={t} className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">{t}</span>
-            ))}
-          </div>
-          <h1 className="font-display text-3xl lg:text-4xl font-bold mb-3">
-            <span className="text-foreground">Gestão do </span>
-            <span className="text-gradient-primary">Negócio</span>
-          </h1>
-          <p className="text-muted-foreground text-sm lg:text-base max-w-2xl leading-relaxed">
-            Do ERP à precificação estratégica, organize sua operação e acompanhe a saúde do seu negócio em um único painel.
-          </p>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+        <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
+          <span className="text-foreground">Gestão do </span>
+          <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}>Negócio</span>
+        </h1>
+        <p className="text-sm lg:text-base text-white max-w-2xl leading-relaxed">
+          Do ERP à precificação estratégica, organize sua operação e acompanhe a saúde do seu negócio em um único painel.
+        </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          {["ERP", "Precificação", "Fluxo de Caixa", "Estoque", "DRE"].map(t => (
+            <span key={t} className="px-3 py-1 rounded-full text-[11px] font-semibold border text-white" style={{ borderColor: 'rgba(0,239,255,0.25)', background: 'rgba(0,239,255,0.08)' }}>{t}</span>
+          ))}
         </div>
       </motion.div>
 
