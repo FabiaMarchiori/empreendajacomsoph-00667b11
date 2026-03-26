@@ -86,12 +86,12 @@ const checklistData: Record<string, { label: string }[]> = {
 };
 
 const colorGuide = [
-  { segment: "Saúde / Bem-estar", colors: "Verde, azul claro, branco", feel: "Calma, confiança" },
-  { segment: "Tecnologia", colors: "Azul, roxo, preto", feel: "Inovação, modernidade" },
-  { segment: "Alimentação", colors: "Vermelho, amarelo, laranja", feel: "Apetite, energia" },
-  { segment: "Beleza", colors: "Rosa, dourado, nude", feel: "Elegância, cuidado" },
-  { segment: "Serviços", colors: "Azul, cinza, branco", feel: "Profissionalismo, seriedade" },
-  { segment: "Arte / Criativo", colors: "Cores vibrantes, contrastes", feel: "Criatividade, ousadia" },
+  { segment: "Saúde / Bem-estar", colors: "Verde, azul claro, branco", feel: "Calma, confiança", swatches: [{ hex: "#4CAF50", border: false }, { hex: "#81D4FA", border: false }, { hex: "#FFFFFF", border: true }] },
+  { segment: "Tecnologia", colors: "Azul, roxo, preto", feel: "Inovação, modernidade", swatches: [{ hex: "#2196F3", border: false }, { hex: "#9C27B0", border: false }, { hex: "#1A1A2E", border: false }] },
+  { segment: "Alimentação", colors: "Vermelho, amarelo, laranja", feel: "Apetite, energia", swatches: [{ hex: "#E53935", border: false }, { hex: "#FDD835", border: true }, { hex: "#FF9800", border: false }] },
+  { segment: "Beleza", colors: "Rosa, dourado, nude", feel: "Elegância, cuidado", swatches: [{ hex: "#E91E90", border: false }, { hex: "#D4A853", border: false }, { hex: "#D2B48C", border: true }] },
+  { segment: "Serviços", colors: "Azul, cinza, branco", feel: "Profissionalismo, seriedade", swatches: [{ hex: "#1565C0", border: false }, { hex: "#9E9E9E", border: false }, { hex: "#FFFFFF", border: true }] },
+  { segment: "Arte / Criativo", colors: "Cores vibrantes, contrastes", feel: "Criatividade, ousadia", swatches: [{ hex: "#FF4081", border: false }, { hex: "#00BCD4", border: false }, { hex: "#FFEB3B", border: true }, { hex: "#7C4DFF", border: false }] },
 ];
 
 const platformCards = [
@@ -313,7 +313,20 @@ export default function LogoMarcaPage() {
                 <div key={c.segment} className="rounded-lg border border-border/40 p-3 bg-muted/10">
                   <p className="text-gradient-primary text-xs font-bold">{c.segment}</p>
                   <p className="text-white text-xs mt-1">Cores: {c.colors}</p>
-                  <p className="text-muted-foreground text-[11px]">Transmite: {c.feel}</p>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    {c.swatches.map((s, i) => (
+                      <span
+                        key={i}
+                        className="w-5 h-5 rounded-full inline-block shrink-0"
+                        style={{
+                          backgroundColor: s.hex,
+                          border: s.border ? '1.5px solid hsl(var(--border))' : 'none',
+                          boxShadow: '0 0 6px ' + s.hex + '44',
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground text-[11px] mt-1">Transmite: {c.feel}</p>
                 </div>
               ))}
             </div>
