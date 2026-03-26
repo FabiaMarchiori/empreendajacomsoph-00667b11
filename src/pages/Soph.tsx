@@ -141,7 +141,7 @@ export default function SophPage() {
                 />
                 <button
                   onClick={() => sendMessage(input)}
-                  className="px-6 rounded-xl bg-gradient-primary-btn text-white font-medium hover:brightness-110 transition-all shadow-[0_0_20px_-4px_hsl(var(--primary)/0.5)]"
+                  className="px-6 rounded-xl bg-gradient-primary-btn text-[#0A192F] font-medium hover:brightness-110 transition-all shadow-[0_0_20px_-4px_hsl(var(--primary)/0.5)]"
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -192,7 +192,7 @@ export default function SophPage() {
               Percebi que você já avançou em fornecedores e estruturação. O próximo passo ideal é fortalecer sua presença digital para começar a vender com mais consistência.
             </p>
           </div>
-          <button className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-primary-btn text-white text-sm font-medium hover:brightness-110 transition-all shadow-[0_0_20px_-4px_hsl(var(--primary)/0.4)] flex-shrink-0">
+          <button className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-primary-btn text-[#0A192F] text-sm font-medium hover:brightness-110 transition-all shadow-[0_0_20px_-4px_hsl(var(--primary)/0.4)] flex-shrink-0">
             <Zap className="h-4 w-4" />
             Seguir recomendação
           </button>
