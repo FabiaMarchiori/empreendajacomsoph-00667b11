@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { FileCheck, Palette, Shield, ArrowRight, CheckCircle2, Circle, MessageCircle, Sparkles, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 interface GuideItem {
   title: string;
