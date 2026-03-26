@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { FileCheck, Palette, Shield, ArrowRight, CheckCircle2, Circle, MessageCircle, Sparkles, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface GuideItem {
   title: string;
@@ -185,6 +186,11 @@ export default function EstruturePage() {
                       </span>
                     </button>
                   ))}
+                </div>
+                <div className="pt-3 border-t" style={{ borderColor: 'rgba(0, 239, 255, 0.1)' }}>
+                  <Link to="/estrutura/abrir-mei" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm bg-gradient-primary-btn text-primary-foreground hover:brightness-110 transition-all">
+                    Começar MEI <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </motion.div>
             )}
