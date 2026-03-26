@@ -23,7 +23,7 @@ const journeySteps = [
 ];
 
 const whyCards = [
-  { icon: <Eye className="h-5 w-5" />, title: "Presença profissional online", desc: "Seu negócio visível 24 horas para qualquer pessoa no mundo. Um site é seu cartão de visitas digital." },
+  { icon: <Globe className="h-5 w-5" />, title: "Presença profissional online", desc: "Seu negócio visível 24 horas para qualquer pessoa no mundo. Um site é seu cartão de visitas digital." },
   { icon: <ShoppingBag className="h-5 w-5" />, title: "Vendas 24/7", desc: "Enquanto você dorme, seu site continua vendendo. Automatize seu funil e escale sem limites de horário." },
   { icon: <Award className="h-5 w-5" />, title: "Credibilidade e confiança", desc: "Clientes confiam mais em negócios com site próprio. Um domínio profissional transmite seriedade." },
 ];
@@ -206,15 +206,6 @@ export default function DominioSitePage() {
           </a>
         </div>
 
-        {/* Soph dica hero */}
-        <div className="flex items-start gap-3 rounded-xl border border-primary/20 p-4 bg-gradient-card">
-          <div className="h-9 w-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-primary-btn">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
-          </div>
-          <p className="text-white text-sm leading-relaxed">
-            <span className="font-bold text-gradient-primary">Soph diz:</span> "Ter um site próprio com domínio profissional é o primeiro passo para ser levado a sério no digital. Vamos juntos?"
-          </p>
-        </div>
       </motion.div>
 
       {/* PROGRESSO GERAL */}
