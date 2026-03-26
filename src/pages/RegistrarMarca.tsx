@@ -187,36 +187,28 @@ export default function RegistrarMarcaPage() {
       </motion.div>
 
       {/* HERO */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border p-6 lg:p-8 space-y-5" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)', borderColor: 'rgba(0,239,255,0.2)' }}>
-        <div className="h-px w-full -mt-6 lg:-mt-8 rounded-t-2xl" style={{ background: 'linear-gradient(90deg, transparent, #9EEBFF, #00EFFF, transparent)' }} />
-        <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: GRAD }}>
-            <Shield className="h-6 w-6 text-[#0A192F]" />
-          </div>
-          <div className="space-y-2 flex-1">
-            <h1 className="font-display text-2xl lg:text-3xl font-extrabold tracking-tight">
-              <span className="text-foreground">Como Registrar Sua Marca </span>
-              <span className="bg-clip-text text-transparent" style={{ backgroundImage: GRAD }}>com a Soph</span>
-            </h1>
-            <p className="text-sm text-white/80 leading-relaxed max-w-2xl">
-              Garanta o direito sobre o nome do seu negócio e proteja o que você construiu com uma jornada simples e prática para registrar sua marca no INPI.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+        <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
+          <span className="text-foreground">Como Registrar Sua Marca </span>
+          <span className="bg-clip-text text-transparent" style={{ backgroundImage: GRAD }}>com a Soph</span>
+        </h1>
+        <p className="text-sm lg:text-base text-white max-w-2xl leading-relaxed">
+          Garanta o direito sobre o nome do seu negócio e proteja o que você construiu com uma jornada simples e prática para registrar sua marca no INPI.
+        </p>
+        <div className="flex flex-wrap gap-2 pt-1">
           {["INPI", "Marca", "Classe NICE", "e-INPI", "GRU", "Protocolo"].map((chip) => (
-            <span key={chip} className="px-3 py-1 rounded-full text-[11px] font-semibold border" style={{ borderColor: 'rgba(0,239,255,0.25)', color: '#9EEBFF', background: 'rgba(0,239,255,0.08)' }}>{chip}</span>
+            <span key={chip} className="px-3 py-1 rounded-full text-[11px] font-semibold border text-white" style={{ borderColor: 'rgba(0,239,255,0.25)', background: 'rgba(0,239,255,0.08)' }}>{chip}</span>
           ))}
         </div>
+      </motion.div>
 
-        {/* Soph tip */}
-        <div className="rounded-xl p-4 border flex items-start gap-3" style={{ background: 'rgba(0,239,255,0.06)', borderColor: 'rgba(0,239,255,0.15)' }}>
-          <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#00EFFF' }} />
-          <p className="text-xs text-white/80 leading-relaxed">
-            <strong className="text-foreground">Soph diz:</strong> Registrar sua marca é um investimento na proteção do seu negócio. Não espere alguém copiar seu nome para agir — comece agora.
-          </p>
-        </div>
+      {/* Soph tip */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-xl p-4 border flex items-start gap-3" style={{ background: 'rgba(0,239,255,0.06)', borderColor: 'rgba(0,239,255,0.15)' }}>
+        <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#00EFFF' }} />
+        <p className="text-xs text-white/80 leading-relaxed">
+          <strong className="text-foreground">Soph diz:</strong> Registrar sua marca é um investimento na proteção do seu negócio. Não espere alguém copiar seu nome para agir — comece agora.
+        </p>
+      </motion.div>
 
         <div className="flex flex-wrap gap-3">
           <button onClick={() => scrollTo("etapa-1")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-primary-foreground hover:brightness-110 transition-all" style={{ background: GRAD }}>
