@@ -1,17 +1,25 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Heart, MessageCircle, Instagram, MapPin } from "lucide-react";
+import { ArrowLeft, Heart, MessageCircle, Instagram, MapPin, Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { suppliers } from "@/data/importadoras25";
-import { useFavorites } from "@/hooks/useFavorites";
+import { useSupabaseSupplierById } from "@/hooks/useSupabaseSuppliers";
+import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 import { cn } from "@/lib/utils";
 
 export default function ImportadorasFornecedor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { toggle, isFavorite } = useFavorites();
+  const { toggle, isFavorite } = useSupabaseFavorites();
+  const { data: supplier, isLoading, error } = useSupabaseSupplierById(id);
 
-  const supplier = suppliers.find((s) => s.id === id);
-  if (!supplier) {
+  if (isLoading) {
+    return (
+      <div className="p-6 lg:p-10 max-w-3xl mx-auto flex items-center justify-center py-20">
+        <Loader2 className="h-6 w-6 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (!supplier || error) {
     return (
       <div className="p-6 lg:p-10 max-w-3xl mx-auto text-center py-20">
         <p className="text-white/50">Fornecedor não encontrado.</p>
@@ -20,27 +28,34 @@ export default function ImportadorasFornecedor() {
     );
   }
 
-  const initials = supplier.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const name = supplier.nome_loja || "Sem nome";
+  const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
   const fav = isFavorite(supplier.id);
+  const numId = supplier.id;
+
+  // Extract instagram handle from URL
+  const instagramHandle = supplier.Instagram_url
+    ? supplier.Instagram_url.replace(/https?:\/\/(www\.)?instagram\.com\//i, "").replace(/\/$/, "")
+    : null;
 
   const actions = [
-    supplier.whatsapp && {
+    supplier.Whatsapp && {
       icon: <MessageCircle className="h-5 w-5" />,
       label: "WhatsApp",
       color: "bg-[#25D366]/15 text-[#25D366] border-[#25D366]/20",
-      href: `https://wa.me/${supplier.whatsapp}`,
+      href: `https://wa.me/${supplier.Whatsapp}`,
     },
-    supplier.instagram && {
+    instagramHandle && {
       icon: <Instagram className="h-5 w-5" />,
       label: "Instagram",
       color: "bg-[#E4405F]/15 text-[#E4405F] border-[#E4405F]/20",
-      href: `https://instagram.com/${supplier.instagram}`,
+      href: supplier.Instagram_url!,
     },
-    supplier.address && {
+    supplier.Endereco && {
       icon: <MapPin className="h-5 w-5" />,
       label: "Endereço",
       color: "bg-primary/10 text-primary border-primary/20",
-      href: supplier.mapUrl || "#",
+      href: `https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`,
     },
   ].filter(Boolean) as { icon: React.ReactNode; label: string; color: string; href: string }[];
 
@@ -57,14 +72,14 @@ export default function ImportadorasFornecedor() {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center text-center gap-4">
         <div className="relative">
           <div className="h-28 w-28 rounded-full border-2 border-primary/30 bg-card flex items-center justify-center overflow-hidden shadow-glow">
-            {supplier.logo ? (
-              <img src={supplier.logo} alt={supplier.name} className="h-full w-full object-cover rounded-full" />
+            {supplier.logo_url ? (
+              <img src={supplier.logo_url} alt={name} className="h-full w-full object-cover rounded-full" />
             ) : (
               <span className="text-3xl font-bold text-primary">{initials}</span>
             )}
           </div>
           <button
-            onClick={() => toggle(supplier.id)}
+            onClick={() => toggle(numId)}
             className="absolute -bottom-1 -right-1 h-10 w-10 rounded-full bg-card border-2 border-border/60 flex items-center justify-center hover:border-primary/40 transition-colors"
           >
             <Heart className={cn("h-4 w-4 transition-colors", fav ? "fill-[#00EFFF] text-[#00EFFF]" : "text-white/40")} />
@@ -72,13 +87,9 @@ export default function ImportadorasFornecedor() {
         </div>
 
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-white">{supplier.name}</h1>
-          <p className="text-xs text-primary font-semibold mt-1">{supplier.category}</p>
+          <h1 className="font-display text-2xl font-extrabold text-white">{name}</h1>
+          <p className="text-xs text-primary font-semibold mt-1">{supplier.categoria}</p>
         </div>
-
-        {supplier.description && (
-          <p className="text-sm text-white/70 max-w-md leading-relaxed">{supplier.description}</p>
-        )}
       </motion.div>
 
       {/* Action buttons */}
@@ -101,24 +112,24 @@ export default function ImportadorasFornecedor() {
       </motion.div>
 
       {/* Address */}
-      {supplier.address && (
+      {supplier.Endereco && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }} className="rounded-2xl border border-border/60 bg-gradient-card p-5">
           <h3 className="font-display font-bold text-white text-sm mb-2">Endereço</h3>
-          <p className="text-white/70 text-sm">{supplier.address}</p>
+          <p className="text-white/70 text-sm">{supplier.Endereco}</p>
         </motion.div>
       )}
 
-      {/* Instagram preview placeholder */}
-      {supplier.instagram && (
+      {/* Instagram */}
+      {instagramHandle && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="rounded-2xl border border-border/60 bg-gradient-card p-5 text-center">
           <h3 className="font-display font-bold text-white text-sm mb-3">Instagram</h3>
           <a
-            href={`https://instagram.com/${supplier.instagram}`}
+            href={supplier.Instagram_url!}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary text-sm hover:underline"
           >
-            @{supplier.instagram}
+            @{instagramHandle}
           </a>
         </motion.div>
       )}
