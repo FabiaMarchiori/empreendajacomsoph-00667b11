@@ -71,9 +71,11 @@ export default function ImportadorasFornecedor() {
       {/* Profile */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center text-center gap-4">
         <div className="relative">
-          <div className="h-28 w-28 rounded-full border-2 border-primary/30 bg-card flex items-center justify-center overflow-hidden shadow-glow">
+          <div className="h-28 w-28 rounded-full border-[3px] border-primary/30 bg-card flex items-center justify-center overflow-hidden shadow-glow">
             {supplier.logo_url ? (
-              <img src={supplier.logo_url} alt={name} className="h-full w-full object-cover rounded-full" />
+              <div className="h-full w-full rounded-full bg-white flex items-center justify-center p-2">
+                <img src={supplier.logo_url} alt={name} className="h-full w-full object-contain rounded-full" />
+              </div>
             ) : (
               <span className="text-3xl font-bold text-primary">{initials}</span>
             )}
@@ -119,10 +121,13 @@ export default function ImportadorasFornecedor() {
         </motion.div>
       )}
 
-      {/* Instagram */}
+      {/* Instagram Mockup */}
       {instagramHandle && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="rounded-2xl border border-border/60 bg-gradient-card p-5 text-center">
-          <h3 className="font-display font-bold text-white text-sm mb-3">Instagram</h3>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="rounded-2xl border border-border/60 bg-gradient-card p-5 text-center space-y-4">
+          <h3 className="font-display font-bold text-white text-sm flex items-center justify-center gap-2">
+            <Instagram className="h-4 w-4 text-[#E4405F]" />
+            Instagram
+          </h3>
           <a
             href={supplier.Instagram_url!}
             target="_blank"
@@ -131,6 +136,21 @@ export default function ImportadorasFornecedor() {
           >
             @{instagramHandle}
           </a>
+          {supplier.mockup_url ? (
+            <div className="mt-3 mx-auto max-w-xs rounded-2xl overflow-hidden border border-border/40 shadow-lg">
+              <img
+                src={supplier.mockup_url}
+                alt={`Instagram de ${name}`}
+                className="w-full h-auto object-contain"
+                loading="lazy"
+              />
+            </div>
+          ) : (
+            <div className="mt-3 mx-auto max-w-xs rounded-2xl border border-border/30 bg-card/50 py-10 flex flex-col items-center justify-center gap-2">
+              <Instagram className="h-8 w-8 text-white/20" />
+              <span className="text-white/30 text-xs">Mockup indisponível</span>
+            </div>
+          )}
         </motion.div>
       )}
     </div>
