@@ -22,6 +22,7 @@ const suppliers = [
     cat: "Importadoras 25 de Março",
     icon: <Package className="h-5 w-5" />,
     isPremium: true,
+    route: "/fornecedores/importadoras-25",
   },
   // Moda Brás subcards
   {
