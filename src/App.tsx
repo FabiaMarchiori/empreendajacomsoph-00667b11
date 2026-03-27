@@ -6,6 +6,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppLayout } from "@/components/AppLayout";
 import HomePage from "./pages/Home";
 import FornecedoresPage from "./pages/Fornecedores";
+import ImportadorasHub from "./pages/importadoras/ImportadorasHub";
+import ImportadorasCategorias from "./pages/importadoras/ImportadorasCategorias";
+import ImportadorasNicho from "./pages/importadoras/ImportadorasNicho";
+import ImportadorasFornecedor from "./pages/importadoras/ImportadorasFornecedor";
+import ImportadorasBusca from "./pages/importadoras/ImportadorasBusca";
+import ImportadorasFavoritos from "./pages/importadoras/ImportadorasFavoritos";
 import EstruturePage from "./pages/Estruture";
 import VendasPage from "./pages/Vendas";
 import VendasMarketplacesPage from "./pages/VendasMarketplaces";
@@ -31,6 +37,12 @@ const App = () => (
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/fornecedores" element={<FornecedoresPage />} />
+            <Route path="/fornecedores/importadoras-25" element={<ImportadorasHub />} />
+            <Route path="/fornecedores/importadoras-25/categorias" element={<ImportadorasCategorias />} />
+            <Route path="/fornecedores/importadoras-25/categoria/:slug" element={<ImportadorasNicho />} />
+            <Route path="/fornecedores/importadoras-25/fornecedor/:id" element={<ImportadorasFornecedor />} />
+            <Route path="/fornecedores/importadoras-25/busca" element={<ImportadorasBusca />} />
+            <Route path="/fornecedores/importadoras-25/favoritos" element={<ImportadorasFavoritos />} />
             <Route path="/estruture" element={<EstruturePage />} />
             <Route path="/vendas" element={<VendasPage />} />
             <Route path="/vendas/marketplaces" element={<VendasMarketplacesPage />} />
