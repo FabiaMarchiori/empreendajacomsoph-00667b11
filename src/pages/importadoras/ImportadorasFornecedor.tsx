@@ -73,8 +73,8 @@ export default function ImportadorasFornecedor() {
         <div className="relative">
           <div className="h-28 w-28 rounded-full border-[3px] border-primary/30 bg-card flex items-center justify-center overflow-hidden shadow-glow">
             {supplier.logo_url ? (
-              <div className="h-full w-full rounded-full bg-white flex items-center justify-center p-2">
-                <img src={supplier.logo_url} alt={name} className="h-full w-full object-contain rounded-full" />
+              <div className="h-full w-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                <img src={supplier.logo_url} alt={name} className="h-full w-full object-cover rounded-full" />
               </div>
             ) : (
               <span className="text-3xl font-bold text-primary">{initials}</span>
