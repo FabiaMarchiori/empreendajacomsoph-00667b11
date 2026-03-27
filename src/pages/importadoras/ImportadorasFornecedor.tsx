@@ -137,18 +137,33 @@ export default function ImportadorasFornecedor() {
             @{instagramHandle}
           </a>
           {supplier.mockup_url ? (
-            <div className="mt-3 mx-auto max-w-xs rounded-2xl overflow-hidden border border-border/40 shadow-lg">
-              <img
-                src={supplier.mockup_url}
-                alt={`Instagram de ${name}`}
-                className="w-full h-auto object-contain"
-                loading="lazy"
-              />
+            <div className="mt-4 mx-auto max-w-[280px] relative">
+              {/* Phone frame */}
+              <div className="relative rounded-[2.5rem] border-[6px] border-white/10 bg-black shadow-2xl shadow-black/40 overflow-hidden">
+                {/* Notch */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl z-10" />
+                {/* Screen */}
+                <div className="pt-6">
+                  <img
+                    src={supplier.mockup_url}
+                    alt={`Instagram de ${name}`}
+                    className="w-full h-auto object-contain"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              {/* Reflection glow */}
+              <div className="absolute -inset-4 bg-primary/5 rounded-[3rem] blur-2xl -z-10" />
             </div>
           ) : (
-            <div className="mt-3 mx-auto max-w-xs rounded-2xl border border-border/30 bg-card/50 py-10 flex flex-col items-center justify-center gap-2">
-              <Instagram className="h-8 w-8 text-white/20" />
-              <span className="text-white/30 text-xs">Mockup indisponível</span>
+            <div className="mt-4 mx-auto max-w-[280px] relative">
+              <div className="relative rounded-[2.5rem] border-[6px] border-white/10 bg-black/80 shadow-2xl overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl z-10" />
+                <div className="pt-6 py-16 flex flex-col items-center justify-center gap-3">
+                  <Instagram className="h-10 w-10 text-white/15" />
+                  <span className="text-white/25 text-xs">Mockup indisponível</span>
+                </div>
+              </div>
             </div>
           )}
         </motion.div>
