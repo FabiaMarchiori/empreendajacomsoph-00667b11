@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { categories } from "@/data/importadoras25";
+import { useSupabaseCategories } from "@/hooks/useSupabaseCategories";
 
+// Fallback local images for categories
 import catAcessorios from "@/assets/categories/acessorios-lacos.png";
 import catBijuterias from "@/assets/categories/bijuterias-semijoias.png";
 import catCosmeticos from "@/assets/categories/cosmeticos-perfumes.png";
@@ -19,26 +20,27 @@ import catPresentes from "@/assets/categories/presentes-pelucias.png";
 import catUnhas from "@/assets/categories/unhas-cilios.png";
 import catUtilidades from "@/assets/categories/utilidades-domesticas.png";
 
-const categoryImages: Record<string, string> = {
-  "acessorios-lacos": catAcessorios,
-  "bijuterias-semijoias": catBijuterias,
-  "cosmeticos-perfumes": catCosmeticos,
+const localImages: Record<string, string> = {
+  "acessorios-e-lacos": catAcessorios,
+  "bijouterias-e-semijoias": catBijuterias,
+  "cosmeticos-e-perfumes": catCosmeticos,
   "eletronicos": catEletronicos,
   "embalagens-personalizadas": catEmbalagens,
-  "games-acessorios": catGames,
-  "garrafas-marmitas": catGarrafas,
+  "games-e-acessorios": catGames,
+  "garrafas-e-marmitas": catGarrafas,
   "maquiagem": catMaquiagem,
-  "mochilas-malas": catMochilas,
+  "mochilas-e-malas": catMochilas,
   "papelaria-fofa": catPapelaria,
-  "peliculas-capinhas": catPeliculas,
-  "perucas-cabelos": catPerucas,
-  "presentes-pelucias": catPresentes,
-  "unhas-cilios": catUnhas,
+  "peliculas-e-capinhas": catPeliculas,
+  "perucas-e-cabelos": catPerucas,
+  "presentes-e-pelucias": catPresentes,
+  "unhas-e-cilios": catUnhas,
   "utilidades-domesticas": catUtilidades,
 };
 
 export default function ImportadorasCategorias() {
   const navigate = useNavigate();
+  const { data: categories, isLoading, error } = useSupabaseCategories();
 
   return (
     <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
@@ -52,33 +54,56 @@ export default function ImportadorasCategorias() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-7">
-        {categories.map((cat, i) => (
-          <motion.button
-            key={cat.slug}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.04 }}
-            onClick={() => navigate(`/fornecedores/importadoras-25/categoria/${cat.slug}`)}
-            className="flex flex-col items-center gap-3 group"
-          >
-            <div className="h-20 w-20 lg:h-24 lg:w-24 rounded-full border-2 border-border/60 group-hover:border-[#00EFFF]/50 bg-card flex items-center justify-center transition-all duration-200 group-hover:shadow-glow-sm group-hover:scale-105 overflow-hidden">
-              <img
-                src={categoryImages[cat.slug]}
-                alt={cat.name}
-                className="h-full w-full object-cover rounded-full"
-                loading="lazy"
-                width={96}
-                height={96}
-              />
-            </div>
-            <div className="text-center">
-              <span className="text-xs font-semibold text-white block leading-tight">{cat.name}</span>
-              <span className="text-[10px] text-white/70">{cat.count} fornecedores</span>
-            </div>
-          </motion.button>
-        ))}
-      </div>
+      {isLoading && (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-6 w-6 text-primary animate-spin" />
+        </div>
+      )}
+
+      {error && (
+        <div className="text-center py-16">
+          <p className="text-white/50 text-sm">Erro ao carregar categorias. Tente novamente.</p>
+        </div>
+      )}
+
+      {categories && categories.length > 0 && (
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-7">
+          {categories.map((cat, i) => {
+            const imgSrc = cat.imagem_url || localImages[cat.slug] || "";
+            return (
+              <motion.button
+                key={cat.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.04 }}
+                onClick={() => navigate(`/fornecedores/importadoras-25/categoria/${cat.slug}`)}
+                className="flex flex-col items-center gap-3 group"
+              >
+                <div className="h-20 w-20 lg:h-24 lg:w-24 rounded-full border-2 border-border/60 group-hover:border-[#00EFFF]/50 bg-card flex items-center justify-center transition-all duration-200 group-hover:shadow-glow-sm group-hover:scale-105 overflow-hidden">
+                  {imgSrc ? (
+                    <img
+                      src={imgSrc}
+                      alt={cat.categoria}
+                      className="h-full w-full object-cover rounded-full"
+                      loading="lazy"
+                      width={96}
+                      height={96}
+                    />
+                  ) : (
+                    <span className="text-2xl font-bold text-primary">
+                      {cat.categoria.charAt(0)}
+                    </span>
+                  )}
+                </div>
+                <div className="text-center">
+                  <span className="text-xs font-semibold text-white block leading-tight">{cat.categoria}</span>
+                  <span className="text-[10px] text-white/70">{cat.count} fornecedores</span>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

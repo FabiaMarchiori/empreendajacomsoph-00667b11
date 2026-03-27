@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { AppLayout } from "@/components/AppLayout";
+import LoginPage from "./pages/Login";
 import HomePage from "./pages/Home";
 import FornecedoresPage from "./pages/Fornecedores";
 import ImportadorasHub from "./pages/importadoras/ImportadorasHub";
@@ -29,36 +31,39 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/fornecedores" element={<FornecedoresPage />} />
-            <Route path="/fornecedores/importadoras-25" element={<ImportadorasHub />} />
-            <Route path="/fornecedores/importadoras-25/categorias" element={<ImportadorasCategorias />} />
-            <Route path="/fornecedores/importadoras-25/categoria/:slug" element={<ImportadorasNicho />} />
-            <Route path="/fornecedores/importadoras-25/fornecedor/:id" element={<ImportadorasFornecedor />} />
-            <Route path="/fornecedores/importadoras-25/busca" element={<ImportadorasBusca />} />
-            <Route path="/fornecedores/importadoras-25/favoritos" element={<ImportadorasFavoritos />} />
-            <Route path="/estruture" element={<EstruturePage />} />
-            <Route path="/vendas" element={<VendasPage />} />
-            <Route path="/vendas/marketplaces" element={<VendasMarketplacesPage />} />
-            <Route path="/vendas/dominio-site" element={<DominioSitePage />} />
-            <Route path="/estrutura/abrir-mei" element={<AbrirMeiPage />} />
-            <Route path="/estrutura/logo-marca" element={<LogoMarcaPage />} />
-            <Route path="/estrutura/registrar-marca" element={<RegistrarMarcaPage />} />
-            <Route path="/gestao" element={<GestaoPage />} />
-            <Route path="/soph" element={<SophPage />} />
-            <Route path="/acessos" element={<AcessosPage />} />
-            <Route path="/conta" element={<ContaPage />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/fornecedores" element={<FornecedoresPage />} />
+              <Route path="/fornecedores/importadoras-25" element={<ImportadorasHub />} />
+              <Route path="/fornecedores/importadoras-25/categorias" element={<ImportadorasCategorias />} />
+              <Route path="/fornecedores/importadoras-25/categoria/:slug" element={<ImportadorasNicho />} />
+              <Route path="/fornecedores/importadoras-25/fornecedor/:id" element={<ImportadorasFornecedor />} />
+              <Route path="/fornecedores/importadoras-25/busca" element={<ImportadorasBusca />} />
+              <Route path="/fornecedores/importadoras-25/favoritos" element={<ImportadorasFavoritos />} />
+              <Route path="/estruture" element={<EstruturePage />} />
+              <Route path="/vendas" element={<VendasPage />} />
+              <Route path="/vendas/marketplaces" element={<VendasMarketplacesPage />} />
+              <Route path="/vendas/dominio-site" element={<DominioSitePage />} />
+              <Route path="/estrutura/abrir-mei" element={<AbrirMeiPage />} />
+              <Route path="/estrutura/logo-marca" element={<LogoMarcaPage />} />
+              <Route path="/estrutura/registrar-marca" element={<RegistrarMarcaPage />} />
+              <Route path="/gestao" element={<GestaoPage />} />
+              <Route path="/soph" element={<SophPage />} />
+              <Route path="/acessos" element={<AcessosPage />} />
+              <Route path="/conta" element={<ContaPage />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

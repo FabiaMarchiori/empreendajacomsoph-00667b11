@@ -7,7 +7,7 @@ interface SupplierCircleProps {
   name: string;
   logo?: string;
   isFavorite?: boolean;
-  onToggleFavorite?: (id: string) => void;
+  onToggleFavorite?: (id: string) => void | (() => void);
   basePath?: string;
 }
 

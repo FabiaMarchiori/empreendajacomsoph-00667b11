@@ -1,18 +1,19 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Search, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { suppliers } from "@/data/importadoras25";
+import { useSupabaseSuppliers } from "@/hooks/useSupabaseSuppliers";
 import { SupplierCircle } from "@/components/SupplierCircle";
-import { useFavorites } from "@/hooks/useFavorites";
+import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 
 export default function ImportadorasBusca() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const { toggle, isFavorite } = useFavorites();
+  const { toggle, isFavorite } = useSupabaseFavorites();
+  const { data: allSuppliers, isLoading } = useSupabaseSuppliers();
 
   const filtered = search.length >= 2
-    ? suppliers.filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
+    ? (allSuppliers || []).filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
     : [];
 
   return (
@@ -41,7 +42,13 @@ export default function ImportadorasBusca() {
         </div>
       </motion.div>
 
-      {search.length >= 2 && filtered.length === 0 && (
+      {isLoading && search.length >= 2 && (
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="h-6 w-6 text-primary animate-spin" />
+        </div>
+      )}
+
+      {search.length >= 2 && !isLoading && filtered.length === 0 && (
         <div className="text-center py-16">
           <p className="text-white/50 text-sm">Nenhum fornecedor encontrado para "{search}".</p>
         </div>
@@ -52,11 +59,11 @@ export default function ImportadorasBusca() {
           {filtered.map((s) => (
             <SupplierCircle
               key={s.id}
-              id={s.id}
-              name={s.name}
-              logo={s.logo || undefined}
+              id={String(s.id)}
+              name={s.nome_loja}
+              logo={s.logo_url || undefined}
               isFavorite={isFavorite(s.id)}
-              onToggleFavorite={toggle}
+              onToggleFavorite={() => toggle(s.id)}
             />
           ))}
         </motion.div>

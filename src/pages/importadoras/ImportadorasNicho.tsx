@@ -1,21 +1,24 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Search, Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { categories, suppliers } from "@/data/importadoras25";
+import { useSupabaseCategories } from "@/hooks/useSupabaseCategories";
+import { useSupabaseSuppliers } from "@/hooks/useSupabaseSuppliers";
 import { SupplierCircle } from "@/components/SupplierCircle";
-import { useFavorites } from "@/hooks/useFavorites";
+import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 
 export default function ImportadorasNicho() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const { toggle, isFavorite } = useFavorites();
+  const { toggle, isFavorite } = useSupabaseFavorites();
+  const { data: categories } = useSupabaseCategories();
+  const { data: suppliers, isLoading } = useSupabaseSuppliers(slug);
 
-  const category = categories.find((c) => c.slug === slug);
-  const filtered = suppliers
-    .filter((s) => s.categorySlug === slug)
-    .filter((s) => s.name.toLowerCase().includes(search.toLowerCase()));
+  const category = categories?.find((c) => c.slug === slug);
+  const filtered = (suppliers || []).filter((s) =>
+    s.nome_loja.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
@@ -24,7 +27,7 @@ export default function ImportadorasNicho() {
           <ArrowLeft className="h-4 w-4" />
         </button>
         <div>
-          <h1 className="font-display text-2xl lg:text-3xl font-extrabold text-white tracking-tight">{category?.name || "Categoria"}</h1>
+          <h1 className="font-display text-2xl lg:text-3xl font-extrabold text-white tracking-tight">{category?.categoria || "Categoria"}</h1>
           <p className="text-xs text-white/60">{filtered.length} fornecedores encontrados</p>
         </div>
       </motion.div>
@@ -42,11 +45,19 @@ export default function ImportadorasNicho() {
         </div>
       </motion.div>
 
-      {filtered.length === 0 ? (
+      {isLoading && (
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="h-6 w-6 text-primary animate-spin" />
+        </div>
+      )}
+
+      {!isLoading && filtered.length === 0 && (
         <div className="text-center py-16">
           <p className="text-white/50 text-sm">Nenhum fornecedor encontrado nesta categoria.</p>
         </div>
-      ) : (
+      )}
+
+      {!isLoading && filtered.length > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -56,11 +67,11 @@ export default function ImportadorasNicho() {
           {filtered.map((s, i) => (
             <motion.div key={s.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.03 }}>
               <SupplierCircle
-                id={s.id}
-                name={s.name}
-                logo={s.logo || undefined}
+                id={String(s.id)}
+                name={s.nome_loja}
+                logo={s.logo_url || undefined}
                 isFavorite={isFavorite(s.id)}
-                onToggleFavorite={toggle}
+                onToggleFavorite={() => toggle(s.id)}
               />
             </motion.div>
           ))}
