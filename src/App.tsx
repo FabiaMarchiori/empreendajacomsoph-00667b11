@@ -31,6 +31,12 @@ const App = () => (
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/fornecedores" element={<FornecedoresPage />} />
+            <Route path="/fornecedores/importadoras-25" element={<ImportadorasHub />} />
+            <Route path="/fornecedores/importadoras-25/categorias" element={<ImportadorasCategorias />} />
+            <Route path="/fornecedores/importadoras-25/categoria/:slug" element={<ImportadorasNicho />} />
+            <Route path="/fornecedores/importadoras-25/fornecedor/:id" element={<ImportadorasFornecedor />} />
+            <Route path="/fornecedores/importadoras-25/busca" element={<ImportadorasBusca />} />
+            <Route path="/fornecedores/importadoras-25/favoritos" element={<ImportadorasFavoritos />} />
             <Route path="/estruture" element={<EstruturePage />} />
             <Route path="/vendas" element={<VendasPage />} />
             <Route path="/vendas/marketplaces" element={<VendasMarketplacesPage />} />
