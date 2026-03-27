@@ -14,7 +14,7 @@ export default function ImportadorasBusca() {
 
   const filtered = search.length >= 2
     ? (allSuppliers || []).filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
-    : [];
+    : (allSuppliers || []);
 
   return (
     <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
@@ -42,13 +42,13 @@ export default function ImportadorasBusca() {
         </div>
       </motion.div>
 
-      {isLoading && search.length >= 2 && (
+      {isLoading && (
         <div className="flex items-center justify-center py-16">
           <Loader2 className="h-6 w-6 text-primary animate-spin" />
         </div>
       )}
 
-      {search.length >= 2 && !isLoading && filtered.length === 0 && (
+      {!isLoading && filtered.length === 0 && (
         <div className="text-center py-16">
           <p className="text-white/50 text-sm">Nenhum fornecedor encontrado para "{search}".</p>
         </div>
