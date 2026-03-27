@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Search, Package, Gem, Factory, Shirt, Footprints, ShoppingBag, Baby, Heart, Dumbbell, MapPin } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const categories = [
   { label: "Todos", key: "Todos" },
@@ -128,6 +129,7 @@ const item = {
 export default function FornecedoresPage() {
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const filtered = suppliers.filter(
     (s) =>
@@ -208,6 +210,7 @@ export default function FornecedoresPage() {
               status={s.status}
               icon={s.icon}
               isPremium={s.isPremium}
+              onClick={s.route ? () => navigate(s.route!) : undefined}
             />
           </motion.div>
         ))}
