@@ -20,18 +20,21 @@ export interface Category {
 }
 
 export const categories: Category[] = [
-  { name: "Brinquedos", slug: "brinquedos", image: "🧸", count: 12 },
-  { name: "Eletrônicos", slug: "eletronicos", image: "📱", count: 18 },
-  { name: "Decoração", slug: "decoracao", image: "🏠", count: 9 },
-  { name: "Utilidades", slug: "utilidades", image: "🔧", count: 15 },
-  { name: "Papelaria", slug: "papelaria", image: "📝", count: 8 },
-  { name: "Bijuterias", slug: "bijuterias", image: "💍", count: 14 },
-  { name: "Bolsas e Malas", slug: "bolsas-malas", image: "👜", count: 11 },
-  { name: "Cosméticos", slug: "cosmeticos", image: "💄", count: 7 },
-  { name: "Ferramentas", slug: "ferramentas", image: "🔨", count: 6 },
-  { name: "Presentes", slug: "presentes", image: "🎁", count: 10 },
-  { name: "Pet Shop", slug: "pet-shop", image: "🐾", count: 5 },
-  { name: "Fitness", slug: "fitness", image: "💪", count: 4 },
+  { name: "Acessórios e Laços", slug: "acessorios-lacos", image: "/categories/acessorios-lacos.png", count: 12 },
+  { name: "Bijuterias e Semijoias", slug: "bijuterias-semijoias", image: "/categories/bijuterias-semijoias.png", count: 18 },
+  { name: "Cosméticos e Perfumes", slug: "cosmeticos-perfumes", image: "/categories/cosmeticos-perfumes.png", count: 9 },
+  { name: "Eletrônicos", slug: "eletronicos", image: "/categories/eletronicos.png", count: 15 },
+  { name: "Embalagens Personalizadas", slug: "embalagens-personalizadas", image: "/categories/embalagens-personalizadas.png", count: 8 },
+  { name: "Games e Acessórios", slug: "games-acessorios", image: "/categories/games-acessorios.png", count: 14 },
+  { name: "Garrafas e Marmitas", slug: "garrafas-marmitas", image: "/categories/garrafas-marmitas.png", count: 11 },
+  { name: "Maquiagem", slug: "maquiagem", image: "/categories/maquiagem.png", count: 7 },
+  { name: "Mochilas e Malas", slug: "mochilas-malas", image: "/categories/mochilas-malas.png", count: 10 },
+  { name: "Papelaria Fofa", slug: "papelaria-fofa", image: "/categories/papelaria-fofa.png", count: 6 },
+  { name: "Películas e Capinhas", slug: "peliculas-capinhas", image: "/categories/peliculas-capinhas.png", count: 8 },
+  { name: "Perucas e Cabelos", slug: "perucas-cabelos", image: "/categories/perucas-cabelos.png", count: 5 },
+  { name: "Presentes e Pelúcias", slug: "presentes-pelucias", image: "/categories/presentes-pelucias.png", count: 10 },
+  { name: "Unhas e Cílios", slug: "unhas-cilios", image: "/categories/unhas-cilios.png", count: 9 },
+  { name: "Utilidades Domésticas", slug: "utilidades-domesticas", image: "/categories/utilidades-domesticas.png", count: 12 },
 ];
 
 export const suppliers: Supplier[] = [
