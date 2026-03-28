@@ -27,7 +27,7 @@ export function SupplierCircle({ id, name, logo, isFavorite, onToggleFavorite, b
       )}
       <button
         onClick={() => navigate(`${basePath}/fornecedor/${id}`)}
-        className="h-24 w-24 lg:h-28 lg:w-28 rounded-full border-[3px] border-primary/30 hover:border-primary/60 bg-card flex items-center justify-center overflow-hidden transition-all duration-200 group-hover:shadow-glow-sm group-hover:scale-105"
+        className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 rounded-full border-[3px] border-primary/30 hover:border-primary/60 bg-card flex items-center justify-center overflow-hidden transition-all duration-200 group-hover:shadow-glow-sm group-hover:scale-105"
       >
         {logo ? (
           <div className="h-full w-full rounded-full bg-white flex items-center justify-center overflow-hidden">

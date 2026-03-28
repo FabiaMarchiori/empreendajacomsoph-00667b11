@@ -46,10 +46,10 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="p-6 lg:p-10 max-w-6xl mx-auto space-y-10">
+    <div className="p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto space-y-8 sm:space-y-10">
       {/* Bloco 1 — Hero / Boas-vindas */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="rounded-2xl p-8 lg:p-10 border border-[#007A7A]/30 relative overflow-hidden min-h-[260px]" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
+        <motion.div variants={item} className="rounded-2xl p-5 sm:p-8 lg:p-10 border border-[#007A7A]/30 relative overflow-hidden min-h-[220px] sm:min-h-[260px]" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
           <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[80px] -translate-y-1/3 translate-x-1/4 opacity-20" style={{ background: 'radial-gradient(circle, #007A7A 0%, transparent 70%)' }} />
 
           <div className="absolute right-0 bottom-0 top-0 w-[40%] lg:w-[36%] pointer-events-none hidden md:flex items-end justify-center">
@@ -68,7 +68,7 @@ export default function HomePage() {
 
           <div className="relative z-10 max-w-lg">
             <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-gradient-primary inline-block mb-3">Seu Ecossistema Empreendedor</p>
-            <h1 className="font-display text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">
+            <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">
               Olá, Empreendedora! <span className="inline-block">👋</span>
             </h1>
             <p className="text-white text-base max-w-lg mb-2 leading-relaxed">
@@ -126,7 +126,7 @@ export default function HomePage() {
             />
             <div className="relative flex justify-between">
               {journeySteps.map((step) => (
-                <div key={step.label} className="flex flex-col items-center text-center" style={{ width: `${100 / journeySteps.length}%` }}>
+                <div key={step.label} className="flex flex-col items-center text-center min-w-0" style={{ width: `${100 / journeySteps.length}%` }}>
                   <div
                     className={`h-10 w-10 rounded-full flex items-center justify-center border-2 relative z-10 ${
                       step.status === "concluido"
@@ -144,7 +144,7 @@ export default function HomePage() {
                       <Lock className="h-3.5 w-3.5" />
                     )}
                   </div>
-                  <span className={`text-xs font-bold mt-3 ${
+                  <span className={`text-[10px] sm:text-xs font-bold mt-3 ${
                     step.status === "concluido"
                       ? "text-transparent bg-clip-text bg-gradient-primary-btn"
                       : step.status === "em_andamento"

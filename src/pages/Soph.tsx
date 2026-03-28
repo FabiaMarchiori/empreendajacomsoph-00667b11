@@ -46,7 +46,7 @@ export default function SophPage() {
   };
 
   return (
-    <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8">
       {/* Hero */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
         <div className="relative mx-auto w-fit">
@@ -75,7 +75,7 @@ export default function SophPage() {
         {/* Chat area */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 flex flex-col gap-4">
           {/* Chat container */}
-          <div className="bg-[hsl(210,63%,10%)] backdrop-blur-sm rounded-xl border border-primary/20 flex flex-col h-[520px] shadow-[0_0_30px_-5px_hsl(var(--primary)/0.15)]">
+          <div className="bg-[hsl(210,63%,10%)] backdrop-blur-sm rounded-xl border border-primary/20 flex flex-col h-[420px] sm:h-[520px] shadow-[0_0_30px_-5px_hsl(var(--primary)/0.15)]">
             <div className="px-5 py-4 border-b border-primary/15 flex items-center gap-3">
               <div className="h-9 w-9 rounded-full overflow-hidden border border-primary/30">
                 <img src={sophAvatar} alt="Soph" width={36} height={36} className="h-full w-full object-cover" />

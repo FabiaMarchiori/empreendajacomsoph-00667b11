@@ -58,7 +58,7 @@ export default function GestaoPage() {
           </div>
 
           {/* Mini métricas */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
             {[
               { icon: DollarSign, label: "Vendas hoje", value: "R$ 1.240", color: "text-emerald-400" },
               { icon: Package, label: "Alertas estoque", value: "3 itens", color: "text-amber-400" },

@@ -38,7 +38,7 @@ export default function ImportadorasFornecedor() {
     : null;
 
   return (
-    <div className="px-4 pt-3 pb-6 lg:px-10 lg:pt-4 max-w-3xl mx-auto space-y-5">
+    <div className="px-4 pt-3 pb-6 lg:px-10 lg:pt-4 max-w-3xl mx-auto space-y-4 sm:space-y-5">
       {/* Back */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <button onClick={() => navigate(-1)} className="h-9 w-9 rounded-xl bg-card border border-border/60 flex items-center justify-center text-white hover:border-primary/40 transition-colors">
