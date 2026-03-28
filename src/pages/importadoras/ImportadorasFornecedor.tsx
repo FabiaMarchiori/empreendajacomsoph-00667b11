@@ -39,28 +39,27 @@ export default function ImportadorasFornecedor() {
 
   const actions = [
     supplier.Whatsapp && {
-      icon: <Phone className="h-5 w-5" />,
+      icon: <Phone className="h-5 w-5 text-[#D9FFF2]" />,
       label: "Abrir Conversa",
       sublabel: "WhatsApp",
-      color: "bg-[#25D366]/15 text-[#25D366] border-[#25D366]/20",
+      className: "bg-[#0F3D2E] border-[#1E5A45] hover:bg-[#14523D] hover:border-[#2A7257] hover:shadow-[0_0_16px_rgba(37,211,102,0.12)]",
       href: `https://wa.me/${supplier.Whatsapp}`,
     },
     instagramHandle && {
-      icon: <Instagram className="h-5 w-5" />,
+      icon: <Instagram className="h-5 w-5 text-[#FFD9F7]" />,
       label: `@${instagramHandle}`,
       sublabel: "Ver Página",
-      color: "bg-[#E4405F]/15 text-[#E4405F] border-[#E4405F]/20",
+      className: "bg-[#3A1638] border-[#5A2A57] hover:bg-[#4A1D47] hover:border-[#6E3570] hover:shadow-[0_0_16px_rgba(228,64,95,0.12)]",
       href: supplier.Instagram_url!,
     },
     supplier.Endereco && {
-      icon: <MapPin className="h-5 w-5" />,
+      icon: <MapPin className="h-5 w-5 text-[#9BE8FF]" />,
       label: "Abrir Mapa",
       sublabel: supplier.Endereco.length > 30 ? supplier.Endereco.slice(0, 30) + "…" : supplier.Endereco,
-      color: "bg-primary/10 text-primary border-primary/20",
+      className: "bg-[#112B3C] border-[#1E445C] hover:bg-[#16374D] hover:border-[#2A5875] hover:shadow-[0_0_16px_rgba(0,239,255,0.1)]",
       href: `https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`,
     },
-  ].filter(Boolean) as { icon: React.ReactNode; label: string; sublabel: string; color: string; href: string }[];
-
+  ].filter(Boolean) as { icon: React.ReactNode; label: string; sublabel: string; className: string; href: string }[];
   return (
     <div className="px-4 pt-3 pb-6 lg:px-10 lg:pt-4 max-w-3xl mx-auto space-y-5">
       {/* Back */}
