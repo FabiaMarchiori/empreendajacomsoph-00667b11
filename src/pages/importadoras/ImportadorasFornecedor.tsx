@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSupabaseSupplierById } from "@/hooks/useSupabaseSuppliers";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 import { cn } from "@/lib/utils";
+import tabletFrame from "@/assets/tablet-frame.png";
 
 export default function ImportadorasFornecedor() {
   const { id } = useParams<{ id: string }>();
@@ -29,37 +30,13 @@ export default function ImportadorasFornecedor() {
   }
 
   const name = supplier.nome_loja || "Sem nome";
-  const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const initials = name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase();
   const fav = isFavorite(supplier.id);
   const numId = supplier.id;
 
   const instagramHandle = supplier.Instagram_url
     ? supplier.Instagram_url.replace(/https?:\/\/(www\.)?instagram\.com\//i, "").replace(/\/$/, "")
     : null;
-
-  const actions = [
-    supplier.Whatsapp && {
-      icon: <Phone className="h-5 w-5" />,
-      label: "Abrir Conversa",
-      sublabel: "WhatsApp",
-      color: "bg-[#25D366]/15 text-[#25D366] border-[#25D366]/20",
-      href: `https://wa.me/${supplier.Whatsapp}`,
-    },
-    instagramHandle && {
-      icon: <Instagram className="h-5 w-5" />,
-      label: `@${instagramHandle}`,
-      sublabel: "Ver Página",
-      color: "bg-[#E4405F]/15 text-[#E4405F] border-[#E4405F]/20",
-      href: supplier.Instagram_url!,
-    },
-    supplier.Endereco && {
-      icon: <MapPin className="h-5 w-5" />,
-      label: "Abrir Mapa",
-      sublabel: supplier.Endereco.length > 30 ? supplier.Endereco.slice(0, 30) + "…" : supplier.Endereco,
-      color: "bg-primary/10 text-primary border-primary/20",
-      href: `https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`,
-    },
-  ].filter(Boolean) as { icon: React.ReactNode; label: string; sublabel: string; color: string; href: string }[];
 
   return (
     <div className="px-4 pt-3 pb-6 lg:px-10 lg:pt-4 max-w-3xl mx-auto space-y-5">
@@ -96,69 +73,105 @@ export default function ImportadorasFornecedor() {
         </div>
       </motion.div>
 
-      {/* Action buttons — card style like reference */}
+      {/* Action buttons — premium solid */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {actions.map((action) => (
+        {/* WhatsApp */}
+        {supplier.Whatsapp && (
           <a
-            key={action.sublabel}
-            href={action.href}
+            href={`https://wa.me/${supplier.Whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(
-              "flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border transition-all hover:scale-[1.02] text-center",
-              action.color
-            )}
+            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border transition-all duration-200 text-center bg-[#0E3B2F] border-[#1B5B49] hover:bg-[#14503F] hover:border-[#2B7A61] shadow-[0_4px_20px_-4px_rgba(30,90,69,0.4)] hover:shadow-[0_6px_24px_-4px_rgba(43,122,97,0.5)]"
           >
-            {action.icon}
-            <span className="text-white text-xs leading-tight">{action.label}</span>
-            <span className="text-xs font-semibold text-white bg-white/10 rounded-lg px-3 py-1">{action.sublabel}</span>
+            <Phone className="h-5 w-5 text-[#7CFFC8]" />
+            <span className="text-sm font-semibold text-white">Abrir Conversa</span>
+            <span className="text-xs text-[#D7FBEF]">WhatsApp</span>
           </a>
-        ))}
+        )}
+
+        {/* Instagram */}
+        {instagramHandle && (
+          <a
+            href={supplier.Instagram_url!}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border transition-all duration-200 text-center bg-[#34182F] border-[#5A2A52] hover:bg-[#46203F] hover:border-[#724068] shadow-[0_4px_20px_-4px_rgba(90,42,82,0.4)] hover:shadow-[0_6px_24px_-4px_rgba(114,64,104,0.5)]"
+          >
+            <Instagram className="h-5 w-5 text-[#FF79C8]" />
+            <span className="text-sm font-semibold text-white">@{instagramHandle}</span>
+            <span className="text-xs text-[#F5D9EF]">Ver Página</span>
+          </a>
+        )}
+
+        {/* Mapa */}
+        {supplier.Endereco && (
+          <a
+            href={`https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border transition-all duration-200 text-center bg-[#102E42] border-[#1F4D68] hover:bg-[#16415B] hover:border-[#2D6C8E] shadow-[0_4px_20px_-4px_rgba(31,77,104,0.4)] hover:shadow-[0_6px_24px_-4px_rgba(45,108,142,0.5)]"
+          >
+            <MapPin className="h-5 w-5 text-[#4FD8FF]" />
+            <span className="text-sm font-semibold text-white">Abrir Mapa</span>
+            <span className="text-xs text-[#D8F4FF] max-w-full truncate">{supplier.Endereco}</span>
+          </a>
+        )}
       </motion.div>
 
-      {/* Instagram Mockup — no wrapper card, no title */}
+      {/* Tablet Mockup — layered composition */}
       {supplier.mockup_url ? (
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-2">
-          <div className="mx-auto max-w-[300px] w-full relative">
-            {/* Phone frame */}
-            <div className="relative rounded-[2.5rem] border-[5px] border-white/10 bg-black shadow-2xl shadow-black/50 overflow-hidden">
-              {/* Top bar — speaker + camera */}
-              <div className="relative h-7 bg-black flex items-center justify-center">
-                <div className="w-20 h-[18px] bg-black rounded-b-2xl border-b border-x border-white/5 flex items-center justify-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-white/10" />
-                </div>
-              </div>
-              {/* Screen */}
-              <div className="bg-white">
-                <img
-                  src={supplier.mockup_url}
-                  alt={`Instagram de ${name}`}
-                  className="w-full h-auto object-contain"
-                  loading="lazy"
-                />
-              </div>
-              {/* Bottom bar */}
-              <div className="h-5 bg-black flex items-center justify-center">
-                <div className="w-24 h-1 rounded-full bg-white/20" />
-              </div>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-4">
+          <div className="relative mx-auto" style={{ width: "340px" }}>
+            {/* Instagram image layer — positioned inside tablet screen area */}
+            <div
+              className="absolute overflow-hidden"
+              style={{
+                top: "11.5%",
+                left: "7.8%",
+                width: "84.4%",
+                height: "76%",
+                borderRadius: "4px",
+              }}
+            >
+              <img
+                src={supplier.mockup_url}
+                alt={`Instagram de ${name}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
             </div>
-            {/* Glow */}
-            <div className="absolute -inset-6 bg-primary/5 rounded-[3.5rem] blur-3xl -z-10" />
+            {/* Tablet frame layer — on top */}
+            <img
+              src={tabletFrame}
+              alt="Tablet frame"
+              className="relative z-10 w-full h-auto pointer-events-none"
+            />
+            {/* Glow effect */}
+            <div className="absolute -inset-8 bg-primary/5 rounded-[3rem] blur-3xl -z-10" />
           </div>
         </motion.div>
       ) : instagramHandle ? (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center pt-2">
-          <div className="mx-auto max-w-[300px] w-full relative">
-            <div className="relative rounded-[2.5rem] border-[5px] border-white/10 bg-black/80 shadow-2xl overflow-hidden">
-              <div className="h-7 bg-black" />
-              <div className="py-16 flex flex-col items-center justify-center gap-3">
-                <Instagram className="h-10 w-10 text-white/15" />
-                <span className="text-white/25 text-xs">Mockup indisponível</span>
-              </div>
-              <div className="h-5 bg-black flex items-center justify-center">
-                <div className="w-24 h-1 rounded-full bg-white/20" />
-              </div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center pt-4">
+          <div className="relative mx-auto" style={{ width: "340px" }}>
+            <div
+              className="absolute flex flex-col items-center justify-center gap-3"
+              style={{
+                top: "11.5%",
+                left: "7.8%",
+                width: "84.4%",
+                height: "76%",
+                borderRadius: "4px",
+                backgroundColor: "rgba(15,25,47,0.8)",
+              }}
+            >
+              <Instagram className="h-10 w-10 text-white/15" />
+              <span className="text-white/25 text-xs">Mockup indisponível</span>
             </div>
+            <img
+              src={tabletFrame}
+              alt="Tablet frame"
+              className="relative z-10 w-full h-auto pointer-events-none"
+            />
           </div>
         </motion.div>
       ) : null}
