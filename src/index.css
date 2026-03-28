@@ -72,6 +72,31 @@
     min-height: 100vh;
   }
 
+  /* Mobile icon strip: hide text, compact layout */
+  [data-mobile-icons="true"] [data-sidebar="group-content"] span.text-\[15px\] {
+    display: none;
+  }
+  [data-mobile-icons="true"] [data-sidebar="header"] .flex.flex-col:not(.items-center) > span,
+  [data-mobile-icons="true"] [data-sidebar="header"] .flex.flex-col:not(.items-center) {
+    display: none;
+  }
+  [data-mobile-icons="true"] [data-sidebar="footer"] {
+    display: none;
+  }
+  [data-mobile-icons="true"] [data-sidebar="menu-button"] {
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  [data-mobile-icons="true"] [data-sidebar="menu-button"] a {
+    justify-content: center;
+    padding: 0.5rem;
+    gap: 0;
+  }
+  [data-mobile-icons="true"] [data-sidebar="menu-button"] a svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', 'Inter', sans-serif;
     letter-spacing: -0.01em;
