@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, Phone, Instagram, MapPin, Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { DeviceFramePreview } from "@/components/DeviceFramePreview";
 import { useSupabaseSupplierById } from "@/hooks/useSupabaseSuppliers";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 import { cn } from "@/lib/utils";
@@ -38,9 +37,6 @@ export default function ImportadorasFornecedor() {
     ? supplier.Instagram_url.replace(/https?:\/\/(www\.)?instagram\.com\//i, "").replace(/\/$/, "")
     : null;
 
-  const actionButtonClassName =
-    "supplier-action-button group flex min-h-[124px] flex-col items-center justify-center gap-1.5 rounded-[1.4rem] px-4 py-4 text-center text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
-
   return (
     <div className="px-4 pt-3 pb-6 lg:px-10 lg:pt-4 max-w-3xl mx-auto space-y-5">
       {/* Back */}
@@ -76,18 +72,21 @@ export default function ImportadorasFornecedor() {
         </div>
       </motion.div>
 
-      {/* Action buttons — gradient premium */}
+      {/* Action buttons — dark premium */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {supplier.Whatsapp && (
           <a
             href={`https://wa.me/${supplier.Whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
-            className={actionButtonClassName}
+            className="group flex min-h-[120px] flex-col items-center justify-center gap-1.5 rounded-2xl px-4 py-4 text-center transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            style={{ background: "#0F2E46", border: "2px solid #1AAEDB", boxShadow: "0 4px 20px -6px rgba(0,239,255,0.12)" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#123854"; e.currentTarget.style.borderColor = "#33CFFF"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#0F2E46"; e.currentTarget.style.borderColor = "#1AAEDB"; }}
           >
-            <Phone className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
-            <span className="text-sm font-extrabold tracking-[-0.01em]">Abrir Conversa</span>
-            <span className="text-[11px] font-medium text-primary-foreground/72">WhatsApp</span>
+            <Phone className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" style={{ color: "#00EFFF" }} />
+            <span className="text-sm font-bold text-white">WhatsApp</span>
+            <span className="text-[11px] font-medium" style={{ color: "#CFEFFF" }}>Abrir Conversa</span>
           </a>
         )}
 
@@ -96,11 +95,14 @@ export default function ImportadorasFornecedor() {
             href={supplier.Instagram_url!}
             target="_blank"
             rel="noopener noreferrer"
-            className={actionButtonClassName}
+            className="group flex min-h-[120px] flex-col items-center justify-center gap-1.5 rounded-2xl px-4 py-4 text-center transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            style={{ background: "#0F2E46", border: "2px solid #1AAEDB", boxShadow: "0 4px 20px -6px rgba(0,239,255,0.12)" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#123854"; e.currentTarget.style.borderColor = "#33CFFF"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#0F2E46"; e.currentTarget.style.borderColor = "#1AAEDB"; }}
           >
-            <Instagram className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
-            <span className="max-w-full truncate text-sm font-extrabold tracking-[-0.01em]">@{instagramHandle}</span>
-            <span className="text-[11px] font-medium text-primary-foreground/72">Ver Página</span>
+            <Instagram className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" style={{ color: "#00EFFF" }} />
+            <span className="max-w-full truncate text-sm font-bold text-white">@{instagramHandle}</span>
+            <span className="text-[11px] font-medium" style={{ color: "#CFEFFF" }}>Ver Página</span>
           </a>
         )}
 
@@ -109,33 +111,51 @@ export default function ImportadorasFornecedor() {
             href={`https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className={actionButtonClassName}
+            className="group flex min-h-[120px] flex-col items-center justify-center gap-1.5 rounded-2xl px-4 py-4 text-center transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            style={{ background: "#0F2E46", border: "2px solid #1AAEDB", boxShadow: "0 4px 20px -6px rgba(0,239,255,0.12)" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#123854"; e.currentTarget.style.borderColor = "#33CFFF"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#0F2E46"; e.currentTarget.style.borderColor = "#1AAEDB"; }}
           >
-            <MapPin className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
-            <span className="text-sm font-extrabold tracking-[-0.01em]">Abrir Mapa</span>
-            <span className="max-w-full truncate text-[11px] font-medium text-primary-foreground/72">{supplier.Endereco}</span>
+            <MapPin className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" style={{ color: "#00EFFF" }} />
+            <span className="max-w-full truncate text-sm font-bold text-white">{supplier.Endereco}</span>
+            <span className="text-[11px] font-medium" style={{ color: "#CFEFFF" }}>Abrir Mapa</span>
           </a>
         )}
       </motion.div>
 
-      {/* Tablet preview */}
-      {supplier.mockup_url ? (
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-3 sm:pt-4">
-          <DeviceFramePreview imageSrc={supplier.mockup_url} imageAlt={`Instagram de ${name}`} />
-        </motion.div>
-      ) : instagramHandle ? (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center pt-3 sm:pt-4">
-          <DeviceFramePreview
-            imageAlt={`Prévia de ${name}`}
-            fallback={
-              <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-background text-center text-foreground/30">
-                <Instagram className="h-10 w-10" />
-                <span className="text-xs font-medium">Mockup indisponível</span>
+      {/* Phone mockup preview */}
+      {supplier.mockup_url && (
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-4">
+          <div className="relative mx-auto" style={{ width: "280px" }}>
+            {/* Phone frame */}
+            <div
+              className="relative rounded-[2.8rem] overflow-hidden"
+              style={{
+                background: "#0B1A2B",
+                border: "3px solid #1A3A55",
+                boxShadow: "0 20px 50px -12px rgba(0,0,0,0.5), 0 0 30px -8px rgba(0,239,255,0.1)",
+                aspectRatio: "9/19.5",
+              }}
+            >
+              {/* Notch */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-[120px] h-[28px] rounded-b-2xl" style={{ background: "#0B1A2B" }} />
+
+              {/* Screen area */}
+              <div className="absolute inset-[6px] rounded-[2.4rem] overflow-hidden bg-black">
+                <img
+                  src={supplier.mockup_url}
+                  alt={`Instagram de ${name}`}
+                  className="h-full w-full object-cover object-top"
+                  loading="lazy"
+                />
               </div>
-            }
-          />
+
+              {/* Bottom bar */}
+              <div className="absolute bottom-[10px] left-1/2 -translate-x-1/2 z-20 w-[100px] h-[4px] rounded-full" style={{ background: "#1A3A55" }} />
+            </div>
+          </div>
         </motion.div>
-      ) : null}
+      )}
     </div>
   );
 }
