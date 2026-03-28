@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSupabaseSupplierById } from "@/hooks/useSupabaseSuppliers";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 import { cn } from "@/lib/utils";
-import tabletFrame from "@/assets/tablet-mockup.png";
+
 export default function ImportadorasFornecedor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -39,27 +39,28 @@ export default function ImportadorasFornecedor() {
 
   const actions = [
     supplier.Whatsapp && {
-      icon: <Phone className="h-5 w-5 text-[#D9FFF2]" />,
+      icon: <Phone className="h-5 w-5" />,
       label: "Abrir Conversa",
       sublabel: "WhatsApp",
-      className: "bg-[#0F3D2E] border-[#1E5A45] hover:bg-[#14523D] hover:border-[#2A7257] hover:shadow-[0_0_16px_rgba(37,211,102,0.12)]",
+      color: "bg-[#25D366]/15 text-[#25D366] border-[#25D366]/20",
       href: `https://wa.me/${supplier.Whatsapp}`,
     },
     instagramHandle && {
-      icon: <Instagram className="h-5 w-5 text-[#FFD9F7]" />,
+      icon: <Instagram className="h-5 w-5" />,
       label: `@${instagramHandle}`,
       sublabel: "Ver Página",
-      className: "bg-[#3A1638] border-[#5A2A57] hover:bg-[#4A1D47] hover:border-[#6E3570] hover:shadow-[0_0_16px_rgba(228,64,95,0.12)]",
+      color: "bg-[#E4405F]/15 text-[#E4405F] border-[#E4405F]/20",
       href: supplier.Instagram_url!,
     },
     supplier.Endereco && {
-      icon: <MapPin className="h-5 w-5 text-[#9BE8FF]" />,
+      icon: <MapPin className="h-5 w-5" />,
       label: "Abrir Mapa",
       sublabel: supplier.Endereco.length > 30 ? supplier.Endereco.slice(0, 30) + "…" : supplier.Endereco,
-      className: "bg-[#112B3C] border-[#1E445C] hover:bg-[#16374D] hover:border-[#2A5875] hover:shadow-[0_0_16px_rgba(0,239,255,0.1)]",
+      color: "bg-primary/10 text-primary border-primary/20",
       href: `https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`,
     },
-  ].filter(Boolean) as { icon: React.ReactNode; label: string; sublabel: string; className: string; href: string }[];
+  ].filter(Boolean) as { icon: React.ReactNode; label: string; sublabel: string; color: string; href: string }[];
+
   return (
     <div className="px-4 pt-3 pb-6 lg:px-10 lg:pt-4 max-w-3xl mx-auto space-y-5">
       {/* Back */}
@@ -95,7 +96,7 @@ export default function ImportadorasFornecedor() {
         </div>
       </motion.div>
 
-      {/* Action buttons — premium styled */}
+      {/* Action buttons — card style like reference */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {actions.map((action) => (
           <a
@@ -104,43 +105,59 @@ export default function ImportadorasFornecedor() {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border transition-all duration-200 hover:scale-[1.02] text-center shadow-sm",
-              action.className
+              "flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border transition-all hover:scale-[1.02] text-center",
+              action.color
             )}
           >
             {action.icon}
-            <span className="text-[#F8FAFC] text-xs font-medium leading-tight">{action.label}</span>
-            <span className="text-[10px] font-semibold text-[#F8FAFC]/70 bg-white/5 rounded-lg px-3 py-1">{action.sublabel}</span>
+            <span className="text-white text-xs leading-tight">{action.label}</span>
+            <span className="text-xs font-semibold text-white bg-white/10 rounded-lg px-3 py-1">{action.sublabel}</span>
           </a>
         ))}
       </motion.div>
 
-      {/* Tablet Mockup with Instagram image */}
+      {/* Instagram Mockup — no wrapper card, no title */}
       {supplier.mockup_url ? (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-2">
-          <div className="relative mx-auto" style={{ width: 280 }}>
-            {/* Tablet frame image */}
-            <img src={tabletFrame} alt="" className="w-full h-auto relative z-10 pointer-events-none" />
-            {/* Instagram content inside the screen */}
-            <div className="absolute z-0 overflow-hidden" style={{ top: '10.5%', left: '7%', right: '7%', bottom: '14%', borderRadius: 4 }}>
-              <img
-                src={supplier.mockup_url}
-                alt={`Instagram de ${name}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
+          <div className="mx-auto max-w-[300px] w-full relative">
+            {/* Phone frame */}
+            <div className="relative rounded-[2.5rem] border-[5px] border-white/10 bg-black shadow-2xl shadow-black/50 overflow-hidden">
+              {/* Top bar — speaker + camera */}
+              <div className="relative h-7 bg-black flex items-center justify-center">
+                <div className="w-20 h-[18px] bg-black rounded-b-2xl border-b border-x border-white/5 flex items-center justify-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-white/10" />
+                </div>
+              </div>
+              {/* Screen */}
+              <div className="bg-white">
+                <img
+                  src={supplier.mockup_url}
+                  alt={`Instagram de ${name}`}
+                  className="w-full h-auto object-contain"
+                  loading="lazy"
+                />
+              </div>
+              {/* Bottom bar */}
+              <div className="h-5 bg-black flex items-center justify-center">
+                <div className="w-24 h-1 rounded-full bg-white/20" />
+              </div>
             </div>
             {/* Glow */}
-            <div className="absolute -inset-8 bg-primary/5 rounded-[2rem] blur-3xl -z-10" />
+            <div className="absolute -inset-6 bg-primary/5 rounded-[3.5rem] blur-3xl -z-10" />
           </div>
         </motion.div>
       ) : instagramHandle ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center pt-2">
-          <div className="relative mx-auto" style={{ width: 280 }}>
-            <img src={tabletFrame} alt="" className="w-full h-auto relative z-10 pointer-events-none" />
-            <div className="absolute z-0 flex flex-col items-center justify-center gap-3 bg-black/40" style={{ top: '10.5%', left: '7%', right: '7%', bottom: '14%', borderRadius: 4 }}>
-              <Instagram className="h-10 w-10 text-white/15" />
-              <span className="text-white/25 text-xs">Mockup indisponível</span>
+          <div className="mx-auto max-w-[300px] w-full relative">
+            <div className="relative rounded-[2.5rem] border-[5px] border-white/10 bg-black/80 shadow-2xl overflow-hidden">
+              <div className="h-7 bg-black" />
+              <div className="py-16 flex flex-col items-center justify-center gap-3">
+                <Instagram className="h-10 w-10 text-white/15" />
+                <span className="text-white/25 text-xs">Mockup indisponível</span>
+              </div>
+              <div className="h-5 bg-black flex items-center justify-center">
+                <div className="w-24 h-1 rounded-full bg-white/20" />
+              </div>
             </div>
           </div>
         </motion.div>
