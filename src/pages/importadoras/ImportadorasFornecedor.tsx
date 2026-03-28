@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSupabaseSupplierById } from "@/hooks/useSupabaseSuppliers";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 import { cn } from "@/lib/utils";
-
+import tabletFrame from "@/assets/tablet-mockup.png";
 export default function ImportadorasFornecedor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
