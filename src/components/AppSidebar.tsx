@@ -7,7 +7,6 @@ import {
   MessageCircle,
   Key,
   User,
-  Sparkles,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -69,8 +68,8 @@ export function AppSidebar() {
             style={active ? { background: 'linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' } : undefined}
             activeClassName=""
           >
-            <item.icon className={`h-12 w-12 flex-shrink-0 ${active ? "text-[#062638]" : ""}`} strokeWidth={2.2} />
-            {!collapsed && <span className="text-[15px]">{item.title}</span>}
+            <item.icon className={`h-12 w-12 flex-shrink-0 ${active ? "text-[#062638]" : "text-white"}`} strokeWidth={2.2} />
+            {!collapsed && <span className={`text-[15px] ${active ? "text-[#062638]" : "text-white"}`}>{item.title}</span>}
           </NavLink>
         </SidebarMenuButton>
       </SidebarMenuItem>
@@ -86,21 +85,16 @@ export function AppSidebar() {
       }}
     >
       <SidebarHeader className="p-5">
-        <div className="flex items-center gap-4">
-          <div
-            className="h-14 w-14 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-primary-btn shadow-glow-sm"
-          >
-            <Sparkles className="h-7 w-7 text-primary-foreground" />
+        {!collapsed ? (
+          <div className="flex flex-col">
+            <span className="font-display font-extrabold text-2xl text-white tracking-tight leading-tight">
+              EmpreendaJá
+            </span>
+            <span className="text-base font-bold text-gradient-primary">com Soph</span>
           </div>
-          {!collapsed && (
-            <div className="flex flex-col">
-              <span className="font-display font-extrabold text-lg text-white tracking-tight leading-tight">
-                EmpreendaJá
-              </span>
-              <span className="text-xs font-bold text-gradient-primary">com Soph</span>
-            </div>
-          )}
-        </div>
+        ) : (
+          <span className="font-display font-extrabold text-xs text-white text-center w-full">EJ</span>
+        )}
       </SidebarHeader>
 
       <SidebarContent className="px-2">
