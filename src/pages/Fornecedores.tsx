@@ -139,7 +139,7 @@ export default function FornecedoresPage() {
   );
 
   return (
-    <div className="p-6 lg:p-10 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto space-y-6 sm:space-y-8">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="font-display text-3xl lg:text-4xl font-extrabold mb-3 tracking-tight">

@@ -39,12 +39,18 @@ const secondaryItems = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, setOpenMobile, isMobile } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
 
   const isActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+
+  const handleNavClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   const renderItem = (item: typeof mainItems[0]) => {
     const active = isActive(item.url);
@@ -54,15 +60,16 @@ export function AppSidebar() {
           <NavLink
             to={item.url}
             end={item.url === "/"}
+            onClick={handleNavClick}
             className={`flex items-center gap-4 px-4 py-4 rounded-xl text-sm transition-all ${
               active
-                ? "text-[#0A192F] font-bold border border-[#00EFFF]/40 shadow-[0_0_20px_-4px_rgba(0,239,255,0.35)]"
+                ? "text-[#062638] font-bold border border-[#00EFFF]/40 shadow-[0_0_20px_-4px_rgba(0,239,255,0.35)]"
                 : "text-white font-semibold hover:bg-white/5"
             }`}
             style={active ? { background: 'linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)' } : undefined}
             activeClassName=""
           >
-            <item.icon className="h-12 w-12 flex-shrink-0" strokeWidth={2.2} />
+            <item.icon className={`h-12 w-12 flex-shrink-0 ${active ? "text-[#062638]" : ""}`} strokeWidth={2.2} />
             {!collapsed && <span className="text-[15px]">{item.title}</span>}
           </NavLink>
         </SidebarMenuButton>
@@ -78,19 +85,19 @@ export function AppSidebar() {
         background: 'linear-gradient(180deg, #0F2336 0%, #0A192F 50%, #081525 100%)',
       }}
     >
-      <SidebarHeader className="p-4">
-        <div className="flex items-center gap-3">
+      <SidebarHeader className="p-5">
+        <div className="flex items-center gap-4">
           <div
-            className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-primary-btn"
+            className="h-14 w-14 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-primary-btn shadow-glow-sm"
           >
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <Sparkles className="h-7 w-7 text-primary-foreground" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="font-display font-bold text-sm text-white tracking-tight">
+              <span className="font-display font-extrabold text-lg text-white tracking-tight leading-tight">
                 EmpreendaJá
               </span>
-              <span className="text-[10px] text-white/70 font-semibold">com Soph</span>
+              <span className="text-xs font-bold text-gradient-primary">com Soph</span>
             </div>
           )}
         </div>

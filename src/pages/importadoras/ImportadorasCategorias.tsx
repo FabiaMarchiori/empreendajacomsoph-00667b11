@@ -67,7 +67,7 @@ export default function ImportadorasCategorias() {
       )}
 
       {categories && categories.length > 0 && (
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-8">
           {categories.map((cat, i) => {
             const imgSrc = cat.imagem_url || localImages[cat.slug] || "";
             return (
@@ -79,7 +79,7 @@ export default function ImportadorasCategorias() {
                 onClick={() => navigate(`/fornecedores/importadoras-25/categoria/${cat.slug}`)}
                 className="flex flex-col items-center gap-3 group"
               >
-                <div className="h-28 w-28 lg:h-32 lg:w-32 rounded-full border-[3px] border-primary/30 group-hover:border-primary/60 bg-card flex items-center justify-center transition-all duration-200 group-hover:shadow-glow-sm group-hover:scale-105 overflow-hidden">
+                <div className="h-20 w-20 sm:h-28 sm:w-28 lg:h-32 lg:w-32 rounded-full border-[3px] border-primary/30 group-hover:border-primary/60 bg-card flex items-center justify-center transition-all duration-200 group-hover:shadow-glow-sm group-hover:scale-105 overflow-hidden">
                   {imgSrc ? (
                     <img
                       src={imgSrc}

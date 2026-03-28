@@ -62,7 +62,7 @@ export default function ImportadorasNicho() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-6"
+          className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6"
         >
           {filtered.map((s, i) => (
             <motion.div key={s.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.03 }}>

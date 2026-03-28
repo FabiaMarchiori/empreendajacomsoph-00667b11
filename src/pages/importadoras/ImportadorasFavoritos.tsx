@@ -40,7 +40,7 @@ export default function ImportadorasFavoritos() {
       )}
 
       {!isLoading && favSuppliers.length > 0 && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-6">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
           {favSuppliers.map((s) => (
             <SupplierCircle
               key={s.id}
