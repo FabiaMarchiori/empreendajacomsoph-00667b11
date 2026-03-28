@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, Phone, Instagram, MapPin, Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { DeviceFramePreview } from "@/components/DeviceFramePreview";
 import { useSupabaseSupplierById } from "@/hooks/useSupabaseSuppliers";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 import { cn } from "@/lib/utils";
-import tabletFrame from "@/assets/tablet-frame.png";
 
 export default function ImportadorasFornecedor() {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +37,9 @@ export default function ImportadorasFornecedor() {
   const instagramHandle = supplier.Instagram_url
     ? supplier.Instagram_url.replace(/https?:\/\/(www\.)?instagram\.com\//i, "").replace(/\/$/, "")
     : null;
+
+  const actionButtonClassName =
+    "supplier-action-button group flex min-h-[124px] flex-col items-center justify-center gap-1.5 rounded-[1.4rem] px-4 py-4 text-center text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
   return (
     <div className="px-4 pt-3 pb-6 lg:px-10 lg:pt-4 max-w-3xl mx-auto space-y-5">
@@ -80,11 +83,11 @@ export default function ImportadorasFornecedor() {
             href={`https://wa.me/${supplier.Whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border border-primary/30 bg-gradient-primary-soft transition-all duration-200 text-center hover:border-primary/60 hover:shadow-glow"
+            className={actionButtonClassName}
           >
-            <Phone className="h-5 w-5 text-primary" />
-            <span className="text-sm font-semibold text-white">Abrir Conversa</span>
-            <span className="text-xs text-muted-foreground">WhatsApp</span>
+            <Phone className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
+            <span className="text-sm font-extrabold tracking-[-0.01em]">Abrir Conversa</span>
+            <span className="text-[11px] font-medium text-primary-foreground/72">WhatsApp</span>
           </a>
         )}
 
@@ -93,11 +96,11 @@ export default function ImportadorasFornecedor() {
             href={supplier.Instagram_url!}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border border-primary/30 bg-gradient-primary-soft transition-all duration-200 text-center hover:border-primary/60 hover:shadow-glow"
+            className={actionButtonClassName}
           >
-            <Instagram className="h-5 w-5 text-primary" />
-            <span className="text-sm font-semibold text-white">@{instagramHandle}</span>
-            <span className="text-xs text-muted-foreground">Ver Página</span>
+            <Instagram className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
+            <span className="max-w-full truncate text-sm font-extrabold tracking-[-0.01em]">@{instagramHandle}</span>
+            <span className="text-[11px] font-medium text-primary-foreground/72">Ver Página</span>
           </a>
         )}
 
@@ -106,70 +109,31 @@ export default function ImportadorasFornecedor() {
             href={`https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border border-primary/30 bg-gradient-primary-soft transition-all duration-200 text-center hover:border-primary/60 hover:shadow-glow"
+            className={actionButtonClassName}
           >
-            <MapPin className="h-5 w-5 text-primary" />
-            <span className="text-sm font-semibold text-white">Abrir Mapa</span>
-            <span className="text-xs text-muted-foreground max-w-full truncate">{supplier.Endereco}</span>
+            <MapPin className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
+            <span className="text-sm font-extrabold tracking-[-0.01em]">Abrir Mapa</span>
+            <span className="max-w-full truncate text-[11px] font-medium text-primary-foreground/72">{supplier.Endereco}</span>
           </a>
         )}
       </motion.div>
 
-      {/* Tablet Mockup — 3-layer composition */}
+      {/* Tablet preview */}
       {supplier.mockup_url ? (
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-4">
-          <div className="relative mx-auto" style={{ width: "380px" }}>
-            {/* Layer 1: Instagram image clipped inside screen area */}
-            <div
-              className="absolute overflow-hidden"
-              style={{
-                top: "5.5%",
-                left: "5%",
-                width: "90%",
-                height: "88%",
-                borderRadius: "8px",
-              }}
-            >
-              <img
-                src={supplier.mockup_url}
-                alt={`Instagram de ${name}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            {/* Layer 2: Tablet frame PNG on top */}
-            <img
-              src={tabletFrame}
-              alt="Tablet frame"
-              className="relative z-10 w-full h-auto pointer-events-none"
-            />
-            {/* Glow behind */}
-            <div className="absolute -inset-8 bg-primary/5 rounded-[3rem] blur-3xl -z-10" />
-          </div>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-3 sm:pt-4">
+          <DeviceFramePreview imageSrc={supplier.mockup_url} imageAlt={`Instagram de ${name}`} />
         </motion.div>
       ) : instagramHandle ? (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center pt-4">
-          <div className="relative mx-auto" style={{ width: "380px" }}>
-            <div
-              className="absolute flex flex-col items-center justify-center gap-3"
-              style={{
-                top: "5.5%",
-                left: "5%",
-                width: "90%",
-                height: "88%",
-                borderRadius: "8px",
-                backgroundColor: "rgba(15,25,47,0.8)",
-              }}
-            >
-              <Instagram className="h-10 w-10 text-white/15" />
-              <span className="text-white/25 text-xs">Mockup indisponível</span>
-            </div>
-            <img
-              src={tabletFrame}
-              alt="Tablet frame"
-              className="relative z-10 w-full h-auto pointer-events-none"
-            />
-          </div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center pt-3 sm:pt-4">
+          <DeviceFramePreview
+            imageAlt={`Prévia de ${name}`}
+            fallback={
+              <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-background text-center text-foreground/30">
+                <Instagram className="h-10 w-10" />
+                <span className="text-xs font-medium">Mockup indisponível</span>
+              </div>
+            }
+          />
         </motion.div>
       ) : null}
     </div>
