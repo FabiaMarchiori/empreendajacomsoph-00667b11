@@ -24,22 +24,26 @@ export default function ImportadorasHub() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {navCards.map((card, i) => (
           <motion.button
             key={card.title}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08 }}
+            transition={{ delay: i * 0.06 }}
             onClick={() => navigate(card.route)}
-            className="group relative rounded-2xl border border-border/60 hover:border-primary/40 bg-gradient-card p-6 text-left transition-all duration-200 hover:shadow-glow-sm"
+            className="group relative rounded-xl border border-border/50 hover:border-primary/50 bg-gradient-card px-5 py-4 text-left transition-all duration-200 hover:shadow-glow-sm"
           >
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4">
-              {card.icon}
+            <div className="flex items-center gap-4">
+              <div className="h-11 w-11 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                {card.icon}
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-white text-sm leading-tight">{card.title}</h3>
+                <p className="text-xs text-white mt-0.5">{card.desc}</p>
+              </div>
             </div>
-            <h3 className="font-display font-bold text-white text-base mb-1">{card.title}</h3>
-            <p className="text-xs text-white/60">{card.desc}</p>
           </motion.button>
         ))}
       </div>
