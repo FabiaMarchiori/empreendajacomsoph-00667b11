@@ -73,64 +73,61 @@ export default function ImportadorasFornecedor() {
         </div>
       </motion.div>
 
-      {/* Action buttons — premium solid */}
+      {/* Action buttons — gradient premium */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {/* WhatsApp */}
         {supplier.Whatsapp && (
           <a
             href={`https://wa.me/${supplier.Whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border transition-all duration-200 text-center bg-[#0E3B2F] border-[#1B5B49] hover:bg-[#14503F] hover:border-[#2B7A61] shadow-[0_4px_20px_-4px_rgba(30,90,69,0.4)] hover:shadow-[0_6px_24px_-4px_rgba(43,122,97,0.5)]"
+            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border border-primary/30 bg-gradient-primary-soft transition-all duration-200 text-center hover:border-primary/60 hover:shadow-glow"
           >
-            <Phone className="h-5 w-5 text-[#7CFFC8]" />
+            <Phone className="h-5 w-5 text-primary" />
             <span className="text-sm font-semibold text-white">Abrir Conversa</span>
-            <span className="text-xs text-[#D7FBEF]">WhatsApp</span>
+            <span className="text-xs text-muted-foreground">WhatsApp</span>
           </a>
         )}
 
-        {/* Instagram */}
         {instagramHandle && (
           <a
             href={supplier.Instagram_url!}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border transition-all duration-200 text-center bg-[#34182F] border-[#5A2A52] hover:bg-[#46203F] hover:border-[#724068] shadow-[0_4px_20px_-4px_rgba(90,42,82,0.4)] hover:shadow-[0_6px_24px_-4px_rgba(114,64,104,0.5)]"
+            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border border-primary/30 bg-gradient-primary-soft transition-all duration-200 text-center hover:border-primary/60 hover:shadow-glow"
           >
-            <Instagram className="h-5 w-5 text-[#FF79C8]" />
+            <Instagram className="h-5 w-5 text-primary" />
             <span className="text-sm font-semibold text-white">@{instagramHandle}</span>
-            <span className="text-xs text-[#F5D9EF]">Ver Página</span>
+            <span className="text-xs text-muted-foreground">Ver Página</span>
           </a>
         )}
 
-        {/* Mapa */}
         {supplier.Endereco && (
           <a
             href={`https://maps.google.com/maps?q=${encodeURIComponent(supplier.Endereco)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border transition-all duration-200 text-center bg-[#102E42] border-[#1F4D68] hover:bg-[#16415B] hover:border-[#2D6C8E] shadow-[0_4px_20px_-4px_rgba(31,77,104,0.4)] hover:shadow-[0_6px_24px_-4px_rgba(45,108,142,0.5)]"
+            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-2xl border border-primary/30 bg-gradient-primary-soft transition-all duration-200 text-center hover:border-primary/60 hover:shadow-glow"
           >
-            <MapPin className="h-5 w-5 text-[#4FD8FF]" />
+            <MapPin className="h-5 w-5 text-primary" />
             <span className="text-sm font-semibold text-white">Abrir Mapa</span>
-            <span className="text-xs text-[#D8F4FF] max-w-full truncate">{supplier.Endereco}</span>
+            <span className="text-xs text-muted-foreground max-w-full truncate">{supplier.Endereco}</span>
           </a>
         )}
       </motion.div>
 
-      {/* Tablet Mockup — layered composition */}
+      {/* Tablet Mockup — 3-layer composition */}
       {supplier.mockup_url ? (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex justify-center pt-4">
-          <div className="relative mx-auto" style={{ width: "340px" }}>
-            {/* Instagram image layer — positioned inside tablet screen area */}
+          <div className="relative mx-auto" style={{ width: "380px" }}>
+            {/* Layer 1: Instagram image clipped inside screen area */}
             <div
               className="absolute overflow-hidden"
               style={{
-                top: "11.5%",
-                left: "7.8%",
-                width: "84.4%",
-                height: "76%",
-                borderRadius: "4px",
+                top: "5.5%",
+                left: "5%",
+                width: "90%",
+                height: "88%",
+                borderRadius: "8px",
               }}
             >
               <img
@@ -140,27 +137,27 @@ export default function ImportadorasFornecedor() {
                 loading="lazy"
               />
             </div>
-            {/* Tablet frame layer — on top */}
+            {/* Layer 2: Tablet frame PNG on top */}
             <img
               src={tabletFrame}
               alt="Tablet frame"
               className="relative z-10 w-full h-auto pointer-events-none"
             />
-            {/* Glow effect */}
+            {/* Glow behind */}
             <div className="absolute -inset-8 bg-primary/5 rounded-[3rem] blur-3xl -z-10" />
           </div>
         </motion.div>
       ) : instagramHandle ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center pt-4">
-          <div className="relative mx-auto" style={{ width: "340px" }}>
+          <div className="relative mx-auto" style={{ width: "380px" }}>
             <div
               className="absolute flex flex-col items-center justify-center gap-3"
               style={{
-                top: "11.5%",
-                left: "7.8%",
-                width: "84.4%",
-                height: "76%",
-                borderRadius: "4px",
+                top: "5.5%",
+                left: "5%",
+                width: "90%",
+                height: "88%",
+                borderRadius: "8px",
                 backgroundColor: "rgba(15,25,47,0.8)",
               }}
             >
