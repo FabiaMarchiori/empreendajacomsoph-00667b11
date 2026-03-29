@@ -74,8 +74,20 @@ export default function GestaoPage() {
             ))}
           </div>
 
-          <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2">
-            Acessar Sistema Completo <ArrowRight className="h-4 w-4" />
+          <button
+            onClick={() => enterErp()}
+            disabled={erpLoading}
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {erpLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" /> Conectando ao ERP...
+              </>
+            ) : (
+              <>
+                Acessar Sistema Completo <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </button>
         </motion.div>
 
