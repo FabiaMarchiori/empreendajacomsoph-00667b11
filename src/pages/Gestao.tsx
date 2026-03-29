@@ -2,11 +2,12 @@ import { motion } from "framer-motion";
 import {
   BarChart3, Star, MessageCircle, ArrowRight, Sparkles, TrendingUp,
   AlertTriangle, DollarSign, Package, FileText, Users, Database,
-  ChevronDown, Activity, Percent, Calculator, HelpCircle, Zap
+  ChevronDown, Activity, Percent, Calculator, HelpCircle, Zap, Loader2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useState } from "react";
+import { useErpEntry } from "@/hooks/useErpEntry";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
 const item = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } };
@@ -21,6 +22,7 @@ const faqs = [
 export default function GestaoPage() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const { enterErp, isLoading: erpLoading } = useErpEntry();
 
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
@@ -72,8 +74,20 @@ export default function GestaoPage() {
             ))}
           </div>
 
-          <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2">
-            Acessar Sistema Completo <ArrowRight className="h-4 w-4" />
+          <button
+            onClick={() => enterErp()}
+            disabled={erpLoading}
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {erpLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" /> Conectando ao ERP...
+              </>
+            ) : (
+              <>
+                Acessar Sistema Completo <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </button>
         </motion.div>
 
