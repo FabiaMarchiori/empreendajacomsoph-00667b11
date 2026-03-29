@@ -22,6 +22,7 @@ const faqs = [
 export default function GestaoPage() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const { enterErp, isLoading: erpLoading } = useErpEntry();
 
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
