@@ -2,11 +2,12 @@ import { motion } from "framer-motion";
 import {
   BarChart3, Star, MessageCircle, ArrowRight, Sparkles, TrendingUp,
   AlertTriangle, DollarSign, Package, FileText, Users, Database,
-  ChevronDown, Activity, Percent, Calculator, HelpCircle, Zap
+  ChevronDown, Activity, Percent, Calculator, HelpCircle, Zap, Loader2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useState } from "react";
+import { useErpEntry } from "@/hooks/useErpEntry";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
 const item = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } };
