@@ -40,7 +40,7 @@ export function useErpEntry() {
 
     try {
       const { data, error } = await supabase.functions.invoke<ErpEntryResult>(
-        ERP_CONFIG.proxyFunctionName,
+        "erp-entry",
         { body: {} }
       );
 
