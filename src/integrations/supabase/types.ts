@@ -178,6 +178,135 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_channels: {
+        Row: {
+          ativo: boolean
+          canal_nome: string
+          comissao_pct: number
+          created_at: string
+          id: string
+          imposto_pct: number
+          taxa_cartao_pct: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          canal_nome: string
+          comissao_pct?: number
+          created_at?: string
+          id?: string
+          imposto_pct?: number
+          taxa_cartao_pct?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          canal_nome?: string
+          comissao_pct?: number
+          created_at?: string
+          id?: string
+          imposto_pct?: number
+          taxa_cartao_pct?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pricing_fixed_costs: {
+        Row: {
+          created_at: string
+          id: string
+          nome_custo: string
+          updated_at: string
+          user_id: string
+          valor: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nome_custo: string
+          updated_at?: string
+          user_id: string
+          valor?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nome_custo?: string
+          updated_at?: string
+          user_id?: string
+          valor?: number
+        }
+        Relationships: []
+      }
+      pricing_products: {
+        Row: {
+          created_at: string
+          custo_compra: number
+          custo_variavel: number
+          fornecedor: string | null
+          id: string
+          nome_produto: string
+          observacoes: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          custo_compra?: number
+          custo_variavel?: number
+          fornecedor?: string | null
+          id?: string
+          nome_produto: string
+          observacoes?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          custo_compra?: number
+          custo_variavel?: number
+          fornecedor?: string | null
+          id?: string
+          nome_produto?: string
+          observacoes?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pricing_settings: {
+        Row: {
+          created_at: string
+          faturamento_avg: number | null
+          id: string
+          nome_empresa: string | null
+          regime_tributario: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          faturamento_avg?: number | null
+          id?: string
+          nome_empresa?: string | null
+          regime_tributario?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          faturamento_avg?: number | null
+          id?: string
+          nome_empresa?: string | null
+          regime_tributario?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
