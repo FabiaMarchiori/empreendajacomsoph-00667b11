@@ -133,6 +133,7 @@ Deno.serve(async (req) => {
         ecosystem_user_id: erpData.ecosystem_user_id,
         email: erpData.email,
         erp_status: erpData.erp_status,
+        entry_url: erpData.entry_url,
         message: erpData.message,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
