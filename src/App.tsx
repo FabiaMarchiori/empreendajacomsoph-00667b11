@@ -56,6 +56,7 @@ const App = () => (
               <Route path="/estrutura/logo-marca" element={<LogoMarcaPage />} />
               <Route path="/estrutura/registrar-marca" element={<RegistrarMarcaPage />} />
               <Route path="/gestao" element={<GestaoPage />} />
+              <Route path="/gestao/precificacao" element={<PrecificacaoPage />} />
               <Route path="/soph" element={<SophPage />} />
               <Route path="/acessos" element={<AcessosPage />} />
               <Route path="/conta" element={<ContaPage />} />

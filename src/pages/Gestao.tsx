@@ -120,7 +120,7 @@ export default function GestaoPage() {
             ))}
           </div>
 
-          <button className="px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center gap-2">
+          <button onClick={() => navigate("/gestao/precificacao")} className="px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center gap-2">
             Novo Cálculo de Preço <ArrowRight className="h-4 w-4" />
           </button>
         </motion.div>
