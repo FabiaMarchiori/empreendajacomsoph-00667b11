@@ -28,17 +28,18 @@ Deno.serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      console.error("[erp-entry] Auth error:", userError?.message);
       return new Response(
         JSON.stringify({ error: "UNAUTHORIZED", message: "Token inválido ou expirado." }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const userId = claimsData.claims.sub as string;
-    const userEmail = claimsData.claims.email as string;
+    const userId = user.id;
+    const userEmail = user.email!;
+    console.log(`[erp-entry] Authenticated user: ${userId} (${userEmail})`);
 
     // 2. Validate active subscription (access check)
     const { data: hasAccess, error: accessError } = await supabase.rpc(
