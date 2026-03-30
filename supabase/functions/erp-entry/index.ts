@@ -78,6 +78,7 @@ Deno.serve(async (req) => {
 
     // 4. Call ERP edge function securely
     const ecosystemSecret = Deno.env.get("ECOSYSTEM_SHARED_SECRET");
+    console.log(`[erp-entry] ECOSYSTEM_SHARED_SECRET present: ${!!ecosystemSecret}, length: ${ecosystemSecret?.length ?? 0}, first4: ${ecosystemSecret?.substring(0, 4) ?? "N/A"}`);
     if (!ecosystemSecret) {
       console.error("ECOSYSTEM_SHARED_SECRET not configured");
       return new Response(
