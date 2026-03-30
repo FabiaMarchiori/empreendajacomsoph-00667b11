@@ -46,7 +46,8 @@ export function useErpEntry() {
 
       if (error) {
         console.error("[useErpEntry] Invoke error:", error);
-        toast.error("Erro ao conectar com o ERP Soph. Tente novamente.");
+        const msg = (error as any)?.message || "Erro ao conectar com o ERP Soph. Tente novamente.";
+        toast.error(msg);
         return false;
       }
 
