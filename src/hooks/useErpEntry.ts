@@ -11,6 +11,7 @@ interface ErpEntryResult {
   ecosystem_user_id?: string;
   email?: string;
   erp_status?: string;
+  entry_url?: string;
   message?: string;
   error?: string;
 }
@@ -60,7 +61,13 @@ export function useErpEntry() {
         return false;
       }
 
-      // Success
+      // Success — validate entry_url
+      if (!data.entry_url) {
+        console.error("[useErpEntry] ERP did not return entry_url:", data);
+        toast.error("Erro de integração: URL de entrada não retornada pelo ERP.");
+        return false;
+      }
+
       const isNew = data.is_new_user;
       toast.success(
         isNew
@@ -69,12 +76,12 @@ export function useErpEntry() {
       );
 
       console.info(
-        `[useErpEntry] ERP entry success — new_user: ${isNew}, erp_user_id: ${data.erp_user_id}`
+        `[useErpEntry] ERP entry success — new_user: ${isNew}, erp_user_id: ${data.erp_user_id}, entry_url: ${data.entry_url}`
       );
 
-      // Redirect to ERP after brief delay for toast visibility
+      // Redirect using the dynamic entry_url from ERP
       setTimeout(() => {
-        window.open(ERP_CONFIG.appUrl, "_blank", "noopener,noreferrer");
+        window.open(data.entry_url!, "_blank", "noopener,noreferrer");
       }, 1200);
 
       return true;
