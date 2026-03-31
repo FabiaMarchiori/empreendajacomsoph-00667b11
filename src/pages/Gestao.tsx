@@ -25,6 +25,15 @@ export default function GestaoPage() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const { enterErp, isLoading: erpLoading } = useErpEntry();
+  const { hasErpAccess, isLoading: accessLoading } = useErpAccess();
+
+  const handleErpClick = () => {
+    if (!hasErpAccess) {
+      toast.error("O ERP Soph é um módulo premium do seu Ecossistema. Ative este módulo para acessar gestão completa, financeiro, estoque e operação.", { duration: 6000 });
+      return;
+    }
+    enterErp();
+  };
 
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
