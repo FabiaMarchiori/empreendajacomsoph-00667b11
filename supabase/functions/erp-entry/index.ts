@@ -41,10 +41,10 @@ Deno.serve(async (req) => {
     const userEmail = user.email!;
     console.log(`[erp-entry] Authenticated user: ${userId} (${userEmail})`);
 
-    // 2. Validate active subscription (access check)
+    // 2. Validate ERP-specific access (not just any subscription)
     const { data: hasAccess, error: accessError } = await supabase.rpc(
-      "has_active_subscription",
-      { user_uuid: userId }
+      "has_erp_access",
+      { check_user_id: userId }
     );
 
     if (accessError) {
