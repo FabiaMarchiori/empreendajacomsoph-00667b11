@@ -41,10 +41,10 @@ Deno.serve(async (req) => {
     const userEmail = user.email!;
     console.log(`[erp-entry] Authenticated user: ${userId} (${userEmail})`);
 
-    // 2. Validate active subscription (access check)
+    // 2. Validate ERP-specific access (not just any subscription)
     const { data: hasAccess, error: accessError } = await supabase.rpc(
-      "has_active_subscription",
-      { user_uuid: userId }
+      "has_erp_access",
+      { check_user_id: userId }
     );
 
     if (accessError) {
@@ -58,8 +58,8 @@ Deno.serve(async (req) => {
     if (!hasAccess) {
       return new Response(
         JSON.stringify({
-          error: "NO_ACCESS",
-          message: "Você não possui acesso ao ERP Soph. Verifique seu plano.",
+          error: "NO_ERP_ACCESS",
+          message: "O ERP Soph é um módulo premium. Ative este módulo para acessar gestão completa.",
         }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );

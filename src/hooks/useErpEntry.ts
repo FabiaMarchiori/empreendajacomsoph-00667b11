@@ -17,6 +17,7 @@ interface ErpEntryResult {
 
 const ERROR_MESSAGES: Record<string, string> = {
   NO_ACCESS: "Você ainda não possui acesso ao ERP Soph. Verifique seu plano.",
+  NO_ERP_ACCESS: "O ERP Soph é um módulo premium. Ative este módulo para acessar gestão completa, financeiro, estoque e operação.",
   UNAUTHORIZED: "Sessão expirada. Faça login novamente.",
   MISSING_ECOSYSTEM_USER_ID: "Erro de identificação do usuário.",
   MISSING_OR_INVALID_EMAIL: "E-mail inválido ou ausente.",

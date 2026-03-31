@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useState } from "react";
 import { useErpEntry } from "@/hooks/useErpEntry";
+import { useErpAccess } from "@/hooks/useErpAccess";
+import { toast } from "sonner";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
 const item = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } };
@@ -23,6 +25,15 @@ export default function GestaoPage() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const { enterErp, isLoading: erpLoading } = useErpEntry();
+  const { hasErpAccess, isLoading: accessLoading } = useErpAccess();
+
+  const handleErpClick = () => {
+    if (!hasErpAccess) {
+      toast.error("O ERP Soph é um módulo premium do seu Ecossistema. Ative este módulo para acessar gestão completa, financeiro, estoque e operação.", { duration: 6000 });
+      return;
+    }
+    enterErp();
+  };
 
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
@@ -75,13 +86,17 @@ export default function GestaoPage() {
           </div>
 
           <button
-            onClick={() => enterErp()}
-            disabled={erpLoading}
+            onClick={handleErpClick}
+            disabled={erpLoading || accessLoading}
             className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {erpLoading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" /> Conectando ao ERP...
+              </>
+            ) : !hasErpAccess && !accessLoading ? (
+              <>
+                Ativar Módulo ERP <ArrowRight className="h-4 w-4" />
               </>
             ) : (
               <>
