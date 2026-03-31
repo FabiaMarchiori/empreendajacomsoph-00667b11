@@ -445,6 +445,7 @@ export type Database = {
         Args: { user_uuid?: string }
         Returns: boolean
       }
+      has_erp_access: { Args: { check_user_id?: string }; Returns: boolean }
       has_role: {
         Args: { requested_role: Database["public"]["Enums"]["user_role"] }
         Returns: boolean

@@ -58,8 +58,8 @@ Deno.serve(async (req) => {
     if (!hasAccess) {
       return new Response(
         JSON.stringify({
-          error: "NO_ACCESS",
-          message: "Você não possui acesso ao ERP Soph. Verifique seu plano.",
+          error: "NO_ERP_ACCESS",
+          message: "O ERP Soph é um módulo premium. Ative este módulo para acessar gestão completa.",
         }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
