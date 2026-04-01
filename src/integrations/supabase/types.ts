@@ -187,6 +187,7 @@ export type Database = {
           id: string
           imposto_pct: number
           taxa_cartao_pct: number
+          taxa_fixa: number
           updated_at: string
           user_id: string
         }
@@ -198,6 +199,7 @@ export type Database = {
           id?: string
           imposto_pct?: number
           taxa_cartao_pct?: number
+          taxa_fixa?: number
           updated_at?: string
           user_id: string
         }
@@ -209,8 +211,63 @@ export type Database = {
           id?: string
           imposto_pct?: number
           taxa_cartao_pct?: number
+          taxa_fixa?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      pricing_default_channels: {
+        Row: {
+          ativo: boolean
+          canal_nome: string
+          comissao_pct_default: number
+          created_at: string
+          data_referencia: string | null
+          id: string
+          imposto_pct_sugerido: number
+          observacoes: string | null
+          taxa_cartao_pct_default: number
+          taxa_fixa_default: number
+          tipo_canal: string
+          updated_at: string
+          usa_categoria: boolean
+          usa_faixa_preco: boolean
+          usa_parcelamento: boolean
+        }
+        Insert: {
+          ativo?: boolean
+          canal_nome: string
+          comissao_pct_default?: number
+          created_at?: string
+          data_referencia?: string | null
+          id?: string
+          imposto_pct_sugerido?: number
+          observacoes?: string | null
+          taxa_cartao_pct_default?: number
+          taxa_fixa_default?: number
+          tipo_canal?: string
+          updated_at?: string
+          usa_categoria?: boolean
+          usa_faixa_preco?: boolean
+          usa_parcelamento?: boolean
+        }
+        Update: {
+          ativo?: boolean
+          canal_nome?: string
+          comissao_pct_default?: number
+          created_at?: string
+          data_referencia?: string | null
+          id?: string
+          imposto_pct_sugerido?: number
+          observacoes?: string | null
+          taxa_cartao_pct_default?: number
+          taxa_fixa_default?: number
+          tipo_canal?: string
+          updated_at?: string
+          usa_categoria?: boolean
+          usa_faixa_preco?: boolean
+          usa_parcelamento?: boolean
         }
         Relationships: []
       }
