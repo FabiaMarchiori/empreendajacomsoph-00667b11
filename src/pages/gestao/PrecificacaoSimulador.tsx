@@ -11,9 +11,9 @@ export default function PrecificacaoSimulador() {
   return (
     <div className="p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-2 pt-8 lg:pt-0">
-        <h1 className="text-2xl lg:text-3xl font-black tracking-tight" style={{ fontFamily: "Manrope, sans-serif" }}>
-          <span className="text-foreground">Simulador </span>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-2 pt-4">
+        <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+          <span>Simulador </span>
           <span
             className="bg-clip-text text-transparent"
             style={{ backgroundImage: "linear-gradient(90deg, #FFFFFF 0%, #F2FBFF 30%, #00FFFF 100%)" }}
@@ -21,7 +21,7 @@ export default function PrecificacaoSimulador() {
             Inteligente
           </span>
         </h1>
-        <p className="text-sm text-foreground/80 max-w-lg leading-relaxed">
+        <p className="text-sm text-white/80 max-w-lg leading-relaxed">
           Informe o custo do produto, escolha o canal de venda e descubra quanto cobrar para ter lucro real.
         </p>
       </motion.div>
