@@ -51,7 +51,8 @@
     --sidebar-ring: 184 100% 50%;
 
     /* Custom tokens */
-    --surface-elevated: 210 55% 14%;
+    --surface-deep: 216 82% 9%;
+    --surface-elevated: 210 63% 16%;
     --glow-primary: 184 100% 50%;
     --gradient-primary-start: 198 100% 97%;
     --gradient-primary-mid: 192 100% 81%;
