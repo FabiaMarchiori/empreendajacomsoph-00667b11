@@ -117,7 +117,7 @@ export function AppSidebar() {
         {!collapsed && (
           <div
             className="rounded-xl p-4 border border-[#00EFFF]/20"
-            style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}
+            style={{ background: '#0A192F', borderColor: 'rgba(0,239,255,0.15)' }}
           >
             <div className="flex items-center gap-2.5 mb-2">
               <div
