@@ -117,6 +117,22 @@ export default function SophPage() {
                     </div>
                   </motion.div>
                 ))}
+                {isTyping && (
+                  <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
+                    <div className="max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed bg-[hsl(210,63%,14%)] text-white border border-primary/15 rounded-bl-md">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Sparkles className="h-3 w-3 text-primary" />
+                        <span className="text-[11px] font-semibold text-gradient-primary">Soph</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="h-2 w-2 rounded-full bg-primary/60 animate-pulse" />
+                        <span className="h-2 w-2 rounded-full bg-primary/40 animate-pulse" style={{ animationDelay: "0.2s" }} />
+                        <span className="h-2 w-2 rounded-full bg-primary/20 animate-pulse" style={{ animationDelay: "0.4s" }} />
+                        <span className="text-xs text-white/50 ml-1">Soph está digitando...</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
