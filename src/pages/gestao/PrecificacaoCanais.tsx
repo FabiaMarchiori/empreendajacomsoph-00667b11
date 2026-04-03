@@ -8,9 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDefaultChannels, type DefaultChannel } from "@/hooks/useDefaultChannels";
+import { usePricingChannels } from "@/hooks/usePricingData";
+import ChannelModal, { type ChannelFormData } from "@/components/precificacao/ChannelModal";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 
-
-/* Channel icon mapping for visual distinction */
 const channelIconMap: Record<string, { icon: React.ElementType; color: string; bg: string }> = {
   "Mercado Livre — Clássico": { icon: ShoppingCart, color: "#FFE600", bg: "rgba(255,230,0,0.12)" },
   "Mercado Livre — Premium": { icon: ShoppingCart, color: "#FFE600", bg: "rgba(255,230,0,0.12)" },
@@ -44,14 +48,78 @@ const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curren
 const pctFmt = (v: number) => `${v.toFixed(1)}%`;
 
 export default function PrecificacaoCanais() {
+  const { user } = useAuth();
+  const qc = useQueryClient();
   const { defaultChannels, isLoading } = useDefaultChannels();
+  const { channels: userChannels, isLoading: loadingUser, create: createUserChannel } = usePricingChannels();
   const [search, setSearch] = useState("");
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingChannel, setEditingChannel] = useState<DefaultChannel | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return defaultChannels;
     const q = search.toLowerCase();
     return defaultChannels.filter((c) => c.canal_nome.toLowerCase().includes(q) || c.tipo_canal.toLowerCase().includes(q));
   }, [defaultChannels, search]);
+
+  const handleNewChannel = () => {
+    setEditingChannel(null);
+    setModalOpen(true);
+  };
+
+  const handleEditChannel = (channel: DefaultChannel) => {
+    setEditingChannel(channel);
+    setModalOpen(true);
+  };
+
+  const handleSave = async (data: ChannelFormData) => {
+    if (!user) return;
+    setIsSaving(true);
+    try {
+      if (editingChannel) {
+        // Update default channel rates
+        const { error } = await supabase
+          .from("pricing_default_channels" as any)
+          .update({
+            comissao_pct_default: data.comissao_pct,
+            taxa_cartao_pct_default: data.taxa_cartao_pct,
+            taxa_fixa_default: data.taxa_fixa,
+            imposto_pct_sugerido: data.imposto_pct,
+            observacoes: data.observacoes || null,
+            ativo: data.ativo,
+          } as any)
+          .eq("id", editingChannel.id);
+        if (error) throw error;
+        toast.success("Taxas atualizadas com sucesso!");
+        qc.invalidateQueries({ queryKey: ["pricing-default-channels"] });
+      } else {
+        // Create new default channel
+        const { error } = await supabase
+          .from("pricing_default_channels" as any)
+          .insert({
+            canal_nome: data.canal_nome,
+            tipo_canal: data.tipo_canal,
+            comissao_pct_default: data.comissao_pct,
+            taxa_cartao_pct_default: data.taxa_cartao_pct,
+            taxa_fixa_default: data.taxa_fixa,
+            imposto_pct_sugerido: data.imposto_pct,
+            observacoes: data.observacoes || null,
+            ativo: data.ativo,
+          } as any);
+        if (error) throw error;
+        toast.success("Canal criado com sucesso!");
+        qc.invalidateQueries({ queryKey: ["pricing-default-channels"] });
+      }
+      setModalOpen(false);
+    } catch (err) {
+      toast.error("Erro ao salvar canal. Verifique suas permissões.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-6">
@@ -73,6 +141,7 @@ export default function PrecificacaoCanais() {
             </p>
           </div>
           <Button
+            onClick={handleNewChannel}
             className="font-bold text-sm text-[#062638] shrink-0 shadow-[0_0_20px_rgba(0,239,255,0.2)] hover:shadow-[0_0_28px_rgba(0,239,255,0.35)] transition-shadow"
             style={{ background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 50%, #00EFFF 100%)" }}
           >
@@ -95,7 +164,7 @@ export default function PrecificacaoCanais() {
         </div>
       </motion.div>
 
-      {/* Default channels grid */}
+      {/* Channels grid */}
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-3" style={{ fontFamily: "Manrope, sans-serif" }}>
           Canais Pré-configurados ({filtered.length})
@@ -108,7 +177,7 @@ export default function PrecificacaoCanais() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map((channel) => (
-              <ChannelCard key={channel.id} channel={channel} />
+              <ChannelCard key={channel.id} channel={channel} onEdit={() => handleEditChannel(channel)} />
             ))}
           </div>
         )}
@@ -118,11 +187,19 @@ export default function PrecificacaoCanais() {
         )}
       </motion.div>
 
+      {/* Modal */}
+      <ChannelModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        channel={editingChannel}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
     </div>
   );
 }
 
-function ChannelCard({ channel }: { channel: DefaultChannel }) {
+function ChannelCard({ channel, onEdit }: { channel: DefaultChannel; onEdit: () => void }) {
   const visual = getChannelVisual(channel.canal_nome);
   const Icon = visual.icon;
   const badges: { label: string; color: string }[] = [];
@@ -135,7 +212,6 @@ function ChannelCard({ channel }: { channel: DefaultChannel }) {
       className="rounded-2xl border border-white/10 p-5 space-y-3.5 hover:border-[#00EFFF]/30 transition-all group"
       style={{ background: "#102A43" }}
     >
-      {/* Header */}
       <div className="flex items-start gap-3">
         <div
           className="h-11 w-11 rounded-xl flex items-center justify-center shrink-0 border"
@@ -149,7 +225,6 @@ function ChannelCard({ channel }: { channel: DefaultChannel }) {
         </div>
       </div>
 
-      {/* Rates */}
       <div className="grid grid-cols-2 gap-2.5">
         <RateItem icon={Tag} label="Comissão" value={pctFmt(channel.comissao_pct_default)} />
         <RateItem icon={CreditCard} label="Gateway" value={pctFmt(channel.taxa_cartao_pct_default)} />
@@ -157,7 +232,6 @@ function ChannelCard({ channel }: { channel: DefaultChannel }) {
         <RateItem icon={Truck} label="Taxa fixa" value={channel.taxa_fixa_default > 0 ? fmt(channel.taxa_fixa_default) : "—"} />
       </div>
 
-      {/* Badges */}
       {badges.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {badges.map((b, i) => (
@@ -168,7 +242,6 @@ function ChannelCard({ channel }: { channel: DefaultChannel }) {
         </div>
       )}
 
-      {/* Observations */}
       {channel.observacoes && (
         <div className="flex items-start gap-2 rounded-lg p-2.5" style={{ background: "rgba(255,191,0,0.06)" }}>
           <AlertTriangle className="h-3.5 w-3.5 text-amber-400 shrink-0 mt-0.5" />
@@ -176,10 +249,10 @@ function ChannelCard({ channel }: { channel: DefaultChannel }) {
         </div>
       )}
 
-      {/* Edit button */}
       <Button
         variant="outline"
         size="sm"
+        onClick={onEdit}
         className="w-full border-white/10 text-white hover:border-[#00EFFF]/40 hover:text-[#00EFFF] hover:bg-[#00EFFF]/5 text-xs font-semibold transition-all"
       >
         <Pencil className="h-3.5 w-3.5 mr-1.5" /> Editar Taxas

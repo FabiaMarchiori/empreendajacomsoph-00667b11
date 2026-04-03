@@ -1,12 +1,21 @@
 import { motion } from "framer-motion";
 import PricingSimulator from "@/components/precificacao/PricingSimulator";
+import RecentSimulations from "@/components/precificacao/RecentSimulations";
 import { usePricingProducts, usePricingChannels } from "@/hooks/usePricingData";
 import { useDefaultChannels } from "@/hooks/useDefaultChannels";
+import { usePricingSimulations } from "@/hooks/usePricingSimulations";
+import type { Simulation } from "@/components/precificacao/RecentSimulations";
 
 export default function PrecificacaoSimulador() {
   const { products, isLoading: loadingProducts } = usePricingProducts();
   const { channels, isLoading: loadingChannels } = usePricingChannels();
   const { defaultChannels, isLoading: loadingDefaults } = useDefaultChannels();
+  const { simulations, isLoading: loadingSims, save, remove } = usePricingSimulations();
+
+  const handleReuse = (sim: Simulation) => {
+    // Dispatch custom event that the simulator listens for
+    window.dispatchEvent(new CustomEvent("reuse-simulation", { detail: sim }));
+  };
 
   return (
     <div className="p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
@@ -33,6 +42,17 @@ export default function PrecificacaoSimulador() {
           channels={channels}
           defaultChannels={defaultChannels}
           isLoading={loadingProducts || loadingChannels || loadingDefaults}
+          onSaveSimulation={(data) => save.mutate(data)}
+        />
+      </motion.div>
+
+      {/* Recent simulations */}
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+        <RecentSimulations
+          simulations={simulations as Simulation[]}
+          isLoading={loadingSims}
+          onReuse={handleReuse}
+          onDelete={(id) => remove.mutate(id)}
         />
       </motion.div>
     </div>

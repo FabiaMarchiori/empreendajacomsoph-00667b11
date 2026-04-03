@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap } from "lucide-react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap, Save } from "lucide-react";
 import { calcularPreco, calcularMarkup, type PricingInput } from "@/lib/pricing-engine";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,16 @@ interface Props {
   channels: Tables<"pricing_channels">[];
   defaultChannels: DefaultChannel[];
   isLoading: boolean;
+  onSaveSimulation?: (data: {
+    nome_produto?: string;
+    canal_nome: string;
+    custo_compra: number;
+    margem_desejada: number;
+    preco_sugerido: number;
+    lucro_liquido: number;
+    margem_final: number;
+    custo_total: number;
+  }) => void;
 }
 
 const fmt = (v: number) =>
@@ -22,7 +32,7 @@ const fmt = (v: number) =>
 
 const pctFmt = (v: number) => `${v.toFixed(2)}%`;
 
-export default function PricingSimulator({ products, channels, defaultChannels, isLoading }: Props) {
+export default function PricingSimulator({ products, channels, defaultChannels, isLoading, onSaveSimulation }: Props) {
   // Source selection
   const [channelSource, setChannelSource] = useState<"default" | "custom" | "manual">("default");
   const [selectedDefaultChannel, setSelectedDefaultChannel] = useState("");
@@ -87,7 +97,45 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
     }
   }, [selectedCustomChannel, channels, channelSource]);
 
-  // Build alerts
+  // Listen for reuse-simulation events
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const sim = (e as CustomEvent).detail;
+      if (sim) {
+        setCustoCompra(Number(sim.custo_compra));
+        setMargemDesejada(Number(sim.margem_desejada));
+        const dc = defaultChannels.find((c) => c.canal_nome === sim.canal_nome);
+        if (dc) {
+          setChannelSource("default");
+          setSelectedDefaultChannel(dc.id);
+          setSelectedCustomChannel("");
+        }
+        setSelectedProduct("manual");
+      }
+    };
+    window.addEventListener("reuse-simulation", handler);
+    return () => window.removeEventListener("reuse-simulation", handler);
+  }, [defaultChannels]);
+
+  // Channel/product name helpers for saving
+  const currentChannelName = useMemo(() => {
+    if (channelSource === "default" && selectedDefaultChannel) {
+      return defaultChannels.find((c) => c.id === selectedDefaultChannel)?.canal_nome ?? "Manual";
+    }
+    if (channelSource === "custom" && selectedCustomChannel) {
+      return channels.find((c) => c.id === selectedCustomChannel)?.canal_nome ?? "Manual";
+    }
+    return "Manual";
+  }, [channelSource, selectedDefaultChannel, selectedCustomChannel, defaultChannels, channels]);
+
+  const currentProductName = useMemo(() => {
+    if (selectedProduct && selectedProduct !== "manual") {
+      return products.find((p) => p.id === selectedProduct)?.nome_produto;
+    }
+    return undefined;
+  }, [selectedProduct, products]);
+
+
   const alerts = useMemo(() => {
     if (!currentDefaultChannel) return [];
     const a: string[] = [];
@@ -343,6 +391,28 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
                 Margem abaixo de 10%. Produtos de ticket baixo neste canal podem não ser viáveis. Considere aumentar o preço ou reduzir custos.
               </p>
             </div>
+          )}
+
+          {/* Save simulation button */}
+          {onSaveSimulation && (
+            <Button
+              onClick={() => {
+                onSaveSimulation({
+                  nome_produto: currentProductName,
+                  canal_nome: currentChannelName,
+                  custo_compra: custoCompra,
+                  margem_desejada: margemDesejada,
+                  preco_sugerido: result.precoSugerido,
+                  lucro_liquido: result.lucroLiquido,
+                  margem_final: result.margemFinal,
+                  custo_total: result.custoTotal,
+                });
+              }}
+              variant="outline"
+              className="w-full border-primary/30 text-primary hover:bg-primary/10 text-sm font-semibold"
+            >
+              <Save className="h-4 w-4 mr-2" /> Salvar Simulação
+            </Button>
           )}
         </div>
       )}
