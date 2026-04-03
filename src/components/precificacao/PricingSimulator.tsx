@@ -169,7 +169,7 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
     // Keep detailedOpen as-is
   }, [defaultChannels]);
 
-
+  const alerts = useMemo(() => {
     if (!currentDefaultChannel) return [];
     const a: string[] = [];
     if (currentDefaultChannel.usa_faixa_preco)
