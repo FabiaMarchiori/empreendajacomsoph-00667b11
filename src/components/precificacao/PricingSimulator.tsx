@@ -426,27 +426,36 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
             </div>
           )}
 
-          {/* Save simulation button */}
-          {onSaveSimulation && (
+          {/* Action buttons */}
+          <div className="flex gap-3">
             <Button
-              onClick={() => {
-                onSaveSimulation({
-                  nome_produto: currentProductName,
-                  canal_nome: currentChannelName,
-                  custo_compra: custoCompra,
-                  margem_desejada: margemDesejada,
-                  preco_sugerido: result.precoSugerido,
-                  lucro_liquido: result.lucroLiquido,
-                  margem_final: result.margemFinal,
-                  custo_total: result.custoTotal,
-                });
-              }}
-              variant="outline"
-              className="w-full border-primary/30 text-primary hover:bg-primary/10 text-sm font-semibold"
+              onClick={handleClear}
+              variant="ghost"
+              className="flex-1 border border-border/50 text-muted-foreground hover:text-foreground text-sm font-semibold"
             >
-              <Save className="h-4 w-4 mr-2" /> Salvar Simulação
+              <RotateCcw className="h-4 w-4 mr-2" /> Limpar Simulação
             </Button>
-          )}
+            {onSaveSimulation && (
+              <Button
+                onClick={() => {
+                  onSaveSimulation({
+                    nome_produto: currentProductName,
+                    canal_nome: currentChannelName,
+                    custo_compra: custoCompra,
+                    margem_desejada: margemDesejada,
+                    preco_sugerido: result.precoSugerido,
+                    lucro_liquido: result.lucroLiquido,
+                    margem_final: result.margemFinal,
+                    custo_total: result.custoTotal,
+                  });
+                }}
+                variant="outline"
+                className="flex-1 border-primary/30 text-primary hover:bg-primary/10 text-sm font-semibold"
+              >
+                <Save className="h-4 w-4 mr-2" /> Salvar Simulação
+              </Button>
+            )}
+          </div>
         </div>
       )}
 
