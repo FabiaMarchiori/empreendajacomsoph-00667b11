@@ -30,6 +30,9 @@ import PrecificacaoConfiguracoes from "./pages/gestao/PrecificacaoConfiguracoes"
 import SophPage from "./pages/Soph";
 import AcessosPage from "./pages/Acessos";
 import ContaPage from "./pages/Conta";
+import TermosPage from "./pages/Termos";
+import PrivacidadePage from "./pages/Privacidade";
+import CookiesPage from "./pages/Cookies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
