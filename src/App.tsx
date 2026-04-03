@@ -30,6 +30,9 @@ import PrecificacaoConfiguracoes from "./pages/gestao/PrecificacaoConfiguracoes"
 import SophPage from "./pages/Soph";
 import AcessosPage from "./pages/Acessos";
 import ContaPage from "./pages/Conta";
+import TermosPage from "./pages/Termos";
+import PrivacidadePage from "./pages/Privacidade";
+import CookiesPage from "./pages/Cookies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -69,6 +72,9 @@ const App = () => (
               <Route path="/soph" element={<SophPage />} />
               <Route path="/acessos" element={<AcessosPage />} />
               <Route path="/conta" element={<ContaPage />} />
+              <Route path="/termos" element={<TermosPage />} />
+              <Route path="/privacidade" element={<PrivacidadePage />} />
+              <Route path="/cookies" element={<CookiesPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

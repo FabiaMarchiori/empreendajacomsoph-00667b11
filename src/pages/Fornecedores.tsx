@@ -138,6 +138,8 @@ export default function FornecedoresPage() {
       s.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  const isSearching = search.length > 0;
+
   return (
     <div className="p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto space-y-6 sm:space-y-8">
       {/* Header */}
@@ -196,26 +198,33 @@ export default function FornecedoresPage() {
       </motion.div>
 
       {/* Grid */}
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        key={activeCategory}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-      >
-        {filtered.map((s) => (
-          <motion.div key={s.title} variants={item}>
-            <ProductCard
-              title={s.title}
-              description={s.desc}
-              status={s.status}
-              icon={s.icon}
-              isPremium={s.isPremium}
-              onClick={s.route ? () => navigate(s.route!) : undefined}
-            />
-          </motion.div>
-        ))}
-      </motion.div>
+      {filtered.length === 0 && isSearching ? (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
+          <p className="text-white/50 text-sm">Nenhum fornecedor encontrado para "<span className="text-white/70">{search}</span>".</p>
+          <button onClick={() => setSearch("")} className="mt-3 text-xs text-primary hover:underline font-medium">Limpar busca</button>
+        </motion.div>
+      ) : (
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          key={activeCategory + search}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+        >
+          {filtered.map((s) => (
+            <motion.div key={s.title} variants={item}>
+              <ProductCard
+                title={s.title}
+                description={s.desc}
+                status={s.status}
+                icon={s.icon}
+                isPremium={s.isPremium}
+                onClick={s.route ? () => navigate(s.route!) : undefined}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </div>
   );
 }
