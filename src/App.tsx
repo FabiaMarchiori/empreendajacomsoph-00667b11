@@ -72,6 +72,9 @@ const App = () => (
               <Route path="/soph" element={<SophPage />} />
               <Route path="/acessos" element={<AcessosPage />} />
               <Route path="/conta" element={<ContaPage />} />
+              <Route path="/termos" element={<TermosPage />} />
+              <Route path="/privacidade" element={<PrivacidadePage />} />
+              <Route path="/cookies" element={<CookiesPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
