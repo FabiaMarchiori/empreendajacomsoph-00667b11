@@ -141,6 +141,10 @@
     );
   }
 
+  .bg-surface-deep {
+    background-color: hsl(var(--surface-deep));
+  }
+
   .bg-surface-elevated {
     background-color: hsl(var(--surface-elevated));
   }
