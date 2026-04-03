@@ -138,6 +138,8 @@ export default function FornecedoresPage() {
       s.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  const isSearching = search.length > 0;
+
   return (
     <div className="p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto space-y-6 sm:space-y-8">
       {/* Header */}
