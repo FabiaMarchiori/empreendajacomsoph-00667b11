@@ -135,8 +135,41 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
     return undefined;
   }, [selectedProduct, products]);
 
+  // Smart reset
+  const handleClear = useCallback(() => {
+    // Clear manual/product fields
+    setSelectedProduct("");
+    setCustoCompra(0);
+    setCustoVariavel(0);
+    setFrete(0);
+    setEmbalagem(0);
+    setAds(0);
+    setOutrosCustos(0);
 
-  const alerts = useMemo(() => {
+    // Restore defaults: pick first default channel or keep manual
+    if (defaultChannels.length > 0) {
+      const first = defaultChannels[0];
+      setChannelSource("default");
+      setSelectedDefaultChannel(first.id);
+      setSelectedCustomChannel("");
+      setComissaoPct(Number(first.comissao_pct_default));
+      setTaxaCartaoPct(Number(first.taxa_cartao_pct_default));
+      setTaxaFixa(Number(first.taxa_fixa_default));
+      setImpostoPct(Number(first.imposto_pct_sugerido));
+    } else {
+      setChannelSource("manual");
+      setSelectedDefaultChannel("");
+      setSelectedCustomChannel("");
+      setComissaoPct(0);
+      setTaxaCartaoPct(0);
+      setTaxaFixa(0);
+      setImpostoPct(6);
+    }
+    setMargemDesejada(30);
+    // Keep detailedOpen as-is
+  }, [defaultChannels]);
+
+
     if (!currentDefaultChannel) return [];
     const a: string[] = [];
     if (currentDefaultChannel.usa_faixa_preco)
