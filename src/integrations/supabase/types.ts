@@ -364,6 +364,48 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_simulations: {
+        Row: {
+          canal_nome: string
+          created_at: string
+          custo_compra: number
+          custo_total: number
+          id: string
+          lucro_liquido: number
+          margem_desejada: number
+          margem_final: number
+          nome_produto: string | null
+          preco_sugerido: number
+          user_id: string
+        }
+        Insert: {
+          canal_nome: string
+          created_at?: string
+          custo_compra?: number
+          custo_total?: number
+          id?: string
+          lucro_liquido?: number
+          margem_desejada?: number
+          margem_final?: number
+          nome_produto?: string | null
+          preco_sugerido?: number
+          user_id: string
+        }
+        Update: {
+          canal_nome?: string
+          created_at?: string
+          custo_compra?: number
+          custo_total?: number
+          id?: string
+          lucro_liquido?: number
+          margem_desejada?: number
+          margem_final?: number
+          nome_produto?: string | null
+          preco_sugerido?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
