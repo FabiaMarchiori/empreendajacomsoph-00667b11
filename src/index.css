@@ -10,7 +10,7 @@
     --background: 217 65% 11%;
     --foreground: 0 0% 100%;
 
-    /* Secondary: #102A43 = hsl(210, 63%, 16%) */
+    /* Cards/Inputs: #102A43 = hsl(210, 63%, 16%) */
     --card: 210 63% 16%;
     --card-foreground: 0 0% 100%;
 
@@ -24,7 +24,7 @@
     --secondary: 210 63% 16%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 50% 20%;
+    --muted: 216 82% 9%;
     --muted-foreground: 0 0% 80%;
 
     /* Tertiary: #007A7A = hsl(180, 100%, 24%) */
@@ -34,24 +34,25 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 40% 22%;
-    --input: 210 40% 22%;
+    --border: 210 40% 18%;
+    --input: 210 63% 16%;
     --ring: 184 100% 50%;
 
     --radius: 0.75rem;
 
-    /* Sidebar */
-    --sidebar-background: 210 63% 16%;
+    /* Sidebar: #041329 = hsl(216, 82%, 9%) */
+    --sidebar-background: 216 82% 9%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 184 100% 50%;
     --sidebar-primary-foreground: 217 65% 11%;
-    --sidebar-accent: 210 50% 20%;
+    --sidebar-accent: 217 65% 11%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 210 40% 22%;
+    --sidebar-border: 210 40% 14%;
     --sidebar-ring: 184 100% 50%;
 
     /* Custom tokens */
-    --surface-elevated: 210 55% 14%;
+    --surface-deep: 216 82% 9%;
+    --surface-elevated: 210 63% 16%;
     --glow-primary: 184 100% 50%;
     --gradient-primary-start: 198 100% 97%;
     --gradient-primary-mid: 192 100% 81%;
@@ -67,8 +68,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
-    background: linear-gradient(135deg, #0A192F 0%, #102A43 55%, #0A192F 100%);
-    background-attachment: fixed;
+    background: #0A192F;
     min-height: 100vh;
   }
 
@@ -139,6 +139,10 @@
       hsl(var(--gradient-primary-mid)) 52%,
       hsl(var(--gradient-primary-end)) 100%
     );
+  }
+
+  .bg-surface-deep {
+    background-color: hsl(var(--surface-deep));
   }
 
   .bg-surface-elevated {
@@ -214,6 +218,6 @@
 
   /* Sidebar gradient */
   .bg-gradient-sidebar {
-    background: linear-gradient(180deg, #102A43 0%, #0A192F 100%);
+    background: linear-gradient(180deg, #041329 0%, #030E1F 100%);
   }
 }

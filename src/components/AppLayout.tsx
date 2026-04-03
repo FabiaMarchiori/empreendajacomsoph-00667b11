@@ -9,7 +9,7 @@ function LayoutHeader() {
   const { isMobile } = useSidebar();
   
   return (
-    <header className="h-14 flex items-center border-b border-border px-4 sticky top-0 z-20" style={{ background: 'rgba(10, 25, 47, 0.85)', backdropFilter: 'blur(12px)' }}>
+    <header className="h-14 flex items-center border-b border-border px-4 sticky top-0 z-20" style={{ background: '#041329' }}>
       {!isMobile && <SidebarTrigger className="text-muted-foreground hover:text-foreground" />}
       {isMobile && <SidebarTrigger className="text-muted-foreground hover:text-foreground" />}
     </header>
