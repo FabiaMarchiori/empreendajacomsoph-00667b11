@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap } from "lucide-react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap, Save } from "lucide-react";
 import { calcularPreco, calcularMarkup, type PricingInput } from "@/lib/pricing-engine";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,16 @@ interface Props {
   channels: Tables<"pricing_channels">[];
   defaultChannels: DefaultChannel[];
   isLoading: boolean;
+  onSaveSimulation?: (data: {
+    nome_produto?: string;
+    canal_nome: string;
+    custo_compra: number;
+    margem_desejada: number;
+    preco_sugerido: number;
+    lucro_liquido: number;
+    margem_final: number;
+    custo_total: number;
+  }) => void;
 }
 
 const fmt = (v: number) =>
