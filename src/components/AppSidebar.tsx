@@ -81,7 +81,7 @@ export function AppSidebar() {
       collapsible="icon"
       className="border-r border-border/40"
       style={{
-        background: 'linear-gradient(180deg, #0F2336 0%, #0A192F 50%, #081525 100%)',
+        background: 'linear-gradient(180deg, #041329 0%, #030E1F 100%)',
       }}
     >
       <SidebarHeader className="p-5">
