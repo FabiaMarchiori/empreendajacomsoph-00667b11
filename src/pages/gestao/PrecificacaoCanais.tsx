@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDefaultChannels, type DefaultChannel } from "@/hooks/useDefaultChannels";
-import PricingChannels from "@/components/precificacao/PricingChannels";
+
 
 /* Channel icon mapping for visual distinction */
 const channelIconMap: Record<string, { icon: React.ElementType; color: string; bg: string }> = {
