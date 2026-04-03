@@ -40,14 +40,14 @@
 
     --radius: 0.75rem;
 
-    /* Sidebar */
-    --sidebar-background: 210 63% 16%;
+    /* Sidebar: #041329 = hsl(216, 82%, 9%) */
+    --sidebar-background: 216 82% 9%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 184 100% 50%;
     --sidebar-primary-foreground: 217 65% 11%;
-    --sidebar-accent: 210 50% 20%;
+    --sidebar-accent: 217 65% 11%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 210 40% 22%;
+    --sidebar-border: 210 40% 14%;
     --sidebar-ring: 184 100% 50%;
 
     /* Custom tokens */
