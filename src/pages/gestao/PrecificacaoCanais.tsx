@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDefaultChannels, type DefaultChannel } from "@/hooks/useDefaultChannels";
-import PricingChannels from "@/components/precificacao/PricingChannels";
+
 
 /* Channel icon mapping for visual distinction */
 const channelIconMap: Record<string, { icon: React.ElementType; color: string; bg: string }> = {
@@ -118,13 +118,6 @@ export default function PrecificacaoCanais() {
         )}
       </motion.div>
 
-      {/* Custom channels */}
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
-        <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-3" style={{ fontFamily: "Manrope, sans-serif" }}>
-          Meus Canais Personalizados
-        </h3>
-        <PricingChannels />
-      </motion.div>
     </div>
   );
 }
