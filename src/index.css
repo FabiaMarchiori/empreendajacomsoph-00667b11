@@ -68,8 +68,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
-    background: linear-gradient(135deg, #0A192F 0%, #102A43 55%, #0A192F 100%);
-    background-attachment: fixed;
+    background: #0A192F;
     min-height: 100vh;
   }
 
