@@ -97,7 +97,45 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
     }
   }, [selectedCustomChannel, channels, channelSource]);
 
-  // Build alerts
+  // Listen for reuse-simulation events
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const sim = (e as CustomEvent).detail;
+      if (sim) {
+        setCustoCompra(Number(sim.custo_compra));
+        setMargemDesejada(Number(sim.margem_desejada));
+        const dc = defaultChannels.find((c) => c.canal_nome === sim.canal_nome);
+        if (dc) {
+          setChannelSource("default");
+          setSelectedDefaultChannel(dc.id);
+          setSelectedCustomChannel("");
+        }
+        setSelectedProduct("manual");
+      }
+    };
+    window.addEventListener("reuse-simulation", handler);
+    return () => window.removeEventListener("reuse-simulation", handler);
+  }, [defaultChannels]);
+
+  // Channel/product name helpers for saving
+  const currentChannelName = useMemo(() => {
+    if (channelSource === "default" && selectedDefaultChannel) {
+      return defaultChannels.find((c) => c.id === selectedDefaultChannel)?.canal_nome ?? "Manual";
+    }
+    if (channelSource === "custom" && selectedCustomChannel) {
+      return channels.find((c) => c.id === selectedCustomChannel)?.canal_nome ?? "Manual";
+    }
+    return "Manual";
+  }, [channelSource, selectedDefaultChannel, selectedCustomChannel, defaultChannels, channels]);
+
+  const currentProductName = useMemo(() => {
+    if (selectedProduct && selectedProduct !== "manual") {
+      return products.find((p) => p.id === selectedProduct)?.nome_produto;
+    }
+    return undefined;
+  }, [selectedProduct, products]);
+
+
   const alerts = useMemo(() => {
     if (!currentDefaultChannel) return [];
     const a: string[] = [];
