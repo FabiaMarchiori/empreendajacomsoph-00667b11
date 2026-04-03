@@ -392,6 +392,28 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
               </p>
             </div>
           )}
+
+          {/* Save simulation button */}
+          {onSaveSimulation && (
+            <Button
+              onClick={() => {
+                onSaveSimulation({
+                  nome_produto: currentProductName,
+                  canal_nome: currentChannelName,
+                  custo_compra: custoCompra,
+                  margem_desejada: margemDesejada,
+                  preco_sugerido: result.precoSugerido,
+                  lucro_liquido: result.lucroLiquido,
+                  margem_final: result.margemFinal,
+                  custo_total: result.custoTotal,
+                });
+              }}
+              variant="outline"
+              className="w-full border-primary/30 text-primary hover:bg-primary/10 text-sm font-semibold"
+            >
+              <Save className="h-4 w-4 mr-2" /> Salvar Simulação
+            </Button>
+          )}
         </div>
       )}
 
