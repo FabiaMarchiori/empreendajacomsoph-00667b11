@@ -35,14 +35,20 @@ export default function SophPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const [isTyping, setIsTyping] = useState(false);
+
   const sendMessage = (text: string) => {
-    if (!text.trim()) return;
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", text },
-      { role: "soph", text: "Essa é uma ótima pergunta! Na versão completa, vou analisar seu contexto e te dar uma orientação personalizada. Por enquanto, explore as áreas da plataforma para avançar na sua jornada! 🚀" },
-    ]);
+    if (!text.trim() || isTyping) return;
+    setMessages((prev) => [...prev, { role: "user", text }]);
     setInput("");
+    setIsTyping(true);
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        { role: "soph", text: "Essa é uma ótima pergunta! Na versão completa, vou analisar seu contexto e te dar uma orientação personalizada. Por enquanto, explore as áreas da plataforma para avançar na sua jornada! 🚀" },
+      ]);
+      setIsTyping(false);
+    }, 1200 + Math.random() * 800);
   };
 
   return (
