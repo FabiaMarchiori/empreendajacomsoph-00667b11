@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap, Save } from "lucide-react";
+import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap, Save, RotateCcw } from "lucide-react";
 import { calcularPreco, calcularMarkup, type PricingInput } from "@/lib/pricing-engine";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
