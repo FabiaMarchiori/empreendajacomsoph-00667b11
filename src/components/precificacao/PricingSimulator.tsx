@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap, Save } from "lucide-react";
+import { Calculator, TrendingUp, DollarSign, BarChart3, ChevronDown, ChevronUp, AlertTriangle, Info, Zap, Save, RotateCcw } from "lucide-react";
 import { calcularPreco, calcularMarkup, type PricingInput } from "@/lib/pricing-engine";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -135,6 +135,39 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
     return undefined;
   }, [selectedProduct, products]);
 
+  // Smart reset
+  const handleClear = useCallback(() => {
+    // Clear manual/product fields
+    setSelectedProduct("");
+    setCustoCompra(0);
+    setCustoVariavel(0);
+    setFrete(0);
+    setEmbalagem(0);
+    setAds(0);
+    setOutrosCustos(0);
+
+    // Restore defaults: pick first default channel or keep manual
+    if (defaultChannels.length > 0) {
+      const first = defaultChannels[0];
+      setChannelSource("default");
+      setSelectedDefaultChannel(first.id);
+      setSelectedCustomChannel("");
+      setComissaoPct(Number(first.comissao_pct_default));
+      setTaxaCartaoPct(Number(first.taxa_cartao_pct_default));
+      setTaxaFixa(Number(first.taxa_fixa_default));
+      setImpostoPct(Number(first.imposto_pct_sugerido));
+    } else {
+      setChannelSource("manual");
+      setSelectedDefaultChannel("");
+      setSelectedCustomChannel("");
+      setComissaoPct(0);
+      setTaxaCartaoPct(0);
+      setTaxaFixa(0);
+      setImpostoPct(6);
+    }
+    setMargemDesejada(30);
+    // Keep detailedOpen as-is
+  }, [defaultChannels]);
 
   const alerts = useMemo(() => {
     if (!currentDefaultChannel) return [];
@@ -393,27 +426,36 @@ export default function PricingSimulator({ products, channels, defaultChannels, 
             </div>
           )}
 
-          {/* Save simulation button */}
-          {onSaveSimulation && (
+          {/* Action buttons */}
+          <div className="flex gap-3">
             <Button
-              onClick={() => {
-                onSaveSimulation({
-                  nome_produto: currentProductName,
-                  canal_nome: currentChannelName,
-                  custo_compra: custoCompra,
-                  margem_desejada: margemDesejada,
-                  preco_sugerido: result.precoSugerido,
-                  lucro_liquido: result.lucroLiquido,
-                  margem_final: result.margemFinal,
-                  custo_total: result.custoTotal,
-                });
-              }}
-              variant="outline"
-              className="w-full border-primary/30 text-primary hover:bg-primary/10 text-sm font-semibold"
+              onClick={handleClear}
+              variant="ghost"
+              className="flex-1 border border-border/50 text-muted-foreground hover:text-foreground text-sm font-semibold"
             >
-              <Save className="h-4 w-4 mr-2" /> Salvar Simulação
+              <RotateCcw className="h-4 w-4 mr-2" /> Limpar Simulação
             </Button>
-          )}
+            {onSaveSimulation && (
+              <Button
+                onClick={() => {
+                  onSaveSimulation({
+                    nome_produto: currentProductName,
+                    canal_nome: currentChannelName,
+                    custo_compra: custoCompra,
+                    margem_desejada: margemDesejada,
+                    preco_sugerido: result.precoSugerido,
+                    lucro_liquido: result.lucroLiquido,
+                    margem_final: result.margemFinal,
+                    custo_total: result.custoTotal,
+                  });
+                }}
+                variant="outline"
+                className="flex-1 border-primary/30 text-primary hover:bg-primary/10 text-sm font-semibold"
+              >
+                <Save className="h-4 w-4 mr-2" /> Salvar Simulação
+              </Button>
+            )}
+          </div>
         </div>
       )}
 
