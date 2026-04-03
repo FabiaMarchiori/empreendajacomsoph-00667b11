@@ -32,7 +32,7 @@ const fmt = (v: number) =>
 
 const pctFmt = (v: number) => `${v.toFixed(2)}%`;
 
-export default function PricingSimulator({ products, channels, defaultChannels, isLoading }: Props) {
+export default function PricingSimulator({ products, channels, defaultChannels, isLoading, onSaveSimulation }: Props) {
   // Source selection
   const [channelSource, setChannelSource] = useState<"default" | "custom" | "manual">("default");
   const [selectedDefaultChannel, setSelectedDefaultChannel] = useState("");
