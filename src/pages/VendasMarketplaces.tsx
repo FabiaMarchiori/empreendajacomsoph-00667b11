@@ -56,26 +56,6 @@ const marketplaces = [
     url: "https://www.magazineluiza.com.br",
     cta: "Acessar Guia Magalu",
   },
-  {
-    name: "Americanas / B2W",
-    badge: "TRADIÇÃO",
-    desc: "Plataforma tradicional com público fiel e grande alcance.",
-    bestFor: "Variedade de categorias e público diversificado",
-    pros: ["Base de clientes grande", "Estrutura logística robusta", "Promoções frequentes"],
-    con: "Processo de onboarding pode ser mais burocrático",
-    url: "https://www.americanas.com.br",
-    cta: "Acessar Guia",
-  },
-  {
-    name: "OLX / Facebook",
-    badge: "VENDA DIRETA",
-    desc: "Plataformas de venda direta, sem intermediário logístico.",
-    bestFor: "Produtos usados, locais e de nicho",
-    pros: ["Sem comissão (OLX)", "Contato direto com comprador", "Fácil de começar"],
-    con: "Sem estrutura logística ou proteção ao vendedor",
-    url: "https://www.olx.com.br",
-    cta: "Acessar Guia",
-  },
 ];
 
 interface CheckItem {
