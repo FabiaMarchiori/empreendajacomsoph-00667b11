@@ -46,6 +46,21 @@ const GRAD = "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)";
 export default function HomePage() {
   const navigate = useNavigate();
 
+  // Track last visited page for "Último acesso"
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem("empreendaja_last_page", window.location.pathname);
+    };
+    const originalPushState = history.pushState.bind(history);
+    history.pushState = function (...args) {
+      localStorage.setItem("empreendaja_last_page", window.location.pathname);
+      return originalPushState(...args);
+    };
+    return () => {
+      history.pushState = originalPushState;
+    };
+  }, []);
+
   return (
     <div className="p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto space-y-8 sm:space-y-10">
       {/* Bloco 1 — Hero / Boas-vindas */}
