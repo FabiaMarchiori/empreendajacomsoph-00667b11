@@ -227,16 +227,18 @@ export default function HomePage() {
 
       {/* Bloco 6 — Ações rápidas */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <motion.div variants={item}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {[
-              { label: "Último acesso", icon: <History className="h-4 w-4" /> },
-              { label: "Favoritos", icon: <Heart className="h-4 w-4" /> },
-              { label: "Histórico", icon: <BookOpen className="h-4 w-4" /> },
-              { label: "Materiais salvos", icon: <BookOpen className="h-4 w-4" /> },
-              { label: "Suporte", icon: <HelpCircle className="h-4 w-4" /> },
+              { label: "Último acesso", icon: <RotateCcw className="h-4 w-4" />, action: () => {
+                const last = localStorage.getItem("empreendaja_last_page");
+                navigate(last && last !== "/" ? last : "/fornecedores");
+              }},
+              { label: "Favoritos", icon: <Heart className="h-4 w-4" />, action: () => navigate("/fornecedores/importadoras-25/favoritos") },
+              { label: "Histórico", icon: <History className="h-4 w-4" />, action: () => navigate("/gestao/precificacao") },
+              { label: "Suporte", icon: <HelpCircle className="h-4 w-4" />, action: () => navigate("/soph") },
             ].map((a) => (
-              <button key={a.label} className="flex items-center gap-2.5 p-3.5 rounded-xl border border-white/10 text-sm text-white font-semibold hover:border-[#00EFFF]/30 hover:shadow-[0_0_12px_-4px_rgba(0,239,255,0.2)] transition-all" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
+              <button key={a.label} onClick={a.action} className="flex items-center gap-2.5 p-3.5 rounded-xl border border-white/10 text-sm text-white font-semibold hover:border-[#00EFFF]/30 hover:shadow-[0_0_12px_-4px_rgba(0,239,255,0.2)] transition-all" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
                 <span className="text-[#00EFFF]">{a.icon}</span> {a.label}
               </button>
             ))}
