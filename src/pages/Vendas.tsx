@@ -119,30 +119,6 @@ export default function VendasPage() {
         ))}
       </motion.div>
 
-      {/* SOPH ESTRATÉGICA */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="relative rounded-2xl border border-primary/20 p-6 bg-gradient-card overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-primary-line opacity-80" />
-
-        <div className="flex items-start gap-4">
-          <div className="h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-primary-btn">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div className="flex-1 space-y-3">
-            <h3 className="font-display font-bold text-base text-white">Soph sugere para seu nicho</h3>
-            <p className="text-white text-sm leading-relaxed">
-              "Pelo seu perfil, começar pelo Instagram Shopping e por marketplaces pode gerar retorno mais rápido. Quer que eu monte um roteiro inicial para você?"
-            </p>
-            <div className="flex items-center gap-3 pt-1">
-              <button
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm bg-gradient-primary-btn text-primary-foreground hover:brightness-110 transition-all"
-              >
-                Criar roteiro <ArrowRight className="h-3.5 w-3.5" />
-              </button>
-              <span className="text-white text-xs">Baseado no seu perfil e segmento</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
 
       {/* DICAS DE ESPECIALISTA */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="space-y-4">
