@@ -80,7 +80,6 @@ export default function SophPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chat area */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 flex flex-col gap-4">
-          {/* Chat container */}
           <div className="bg-[hsl(210,63%,10%)] backdrop-blur-sm rounded-xl border border-primary/20 flex flex-col h-[420px] sm:h-[520px] shadow-[0_0_30px_-5px_hsl(var(--primary)/0.15)]">
             <div className="px-5 py-4 border-b border-primary/15 flex items-center gap-3">
               <div className="h-9 w-9 rounded-full overflow-hidden border border-primary/30">
@@ -88,7 +87,7 @@ export default function SophPage() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">Conversa com a Soph</p>
-                <p className="text-[11px] text-white/70">Assistente estratégica do ecossistema</p>
+                <p className="text-[11px] text-white/60">Assistente estratégica do ecossistema</p>
               </div>
             </div>
 
@@ -97,20 +96,24 @@ export default function SophPage() {
                 {messages.map((msg, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 6 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
+                    transition={{ delay: i * 0.04, duration: 0.3 }}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
-                    <div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                    {msg.role === "soph" && (
+                      <div className="h-7 w-7 rounded-full overflow-hidden border border-primary/20 flex-shrink-0 mr-2.5 mt-0.5">
+                        <img src={sophAvatar} alt="" width={28} height={28} className="h-full w-full object-cover" />
+                      </div>
+                    )}
+                    <div className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                       msg.role === "user"
-                        ? "bg-gradient-primary-btn text-white rounded-br-md shadow-[0_2px_12px_-2px_hsl(var(--primary)/0.4)]"
-                        : "bg-[hsl(210,63%,14%)] text-white border border-primary/15 rounded-bl-md"
+                        ? "bg-gradient-primary-btn text-[#0A192F] font-medium rounded-br-md shadow-[0_2px_12px_-2px_hsl(var(--primary)/0.35)]"
+                        : "bg-[hsl(210,63%,14%)] text-white/95 border border-primary/10 rounded-bl-md"
                     }`}>
                       {msg.role === "soph" && (
-                        <div className="flex items-center gap-1.5 mb-2">
-                          <Sparkles className="h-3 w-3 text-primary" />
-                          <span className="text-[11px] font-semibold text-gradient-primary">Soph</span>
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                          <span className="text-[10px] font-bold text-gradient-primary uppercase tracking-wider">Soph</span>
                         </div>
                       )}
                       {msg.text}
@@ -118,17 +121,18 @@ export default function SophPage() {
                   </motion.div>
                 ))}
                 {isTyping && (
-                  <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
-                    <div className="max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed bg-[hsl(210,63%,14%)] text-white border border-primary/15 rounded-bl-md">
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <Sparkles className="h-3 w-3 text-primary" />
-                        <span className="text-[11px] font-semibold text-gradient-primary">Soph</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full bg-primary/60 animate-pulse" />
-                        <span className="h-2 w-2 rounded-full bg-primary/40 animate-pulse" style={{ animationDelay: "0.2s" }} />
-                        <span className="h-2 w-2 rounded-full bg-primary/20 animate-pulse" style={{ animationDelay: "0.4s" }} />
-                        <span className="text-xs text-white/50 ml-1">Soph está digitando...</span>
+                  <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
+                    <div className="h-7 w-7 rounded-full overflow-hidden border border-primary/20 flex-shrink-0 mr-2.5 mt-0.5">
+                      <img src={sophAvatar} alt="" width={28} height={28} className="h-full w-full object-cover" />
+                    </div>
+                    <div className="max-w-[78%] rounded-2xl px-4 py-3.5 text-sm bg-[hsl(210,63%,14%)] text-white border border-primary/10 rounded-bl-md">
+                      <div className="flex items-center gap-2">
+                        <div className="flex gap-1">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary/70 animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary/50 animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary/30 animate-bounce" style={{ animationDelay: "300ms" }} />
+                        </div>
+                        <span className="text-[11px] text-white/40">Digitando...</span>
                       </div>
                     </div>
                   </motion.div>
@@ -143,7 +147,8 @@ export default function SophPage() {
                 <button
                   key={q}
                   onClick={() => sendMessage(q)}
-                  className="px-3.5 py-2 rounded-full bg-[hsl(210,63%,14%)] border border-primary/25 text-[11px] text-white font-medium hover:border-primary/50 hover:bg-[hsl(210,63%,18%)] hover:shadow-[0_0_12px_-3px_hsl(var(--primary)/0.3)] transition-all duration-200 cursor-pointer"
+                  disabled={isTyping}
+                  className="px-3.5 py-2 rounded-full bg-[hsl(210,63%,14%)] border border-primary/20 text-[11px] text-white font-medium hover:border-primary/40 hover:bg-[hsl(210,63%,18%)] hover:shadow-[0_0_12px_-3px_hsl(var(--primary)/0.25)] transition-all duration-200 cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {q}
                 </button>
@@ -158,12 +163,14 @@ export default function SophPage() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
-                  placeholder="Escreva sua dúvida e a Soph te orienta com clareza prática..."
-                  className="flex-1 bg-[hsl(210,63%,14%)] border border-primary/20 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
+                  disabled={isTyping}
+                  placeholder="Escreva sua dúvida e a Soph te orienta..."
+                  className="flex-1 bg-[hsl(210,63%,14%)] border border-primary/20 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all duration-300 disabled:opacity-50"
                 />
                 <button
                   onClick={() => sendMessage(input)}
-                  className="px-6 rounded-xl bg-gradient-primary-btn text-[#0A192F] font-medium hover:brightness-110 transition-all shadow-[0_0_20px_-4px_hsl(var(--primary)/0.5)]"
+                  disabled={isTyping || !input.trim()}
+                  className="px-6 rounded-xl bg-gradient-primary-btn text-[#0A192F] font-medium transition-all duration-300 hover:brightness-110 active:scale-95 shadow-[0_0_20px_-4px_hsl(var(--primary)/0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -172,9 +179,8 @@ export default function SophPage() {
           </div>
         </motion.div>
 
-        {/* Sidebar - Shortcuts only */}
+        {/* Sidebar */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-4">
-          {/* Shortcuts */}
           <div className="bg-[hsl(210,63%,10%)] backdrop-blur-sm rounded-xl border border-primary/15 p-5">
             <h3 className="font-display font-semibold text-sm text-white mb-3">Atalhos rápidos</h3>
             <div className="space-y-1">
@@ -184,16 +190,16 @@ export default function SophPage() {
                   <button
                     key={s.label}
                     onClick={() => sendMessage(`Me ajude com ${s.label.toLowerCase()}`)}
-                    className="w-full flex items-center gap-3 p-2.5 rounded-lg text-left hover:bg-primary/10 transition-all duration-200 group"
+                    className="w-full flex items-center gap-3 p-2.5 rounded-lg text-left transition-all duration-200 group hover:bg-primary/10 active:scale-[0.98]"
                   >
-                    <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:border-primary/40 transition-colors">
-                      <Icon className="h-3.5 w-3.5 text-white group-hover:text-primary transition-colors" />
+                    <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:border-primary/40 transition-colors duration-200">
+                      <Icon className="h-3.5 w-3.5 text-white group-hover:text-primary transition-colors duration-200" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-medium text-white truncate">{s.label}</p>
-                      <p className="text-[10px] text-white/60 truncate">{s.desc}</p>
+                      <p className="text-[10px] text-white/50 truncate">{s.desc}</p>
                     </div>
-                    <ArrowRight className="h-3 w-3 text-white/30 ml-auto flex-shrink-0 group-hover:text-primary transition-colors" />
+                    <ArrowRight className="h-3 w-3 text-white/20 ml-auto flex-shrink-0 group-hover:text-primary/60 transition-colors duration-200" />
                   </button>
                 );
               })}
@@ -202,7 +208,7 @@ export default function SophPage() {
         </motion.div>
       </div>
 
-      {/* Insight da Soph - Bottom */}
+      {/* Insight da Soph */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
         <div className="bg-[hsl(210,63%,10%)] rounded-xl border border-primary/20 p-6 flex flex-col md:flex-row items-start md:items-center gap-5">
           <div className="h-12 w-12 rounded-xl bg-gradient-primary-soft flex items-center justify-center flex-shrink-0">
@@ -214,7 +220,7 @@ export default function SophPage() {
               Percebi que você já avançou em fornecedores e estruturação. O próximo passo ideal é fortalecer sua presença digital para começar a vender com mais consistência.
             </p>
           </div>
-          <button className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-primary-btn text-[#0A192F] text-sm font-medium hover:brightness-110 transition-all shadow-[0_0_20px_-4px_hsl(var(--primary)/0.4)] flex-shrink-0">
+          <button className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-primary-btn text-[#0A192F] text-sm font-medium transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_-4px_hsl(var(--primary)/0.5)] active:scale-95 flex-shrink-0">
             <Zap className="h-4 w-4" />
             Seguir recomendação
           </button>
