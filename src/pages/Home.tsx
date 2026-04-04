@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import {
   ArrowRight,
   Package,
@@ -7,7 +8,6 @@ import {
   Sparkles,
   History,
   Heart,
-  BookOpen,
   HelpCircle,
   Star,
   Check,
@@ -15,6 +15,7 @@ import {
   Gem,
   Factory,
   ShoppingBag,
+  RotateCcw,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ProductCard } from "@/components/ProductCard";
