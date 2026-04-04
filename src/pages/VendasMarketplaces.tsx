@@ -56,26 +56,6 @@ const marketplaces = [
     url: "https://www.magazineluiza.com.br",
     cta: "Acessar Guia Magalu",
   },
-  {
-    name: "Americanas / B2W",
-    badge: "TRADIÇÃO",
-    desc: "Plataforma tradicional com público fiel e grande alcance.",
-    bestFor: "Variedade de categorias e público diversificado",
-    pros: ["Base de clientes grande", "Estrutura logística robusta", "Promoções frequentes"],
-    con: "Processo de onboarding pode ser mais burocrático",
-    url: "https://www.americanas.com.br",
-    cta: "Acessar Guia",
-  },
-  {
-    name: "OLX / Facebook",
-    badge: "VENDA DIRETA",
-    desc: "Plataformas de venda direta, sem intermediário logístico.",
-    bestFor: "Produtos usados, locais e de nicho",
-    pros: ["Sem comissão (OLX)", "Contato direto com comprador", "Fácil de começar"],
-    con: "Sem estrutura logística ou proteção ao vendedor",
-    url: "https://www.olx.com.br",
-    cta: "Acessar Guia",
-  },
 ];
 
 interface CheckItem {
@@ -179,8 +159,6 @@ const toolsDetailed = [
       { name: "Shopee", url: "https://shopee.com.br", desc: "Comece a vender com frete subsidiado e cupons", icon: <ShoppingBag className="h-4 w-4" /> },
       { name: "Amazon", url: "https://www.amazon.com.br", desc: "Acesse o marketplace global com logística FBA", icon: <ShoppingBag className="h-4 w-4" /> },
       { name: "Magalu", url: "https://www.magazineluiza.com.br", desc: "Venda na plataforma com força de marca nacional", icon: <ShoppingBag className="h-4 w-4" /> },
-      { name: "Americanas", url: "https://www.americanas.com.br", desc: "Alcance público diversificado em grande escala", icon: <ShoppingBag className="h-4 w-4" /> },
-      { name: "OLX", url: "https://www.olx.com.br", desc: "Venda direta sem comissão e com contato local", icon: <ShoppingBag className="h-4 w-4" /> },
     ],
   },
   {
@@ -271,8 +249,6 @@ export default function VendasMarketplacesPage() {
             { icon: "🛍️", name: "Shopee" },
             { icon: "📦", name: "Amazon" },
             { icon: "🏪", name: "Magalu" },
-            { icon: "🏬", name: "Americanas" },
-            { icon: "📱", name: "OLX" },
           ].map((m) => (
             <span
               key={m.name}
