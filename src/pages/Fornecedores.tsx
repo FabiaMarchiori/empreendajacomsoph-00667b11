@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Search, Package, Gem, Factory, Shirt, Footprints, ShoppingBag, Baby, Heart, Dumbbell, MapPin, SearchX } from "lucide-react";
+import { Search, Package, Gem, Factory, Shirt, Footprints, ShoppingBag, Baby, Heart, Dumbbell, MapPin } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ const categories = [
 ];
 
 const suppliers = [
+  // Importadoras
   {
     title: "Importadoras 25 de Março",
     desc: "Produtos importados direto das melhores importadoras de SP",
@@ -23,6 +24,7 @@ const suppliers = [
     isPremium: true,
     route: "/fornecedores/importadoras-25",
   },
+  // Moda Brás subcards
   {
     title: "Moda Feminina",
     desc: "Fornecedores de moda feminina no Brás",
@@ -63,6 +65,7 @@ const suppliers = [
     icon: <Dumbbell className="h-5 w-5" />,
     isPremium: false,
   },
+  // Calçados subcards
   {
     title: "Jaú",
     desc: "Polo calçadista de Jaú — SP",
@@ -95,6 +98,7 @@ const suppliers = [
     icon: <MapPin className="h-5 w-5" />,
     isPremium: false,
   },
+  // Semi-jóias
   {
     title: "Semi-jóias de Limeira",
     desc: "Fabricantes de semi-jóias direto do polo de Limeira",
@@ -103,9 +107,10 @@ const suppliers = [
     icon: <Gem className="h-5 w-5" />,
     isPremium: false,
   },
+  // Fabricantes Nacionais
   {
     title: "Fabricantes Nacionais",
-    desc: "Brinquedos, decoração, eletrônicos e outros nichos",
+    desc: "Brinquedos, Decoração, Eletrônicos e outros nichos nacionais",
     status: "em_breve" as const,
     cat: "Fabricantes Nacionais",
     icon: <Factory className="h-5 w-5" />,
@@ -144,20 +149,20 @@ export default function FornecedoresPage() {
           <span className="text-gradient-primary inline-block">Fornecedores</span>
         </h1>
         <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
-          Acesse as maiores importadoras, fornecedores e polos calçadistas para ampliar suas margens e encontrar novas oportunidades.
+          Acesse as maiores importadoras, fornecedores, e polos calçadistas para ampliar suas margens e encontrar novas oportunidades para o seu negócio.
         </p>
       </motion.div>
 
       {/* Search */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
-        <div className="relative max-w-md group">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50 transition-colors group-focus-within:text-primary/70" />
+        <div className="relative max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           <input
             type="text"
-            placeholder="Buscar por nome do fornecedor..."
+            placeholder="Buscar fornecedores..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-border bg-card pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all duration-300"
+            className="w-full rounded-xl border border-border bg-card pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50"
           />
         </div>
       </motion.div>
@@ -175,10 +180,10 @@ export default function FornecedoresPage() {
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-300 active:scale-95 ${
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 ${
                 isActive
                   ? "text-[#0A192F] shadow-[0_0_16px_-2px_rgba(0,239,255,0.5)]"
-                  : "text-white border-2 border-[#1E3A5F] hover:border-[#007A7A] hover:bg-white/[0.03]"
+                  : "text-white border-2 border-[#1E3A5F] hover:border-[#007A7A]"
               }`}
               style={
                 isActive
@@ -193,25 +198,10 @@ export default function FornecedoresPage() {
       </motion.div>
 
       {/* Grid */}
-      {filtered.length === 0 ? (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-          <div className="mx-auto h-14 w-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4">
-            <SearchX className="h-6 w-6 text-primary/60" />
-          </div>
-          <p className="text-white font-display font-semibold text-base mb-1.5">
-            Nenhum fornecedor encontrado
-          </p>
-          <p className="text-white/50 text-sm max-w-sm mx-auto mb-4">
-            {isSearching
-              ? <>Não encontramos resultados para "<span className="text-white/70 font-medium">{search}</span>". Tente outro termo.</>
-              : "Nenhum fornecedor disponível nesta categoria no momento."
-            }
-          </p>
-          {isSearching && (
-            <button onClick={() => setSearch("")} className="text-xs text-primary hover:underline font-semibold transition-opacity hover:opacity-80">
-              Limpar busca
-            </button>
-          )}
+      {filtered.length === 0 && isSearching ? (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
+          <p className="text-white/50 text-sm">Nenhum fornecedor encontrado para "<span className="text-white/70">{search}</span>".</p>
+          <button onClick={() => setSearch("")} className="mt-3 text-xs text-primary hover:underline font-medium">Limpar busca</button>
         </motion.div>
       ) : (
         <motion.div

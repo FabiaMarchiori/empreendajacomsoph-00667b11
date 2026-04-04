@@ -22,19 +22,14 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
   return (
     <>
       <motion.div
-        whileHover={isComingSoon ? undefined : { y: -4 }}
-        whileTap={isComingSoon ? undefined : { scale: 0.98 }}
+        whileHover={{ y: -3 }}
         onClick={isComingSoon ? undefined : onClick}
         className={cn(
-          "group relative rounded-2xl border p-6 flex flex-col h-full min-h-[220px]",
-          "transition-all duration-300 ease-out",
-          isComingSoon
-            ? "cursor-default opacity-80"
-            : "cursor-pointer",
+          "group relative rounded-2xl border p-6 transition-all duration-200 flex flex-col h-full min-h-[220px]",
+          isComingSoon ? "cursor-default" : "cursor-pointer",
           isPremium
             ? "bg-gradient-card border-primary/15 hover:border-primary/40 shadow-glow-sm hover:shadow-glow"
-            : "bg-gradient-card border-border/60 hover:border-primary/25",
-          !isComingSoon && "active:border-primary/50",
+            : "bg-gradient-card border-border/60 hover:border-primary/20",
         )}
       >
         {isPremium && (
@@ -42,10 +37,8 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
         )}
         <div className="flex items-start justify-between mb-4">
           <div className={cn(
-            "h-11 w-11 rounded-xl flex items-center justify-center transition-colors duration-300",
-            isPremium
-              ? "bg-primary/15 text-primary group-hover:bg-primary/25"
-              : "bg-muted/50 text-foreground group-hover:bg-muted/70"
+            "h-11 w-11 rounded-xl flex items-center justify-center",
+            isPremium ? "bg-primary/15 text-primary" : "bg-muted/50 text-foreground"
           )}>
             {icon}
           </div>
@@ -56,16 +49,17 @@ export function ProductCard({ title, description, status, icon, isPremium, onCli
         <div className="flex items-center text-xs font-semibold mt-auto">
           {isAccessible ? (
             <span
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold transition-all duration-300 group-hover:gap-3 group-hover:shadow-[0_0_16px_-3px_rgba(0,239,255,0.5)] active:scale-95"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
               style={{ background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}
             >
-              Acessar <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+              Acessar <ArrowRight className="h-3.5 w-3.5" />
             </span>
           ) : isComingSoon ? (
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); setInterestOpen(true); }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-primary/30 text-white/90 font-bold transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-white active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold transition-all hover:opacity-90 cursor-pointer"
+              style={{ background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}
             >
               <Bell className="h-3.5 w-3.5" /> Avise-me
             </button>
