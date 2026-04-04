@@ -159,8 +159,6 @@ const toolsDetailed = [
       { name: "Shopee", url: "https://shopee.com.br", desc: "Comece a vender com frete subsidiado e cupons", icon: <ShoppingBag className="h-4 w-4" /> },
       { name: "Amazon", url: "https://www.amazon.com.br", desc: "Acesse o marketplace global com logística FBA", icon: <ShoppingBag className="h-4 w-4" /> },
       { name: "Magalu", url: "https://www.magazineluiza.com.br", desc: "Venda na plataforma com força de marca nacional", icon: <ShoppingBag className="h-4 w-4" /> },
-      { name: "Americanas", url: "https://www.americanas.com.br", desc: "Alcance público diversificado em grande escala", icon: <ShoppingBag className="h-4 w-4" /> },
-      { name: "OLX", url: "https://www.olx.com.br", desc: "Venda direta sem comissão e com contato local", icon: <ShoppingBag className="h-4 w-4" /> },
     ],
   },
   {
