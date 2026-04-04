@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import {
   ArrowRight,
   Package,
@@ -7,7 +8,6 @@ import {
   Sparkles,
   History,
   Heart,
-  BookOpen,
   HelpCircle,
   Star,
   Check,
@@ -15,6 +15,7 @@ import {
   Gem,
   Factory,
   ShoppingBag,
+  RotateCcw,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ProductCard } from "@/components/ProductCard";
@@ -44,6 +45,21 @@ const GRAD = "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)";
 
 export default function HomePage() {
   const navigate = useNavigate();
+
+  // Track last visited page for "Último acesso"
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem("empreendaja_last_page", window.location.pathname);
+    };
+    const originalPushState = history.pushState.bind(history);
+    history.pushState = function (...args) {
+      localStorage.setItem("empreendaja_last_page", window.location.pathname);
+      return originalPushState(...args);
+    };
+    return () => {
+      history.pushState = originalPushState;
+    };
+  }, []);
 
   return (
     <div className="p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto space-y-8 sm:space-y-10">
@@ -211,16 +227,18 @@ export default function HomePage() {
 
       {/* Bloco 6 — Ações rápidas */}
       <motion.section variants={container} initial="hidden" animate="show">
-        <motion.div variants={item}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <motion.div variants={item}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {[
-              { label: "Último acesso", icon: <History className="h-4 w-4" /> },
-              { label: "Favoritos", icon: <Heart className="h-4 w-4" /> },
-              { label: "Histórico", icon: <BookOpen className="h-4 w-4" /> },
-              { label: "Materiais salvos", icon: <BookOpen className="h-4 w-4" /> },
-              { label: "Suporte", icon: <HelpCircle className="h-4 w-4" /> },
+              { label: "Último acesso", icon: <RotateCcw className="h-4 w-4" />, action: () => {
+                const last = localStorage.getItem("empreendaja_last_page");
+                navigate(last && last !== "/" ? last : "/fornecedores");
+              }},
+              { label: "Favoritos", icon: <Heart className="h-4 w-4" />, action: () => navigate("/fornecedores/importadoras-25/favoritos") },
+              { label: "Histórico", icon: <History className="h-4 w-4" />, action: () => navigate("/gestao/precificacao") },
+              { label: "Suporte", icon: <HelpCircle className="h-4 w-4" />, action: () => navigate("/soph") },
             ].map((a) => (
-              <button key={a.label} className="flex items-center gap-2.5 p-3.5 rounded-xl border border-white/10 text-sm text-white font-semibold hover:border-[#00EFFF]/30 hover:shadow-[0_0_12px_-4px_rgba(0,239,255,0.2)] transition-all" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
+              <button key={a.label} onClick={a.action} className="flex items-center gap-2.5 p-3.5 rounded-xl border border-white/10 text-sm text-white font-semibold hover:border-[#00EFFF]/30 hover:shadow-[0_0_12px_-4px_rgba(0,239,255,0.2)] transition-all" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
                 <span className="text-[#00EFFF]">{a.icon}</span> {a.label}
               </button>
             ))}
