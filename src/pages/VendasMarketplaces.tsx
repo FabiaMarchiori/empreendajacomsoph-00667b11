@@ -251,8 +251,6 @@ export default function VendasMarketplacesPage() {
             { icon: "🛍️", name: "Shopee" },
             { icon: "📦", name: "Amazon" },
             { icon: "🏪", name: "Magalu" },
-            { icon: "🏬", name: "Americanas" },
-            { icon: "📱", name: "OLX" },
           ].map((m) => (
             <span
               key={m.name}
