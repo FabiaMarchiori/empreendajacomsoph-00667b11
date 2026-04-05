@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
-  Search, Pencil, AlertTriangle, CreditCard, Tag, Truck, BarChart3, Plus,
+  Search, Pencil, AlertTriangle, CreditCard, Tag, Truck, BarChart3, Plus, Trash2,
   ShoppingCart, Zap, Globe, Smartphone, Store, CreditCard as CardIcon, Wallet
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -51,8 +51,15 @@ export default function PrecificacaoCanais() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const { defaultChannels, isLoading } = useDefaultChannels();
-  const { channels: userChannels, isLoading: loadingUser, create: createUserChannel } = usePricingChannels();
+  const { channels: userChannels, isLoading: loadingUser, create: createUserChannel, remove: removeUserChannel } = usePricingChannels();
   const [search, setSearch] = useState("");
+
+  // Merge: user custom channels (not matching any default) for display
+  const customUserChannels = useMemo(() => {
+    if (!userChannels.length) return [];
+    const defaultNames = new Set(defaultChannels.map(d => d.canal_nome.toLowerCase()));
+    return userChannels.filter(uc => !defaultNames.has(uc.canal_nome.toLowerCase()));
+  }, [userChannels, defaultChannels]);
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -94,10 +101,8 @@ export default function PrecificacaoCanais() {
           }, { onConflict: "user_id,canal_nome", ignoreDuplicates: false });
         if (error) throw error;
         toast.success("Taxas atualizadas com sucesso!");
-        qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       } else {
-        // Create new user channel
-        const { error } = await supabase
+        const { data: inserted, error } = await supabase
           .from("pricing_channels")
           .insert({
             user_id: user.id,
@@ -107,11 +112,13 @@ export default function PrecificacaoCanais() {
             taxa_fixa: data.taxa_fixa,
             imposto_pct: data.imposto_pct,
             ativo: data.ativo,
-          });
+          })
+          .select();
         if (error) throw error;
+        if (!inserted || inserted.length === 0) throw new Error("Canal não foi salvo");
         toast.success("Canal criado com sucesso!");
-        qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       }
+      await qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       setModalOpen(false);
     } catch (err) {
       toast.error("Erro ao salvar canal. Verifique suas permissões.");
@@ -185,6 +192,63 @@ export default function PrecificacaoCanais() {
           <p className="text-sm text-white/50 text-center py-8">Nenhum canal encontrado.</p>
         )}
       </motion.div>
+
+      {/* User custom channels */}
+      {(customUserChannels.length > 0 || loadingUser) && (
+        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-3" style={{ fontFamily: "Manrope, sans-serif" }}>
+            Meus Canais Personalizados ({customUserChannels.length})
+          </h3>
+          {loadingUser ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2].map(i => <Skeleton key={i} className="h-40 rounded-2xl" />)}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {customUserChannels.map((uc) => {
+                const visual = getChannelVisual(uc.canal_nome);
+                const Icon = visual.icon;
+                return (
+                  <div
+                    key={uc.id}
+                    className="rounded-2xl border border-white/10 p-5 space-y-3.5 hover:border-[#00EFFF]/30 transition-all"
+                    style={{ background: "#102A43" }}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="h-11 w-11 rounded-xl flex items-center justify-center shrink-0 border"
+                        style={{ background: visual.bg, borderColor: `${visual.color}30` }}
+                      >
+                        <Icon className="h-5 w-5" style={{ color: visual.color }} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-sm text-white leading-tight" style={{ fontFamily: "Manrope, sans-serif" }}>{uc.canal_nome}</h4>
+                        <p className="text-[10px] text-white/50 uppercase tracking-wide font-semibold mt-0.5">personalizado</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <RateItem icon={Tag} label="Comissão" value={pctFmt(Number(uc.comissao_pct))} />
+                      <RateItem icon={CreditCard} label="Gateway" value={pctFmt(Number(uc.taxa_cartao_pct))} />
+                      <RateItem icon={BarChart3} label="Imposto" value={pctFmt(Number(uc.imposto_pct))} />
+                      <RateItem icon={Truck} label="Taxa fixa" value={Number(uc.taxa_fixa) > 0 ? fmt(Number(uc.taxa_fixa)) : "—"} />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeUserChannel.mutate(uc.id)}
+                        className="flex-1 border-white/10 text-white/60 hover:border-red-400/40 hover:text-red-400 hover:bg-red-400/5 text-xs font-semibold transition-all"
+                      >
+                        <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Remover
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </motion.div>
+      )}
 
       {/* Modal */}
       <ChannelModal
