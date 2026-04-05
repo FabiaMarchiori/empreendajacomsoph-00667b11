@@ -6,7 +6,6 @@ import {
   BarChart3,
   MessageCircle,
   Key,
-  User,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -21,7 +20,7 @@ import {
   SidebarHeader,
   SidebarFooter,
   useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarAccountBlock } from "@/components/SidebarAccountBlock";
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
