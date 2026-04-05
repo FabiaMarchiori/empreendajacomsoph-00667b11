@@ -33,7 +33,7 @@ type ChatMessage = { role: "user" | "assistant"; content: string };
 export default function SophPage() {
   const { user } = useAuth();
   const { data: profile } = useProfile();
-  const { data: subscription } = useSubscription();
+  const { hasActive: hasSubscription } = useSubscription();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
