@@ -6,6 +6,7 @@ import {
   BarChart3,
   MessageCircle,
   Key,
+  User,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -34,6 +35,7 @@ const mainItems = [
 const secondaryItems = [
   { title: "Soph, sua Sócia Digital", url: "/soph", icon: MessageCircle },
   { title: "Meus Acessos", url: "/acessos", icon: Key },
+  { title: "Conta / Plano", url: "/conta", icon: User },
 ];
 
 export function AppSidebar() {

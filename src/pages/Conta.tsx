@@ -288,7 +288,6 @@ export default function ContaPage() {
                 {[
                   { label: "Segurança e senha", icon: <Lock className="h-4 w-4 text-primary" />, desc: "Altere sua senha de acesso", action: () => setPasswordModalOpen(true) },
                   { label: "Métodos de pagamento", icon: <Wallet className="h-4 w-4 text-primary" />, desc: "Gerenciado pela plataforma de compra", badge: "Em breve" },
-                  { label: "Central de ajuda", icon: <FileText className="h-4 w-4 text-primary" />, desc: "Fale com nosso suporte", action: () => window.open(WHATSAPP_SUPPORT, "_blank") },
                 ].map((a) => (
                   <button
                     key={a.label}
