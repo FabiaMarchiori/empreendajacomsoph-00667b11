@@ -168,7 +168,18 @@ export default function SophPage() {
     }
   };
 
-  const greeting = userName
+  // Auto-send initial message from floating widget navigation
+  useEffect(() => {
+    const initialMessage = (location.state as any)?.initialMessage;
+    if (initialMessage && !initialMessageHandled.current) {
+      initialMessageHandled.current = true;
+      // Clear the state to prevent re-sending on re-render
+      window.history.replaceState({}, "");
+      // Small delay to ensure component is fully mounted
+      setTimeout(() => sendMessage(initialMessage), 100);
+    }
+  }, [location.state]);
+
     ? `Olá, ${userName}! Sou a Soph, sua sócia digital. Como posso te ajudar hoje?`
     : "Olá! Sou a Soph, sua sócia digital. Como posso te ajudar hoje?";
 
