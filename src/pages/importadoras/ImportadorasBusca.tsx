@@ -12,20 +12,9 @@ export default function ImportadorasBusca() {
   const { toggle, isFavorite } = useSupabaseFavorites();
   const { data: allSuppliers, isLoading } = useSupabaseSuppliers();
 
-  // Deduplicate by nome_loja for search (same supplier can appear in multiple categories)
-  const uniqueSuppliers = (() => {
-    const seen = new Set<string>();
-    return (allSuppliers || []).filter((s) => {
-      const key = s.nome_loja.toLowerCase();
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  })();
-
   const filtered = search.length >= 2
-    ? uniqueSuppliers.filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
-    : uniqueSuppliers;
+    ? (allSuppliers || []).filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
+    : (allSuppliers || []);
 
   return (
     <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
