@@ -236,7 +236,7 @@ export default function HomePage() {
               }},
               { label: "Favoritos", icon: <Heart className="h-4 w-4" />, action: () => navigate("/fornecedores/importadoras-25/favoritos") },
               { label: "Histórico", icon: <History className="h-4 w-4" />, action: () => navigate("/gestao/precificacao") },
-              { label: "Suporte", icon: <HelpCircle className="h-4 w-4" />, action: () => navigate("/soph") },
+              { label: "Suporte", icon: <HelpCircle className="h-4 w-4" />, action: () => window.open("https://wa.me/5511983348749?text=Suporte%20Ecossistema", "_blank") },
             ].map((a) => (
               <button key={a.label} onClick={a.action} className="flex items-center gap-2.5 p-3.5 rounded-xl border border-white/10 text-sm text-white font-semibold hover:border-[#00EFFF]/30 hover:shadow-[0_0_12px_-4px_rgba(0,239,255,0.2)] transition-all" style={{ background: 'linear-gradient(135deg, #102A43 0%, #0A192F 100%)' }}>
                 <span className="text-[#00EFFF]">{a.icon}</span> {a.label}
