@@ -118,6 +118,7 @@ export default function PrecificacaoCanais() {
         if (!inserted || inserted.length === 0) throw new Error("Canal não foi salvo");
         toast.success("Canal criado com sucesso!");
       }
+      await qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       setModalOpen(false);
     } catch (err) {
       toast.error("Erro ao salvar canal. Verifique suas permissões.");
