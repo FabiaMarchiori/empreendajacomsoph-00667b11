@@ -103,8 +103,7 @@ export default function PrecificacaoCanais() {
         toast.success("Taxas atualizadas com sucesso!");
         qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       } else {
-        // Create new user channel
-        const { error } = await supabase
+        const { data: inserted, error } = await supabase
           .from("pricing_channels")
           .insert({
             user_id: user.id,
@@ -114,10 +113,11 @@ export default function PrecificacaoCanais() {
             taxa_fixa: data.taxa_fixa,
             imposto_pct: data.imposto_pct,
             ativo: data.ativo,
-          });
+          })
+          .select();
         if (error) throw error;
+        if (!inserted || inserted.length === 0) throw new Error("Canal não foi salvo");
         toast.success("Canal criado com sucesso!");
-        qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       }
       setModalOpen(false);
     } catch (err) {
