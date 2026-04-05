@@ -34,7 +34,6 @@ const mainItems = [
 const secondaryItems = [
   { title: "Soph, sua Sócia Digital", url: "/soph", icon: MessageCircle },
   { title: "Meus Acessos", url: "/acessos", icon: Key },
-  { title: "Conta / Plano", url: "/conta", icon: User },
 ];
 
 export function AppSidebar() {
