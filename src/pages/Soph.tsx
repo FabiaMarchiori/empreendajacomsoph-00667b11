@@ -35,12 +35,14 @@ export default function SophPage() {
   const { user } = useAuth();
   const { data: profile } = useProfile();
   const { hasActive: hasSubscription } = useSubscription();
+  const location = useLocation();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const initialMessageHandled = useRef(false);
 
   const userName = profile?.first_name || user?.email?.split("@")[0] || "";
 
