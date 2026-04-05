@@ -51,8 +51,15 @@ export default function PrecificacaoCanais() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const { defaultChannels, isLoading } = useDefaultChannels();
-  const { channels: userChannels, isLoading: loadingUser, create: createUserChannel } = usePricingChannels();
+  const { channels: userChannels, isLoading: loadingUser, create: createUserChannel, remove: removeUserChannel } = usePricingChannels();
   const [search, setSearch] = useState("");
+
+  // Merge: user custom channels (not matching any default) for display
+  const customUserChannels = useMemo(() => {
+    if (!userChannels.length) return [];
+    const defaultNames = new Set(defaultChannels.map(d => d.canal_nome.toLowerCase()));
+    return userChannels.filter(uc => !defaultNames.has(uc.canal_nome.toLowerCase()));
+  }, [userChannels, defaultChannels]);
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
