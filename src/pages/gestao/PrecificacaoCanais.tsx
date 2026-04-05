@@ -101,7 +101,6 @@ export default function PrecificacaoCanais() {
           }, { onConflict: "user_id,canal_nome", ignoreDuplicates: false });
         if (error) throw error;
         toast.success("Taxas atualizadas com sucesso!");
-        qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       } else {
         const { data: inserted, error } = await supabase
           .from("pricing_channels")
