@@ -80,38 +80,37 @@ export default function PrecificacaoCanais() {
     setIsSaving(true);
     try {
       if (editingChannel) {
-        // Update default channel rates
+        // Update user's own pricing channel (or create from default)
         const { error } = await supabase
-          .from("pricing_default_channels" as any)
-          .update({
-            comissao_pct_default: data.comissao_pct,
-            taxa_cartao_pct_default: data.taxa_cartao_pct,
-            taxa_fixa_default: data.taxa_fixa,
-            imposto_pct_sugerido: data.imposto_pct,
-            observacoes: data.observacoes || null,
+          .from("pricing_channels")
+          .upsert({
+            user_id: user.id,
+            canal_nome: editingChannel.canal_nome,
+            comissao_pct: data.comissao_pct,
+            taxa_cartao_pct: data.taxa_cartao_pct,
+            taxa_fixa: data.taxa_fixa,
+            imposto_pct: data.imposto_pct,
             ativo: data.ativo,
-          } as any)
-          .eq("id", editingChannel.id);
+          }, { onConflict: "user_id,canal_nome", ignoreDuplicates: false });
         if (error) throw error;
         toast.success("Taxas atualizadas com sucesso!");
-        qc.invalidateQueries({ queryKey: ["pricing-default-channels"] });
+        qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       } else {
-        // Create new default channel
+        // Create new user channel
         const { error } = await supabase
-          .from("pricing_default_channels" as any)
+          .from("pricing_channels")
           .insert({
+            user_id: user.id,
             canal_nome: data.canal_nome,
-            tipo_canal: data.tipo_canal,
-            comissao_pct_default: data.comissao_pct,
-            taxa_cartao_pct_default: data.taxa_cartao_pct,
-            taxa_fixa_default: data.taxa_fixa,
-            imposto_pct_sugerido: data.imposto_pct,
-            observacoes: data.observacoes || null,
+            comissao_pct: data.comissao_pct,
+            taxa_cartao_pct: data.taxa_cartao_pct,
+            taxa_fixa: data.taxa_fixa,
+            imposto_pct: data.imposto_pct,
             ativo: data.ativo,
-          } as any);
+          });
         if (error) throw error;
         toast.success("Canal criado com sucesso!");
-        qc.invalidateQueries({ queryKey: ["pricing-default-channels"] });
+        qc.invalidateQueries({ queryKey: ["pricing-channels"] });
       }
       setModalOpen(false);
     } catch (err) {
