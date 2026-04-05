@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import {
-  BarChart3, Star, MessageCircle, ArrowRight, Sparkles, TrendingUp,
-  AlertTriangle, DollarSign, Package, FileText, Users, Database,
-  ChevronDown, Activity, Percent, Calculator, HelpCircle, Zap, Loader2
+  BarChart3, Star, ArrowRight, TrendingUp,
+  AlertTriangle, DollarSign, Package,
+  ChevronDown, Activity, Percent, Calculator, HelpCircle, Loader2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -140,34 +140,6 @@ export default function GestaoPage() {
           </button>
         </motion.div>
 
-        {/* ── SOPH CONSULTIVA ── */}
-        <motion.div variants={item} className="rounded-2xl border border-accent/30 bg-gradient-card p-6 lg:p-8 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
-          <div className="flex items-start gap-4 mb-5">
-            <div className="h-14 w-14 rounded-xl bg-gradient-primary-soft border border-primary/15 flex items-center justify-center flex-shrink-0 animate-float">
-              <Sparkles className="h-7 w-7 text-primary" />
-            </div>
-            <div>
-              <h2 className="font-display font-bold text-xl text-foreground mb-1">Soph está analisando sua gestão</h2>
-              <StatusBadge status="liberado" />
-            </div>
-          </div>
-
-          <div className="rounded-xl bg-muted/30 border border-border p-5 mb-5">
-            <p className="text-sm text-foreground leading-relaxed">
-              <span className="text-primary font-semibold">Insight:</span> Identifiquei que sua margem pode melhorar em alguns produtos. Revisar a precificação agora pode aumentar seu lucro em até 15% sem mudar o volume de vendas.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-3">
-            <button className="px-5 py-2.5 rounded-xl bg-gradient-primary-btn text-primary-foreground text-sm font-semibold hover:brightness-110 transition-all flex items-center gap-2">
-              Revisar Precificação <ArrowRight className="h-3.5 w-3.5" />
-            </button>
-            <button onClick={() => navigate("/soph")} className="px-5 py-2.5 rounded-xl border border-primary/20 bg-muted/30 text-foreground text-sm font-medium hover:border-primary/40 transition-all flex items-center gap-2">
-              <MessageCircle className="h-3.5 w-3.5 text-primary" /> Falar com a Soph
-            </button>
-          </div>
-        </motion.div>
 
         {/* ── DÚVIDAS FREQUENTES ── */}
         <motion.div variants={item} className="rounded-2xl border border-border bg-gradient-card p-6 lg:p-8">
@@ -251,25 +223,6 @@ export default function GestaoPage() {
           </div>
         </motion.div>
 
-        {/* ── ACESSOS RÁPIDOS ── */}
-        <motion.div variants={item} className="rounded-2xl border border-border bg-gradient-card p-6 lg:p-8">
-          <div className="flex items-center gap-3 mb-5">
-            <Zap className="h-5 w-5 text-primary" />
-            <h2 className="font-display font-bold text-lg text-foreground">Acessos Rápidos</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {[
-              { icon: FileText, label: "Gerar Relatório DRE" },
-              { icon: Users, label: "Contatos Clientes" },
-              { icon: Database, label: "Backup de Dados" },
-            ].map(a => (
-              <button key={a.label} className="flex items-center gap-3 p-4 rounded-xl border border-border bg-muted/20 hover:border-primary/30 hover:bg-muted/40 transition-all text-left group">
-                <a.icon className="h-5 w-5 text-primary flex-shrink-0" />
-                <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{a.label}</span>
-              </button>
-            ))}
-          </div>
-        </motion.div>
       </motion.div>
     </div>
   );
