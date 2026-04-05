@@ -172,15 +172,15 @@ export default function SophPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8">
       {/* Hero */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-3">
-        <div className="h-16 w-16 rounded-full border-2 border-primary/40 flex items-center justify-center mx-auto shadow-glow-sm overflow-hidden">
-          <img src={sophAvatar} alt="Soph" width={64} height={64} className="h-full w-full object-cover" />
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
+        <div className="h-28 w-28 rounded-full border-2 border-primary/40 flex items-center justify-center mx-auto shadow-glow overflow-hidden">
+          <img src={sophAvatar} alt="Soph" width={112} height={112} className="h-full w-full object-cover" />
         </div>
         <div>
           <h1 className="font-display text-xl lg:text-2xl font-bold text-white mb-1">
             Soph, sua <span className="text-gradient-primary">Sócia Digital</span>
           </h1>
-          <p className="text-xs text-white/60 max-w-md mx-auto leading-relaxed">
+          <p className="text-sm text-white max-w-md mx-auto leading-relaxed">
             Sua assistente estratégica para cada etapa do seu negócio.
           </p>
         </div>
@@ -198,12 +198,12 @@ export default function SophPage() {
                 <p className="text-sm font-semibold text-white">Conversa com a Soph</p>
                 <div className="flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  <p className="text-[10px] text-white/50">Online</p>
+                  <p className="text-[10px] text-white">Online</p>
                 </div>
               </div>
             </div>
 
-            <ScrollArea className="flex-1 p-5">
+            <ScrollArea className="flex-1 p-5 [&_[data-radix-scroll-area-scrollbar]]:bg-white/10 [&_[data-radix-scroll-area-thumb]]:bg-white">
               <div className="space-y-4">
                 {/* Welcome message (static, not in state) */}
                 <div className="flex justify-start">
@@ -225,7 +225,7 @@ export default function SophPage() {
                   >
                     <div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                       msg.role === "user"
-                        ? "bg-gradient-primary-btn text-white rounded-br-md shadow-[0_2px_12px_-2px_hsl(var(--primary)/0.4)]"
+                        ? "bg-gradient-primary-btn text-primary-foreground rounded-br-md shadow-[0_2px_12px_-2px_hsl(var(--primary)/0.4)]"
                         : "bg-[hsl(210,63%,14%)] text-white border border-primary/15 rounded-bl-md"
                     }`}>
                       {msg.role === "assistant" && (
@@ -252,7 +252,7 @@ export default function SophPage() {
                         <Sparkles className="h-3 w-3 text-primary" />
                         <span className="text-[11px] font-semibold text-gradient-primary">Soph</span>
                       </div>
-                      <div className="flex items-center gap-2 text-white/50">
+                      <div className="flex items-center gap-2 text-white">
                         <Loader2 className="h-3 w-3 animate-spin" />
                         <span className="text-xs">Pensando...</span>
                       </div>
@@ -272,7 +272,7 @@ export default function SophPage() {
                     key={q}
                     onClick={() => sendMessage(q)}
                     disabled={isLoading}
-                    className="px-3 py-1.5 rounded-full bg-[hsl(210,63%,14%)] border border-primary/15 text-[10px] text-white/60 font-medium hover:border-primary/30 hover:text-white/80 transition-all duration-200 cursor-pointer disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-full bg-[hsl(210,63%,14%)] border border-primary/15 text-[10px] text-white font-medium hover:border-primary/30 hover:text-primary transition-all duration-200 cursor-pointer disabled:opacity-50"
                   >
                     {q}
                   </button>
@@ -290,7 +290,7 @@ export default function SophPage() {
                   onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage(input)}
                   placeholder="Escreva sua dúvida..."
                   disabled={isLoading}
-                  className="flex-1 bg-[hsl(210,63%,14%)] border border-primary/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all disabled:opacity-50"
+                  className="flex-1 bg-[hsl(210,63%,14%)] border border-primary/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all disabled:opacity-50"
                 />
                 <button
                   onClick={() => sendMessage(input)}
@@ -323,9 +323,9 @@ export default function SophPage() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-medium text-white truncate">{s.label}</p>
-                      <p className="text-[10px] text-white/60 truncate">{s.desc}</p>
+                      <p className="text-[10px] text-white truncate">{s.desc}</p>
                     </div>
-                    <ArrowRight className="h-3 w-3 text-white/30 ml-auto flex-shrink-0 group-hover:text-primary transition-colors" />
+                    <ArrowRight className="h-3 w-3 text-white ml-auto flex-shrink-0 group-hover:text-primary transition-colors" />
                   </button>
                 );
               })}
