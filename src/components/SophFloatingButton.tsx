@@ -11,8 +11,8 @@ export function SophFloatingButton() {
   if (location.pathname === "/soph") return null;
 
   const quickActions = [
-    { label: "Por onde começo?", action: () => navigate("/soph") },
-    { label: "Me ajude a precificar", action: () => navigate("/soph") },
+    { label: "Por onde começo?", action: () => navigate("/soph", { state: { initialMessage: "Por onde começo?" } }) },
+    { label: "Me ajude a precificar", action: () => navigate("/soph", { state: { initialMessage: "Me ajude a precificar" } }) },
     { label: "Quero encontrar fornecedores", action: () => navigate("/fornecedores") },
     { label: "Conversar com a Soph", action: () => navigate("/soph") },
   ];

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Send, Package, FileText, Shield, Globe, ShoppingCart, DollarSign, BarChart3, Building2, ArrowRight, Loader2 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -34,12 +35,14 @@ export default function SophPage() {
   const { user } = useAuth();
   const { data: profile } = useProfile();
   const { hasActive: hasSubscription } = useSubscription();
+  const location = useLocation();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const initialMessageHandled = useRef(false);
 
   const userName = profile?.first_name || user?.email?.split("@")[0] || "";
 
@@ -164,6 +167,18 @@ export default function SophPage() {
       abortRef.current = null;
     }
   };
+
+  // Auto-send initial message from floating widget navigation
+  useEffect(() => {
+    const initialMessage = (location.state as any)?.initialMessage;
+    if (initialMessage && !initialMessageHandled.current) {
+      initialMessageHandled.current = true;
+      // Clear the state to prevent re-sending on re-render
+      window.history.replaceState({}, "");
+      // Small delay to ensure component is fully mounted
+      setTimeout(() => sendMessage(initialMessage), 100);
+    }
+  }, [location.state]);
 
   const greeting = userName
     ? `Olá, ${userName}! Sou a Soph, sua sócia digital. Como posso te ajudar hoje?`
