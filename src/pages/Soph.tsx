@@ -180,6 +180,7 @@ export default function SophPage() {
     }
   }, [location.state]);
 
+  const greeting = userName
     ? `Olá, ${userName}! Sou a Soph, sua sócia digital. Como posso te ajudar hoje?`
     : "Olá! Sou a Soph, sua sócia digital. Como posso te ajudar hoje?";
 
