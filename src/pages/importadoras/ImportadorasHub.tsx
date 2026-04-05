@@ -49,7 +49,11 @@ export default function ImportadorasHub() {
   const { favorites } = useSupabaseFavorites();
 
   const catCount = categories?.length ?? 0;
-  const supCount = suppliers?.length ?? 0;
+  const supCount = (() => {
+    const seen = new Set<string>();
+    (suppliers || []).forEach((s) => seen.add(s.nome_loja.toLowerCase()));
+    return seen.size;
+  })();
   const favCount = favorites?.length ?? 0;
 
   const stats = [

@@ -31,9 +31,11 @@ export function useSupabaseCategories() {
 
       if (catError) throw catError;
 
-      // Fetch supplier counts per category
+      // Fetch ALL supplier rows to count per category accurately
       const { data: suppliers, error: supError } = await supabase
-        .rpc("get_distinct_fornecedores");
+        .from("fornecedores")
+        .select("categoria")
+        .not("nome_loja", "is", null);
 
       if (supError) throw supError;
 
