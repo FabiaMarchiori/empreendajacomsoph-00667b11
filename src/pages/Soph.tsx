@@ -54,7 +54,7 @@ export default function SophPage() {
     const userContext = {
       userName,
       currentModule: "Soph (Assistente)",
-      hasSubscription: !!subscription,
+      hasSubscription,
     };
 
     const resp = await fetch(CHAT_URL, {
@@ -135,7 +135,7 @@ export default function SophPage() {
         } catch { /* ignore */ }
       }
     }
-  }, [userName, subscription]);
+  }, [userName, hasSubscription]);
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
