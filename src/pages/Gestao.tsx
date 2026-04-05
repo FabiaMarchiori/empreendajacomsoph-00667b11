@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import {
-  BarChart3, Star, MessageCircle, ArrowRight, Sparkles, TrendingUp,
-  AlertTriangle, DollarSign, Package, FileText, Users, Database,
-  ChevronDown, Activity, Percent, Calculator, HelpCircle, Zap, Loader2
+  BarChart3, Star, ArrowRight, TrendingUp,
+  AlertTriangle, DollarSign, Package,
+  ChevronDown, Activity, Percent, Calculator, HelpCircle, Loader2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
