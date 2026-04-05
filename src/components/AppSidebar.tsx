@@ -20,6 +20,7 @@ import {
   SidebarHeader,
   SidebarFooter,
   useSidebar,
+} from "@/components/ui/sidebar";
 import { SidebarAccountBlock } from "@/components/SidebarAccountBlock";
 
 const mainItems = [
