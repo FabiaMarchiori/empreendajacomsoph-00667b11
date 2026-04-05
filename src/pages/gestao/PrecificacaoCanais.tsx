@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
-  Search, Pencil, AlertTriangle, CreditCard, Tag, Truck, BarChart3, Plus,
+  Search, Pencil, AlertTriangle, CreditCard, Tag, Truck, BarChart3, Plus, Trash2,
   ShoppingCart, Zap, Globe, Smartphone, Store, CreditCard as CardIcon, Wallet
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
