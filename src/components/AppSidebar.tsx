@@ -6,7 +6,6 @@ import {
   BarChart3,
   MessageCircle,
   Key,
-  User,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -22,6 +21,7 @@ import {
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { SidebarAccountBlock } from "@/components/SidebarAccountBlock";
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
@@ -34,7 +34,6 @@ const mainItems = [
 const secondaryItems = [
   { title: "Soph, sua Sócia Digital", url: "/soph", icon: MessageCircle },
   { title: "Meus Acessos", url: "/acessos", icon: Key },
-  { title: "Conta / Plano", url: "/conta", icon: User },
 ];
 
 export function AppSidebar() {
@@ -114,24 +113,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-3">
-        {!collapsed && (
-          <div
-            className="rounded-xl p-4 border border-[#00EFFF]/20"
-            style={{ background: '#0A192F', borderColor: 'rgba(0,239,255,0.15)' }}
-          >
-            <div className="flex items-center gap-2.5 mb-2">
-              <div
-                className="h-8 w-8 rounded-lg flex items-center justify-center bg-gradient-primary-btn"
-              >
-                <MessageCircle className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="text-xs font-bold text-white">Soph diz:</span>
-            </div>
-            <p className="text-[11px] text-white/80 leading-relaxed font-medium">
-              "Precisa de ajuda? Estou aqui para te orientar!"
-            </p>
-          </div>
-        )}
+        <SidebarAccountBlock collapsed={collapsed} />
       </SidebarFooter>
     </Sidebar>
   );
