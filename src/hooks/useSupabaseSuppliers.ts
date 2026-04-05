@@ -27,7 +27,14 @@ export function useSupabaseSuppliers(categorySlug?: string) {
   return useQuery({
     queryKey: ["supabase-suppliers", categorySlug],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("get_distinct_fornecedores");
+      // Query the table directly to get ALL rows (each row = supplier+category pair)
+      const query = supabase
+        .from("fornecedores")
+        .select("*")
+        .not("nome_loja", "is", null)
+        .order("nome_loja");
+
+      const { data, error } = await query;
       if (error) throw error;
 
       const mapped = (data || []).map((s: any) => ({
