@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import {
   BarChart3, Star, ArrowRight, TrendingUp,
   AlertTriangle, DollarSign, Package,
-  ChevronDown, Activity, Percent, Calculator, HelpCircle, Loader2
+  ChevronDown, Activity, Percent, Calculator, HelpCircle, Loader2, Info
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -10,6 +10,9 @@ import { useState } from "react";
 import { useErpEntry } from "@/hooks/useErpEntry";
 import { useErpAccess } from "@/hooks/useErpAccess";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
 const item = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } };
@@ -26,6 +29,50 @@ export default function GestaoPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const { enterErp, isLoading: erpLoading } = useErpEntry();
   const { hasErpAccess, isLoading: accessLoading } = useErpAccess();
+  const { user } = useAuth();
+
+  const { data: simulations } = useQuery({
+    queryKey: ["pricing_simulations_dashboard", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data } = await supabase
+        .from("pricing_simulations")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      return data || [];
+    },
+    enabled: !!user?.id,
+  });
+
+  const { data: fixedCosts } = useQuery({
+    queryKey: ["pricing_fixed_costs_dashboard", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data } = await supabase
+        .from("pricing_fixed_costs")
+        .select("*")
+        .eq("user_id", user.id);
+      return data || [];
+    },
+    enabled: !!user?.id,
+  });
+
+  const hasSimulations = simulations && simulations.length > 0;
+  const hasCosts = fixedCosts && fixedCosts.length > 0;
+
+  // Real metrics from simulations
+  const totalRevenue = hasSimulations ? simulations.reduce((acc, s) => acc + (s.preco_sugerido || 0), 0) : 0;
+  const totalCost = hasSimulations ? simulations.reduce((acc, s) => acc + (s.custo_total || 0), 0) : 0;
+  const totalProfit = hasSimulations ? simulations.reduce((acc, s) => acc + (s.lucro_liquido || 0), 0) : 0;
+  const avgMargin = hasSimulations ? simulations.reduce((acc, s) => acc + (s.margem_final || 0), 0) / simulations.length : 0;
+  const totalFixedCosts = hasCosts ? fixedCosts.reduce((acc, c) => acc + (c.valor || 0), 0) : 0;
+
+  // Health score based on real data
+  const hasData = hasSimulations || hasCosts;
+  const precificacaoScore = hasSimulations ? (avgMargin > 20 ? 100 : avgMargin > 10 ? 70 : 40) : 0;
+  const custosScore = hasCosts ? 100 : 0;
+  const healthScore = hasData ? Math.round((precificacaoScore + custosScore) / 2) : 0;
 
   const handleErpClick = () => {
     if (!hasErpAccess) {
@@ -164,62 +211,94 @@ export default function GestaoPage() {
           </div>
         </motion.div>
 
-        {/* ── MÉTRICAS / DASHBOARD ── */}
+        {/* ── MÉTRICAS / DASHBOARD — DADOS REAIS ── */}
         <motion.div variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Fluxo de Caixa */}
+          {/* Fluxo de Caixa — dados reais de simulações */}
           <div className="rounded-2xl border border-primary/20 bg-gradient-card p-6 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
             <div className="flex items-center gap-3 mb-5">
               <Activity className="h-5 w-5 text-primary" />
-              <h3 className="font-display font-bold text-foreground">Fluxo de Caixa Mensal</h3>
+              <h3 className="font-display font-bold text-foreground">Resumo Financeiro</h3>
             </div>
-            <div className="space-y-3">
-              {[
-                { label: "Entradas", value: "R$ 12.450", pct: 78, color: "bg-emerald-500" },
-                { label: "Saídas", value: "R$ 8.320", pct: 52, color: "bg-red-400" },
-                { label: "Saldo", value: "R$ 4.130", pct: 100, color: "bg-primary" },
-              ].map(r => (
-                <div key={r.label}>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-muted-foreground">{r.label}</span>
-                    <span className="text-foreground font-semibold">{r.value}</span>
+            {hasSimulations ? (
+              <div className="space-y-3">
+                {[
+                  { label: "Receita estimada", value: `R$ ${totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, pct: 100, color: "bg-emerald-500" },
+                  { label: "Custos totais", value: `R$ ${totalCost.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, pct: totalRevenue > 0 ? Math.round((totalCost / totalRevenue) * 100) : 0, color: "bg-red-400" },
+                  { label: "Lucro estimado", value: `R$ ${totalProfit.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, pct: totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : 0, color: "bg-primary" },
+                ].map(r => (
+                  <div key={r.label}>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-muted-foreground">{r.label}</span>
+                      <span className="text-foreground font-semibold">{r.value}</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-muted/40 overflow-hidden">
+                      <motion.div initial={{ width: 0 }} animate={{ width: `${r.pct}%` }} transition={{ duration: 1, delay: 0.3 }} className={`h-full rounded-full ${r.color}`} />
+                    </div>
                   </div>
-                  <div className="h-2 rounded-full bg-muted/40 overflow-hidden">
-                    <motion.div initial={{ width: 0 }} animate={{ width: `${r.pct}%` }} transition={{ duration: 1, delay: 0.3 }} className={`h-full rounded-full ${r.color}`} />
-                  </div>
+                ))}
+                <div className="flex items-center gap-1.5 mt-2">
+                  <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                  <p className="text-[11px] text-muted-foreground">Baseado em {simulations.length} simulação(ões) de precificação</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <Activity className="h-8 w-8 text-muted-foreground/30 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground mb-1">Sem dados financeiros ainda</p>
+                <p className="text-xs text-muted-foreground/60">Crie simulações de precificação para ver seu resumo aqui</p>
+                <button onClick={() => navigate("/gestao/precificacao")} className="mt-3 text-xs text-primary hover:underline font-medium">
+                  Criar primeira simulação →
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* Saúde da Gestão */}
+          {/* Saúde da Gestão — dados reais */}
           <div className="rounded-2xl border border-primary/20 bg-gradient-card p-6 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
             <div className="flex items-center gap-3 mb-5">
               <BarChart3 className="h-5 w-5 text-primary" />
               <h3 className="font-display font-bold text-foreground">Saúde da Gestão</h3>
             </div>
-            <div className="flex items-center justify-center mb-4">
-              <div className="relative h-28 w-28">
-                <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
-                  <circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
-                  <motion.circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--primary))" strokeWidth="8" strokeLinecap="round" strokeDasharray={2 * Math.PI * 42} initial={{ strokeDashoffset: 2 * Math.PI * 42 }} animate={{ strokeDashoffset: 2 * Math.PI * 42 * 0.24 }} transition={{ duration: 1.2, delay: 0.3 }} />
-                </svg>
-                <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-2xl text-primary">76%</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-2 text-center text-xs">
-              {[
-                { label: "Financeiro", emoji: "✅" },
-                { label: "Estoque", emoji: "⚠️" },
-                { label: "Vendas", emoji: "✅" },
-              ].map(s => (
-                <div key={s.label} className="rounded-lg bg-muted/30 border border-border p-2">
-                  <span className="text-base">{s.emoji}</span>
-                  <p className="text-muted-foreground mt-1">{s.label}</p>
+            {hasData ? (
+              <>
+                <div className="flex items-center justify-center mb-4">
+                  <div className="relative h-28 w-28">
+                    <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
+                      <motion.circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--primary))" strokeWidth="8" strokeLinecap="round" strokeDasharray={2 * Math.PI * 42} initial={{ strokeDashoffset: 2 * Math.PI * 42 }} animate={{ strokeDashoffset: 2 * Math.PI * 42 * (1 - healthScore / 100) }} transition={{ duration: 1.2, delay: 0.3 }} />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-2xl text-primary">{healthScore}%</span>
+                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  {[
+                    { label: "Precificação", done: hasSimulations },
+                    { label: "Custos Fixos", done: hasCosts },
+                    { label: "ERP", done: hasErpAccess },
+                  ].map(s => (
+                    <div key={s.label} className="rounded-lg bg-muted/30 border border-border p-2">
+                      <span className="text-base">{s.done ? "✅" : "⚠️"}</span>
+                      <p className="text-muted-foreground mt-1">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5 mt-3">
+                  <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                  <p className="text-[11px] text-muted-foreground">Score calculado com base nos módulos configurados</p>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-6">
+                <BarChart3 className="h-8 w-8 text-muted-foreground/30 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground mb-1">Nenhum dado de gestão registrado</p>
+                <p className="text-xs text-muted-foreground/60">Configure custos fixos e crie simulações para acompanhar a saúde do negócio</p>
+                <button onClick={() => navigate("/gestao/precificacao")} className="mt-3 text-xs text-primary hover:underline font-medium">
+                  Começar a configurar →
+                </button>
+              </div>
+            )}
           </div>
         </motion.div>
 

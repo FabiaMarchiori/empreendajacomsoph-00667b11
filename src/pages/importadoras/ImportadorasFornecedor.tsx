@@ -22,7 +22,7 @@ export default function ImportadorasFornecedor() {
   if (!supplier || error) {
     return (
       <div className="p-4 max-w-3xl mx-auto text-center py-20">
-        <p className="text-white/50">Fornecedor não encontrado.</p>
+        <p className="text-white/50">Importadora não encontrada.</p>
         <button onClick={() => navigate(-1)} className="mt-4 text-primary text-sm hover:underline">Voltar</button>
       </div>
     );

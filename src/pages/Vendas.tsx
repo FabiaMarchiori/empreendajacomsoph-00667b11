@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Globe, ShoppingBag, ArrowRight, Circle, Camera, Star, Target, TrendingUp, Users } from "lucide-react";
+import { Globe, ShoppingBag, ArrowRight, Camera, Star, Target, TrendingUp } from "lucide-react";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
@@ -56,18 +56,6 @@ export default function VendasPage() {
         <p className="text-white text-sm lg:text-base max-w-2xl leading-relaxed">
           Não basta estar online. É preciso ser encontrado, gerar confiança e transformar presença digital em vendas reais.
         </p>
-        <div className="flex items-center gap-2 pt-1">
-          <div className="flex -space-x-2">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="h-7 w-7 rounded-full border-2 border-background flex items-center justify-center bg-gradient-primary-btn">
-                <Users className="h-3 w-3 text-primary-foreground" />
-              </div>
-            ))}
-          </div>
-          <p className="text-white text-xs font-medium">
-            Empreendedores já estão fortalecendo sua presença digital esta semana.
-          </p>
-        </div>
       </motion.div>
 
       {/* DOIS CAMINHOS */}

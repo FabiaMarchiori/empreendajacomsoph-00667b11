@@ -15,7 +15,7 @@ const navCards = [
   },
   {
     icon: <Search className="h-6 w-6" />,
-    title: "Buscar Fornecedores",
+    title: "Buscar Importadoras",
     desc: "Encontre pelo nome e acesse contato direto",
     route: "/fornecedores/importadoras-25/busca",
     accent: false,
@@ -23,14 +23,14 @@ const navCards = [
   {
     icon: <Heart className="h-6 w-6" />,
     title: "Meus Favoritos",
-    desc: "Acesse rapidamente os fornecedores que você salvou",
+    desc: "Acesse rapidamente as importadoras que você salvou",
     route: "/fornecedores/importadoras-25/favoritos",
     accent: false,
   },
   {
     icon: <ArrowLeft className="h-6 w-6" />,
     title: "Voltar para Central",
-    desc: "Retorne à Central de Fornecedores",
+    desc: "Retorne à Central de Importadoras",
     route: "/fornecedores",
     accent: false,
   },
@@ -38,7 +38,7 @@ const navCards = [
 
 const steps = [
   { num: "1", icon: <LayoutGrid className="h-4 w-4" />, text: "Explore categorias de produtos" },
-  { num: "2", icon: <Store className="h-4 w-4" />, text: "Encontre fornecedores ideais" },
+  { num: "2", icon: <Store className="h-4 w-4" />, text: "Encontre importadoras ideais" },
   { num: "3", icon: <Bookmark className="h-4 w-4" />, text: "Salve seus favoritos" },
 ];
 
@@ -54,7 +54,7 @@ export default function ImportadorasHub() {
 
   const stats = [
     { label: "Categorias", value: catCount },
-    { label: "Fornecedores", value: supCount },
+    { label: "Importadoras", value: supCount },
     { label: "Favoritos salvos", value: favCount },
   ];
 
@@ -70,8 +70,8 @@ export default function ImportadorasHub() {
           <span className="text-gradient-primary inline-block">25 de Março</span>
         </h1>
         <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
-          Sua central completa de fornecedores do maior polo de importados do Brasil.
-          Explore categorias, encontre contatos e monte sua carteira de fornecedores.
+          Sua central completa de importadoras do maior polo Comercial do Brasil.
+          Explore categorias, encontre contatos e monte sua carteira de Importadoras.
         </p>
       </motion.div>
 
