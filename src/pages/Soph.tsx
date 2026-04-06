@@ -61,12 +61,20 @@ export default function SophPage() {
       hasSubscription,
     };
 
-    // Get current session token — require authenticated user
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.access_token) {
-      throw new Error("Você precisa estar logado para conversar com a Soph.");
+    // Refresh session to ensure we have a valid, non-expired token
+    let token: string | undefined;
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (!sessionError && session?.access_token) {
+      token = session.access_token;
+    } else {
+      const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+      if (!refreshError && refreshData?.session?.access_token) {
+        token = refreshData.session.access_token;
+      }
     }
-    const token = session.access_token;
+    if (!token) {
+      throw new Error("Sua sessão expirou. Faça login novamente para conversar com a Soph.");
+    }
 
     const resp = await fetch(CHAT_URL, {
       method: "POST",

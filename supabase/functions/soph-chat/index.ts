@@ -21,16 +21,16 @@ async function authenticateUser(req: Request): Promise<{ userId: string } | Resp
     global: { headers: { Authorization: authHeader } },
   });
 
-  const token = authHeader.replace("Bearer ", "");
-  const { data, error } = await supabase.auth.getClaims(token);
-  if (error || !data?.claims) {
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error || !user) {
+    console.error("[soph-chat] Auth failed:", error?.message);
     return new Response(
       JSON.stringify({ error: "Sessão inválida. Faça login novamente." }),
       { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 
-  return { userId: data.claims.sub as string };
+  return { userId: user.id };
 }
 const SYSTEM_PROMPT = `Você é a Soph, sócia digital estratégica do Ecossistema EmpreendaJá com Soph.
 
