@@ -540,6 +540,7 @@ export type Database = {
           Whatsapp: string
         }[]
       }
+      get_is_admin: { Args: { _user_id: string }; Returns: boolean }
       has_active_subscription: {
         Args: { user_uuid?: string }
         Returns: boolean

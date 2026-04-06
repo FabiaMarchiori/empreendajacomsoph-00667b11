@@ -8,6 +8,7 @@ import { useProfile } from "@/hooks/useProfile";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 import sophAvatar from "@/assets/soph-avatar.png";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/soph-chat`;
@@ -60,11 +61,15 @@ export default function SophPage() {
       hasSubscription,
     };
 
+    // Get current session token for authenticated requests
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
     const resp = await fetch(CHAT_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
