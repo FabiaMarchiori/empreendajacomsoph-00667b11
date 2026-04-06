@@ -50,7 +50,7 @@ export default function ImportadorasCategorias() {
         </button>
         <div>
           <h1 className="font-display text-3xl lg:text-4xl font-extrabold text-white tracking-tight">Categorias</h1>
-          <p className="text-sm text-white mt-0.5">Escolha um nicho para explorar os fornecedores</p>
+          <p className="text-sm text-white mt-0.5">Escolha um nicho para explorar as importadoras</p>
         </div>
       </motion.div>
 
@@ -97,7 +97,7 @@ export default function ImportadorasCategorias() {
                 </div>
                 <div className="text-center">
                   <span className="text-xs font-semibold text-white block leading-tight">{cat.categoria}</span>
-                  <span className="text-[10px] text-white/70">{cat.count} fornecedores</span>
+                  <span className="text-[10px] text-white/70">{cat.count} importadoras</span>
                 </div>
               </motion.button>
             );

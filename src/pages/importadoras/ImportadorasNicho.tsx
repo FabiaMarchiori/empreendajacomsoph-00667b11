@@ -28,7 +28,7 @@ export default function ImportadorasNicho() {
         </button>
         <div>
           <h1 className="font-display text-2xl lg:text-3xl font-extrabold text-white tracking-tight">{category?.categoria || "Categoria"}</h1>
-          <p className="text-xs text-white/60">{filtered.length} fornecedores encontrados</p>
+          <p className="text-xs text-white/60">{filtered.length} importadoras encontradas</p>
         </div>
       </motion.div>
 
@@ -53,7 +53,7 @@ export default function ImportadorasNicho() {
 
       {!isLoading && filtered.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-white/50 text-sm">Nenhum fornecedor encontrado nesta categoria.</p>
+          <p className="text-white/50 text-sm">Nenhuma importadora encontrada nesta categoria.</p>
         </div>
       )}
 

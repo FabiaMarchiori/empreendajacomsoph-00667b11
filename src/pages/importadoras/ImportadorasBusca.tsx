@@ -23,7 +23,7 @@ export default function ImportadorasBusca() {
           <ArrowLeft className="h-4 w-4" />
         </button>
         <div>
-          <h1 className="font-display text-2xl lg:text-3xl font-extrabold text-white tracking-tight">Buscar Fornecedores</h1>
+          <h1 className="font-display text-2xl lg:text-3xl font-extrabold text-white tracking-tight">Buscar Importadoras</h1>
           <p className="text-xs text-white/60">Digite pelo menos 2 letras para buscar</p>
         </div>
       </motion.div>
@@ -33,7 +33,7 @@ export default function ImportadorasBusca() {
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           <input
             type="text"
-            placeholder="Nome do fornecedor..."
+            placeholder="Nome da importadora..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus
@@ -50,7 +50,7 @@ export default function ImportadorasBusca() {
 
       {!isLoading && filtered.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-white/50 text-sm">Nenhum fornecedor encontrado para "{search}".</p>
+          <p className="text-white/50 text-sm">Nenhuma importadora encontrada para "{search}".</p>
         </div>
       )}
 

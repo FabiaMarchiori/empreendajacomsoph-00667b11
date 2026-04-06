@@ -148,8 +148,8 @@ export default function FornecedoresPage() {
           <span className="text-white">Central de </span>
           <span className="text-gradient-primary inline-block">Fornecedores</span>
         </h1>
-        <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
-          Acesse as maiores importadoras, fornecedores, e polos calçadistas para ampliar suas margens e encontrar novas oportunidades para o seu negócio.
+         <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
+          Acesse as maiores importadoras e polos calçadistas para ampliar suas margens e encontrar novas oportunidades para o seu negócio.
         </p>
       </motion.div>
 
@@ -159,7 +159,7 @@ export default function FornecedoresPage() {
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           <input
             type="text"
-            placeholder="Buscar fornecedores..."
+            placeholder="Buscar importadoras..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-xl border border-border bg-card pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50"
@@ -200,7 +200,7 @@ export default function FornecedoresPage() {
       {/* Grid */}
       {filtered.length === 0 && isSearching ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
-          <p className="text-white/50 text-sm">Nenhum fornecedor encontrado para "<span className="text-white/70">{search}</span>".</p>
+          <p className="text-white/50 text-sm">Nenhuma importadora encontrada para "<span className="text-white/70">{search}</span>".</p>
           <button onClick={() => setSearch("")} className="mt-3 text-xs text-primary hover:underline font-medium">Limpar busca</button>
         </motion.div>
       ) : (

@@ -21,7 +21,7 @@ export default function ImportadorasFavoritos() {
         </button>
         <div>
           <h1 className="font-display text-2xl lg:text-3xl font-extrabold text-white tracking-tight">Meus Favoritos</h1>
-          <p className="text-xs text-white/60">{favSuppliers.length} fornecedores salvos</p>
+          <p className="text-xs text-white/60">{favSuppliers.length} importadoras salvas</p>
         </div>
       </motion.div>
 
@@ -35,7 +35,7 @@ export default function ImportadorasFavoritos() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
           <Heart className="h-12 w-12 text-white/20 mx-auto mb-4" />
           <p className="text-white/50 text-sm mb-2">Nenhum favorito salvo ainda.</p>
-          <p className="text-white/30 text-xs">Clique no coração nos fornecedores para salvar aqui.</p>
+          <p className="text-white/30 text-xs">Clique no coração nas importadoras para salvar aqui.</p>
         </motion.div>
       )}
 
