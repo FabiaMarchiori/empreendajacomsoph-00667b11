@@ -44,7 +44,7 @@ const tips = [
 
 export default function VendasPage() {
   return (
-    <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-10">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-8 sm:space-y-10">
       {/* HERO */}
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
         <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
@@ -59,7 +59,7 @@ export default function VendasPage() {
       </motion.div>
 
       {/* DOIS CAMINHOS */}
-      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         {pathCards.map((card) => (
           <motion.div
             key={card.title}
@@ -115,7 +115,7 @@ export default function VendasPage() {
           <h2 className="font-display font-bold text-lg text-white">Dicas de Especialista</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {tips.map((tip) => (
             <div key={tip.title} className="rounded-xl border border-border/60 p-5 bg-gradient-card hover:border-primary/20 transition-all">
               <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3 bg-gradient-primary-btn text-primary-foreground">

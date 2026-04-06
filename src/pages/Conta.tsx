@@ -143,7 +143,7 @@ export default function ContaPage() {
       <PasswordChangeModal open={passwordModalOpen} onClose={() => setPasswordModalOpen(false)} />
 
       {/* Hero */}
-      <motion.div variants={itemVariants} className="flex items-center justify-between">
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-1">Conta / Plano</h1>
           <p className="text-sm text-white">
