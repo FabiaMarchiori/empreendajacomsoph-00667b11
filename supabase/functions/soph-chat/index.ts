@@ -73,6 +73,10 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Authenticate user
+    const authResult = await authenticateUser(req);
+    if (authResult instanceof Response) return authResult;
+
     const { messages, userContext } = await req.json();
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
