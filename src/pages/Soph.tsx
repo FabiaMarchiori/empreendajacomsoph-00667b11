@@ -61,9 +61,12 @@ export default function SophPage() {
       hasSubscription,
     };
 
-    // Get current session token for authenticated requests
+    // Get current session token — require authenticated user
     const { data: { session } } = await supabase.auth.getSession();
-    const token = session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (!session?.access_token) {
+      throw new Error("Você precisa estar logado para conversar com a Soph.");
+    }
+    const token = session.access_token;
 
     const resp = await fetch(CHAT_URL, {
       method: "POST",
