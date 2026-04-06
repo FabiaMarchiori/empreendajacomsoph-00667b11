@@ -122,7 +122,7 @@ export default function AcessosPage() {
       <section>
         <h2 className="font-display font-bold text-lg text-white mb-1">Seu produto principal</h2>
         <p className="text-sm text-white mb-4">O acesso principal que você adquiriu</p>
-        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {produtoPrincipal.map(a => (
             <GridCard key={a.title} item={a} isPrimary />
           ))}
@@ -133,7 +133,7 @@ export default function AcessosPage() {
       <section>
         <h2 className="font-display font-bold text-lg text-white mb-1">Brindes inclusos no seu acesso</h2>
         <p className="text-sm text-white mb-4">Módulos e ferramentas liberados como benefício do seu plano</p>
-        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {brindes.map(a => (
             <GridCard key={a.title} item={a} />
           ))}
@@ -144,7 +144,7 @@ export default function AcessosPage() {
       <section>
         <h2 className="font-display font-bold text-lg text-white mb-1">Em breve</h2>
         <p className="text-sm text-white mb-4">Novos módulos e catálogos que serão lançados no ecossistema</p>
-        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {allEmBreve.map(a => (
             <GridCard key={a.title} item={a} />
           ))}
@@ -152,7 +152,7 @@ export default function AcessosPage() {
       </section>
 
       {/* ── SUPORTE + SOPH ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* SUPORTE */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-border/60 bg-gradient-card p-5 flex flex-col gap-4">
           <div className="flex items-center gap-3">

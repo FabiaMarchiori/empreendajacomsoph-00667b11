@@ -173,7 +173,7 @@ export default function DominioSitePage() {
   const chips = ["Domínio", "Hospedagem", "Wix", "Google Sites", "WordPress", "Canva Sites"];
 
   return (
-    <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-10">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-8 sm:space-y-10">
       {/* NAV */}
       <Link to="/vendas" className="inline-flex items-center gap-2 text-sm text-white hover:text-primary transition-colors">
         <ArrowLeft className="h-4 w-4" /> Voltar para Vendas e Presença
@@ -216,7 +216,7 @@ export default function DominioSitePage() {
           <span className="text-gradient-primary text-sm font-bold">{doneItems}/{totalItems} concluídos</span>
         </div>
         <Progress value={pct} className="h-3" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {journeySteps.map((s) => {
             const sp = stepProgress(s.key);
             return (
@@ -232,7 +232,7 @@ export default function DominioSitePage() {
       {/* POR QUE SEU NEGÓCIO PRECISA DE UM SITE */}
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
         <h2 className="font-display font-bold text-xl text-white">Por que seu negócio precisa de um site?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {whyCards.map((c) => (
             <motion.div key={c.title} variants={item} className="rounded-xl border border-border/60 p-5 bg-gradient-card hover:border-primary/30 transition-all">
               <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3 bg-gradient-primary-btn text-primary-foreground">
@@ -265,7 +265,7 @@ export default function DominioSitePage() {
         checked={checked}
         onCheck={toggle}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
           <div className="rounded-xl border border-primary/20 p-5 bg-gradient-card">
             <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3 bg-gradient-primary-btn text-primary-foreground">
               <Globe className="h-5 w-5" />
@@ -288,7 +288,7 @@ export default function DominioSitePage() {
 
         <div className="mt-5">
           <h4 className="font-display font-bold text-sm text-white mb-3">Terminações de domínio</h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {terminacoes.map((t) => (
               <div key={t.ext} className="rounded-lg border border-border/60 p-3 bg-muted/20 text-center">
                 <p className="text-gradient-primary text-sm font-bold mb-1">{t.ext}</p>
@@ -319,8 +319,8 @@ export default function DominioSitePage() {
         checked={checked}
         onCheck={toggle}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
-          <div className="rounded-xl border border-green-500/20 p-5 bg-gradient-card">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+            <div className="rounded-xl border border-green-500/20 p-5 bg-gradient-card">
             <h4 className="font-display font-bold text-sm text-white mb-3 flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-green-400" /> Boas práticas
             </h4>
@@ -344,7 +344,7 @@ export default function DominioSitePage() {
 
         <div className="mt-5">
           <h4 className="font-display font-bold text-sm text-white mb-3">Ferramentas para verificar e registrar</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {domainTools.map((t) => (
               <div key={t.name} className="rounded-xl border border-border/60 p-4 bg-gradient-card flex flex-col">
                 <p className="text-white text-sm font-bold mb-1">{t.name}</p>
@@ -359,7 +359,7 @@ export default function DominioSitePage() {
 
         <div className="rounded-xl border border-primary/20 p-5 bg-gradient-card mt-5">
           <h4 className="font-display font-bold text-sm text-white mb-2">Domínio grátis x domínio próprio</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
             <div className="rounded-lg border border-border/40 p-4 bg-muted/10">
               <p className="text-gradient-primary text-xs font-bold mb-2">DOMÍNIO GRÁTIS</p>
               <p className="text-white text-xs leading-relaxed">Ex: suamarca.wixsite.com — funcional, mas sem credibilidade profissional. Bom para testes.</p>
@@ -385,7 +385,7 @@ export default function DominioSitePage() {
       >
         <div className="mt-5">
           <h4 className="font-display font-bold text-sm text-white mb-3">Plataformas para criar seu site</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {platforms.map((p) => (
               <div key={p.name} className="rounded-xl border border-border/60 p-5 bg-gradient-card hover:border-primary/30 transition-all flex flex-col">
                 <h5 className="font-display font-bold text-base text-gradient-primary mb-2">{p.name}</h5>
@@ -427,7 +427,7 @@ export default function DominioSitePage() {
       >
         <div className="mt-5">
           <h4 className="font-display font-bold text-sm text-white mb-3">Ferramentas de SEO e presença local</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {seoTools.map((t) => (
               <div key={t.name} className="rounded-xl border border-border/60 p-4 bg-gradient-card flex flex-col">
                 <p className="text-white text-sm font-bold mb-0.5">{t.name}</p>
@@ -461,7 +461,7 @@ export default function DominioSitePage() {
         {toolGroups.map((group) => (
           <div key={group.title} className="space-y-3">
             <h3 className="font-display font-bold text-sm text-gradient-primary">{group.title}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {group.items.map((t) => (
                 <div key={t.name} className="rounded-xl border border-border/60 p-4 bg-gradient-card hover:border-primary/20 transition-all flex flex-col">
                   <p className="text-white text-sm font-bold mb-0.5">{t.name}</p>

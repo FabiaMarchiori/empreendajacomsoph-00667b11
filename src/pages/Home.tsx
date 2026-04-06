@@ -228,7 +228,7 @@ export default function HomePage() {
       {/* Bloco 6 — Ações rápidas */}
       <motion.section variants={container} initial="hidden" animate="show">
       <motion.div variants={item}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
               { label: "Último acesso", icon: <RotateCcw className="h-4 w-4" />, action: () => {
                 const last = localStorage.getItem("empreendaja_last_page");

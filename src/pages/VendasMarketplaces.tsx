@@ -214,7 +214,7 @@ export default function VendasMarketplacesPage() {
   };
 
   return (
-    <div className="p-6 lg:p-8 max-w-5xl mx-auto space-y-12 pb-20">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-8 sm:space-y-12 pb-20">
       {/* BACK */}
       <Link to="/vendas" className="inline-flex items-center gap-2 text-white text-sm hover:text-primary transition-colors">
         <ArrowLeft className="h-4 w-4" /> Voltar para Vendas e Presença
@@ -225,7 +225,7 @@ export default function VendasMarketplacesPage() {
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-gradient-primary inline-block">
           MÓDULO ESTRATÉGICO
         </p>
-        <h1 className="font-display text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]">
+        <h1 className="font-display text-2xl sm:text-3xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]">
           <span className="text-white">Como vender em{" "}</span>
           <br />
           <span
@@ -286,11 +286,11 @@ export default function VendasMarketplacesPage() {
           <Progress value={progressPct} className="h-3 bg-muted" />
 
           {/* Timeline steps */}
-          <div className="relative flex items-start justify-between pt-4">
+        <div className="relative flex flex-col sm:flex-row items-start sm:items-start justify-between pt-4 gap-4 sm:gap-0">
             {/* Connecting line */}
-            <div className="absolute top-[2.25rem] left-[calc(16.66%)] right-[calc(16.66%)] h-0.5 bg-border" />
+            <div className="absolute top-[2.25rem] left-[calc(16.66%)] right-[calc(16.66%)] h-0.5 bg-border hidden sm:block" />
             <div
-              className="absolute top-[2.25rem] left-[calc(16.66%)] h-0.5 transition-all duration-500"
+              className="absolute top-[2.25rem] left-[calc(16.66%)] h-0.5 transition-all duration-500 hidden sm:block"
               style={{
                 background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)",
                 width: progressPct >= 100
@@ -307,7 +307,7 @@ export default function VendasMarketplacesPage() {
               const status = getStageStatus(i);
               const sp = stageProgress(i);
               return (
-                <div key={i} className="flex flex-col items-center text-center flex-1 relative z-10">
+                <div key={i} className="flex flex-row sm:flex-col items-center sm:text-center flex-1 relative z-10 gap-3 sm:gap-0">
                   <div
                     className={`h-10 w-10 rounded-full flex items-center justify-center text-base font-bold mb-3 border-2 transition-all ${
                       status === "done"
@@ -338,7 +338,7 @@ export default function VendasMarketplacesPage() {
           <h2 className="font-display font-bold text-2xl text-white">Onde começar a vender?</h2>
           <span className="text-xs text-white font-medium hidden md:block">Deslize para ver todos →</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {marketplaces.map((mp) => (
             <motion.div
               key={mp.name}
@@ -480,7 +480,7 @@ export default function VendasMarketplacesPage() {
           <h2 className="font-display font-bold text-2xl text-white">Estratégias para Vencer</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
           {/* Top sellers */}
           <div className="rounded-2xl border border-border p-6 space-y-4" style={{ background: "linear-gradient(135deg, #102A43 0%, #0A192F 100%)" }}>
             <div className="flex items-center gap-2">
@@ -589,7 +589,7 @@ export default function VendasMarketplacesPage() {
         </div>
 
         {/* Stats */}
-        <div className="flex justify-center gap-10 pt-4">
+        <div className="flex justify-center gap-6 sm:gap-10 pt-4">
           {[
             { value: "45min", label: "TEMPO MÉDIO" },
             { value: "8", label: "AULAS EM VÍDEO" },

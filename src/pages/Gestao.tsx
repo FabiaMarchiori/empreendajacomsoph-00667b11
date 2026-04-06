@@ -83,7 +83,7 @@ export default function GestaoPage() {
   };
 
   return (
-    <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8">
       {/* ── HERO ── */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
         <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
@@ -212,7 +212,7 @@ export default function GestaoPage() {
         </motion.div>
 
         {/* ── MÉTRICAS / DASHBOARD — DADOS REAIS ── */}
-        <motion.div variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Fluxo de Caixa — dados reais de simulações */}
           <div className="rounded-2xl border border-primary/20 bg-gradient-card p-6 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />

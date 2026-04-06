@@ -84,7 +84,7 @@ export default function EstruturePage() {
   const isPrimaryOpen = openGuide === 0;
 
   return (
-    <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8">
       {/* Hero */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
         <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
