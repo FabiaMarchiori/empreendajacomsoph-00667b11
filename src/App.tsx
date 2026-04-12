@@ -34,6 +34,7 @@ import TermosPage from "./pages/Termos";
 import PrivacidadePage from "./pages/Privacidade";
 import CookiesPage from "./pages/Cookies";
 import NotFound from "./pages/NotFound";
+import ObrigadoPage from "./pages/Obrigado";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/obrigado" element={<ObrigadoPage />} />
             <Route element={<AppLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/fornecedores" element={<FornecedoresPage />} />
