@@ -49,7 +49,7 @@ export default function ObrigadoPage() {
           </Link>
 
           <a
-            href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20acabei%20de%20comprar%20e%20preciso%20de%20ajuda%20com%20o%20acesso."
+            href="https://wa.me/5511983348749?text=Preciso%20de%20ajuda"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-medium text-sm border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all"
