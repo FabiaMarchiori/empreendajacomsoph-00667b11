@@ -23,6 +23,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SidebarAccountBlock } from "@/components/SidebarAccountBlock";
+import logoOficial from "@/assets/logo-oficial.png";
+import iconeOficial from "@/assets/icone-oficial.png";
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
@@ -85,16 +87,11 @@ export function AppSidebar() {
         background: 'linear-gradient(180deg, #041329 0%, #030E1F 100%)',
       }}
     >
-      <SidebarHeader className="p-5">
+      <SidebarHeader className="p-5 flex items-center justify-center">
         {!collapsed ? (
-          <div className="flex flex-col">
-            <span className="font-display font-extrabold text-2xl text-white tracking-tight leading-tight">
-              EmpreendaJá
-            </span>
-            <span className="text-base font-bold text-gradient-primary">com Soph</span>
-          </div>
+          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-10 w-auto object-contain" />
         ) : (
-          <span className="font-display font-extrabold text-xs text-white text-center w-full">EJ</span>
+          <img src={iconeOficial} alt="EmpreendaJá" className="h-8 w-8 object-contain" />
         )}
       </SidebarHeader>
 

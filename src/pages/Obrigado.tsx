@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import logoOficial from "@/assets/logo-oficial.png";
 
 export default function ObrigadoPage() {
   return (
@@ -14,9 +15,12 @@ export default function ObrigadoPage() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-lg text-center"
       >
-        {/* Icon */}
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/30">
-          <CheckCircle className="h-10 w-10 text-primary" />
+        {/* Logo */}
+        <div className="mx-auto mb-6">
+          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-10 w-auto mx-auto object-contain mb-4" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/30">
+            <CheckCircle className="h-8 w-8 text-primary" />
+          </div>
         </div>
 
         {/* Title */}
