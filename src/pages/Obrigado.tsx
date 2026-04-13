@@ -17,7 +17,7 @@ export default function ObrigadoPage() {
       >
         {/* Logo */}
         <div className="mx-auto mb-6">
-          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-10 w-auto mx-auto object-contain mb-4" />
+          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-16 w-auto max-w-[260px] mx-auto object-contain mb-4" />
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/30">
             <CheckCircle className="h-8 w-8 text-primary" />
           </div>

@@ -49,7 +49,7 @@ export default function LoginPage() {
         {/* Logo / Brand */}
         <div className="text-center mb-8">
           <div className="mb-4">
-            <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-10 w-auto mx-auto object-contain" />
+            <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-16 w-auto max-w-[260px] mx-auto object-contain" />
           </div>
           <h1 className="font-display text-2xl font-extrabold text-white">
             {isSignUp ? "Crie sua conta" : "Acesse sua conta"}
