@@ -23,6 +23,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SidebarAccountBlock } from "@/components/SidebarAccountBlock";
+import logoOficial from "@/assets/logo-oficial.png";
+import iconeOficial from "@/assets/icone-oficial.png";
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
