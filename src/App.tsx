@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AppLayout } from "@/components/AppLayout";
 import LoginPage from "./pages/Login";
+import AuthCallback from "./pages/AuthCallback";
 import HomePage from "./pages/Home";
 import FornecedoresPage from "./pages/Fornecedores";
 import ImportadorasHub from "./pages/importadoras/ImportadorasHub";
@@ -47,6 +48,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/obrigado" element={<ObrigadoPage />} />
             <Route element={<AppLayout />}>
               <Route path="/" element={<HomePage />} />
