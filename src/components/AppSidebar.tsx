@@ -89,9 +89,9 @@ export function AppSidebar() {
     >
       <SidebarHeader className="p-5 flex items-center justify-center">
         {!collapsed ? (
-          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-10 w-auto object-contain" />
+          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-14 w-auto max-w-[180px] object-contain flex-shrink-0" />
         ) : (
-          <img src={iconeOficial} alt="EmpreendaJá" className="h-8 w-8 object-contain" />
+          <img src={iconeOficial} alt="EmpreendaJá" className="h-10 w-10 object-contain flex-shrink-0" />
         )}
       </SidebarHeader>
 
