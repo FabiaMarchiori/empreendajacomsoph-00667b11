@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import logoOficial from "@/assets/logo-oficial.png";
+import logoOficial from "@/assets/logo-oficial-cropped.png";
 
 export default function LoginPage() {
   const { signIn, signUp } = useAuth();
