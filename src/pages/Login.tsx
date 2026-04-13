@@ -2,8 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from "lucide-react";
+import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import logoOficial from "@/assets/logo-oficial.png";
 
 export default function LoginPage() {
   const { signIn, signUp } = useAuth();
@@ -47,9 +48,8 @@ export default function LoginPage() {
       >
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="font-display text-xl font-bold text-white">EmpreendaJá</span>
+          <div className="mb-4">
+            <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-10 w-auto mx-auto object-contain" />
           </div>
           <h1 className="font-display text-2xl font-extrabold text-white">
             {isSignUp ? "Crie sua conta" : "Acesse sua conta"}
