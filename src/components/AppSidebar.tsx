@@ -23,7 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SidebarAccountBlock } from "@/components/SidebarAccountBlock";
-import logoOficial from "@/assets/logo-oficial.png";
+import logoOficialCropped from "@/assets/logo-oficial-cropped.png";
 import iconeOficial from "@/assets/icone-oficial.png";
 
 const mainItems = [
@@ -89,7 +89,7 @@ export function AppSidebar() {
     >
       <SidebarHeader className="p-5 flex items-center justify-center">
         {!collapsed ? (
-          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-14 w-auto max-w-[180px] object-contain flex-shrink-0" />
+          <img src={logoOficialCropped} alt="EmpreendaJá com Soph" className="h-12 w-auto max-w-[200px] object-contain flex-shrink-0" />
         ) : (
           <img src={iconeOficial} alt="EmpreendaJá" className="h-10 w-10 object-contain flex-shrink-0" />
         )}
