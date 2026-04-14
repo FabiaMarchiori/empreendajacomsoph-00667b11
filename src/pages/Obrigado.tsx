@@ -43,8 +43,8 @@ export default function ObrigadoPage() {
         {/* Logo */}
         <div className="mx-auto mb-6">
           <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-20 w-auto max-w-[300px] mx-auto object-contain mb-4" />
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/30">
-            <CheckCircle className="h-8 w-8 text-primary" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 ring-2 ring-primary/40" style={{ boxShadow: '0 0 20px hsl(184 100% 50% / 0.2)' }}>
+            <CheckCircle className="h-8 w-8 text-primary drop-shadow-[0_0_6px_hsl(184,100%,50%,0.4)]" />
           </div>
         </div>
 
