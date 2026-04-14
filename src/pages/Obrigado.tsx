@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink } from "lucide-react";
+import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
+import { useInstallPWA } from "@/hooks/useInstallPWA";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 const LOGIN_URL = "https://appempreendajacomsoph.netlify.app/login";
 const WHATSAPP_URL = "https://wa.me/5511983348749?text=Suporte%20App%20ecossistema%20Soph";
@@ -10,6 +18,8 @@ const INSTAGRAM_URL = "https://www.instagram.com/fornecedoresda25ebras";
 
 export default function ObrigadoPage() {
   const [copied, setCopied] = useState(false);
+  const [showIOSModal, setShowIOSModal] = useState(false);
+  const { canInstall, isInstalled, isIOS, install } = useInstallPWA();
 
   const handleCopy = async () => {
     try {
@@ -17,7 +27,6 @@ export default function ObrigadoPage() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      // fallback
       const input = document.createElement("input");
       input.value = LOGIN_URL;
       document.body.appendChild(input);
@@ -26,6 +35,12 @@ export default function ObrigadoPage() {
       document.body.removeChild(input);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  const handleInstallClick = async () => {
+    if (canInstall) {
+      await install();
     }
   };
 
@@ -78,29 +93,70 @@ export default function ObrigadoPage() {
           </Link>
         </div>
 
-        {/* ── Bloco 1: Instalar o App ── */}
+        {/* ── Bloco 1: Instalar o App (DESTAQUE) ── */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.15 }}
-          className="rounded-2xl border border-primary/15 bg-card/70 backdrop-blur p-5 mb-4 text-left" style={{ boxShadow: '0 0 14px -4px hsl(184 100% 50% / 0.06)' }}
+          className="relative rounded-2xl border-2 border-primary/40 bg-card/80 backdrop-blur p-6 mb-4 text-left overflow-hidden"
+          style={{ boxShadow: '0 0 28px -4px hsl(184 100% 50% / 0.15), 0 0 8px -2px hsl(184 100% 50% / 0.1)' }}
         >
-          <div className="flex items-center gap-2.5 mb-2.5">
-            <Smartphone className="h-6 w-6 text-primary drop-shadow-[0_0_5px_hsl(184,100%,50%,0.35)]" />
-            <h2 className="text-sm font-extrabold text-white tracking-tight">Acesse com mais facilidade</h2>
+          {/* Glow accent bar */}
+          <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, hsl(184 100% 50% / 0.6), transparent)' }} />
+
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/30" style={{ boxShadow: '0 0 14px hsl(184 100% 50% / 0.2)' }}>
+              <Download className="h-6 w-6 text-primary drop-shadow-[0_0_6px_hsl(184,100%,50%,0.5)]" />
+            </div>
+            <div>
+              <h2 className="text-base font-extrabold text-white tracking-tight">Baixe o app no celular</h2>
+              <p className="text-[11px] text-primary/80 font-semibold">Acesso rápido direto da tela inicial</p>
+            </div>
           </div>
-          <p className="text-xs text-white/80 leading-relaxed mb-3">
-            Adicione o Ecossistema à tela inicial do seu celular para entrar mais rápido sempre que precisar.
+
+          <p className="text-xs text-white/80 leading-relaxed mb-4">
+            Instale o Ecossistema no seu celular para abrir sempre que precisar — rápido, sem precisar de navegador.
           </p>
-          <div className="space-y-1.5 text-xs text-white/70">
-            <p>
-              <span className="font-bold text-white">Android:</span>{" "}
-              menu do navegador → <span className="text-primary font-semibold">Instalar app</span>
-            </p>
-            <p>
-              <span className="font-bold text-white">iPhone:</span>{" "}
-              Compartilhar → <span className="text-primary font-semibold">Adicionar à Tela de Início</span>
-            </p>
+
+          {/* Botões de instalação */}
+          <div className="flex flex-col gap-2.5">
+            {/* Android / Desktop - Instalar app */}
+            {isInstalled ? (
+              <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-primary bg-primary/10 border border-primary/30">
+                <Check className="h-5 w-5" />
+                App já instalado
+              </div>
+            ) : canInstall ? (
+              <button
+                onClick={handleInstallClick}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
+              >
+                <Download className="h-5 w-5" />
+                Instalar app
+              </button>
+            ) : !isIOS ? (
+              <button
+                onClick={() => {}}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)] cursor-default"
+                style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
+              >
+                <Smartphone className="h-5 w-5" />
+                Android: Menu ▸ Instalar app
+              </button>
+            ) : null}
+
+            {/* iPhone - Adicionar à Tela de Início */}
+            {isIOS || !canInstall ? (
+              <button
+                onClick={() => setShowIOSModal(true)}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                style={{ background: 'linear-gradient(135deg, hsl(220 60% 35%), hsl(200 70% 40%), hsl(184 80% 42%))' }}
+              >
+                <PlusSquare className="h-5 w-5" />
+                {isIOS ? "Adicionar à Tela de Início" : "iPhone: Adicionar à Tela de Início"}
+              </button>
+            ) : null}
           </div>
         </motion.div>
 
@@ -177,6 +233,57 @@ export default function ObrigadoPage() {
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Modal de instrução iOS */}
+      <Dialog open={showIOSModal} onOpenChange={setShowIOSModal}>
+        <DialogContent className="max-w-sm border-primary/20 bg-[#0f2233]" style={{ boxShadow: '0 0 40px -8px hsl(184 100% 50% / 0.15)' }}>
+          <DialogHeader>
+            <DialogTitle className="text-white text-lg font-extrabold flex items-center gap-2">
+              <Smartphone className="h-5 w-5 text-primary" />
+              Instalar no iPhone
+            </DialogTitle>
+            <DialogDescription className="text-white/70 text-sm">
+              Siga estes dois passos para adicionar o app à sua tela inicial:
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 mt-2">
+            {/* Passo 1 */}
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">
+                1
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white">Toque em Compartilhar</p>
+                <p className="text-xs text-white/60 mt-0.5">
+                  No Safari, toque no ícone <Share className="inline h-3.5 w-3.5 text-primary align-text-bottom" /> na barra inferior do navegador.
+                </p>
+              </div>
+            </div>
+
+            {/* Passo 2 */}
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">
+                2
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white">Adicionar à Tela de Início</p>
+                <p className="text-xs text-white/60 mt-0.5">
+                  Role as opções e toque em <span className="text-primary font-semibold">"Adicionar à Tela de Início"</span>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowIOSModal(false)}
+            className="mt-4 w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110"
+            style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(190 100% 45%))' }}
+          >
+            Entendi
+          </button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
