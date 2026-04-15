@@ -130,43 +130,45 @@ export default function ObrigadoPage() {
             Adicione o Ecossistema para abrir mais rápido sempre que precisar — direto do computador ou da tela inicial do celular.
           </p>
 
-          {/* Botões de instalação */}
+          {/* Botões de instalação — 3 caminhos */}
           <div className="flex flex-col gap-2.5">
             {isInstalled ? (
               <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-primary bg-primary/10 border border-primary/30">
                 <Check className="h-5 w-5" />
                 App já instalado
               </div>
-            ) : canInstall ? (
-              <button
-                onClick={handleInstallClick}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
-                style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
-              >
-                <Download className="h-5 w-5" />
-                {isIOS ? "Instalar app" : /Mobi|Android/i.test(navigator.userAgent) ? "Instalar app" : "Instalar app no computador"}
-              </button>
-            ) : !isIOS ? (
-              <button
-                onClick={() => {}}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)] cursor-default"
-                style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
-              >
-                <Smartphone className="h-5 w-5" />
-                {/Mobi|Android/i.test(navigator.userAgent) ? "Android: Menu ▸ Instalar app" : "Menu do navegador ▸ Instalar app"}
-              </button>
-            ) : null}
+            ) : (
+              <>
+                {/* Computador */}
+                <button
+                  onClick={handleDesktopInstall}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                  style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
+                >
+                  <Monitor className="h-5 w-5" />
+                  Computador: Instalar app
+                </button>
 
-            {/* iPhone - Adicionar à Tela de Início */}
-            {isIOS && (
-              <button
-                onClick={() => setShowIOSModal(true)}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
-                style={{ background: 'linear-gradient(135deg, hsl(220 60% 35%), hsl(200 70% 40%), hsl(184 80% 42%))' }}
-              >
-                <PlusSquare className="h-5 w-5" />
-                Adicionar à Tela de Início
-              </button>
+                {/* Android */}
+                <button
+                  onClick={handleAndroidInstall}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                  style={{ background: 'linear-gradient(135deg, hsl(160 60% 35%), hsl(170 70% 40%), hsl(184 80% 42%))' }}
+                >
+                  <Smartphone className="h-5 w-5" />
+                  Android: Instalar app
+                </button>
+
+                {/* iPhone */}
+                <button
+                  onClick={() => setShowIOSModal(true)}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                  style={{ background: 'linear-gradient(135deg, hsl(220 60% 35%), hsl(200 70% 40%), hsl(184 80% 42%))' }}
+                >
+                  <PlusSquare className="h-5 w-5" />
+                  iPhone: Adicionar à Tela de Início
+                </button>
+              </>
             )}
           </div>
         </motion.div>
