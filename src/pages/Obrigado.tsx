@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare } from "lucide-react";
+import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useInstallPWA } from "@/hooks/useInstallPWA";
@@ -19,6 +19,8 @@ const INSTAGRAM_URL = "https://www.instagram.com/fornecedoresda25ebras";
 export default function ObrigadoPage() {
   const [copied, setCopied] = useState(false);
   const [showIOSModal, setShowIOSModal] = useState(false);
+  const [showDesktopModal, setShowDesktopModal] = useState(false);
+  const [showAndroidModal, setShowAndroidModal] = useState(false);
   const { canInstall, isInstalled, isIOS, install } = useInstallPWA();
 
   const handleCopy = async () => {
@@ -38,9 +40,19 @@ export default function ObrigadoPage() {
     }
   };
 
-  const handleInstallClick = async () => {
+  const handleDesktopInstall = async () => {
     if (canInstall) {
       await install();
+    } else {
+      setShowDesktopModal(true);
+    }
+  };
+
+  const handleAndroidInstall = async () => {
+    if (canInstall) {
+      await install();
+    } else {
+      setShowAndroidModal(true);
     }
   };
 
@@ -118,43 +130,45 @@ export default function ObrigadoPage() {
             Adicione o Ecossistema para abrir mais rápido sempre que precisar — direto do computador ou da tela inicial do celular.
           </p>
 
-          {/* Botões de instalação */}
+          {/* Botões de instalação — 3 caminhos */}
           <div className="flex flex-col gap-2.5">
             {isInstalled ? (
               <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-primary bg-primary/10 border border-primary/30">
                 <Check className="h-5 w-5" />
                 App já instalado
               </div>
-            ) : canInstall ? (
-              <button
-                onClick={handleInstallClick}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
-                style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
-              >
-                <Download className="h-5 w-5" />
-                {isIOS ? "Instalar app" : /Mobi|Android/i.test(navigator.userAgent) ? "Instalar app" : "Instalar app no computador"}
-              </button>
-            ) : !isIOS ? (
-              <button
-                onClick={() => {}}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)] cursor-default"
-                style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
-              >
-                <Smartphone className="h-5 w-5" />
-                {/Mobi|Android/i.test(navigator.userAgent) ? "Android: Menu ▸ Instalar app" : "Menu do navegador ▸ Instalar app"}
-              </button>
-            ) : null}
+            ) : (
+              <>
+                {/* Computador */}
+                <button
+                  onClick={handleDesktopInstall}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                  style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
+                >
+                  <Monitor className="h-5 w-5" />
+                  Computador: Instalar app
+                </button>
 
-            {/* iPhone - Adicionar à Tela de Início */}
-            {isIOS && (
-              <button
-                onClick={() => setShowIOSModal(true)}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
-                style={{ background: 'linear-gradient(135deg, hsl(220 60% 35%), hsl(200 70% 40%), hsl(184 80% 42%))' }}
-              >
-                <PlusSquare className="h-5 w-5" />
-                Adicionar à Tela de Início
-              </button>
+                {/* Android */}
+                <button
+                  onClick={handleAndroidInstall}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                  style={{ background: 'linear-gradient(135deg, hsl(160 60% 35%), hsl(170 70% 40%), hsl(184 80% 42%))' }}
+                >
+                  <Smartphone className="h-5 w-5" />
+                  Android: Instalar app
+                </button>
+
+                {/* iPhone */}
+                <button
+                  onClick={() => setShowIOSModal(true)}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
+                  style={{ background: 'linear-gradient(135deg, hsl(220 60% 35%), hsl(200 70% 40%), hsl(184 80% 42%))' }}
+                >
+                  <PlusSquare className="h-5 w-5" />
+                  iPhone: Adicionar à Tela de Início
+                </button>
+              </>
             )}
           </div>
         </motion.div>
@@ -279,6 +293,73 @@ export default function ObrigadoPage() {
             className="mt-4 w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110"
             style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(190 100% 45%))' }}
           >
+            Entendi
+          </button>
+        </DialogContent>
+      </Dialog>
+      {/* Modal de instrução Desktop */}
+      <Dialog open={showDesktopModal} onOpenChange={setShowDesktopModal}>
+        <DialogContent className="max-w-sm border-primary/20 bg-[#0f2233]" style={{ boxShadow: '0 0 40px -8px hsl(184 100% 50% / 0.15)' }}>
+          <DialogHeader>
+            <DialogTitle className="text-white text-lg font-extrabold flex items-center gap-2">
+              <Monitor className="h-5 w-5 text-primary" />
+              Instalar no Computador
+            </DialogTitle>
+            <DialogDescription className="text-white/70 text-sm">
+              Siga estes passos para instalar o app no seu computador:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">1</div>
+              <div>
+                <p className="text-sm font-bold text-white">Abra o menu do navegador</p>
+                <p className="text-xs text-white/60 mt-0.5">No Chrome, clique nos <span className="text-primary font-semibold">três pontos (⋮)</span> no canto superior direito.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">2</div>
+              <div>
+                <p className="text-sm font-bold text-white">Clique em "Instalar app"</p>
+                <p className="text-xs text-white/60 mt-0.5">Procure a opção <span className="text-primary font-semibold">"Instalar EmpreendaJá…"</span> ou <span className="text-primary font-semibold">"Instalar app"</span>.</p>
+              </div>
+            </div>
+          </div>
+          <button onClick={() => setShowDesktopModal(false)} className="mt-4 w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110" style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(190 100% 45%))' }}>
+            Entendi
+          </button>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de instrução Android */}
+      <Dialog open={showAndroidModal} onOpenChange={setShowAndroidModal}>
+        <DialogContent className="max-w-sm border-primary/20 bg-[#0f2233]" style={{ boxShadow: '0 0 40px -8px hsl(184 100% 50% / 0.15)' }}>
+          <DialogHeader>
+            <DialogTitle className="text-white text-lg font-extrabold flex items-center gap-2">
+              <Smartphone className="h-5 w-5 text-primary" />
+              Instalar no Android
+            </DialogTitle>
+            <DialogDescription className="text-white/70 text-sm">
+              Siga estes passos para instalar o app no seu celular:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">1</div>
+              <div>
+                <p className="text-sm font-bold text-white">Abra o menu do navegador</p>
+                <p className="text-xs text-white/60 mt-0.5">No Chrome, toque nos <span className="text-primary font-semibold">três pontos (⋮)</span> no canto superior direito.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">2</div>
+              <div>
+                <p className="text-sm font-bold text-white">Toque em "Instalar app"</p>
+                <p className="text-xs text-white/60 mt-0.5">Selecione <span className="text-primary font-semibold">"Instalar app"</span> ou <span className="text-primary font-semibold">"Adicionar à tela inicial"</span>.</p>
+              </div>
+            </div>
+          </div>
+          <button onClick={() => setShowAndroidModal(false)} className="mt-4 w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110" style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(190 100% 45%))' }}>
             Entendi
           </button>
         </DialogContent>
