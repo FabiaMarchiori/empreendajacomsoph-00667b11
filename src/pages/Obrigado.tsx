@@ -21,7 +21,7 @@ export default function ObrigadoPage() {
   const [showIOSModal, setShowIOSModal] = useState(false);
   const [showDesktopModal, setShowDesktopModal] = useState(false);
   const [showAndroidModal, setShowAndroidModal] = useState(false);
-  const { canInstall, isInstalled, isIOS, install } = useInstallPWA();
+  const { canInstall, isInstalled, isAndroid, isDesktop, install, serviceWorker, desktopFallback, androidFallback } = useInstallPWA();
 
   const handleCopy = async () => {
     try {
@@ -41,19 +41,21 @@ export default function ObrigadoPage() {
   };
 
   const handleDesktopInstall = async () => {
-    if (canInstall) {
+    if (canInstall && isDesktop) {
       await install();
-    } else {
-      setShowDesktopModal(true);
+      return;
     }
+
+    setShowDesktopModal(true);
   };
 
   const handleAndroidInstall = async () => {
-    if (canInstall) {
+    if (canInstall && isAndroid) {
       await install();
-    } else {
-      setShowAndroidModal(true);
+      return;
     }
+
+    setShowAndroidModal(true);
   };
 
   return (
@@ -306,24 +308,36 @@ export default function ObrigadoPage() {
               Instalar no Computador
             </DialogTitle>
             <DialogDescription className="text-white/70 text-sm">
-              Siga estes passos para instalar o app no seu computador:
+              {desktopFallback.description}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-2">
-            <div className="flex items-start gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">1</div>
-              <div>
-                <p className="text-sm font-bold text-white">Abra o menu do navegador</p>
-                <p className="text-xs text-white/60 mt-0.5">No Chrome, clique nos <span className="text-primary font-semibold">três pontos (⋮)</span> no canto superior direito.</p>
+            <div className="rounded-xl border border-primary/20 bg-background/40 p-4">
+              <p className="text-sm font-bold text-white">{desktopFallback.title}</p>
+              {desktopFallback.hint ? (
+                <p className="text-xs text-white/60 mt-1.5 leading-relaxed">{desktopFallback.hint}</p>
+              ) : null}
+            </div>
+
+            <div className="rounded-xl border border-border/50 bg-background/30 p-4 space-y-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">Diagnóstico desta sessão</p>
+              <div className="flex items-center justify-between gap-3 text-xs">
+                <span className="text-white/70">Service worker</span>
+                <span className={`font-semibold ${serviceWorker.active || serviceWorker.ready || serviceWorker.controlling ? "text-primary" : "text-white/60"}`}>
+                  {serviceWorker.active || serviceWorker.ready || serviceWorker.controlling ? "Ativo" : "Ainda não ativo"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-3 text-xs">
+                <span className="text-white/70">Prompt nativo</span>
+                <span className={`font-semibold ${canInstall && isDesktop ? "text-primary" : "text-white/60"}`}>
+                  {canInstall && isDesktop ? "Disponível" : "Ainda não liberado"}
+                </span>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">2</div>
-              <div>
-                <p className="text-sm font-bold text-white">Clique em "Instalar app"</p>
-                <p className="text-xs text-white/60 mt-0.5">Procure a opção <span className="text-primary font-semibold">"Instalar EmpreendaJá…"</span> ou <span className="text-primary font-semibold">"Instalar app"</span>.</p>
-              </div>
-            </div>
+
+            <p className="text-[11px] leading-relaxed text-white/50">
+              No computador, a instalação real aparece apenas na versão publicada do app e em navegadores compatíveis, como Chrome ou Edge.
+            </p>
           </div>
           <button onClick={() => setShowDesktopModal(false)} className="mt-4 w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110" style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(190 100% 45%))' }}>
             Entendi
@@ -340,10 +354,16 @@ export default function ObrigadoPage() {
               Instalar no Android
             </DialogTitle>
             <DialogDescription className="text-white/70 text-sm">
-              Siga estes passos para instalar o app no seu celular:
+              {androidFallback.description}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-2">
+            <div className="rounded-xl border border-primary/20 bg-background/40 p-4">
+              <p className="text-sm font-bold text-white">{androidFallback.title}</p>
+              {androidFallback.hint ? (
+                <p className="text-xs text-white/60 mt-1.5 leading-relaxed">{androidFallback.hint}</p>
+              ) : null}
+            </div>
             <div className="flex items-start gap-3">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary font-extrabold text-sm ring-1 ring-primary/30">1</div>
               <div>

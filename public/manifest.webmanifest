@@ -1,8 +1,10 @@
 {
+  "id": "/",
   "name": "EmpreendaJá com Soph",
   "short_name": "EmpreendaJá",
   "description": "Ecossistema completo para empreendedores brasileiros",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0A192F",
   "theme_color": "#0A192F",
