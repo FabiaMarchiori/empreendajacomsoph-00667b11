@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare } from "lucide-react";
+import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useInstallPWA } from "@/hooks/useInstallPWA";
@@ -19,6 +19,8 @@ const INSTAGRAM_URL = "https://www.instagram.com/fornecedoresda25ebras";
 export default function ObrigadoPage() {
   const [copied, setCopied] = useState(false);
   const [showIOSModal, setShowIOSModal] = useState(false);
+  const [showDesktopModal, setShowDesktopModal] = useState(false);
+  const [showAndroidModal, setShowAndroidModal] = useState(false);
   const { canInstall, isInstalled, isIOS, install } = useInstallPWA();
 
   const handleCopy = async () => {
@@ -38,9 +40,19 @@ export default function ObrigadoPage() {
     }
   };
 
-  const handleInstallClick = async () => {
+  const handleDesktopInstall = async () => {
     if (canInstall) {
       await install();
+    } else {
+      setShowDesktopModal(true);
+    }
+  };
+
+  const handleAndroidInstall = async () => {
+    if (canInstall) {
+      await install();
+    } else {
+      setShowAndroidModal(true);
     }
   };
 
