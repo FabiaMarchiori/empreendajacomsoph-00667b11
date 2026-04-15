@@ -109,18 +109,17 @@ export default function ObrigadoPage() {
               <Download className="h-6 w-6 text-primary drop-shadow-[0_0_6px_hsl(184,100%,50%,0.5)]" />
             </div>
             <div>
-              <h2 className="text-base font-extrabold text-white tracking-tight">Baixe o app no celular</h2>
-              <p className="text-[11px] text-primary/80 font-semibold">Acesso rápido direto da tela inicial</p>
+              <h2 className="text-base font-extrabold text-white tracking-tight">Instale o app e acesse com mais facilidade</h2>
+              <p className="text-[11px] text-primary/80 font-semibold">No computador ou no celular</p>
             </div>
           </div>
 
           <p className="text-xs text-white/80 leading-relaxed mb-4">
-            Instale o Ecossistema no seu celular para abrir sempre que precisar — rápido, sem precisar de navegador.
+            Adicione o Ecossistema para abrir mais rápido sempre que precisar — direto do computador ou da tela inicial do celular.
           </p>
 
           {/* Botões de instalação */}
           <div className="flex flex-col gap-2.5">
-            {/* Android / Desktop - Instalar app */}
             {isInstalled ? (
               <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-primary bg-primary/10 border border-primary/30">
                 <Check className="h-5 w-5" />
@@ -133,7 +132,7 @@ export default function ObrigadoPage() {
                 style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
               >
                 <Download className="h-5 w-5" />
-                Instalar app
+                {isIOS ? "Instalar app" : /Mobi|Android/i.test(navigator.userAgent) ? "Instalar app" : "Instalar app no computador"}
               </button>
             ) : !isIOS ? (
               <button
@@ -142,21 +141,21 @@ export default function ObrigadoPage() {
                 style={{ background: 'linear-gradient(135deg, hsl(184 100% 40%), hsl(184 80% 50%), hsl(190 100% 45%))' }}
               >
                 <Smartphone className="h-5 w-5" />
-                Android: Menu ▸ Instalar app
+                {/Mobi|Android/i.test(navigator.userAgent) ? "Android: Menu ▸ Instalar app" : "Menu do navegador ▸ Instalar app"}
               </button>
             ) : null}
 
             {/* iPhone - Adicionar à Tela de Início */}
-            {isIOS || !canInstall ? (
+            {isIOS && (
               <button
                 onClick={() => setShowIOSModal(true)}
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all hover:brightness-110 hover:shadow-[0_0_20px_-4px_hsl(184,100%,50%,0.35)]"
                 style={{ background: 'linear-gradient(135deg, hsl(220 60% 35%), hsl(200 70% 40%), hsl(184 80% 42%))' }}
               >
                 <PlusSquare className="h-5 w-5" />
-                {isIOS ? "Adicionar à Tela de Início" : "iPhone: Adicionar à Tela de Início"}
+                Adicionar à Tela de Início
               </button>
-            ) : null}
+            )}
           </div>
         </motion.div>
 
