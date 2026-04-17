@@ -19,23 +19,39 @@ export default function ForgotPasswordPage() {
     if (!email) return;
 
     setLoading(true);
-    console.log("[ForgotPassword] Enviando reset para:", email, "redirectTo:", RESET_REDIRECT_URL);
+    console.log("[ForgotPassword] → Enviando reset para:", email);
+    console.log("[ForgotPassword] → redirectTo:", RESET_REDIRECT_URL);
+    console.log("[ForgotPassword] → origin atual:", window.location.origin);
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: RESET_REDIRECT_URL,
-    });
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: RESET_REDIRECT_URL,
+      });
 
-    setLoading(false);
+      setLoading(false);
 
-    if (error) {
-      console.error("[ForgotPassword] Erro:", error);
-      toast.error(error.message || "Não foi possível enviar o e-mail. Tente novamente.");
-      return;
+      if (error) {
+        console.error("[ForgotPassword] ✗ Erro Supabase:", error);
+        toast.error(error.message || "Não foi possível enviar o e-mail. Tente novamente.");
+        return;
+      }
+
+      console.log("[ForgotPassword] ✓ E-mail enviado com sucesso.");
+      setSent(true);
+      toast.success("E-mail de recuperação enviado!");
+    } catch (err: any) {
+      setLoading(false);
+      console.error("[ForgotPassword] ✗ Erro de rede/fetch:", err);
+      const isPreview = window.location.hostname.includes("lovable.app");
+      if (err?.message === "Failed to fetch" && isPreview) {
+        toast.error(
+          "Não funciona no preview do Lovable. Teste no domínio publicado: appempreendajacomsoph.netlify.app/forgot-password",
+          { duration: 8000 }
+        );
+      } else {
+        toast.error(err?.message || "Erro de conexão. Verifique sua internet e tente novamente.");
+      }
     }
-
-    console.log("[ForgotPassword] E-mail enviado com sucesso.");
-    setSent(true);
-    toast.success("E-mail de recuperação enviado!");
   };
 
   return (
