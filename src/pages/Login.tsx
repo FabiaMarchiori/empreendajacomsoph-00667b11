@@ -175,13 +175,21 @@ export default function LoginPage() {
             {googleLoading ? "Conectando..." : "Entrar com Google"}
           </button>
 
-          <div className="mt-4 text-center">
+          <div className="mt-4 text-center space-y-2">
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm text-primary hover:underline"
+              className="text-sm text-primary hover:underline block w-full"
             >
               {isSignUp ? "Já tem conta? Entrar" : "Não tem conta? Criar agora"}
             </button>
+            {!isSignUp && (
+              <button
+                onClick={() => navigate("/forgot-password")}
+                className="text-xs text-white/60 hover:text-white hover:underline block w-full"
+              >
+                Esqueci minha senha
+              </button>
+            )}
           </div>
         </div>
       </motion.div>
