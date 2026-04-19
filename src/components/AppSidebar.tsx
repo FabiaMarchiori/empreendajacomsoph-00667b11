@@ -87,11 +87,19 @@ export function AppSidebar() {
         background: 'linear-gradient(180deg, #041329 0%, #030E1F 100%)',
       }}
     >
-      <SidebarHeader className="p-5 flex items-center justify-center">
-        {!collapsed ? (
-          <img src={logoOficialCropped} alt="EmpreendaJá com Soph" className="h-16 w-auto max-w-[240px] object-contain flex-shrink-0" />
+      <SidebarHeader className={`flex items-center justify-center overflow-hidden ${collapsed ? "p-2" : "p-5"}`}>
+        {collapsed ? (
+          <img
+            src={iconeOficial}
+            alt="EmpreendaJá"
+            className="h-9 w-9 object-contain flex-shrink-0"
+          />
         ) : (
-          <img src={iconeOficial} alt="EmpreendaJá" className="h-10 w-10 object-contain flex-shrink-0" />
+          <img
+            src={logoOficialCropped}
+            alt="EmpreendaJá com Soph"
+            className="h-16 w-auto max-w-full object-contain flex-shrink-0"
+          />
         )}
       </SidebarHeader>
 
