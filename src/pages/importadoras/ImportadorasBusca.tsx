@@ -12,9 +12,23 @@ export default function ImportadorasBusca() {
   const { toggle, isFavorite } = useSupabaseFavorites();
   const { data: allSuppliers, isLoading } = useSupabaseSuppliers();
 
-  const filtered = search.length >= 2
+  const base = search.length >= 2
     ? (allSuppliers || []).filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
     : (allSuppliers || []);
+
+  // Deduplica por id — mantém a primeira ocorrência e consolida categorias
+  const dedupMap = new Map<number, typeof base[number] & { categorias: string[] }>();
+  for (const s of base) {
+    const existing = dedupMap.get(s.id);
+    if (existing) {
+      if (s.categoria && !existing.categorias.includes(s.categoria)) {
+        existing.categorias.push(s.categoria);
+      }
+    } else {
+      dedupMap.set(s.id, { ...s, categorias: s.categoria ? [s.categoria] : [] });
+    }
+  }
+  const filtered = Array.from(dedupMap.values());
 
   return (
     <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
