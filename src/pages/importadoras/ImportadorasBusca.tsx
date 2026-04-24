@@ -85,11 +85,11 @@ export default function ImportadorasBusca() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
           {filtered.map((s) => (
             <SupplierCircle
-              key={s.id}
+              key={s.allIds.join("-")}
               id={String(s.id)}
               name={s.nome_loja}
               logo={s.logo_url || undefined}
-              isFavorite={isFavorite(s.id)}
+              isFavorite={s.allIds.some((id) => isFavorite(id))}
               onToggleFavorite={() => toggle(s.id)}
             />
           ))}
