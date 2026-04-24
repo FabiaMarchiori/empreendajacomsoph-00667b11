@@ -16,19 +16,32 @@ export default function ImportadorasBusca() {
     ? (allSuppliers || []).filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
     : (allSuppliers || []);
 
-  // Deduplica por id — mantém a primeira ocorrência e consolida categorias
-  const dedupMap = new Map<number, typeof base[number] & { categorias: string[] }>();
+  // Normaliza nome para chave de agrupamento (lowercase + sem acentos + trim)
+  const normalize = (n: string) =>
+    n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+  // Deduplica por nome_loja — cada fornecedor aparece 1x mesmo com múltiplas categorias/IDs
+  type Grouped = typeof base[number] & { categorias: string[]; allIds: number[] };
+  const dedupMap = new Map<string, Grouped>();
   for (const s of base) {
-    const existing = dedupMap.get(s.id);
+    const key = normalize(s.nome_loja);
+    const existing = dedupMap.get(key);
     if (existing) {
       if (s.categoria && !existing.categorias.includes(s.categoria)) {
         existing.categorias.push(s.categoria);
       }
+      if (!existing.allIds.includes(s.id)) existing.allIds.push(s.id);
     } else {
-      dedupMap.set(s.id, { ...s, categorias: s.categoria ? [s.categoria] : [] });
+      dedupMap.set(key, {
+        ...s,
+        categorias: s.categoria ? [s.categoria] : [],
+        allIds: [s.id],
+      });
     }
   }
-  const filtered = Array.from(dedupMap.values());
+  const filtered = Array.from(dedupMap.values()).sort((a, b) =>
+    a.nome_loja.localeCompare(b.nome_loja, "pt-BR")
+  );
 
   return (
     <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
@@ -72,11 +85,11 @@ export default function ImportadorasBusca() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
           {filtered.map((s) => (
             <SupplierCircle
-              key={s.id}
+              key={s.allIds.join("-")}
               id={String(s.id)}
               name={s.nome_loja}
               logo={s.logo_url || undefined}
-              isFavorite={isFavorite(s.id)}
+              isFavorite={s.allIds.some((id) => isFavorite(id))}
               onToggleFavorite={() => toggle(s.id)}
             />
           ))}
