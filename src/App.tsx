@@ -18,6 +18,7 @@ import ImportadorasFornecedor from "./pages/importadoras/ImportadorasFornecedor"
 import ImportadorasBusca from "./pages/importadoras/ImportadorasBusca";
 import ImportadorasFavoritos from "./pages/importadoras/ImportadorasFavoritos";
 import BolsasProtected from "./pages/bolsas/BolsasProtected";
+import EcosystemProtected from "./components/EcosystemProtected";
 import BolsasHub from "./pages/bolsas/BolsasHub";
 import BolsasLista from "./pages/bolsas/BolsasLista";
 import BolsasBusca from "./pages/bolsas/BolsasBusca";
@@ -62,33 +63,33 @@ const App = () => (
             <Route element={<AppLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/fornecedores" element={<FornecedoresPage />} />
-              <Route path="/fornecedores/importadoras-25" element={<ImportadorasHub />} />
-              <Route path="/fornecedores/importadoras-25/categorias" element={<ImportadorasCategorias />} />
-              <Route path="/fornecedores/importadoras-25/categoria/:slug" element={<ImportadorasNicho />} />
-              <Route path="/fornecedores/importadoras-25/fornecedor/:id" element={<ImportadorasFornecedor />} />
-              <Route path="/fornecedores/importadoras-25/busca" element={<ImportadorasBusca />} />
-              <Route path="/fornecedores/importadoras-25/favoritos" element={<ImportadorasFavoritos />} />
+              <Route path="/fornecedores/importadoras-25" element={<EcosystemProtected><ImportadorasHub /></EcosystemProtected>} />
+              <Route path="/fornecedores/importadoras-25/categorias" element={<EcosystemProtected><ImportadorasCategorias /></EcosystemProtected>} />
+              <Route path="/fornecedores/importadoras-25/categoria/:slug" element={<EcosystemProtected><ImportadorasNicho /></EcosystemProtected>} />
+              <Route path="/fornecedores/importadoras-25/fornecedor/:id" element={<EcosystemProtected><ImportadorasFornecedor /></EcosystemProtected>} />
+              <Route path="/fornecedores/importadoras-25/busca" element={<EcosystemProtected><ImportadorasBusca /></EcosystemProtected>} />
+              <Route path="/fornecedores/importadoras-25/favoritos" element={<EcosystemProtected><ImportadorasFavoritos /></EcosystemProtected>} />
               {/* Nicho: Bolsas, Mochilas e Malas */}
               <Route path="/fornecedores/bolsas-mochilas-malas" element={<BolsasProtected><BolsasHub /></BolsasProtected>} />
               <Route path="/fornecedores/bolsas-mochilas-malas/lista" element={<BolsasProtected><BolsasLista /></BolsasProtected>} />
               <Route path="/fornecedores/bolsas-mochilas-malas/busca" element={<BolsasProtected><BolsasBusca /></BolsasProtected>} />
               <Route path="/fornecedores/bolsas-mochilas-malas/favoritos" element={<BolsasProtected><BolsasFavoritos /></BolsasProtected>} />
               <Route path="/fornecedores/bolsas-mochilas-malas/fornecedor/:id" element={<BolsasProtected><ImportadorasFornecedor /></BolsasProtected>} />
-              <Route path="/estruture" element={<EstruturePage />} />
-              <Route path="/vendas" element={<VendasPage />} />
-              <Route path="/vendas/marketplaces" element={<VendasMarketplacesPage />} />
-              <Route path="/vendas/dominio-site" element={<DominioSitePage />} />
-              <Route path="/estrutura/abrir-mei" element={<AbrirMeiPage />} />
-              <Route path="/estrutura/logo-marca" element={<LogoMarcaPage />} />
-              <Route path="/estrutura/registrar-marca" element={<RegistrarMarcaPage />} />
-              <Route path="/gestao" element={<GestaoPage />} />
-              <Route path="/gestao/precificacao" element={<PricingLayout />}>
+              <Route path="/estruture" element={<EcosystemProtected><EstruturePage /></EcosystemProtected>} />
+              <Route path="/vendas" element={<EcosystemProtected><VendasPage /></EcosystemProtected>} />
+              <Route path="/vendas/marketplaces" element={<EcosystemProtected><VendasMarketplacesPage /></EcosystemProtected>} />
+              <Route path="/vendas/dominio-site" element={<EcosystemProtected><DominioSitePage /></EcosystemProtected>} />
+              <Route path="/estrutura/abrir-mei" element={<EcosystemProtected><AbrirMeiPage /></EcosystemProtected>} />
+              <Route path="/estrutura/logo-marca" element={<EcosystemProtected><LogoMarcaPage /></EcosystemProtected>} />
+              <Route path="/estrutura/registrar-marca" element={<EcosystemProtected><RegistrarMarcaPage /></EcosystemProtected>} />
+              <Route path="/gestao" element={<EcosystemProtected><GestaoPage /></EcosystemProtected>} />
+              <Route path="/gestao/precificacao" element={<EcosystemProtected><PricingLayout /></EcosystemProtected>}>
                 <Route index element={<PrecificacaoHub />} />
                 <Route path="simulador" element={<PrecificacaoSimulador />} />
                 <Route path="canais" element={<PrecificacaoCanais />} />
                 <Route path="configuracoes" element={<PrecificacaoConfiguracoes />} />
               </Route>
-              <Route path="/soph" element={<SophPage />} />
+              <Route path="/soph" element={<EcosystemProtected><SophPage /></EcosystemProtected>} />
               <Route path="/acessos" element={<AcessosPage />} />
               <Route path="/conta" element={<ContaPage />} />
               <Route path="/termos" element={<TermosPage />} />
