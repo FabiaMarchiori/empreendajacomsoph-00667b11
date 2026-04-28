@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 const categories = [
   { label: "Todos", key: "Todos" },
   { label: "25 de Março", key: "Importadoras 25 de Março" },
+  { label: "Bolsas, Mochilas e Malas", key: "Bolsas, Mochilas e Malas" },
   { label: "Moda Brás", key: "Moda Brás" },
   { label: "Calçados", key: "Calçados Atacadistas" },
   { label: "Semi-jóias", key: "Semi-jóias de Limeira" },
@@ -23,6 +24,16 @@ const suppliers = [
     icon: <Package className="h-5 w-5" />,
     isPremium: true,
     route: "/fornecedores/importadoras-25",
+  },
+  // Nicho Bolsas, Mochilas e Malas
+  {
+    title: "Bolsas, Mochilas e Malas",
+    desc: "Fornecedores curados do nicho de bolsas, mochilas e malas",
+    status: "liberado" as const,
+    cat: "Bolsas, Mochilas e Malas",
+    icon: <ShoppingBag className="h-5 w-5" />,
+    isPremium: true,
+    route: "/fornecedores/bolsas-mochilas-malas",
   },
   // Moda Brás subcards
   {

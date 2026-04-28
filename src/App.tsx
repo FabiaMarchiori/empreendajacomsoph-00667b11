@@ -17,6 +17,11 @@ import ImportadorasNicho from "./pages/importadoras/ImportadorasNicho";
 import ImportadorasFornecedor from "./pages/importadoras/ImportadorasFornecedor";
 import ImportadorasBusca from "./pages/importadoras/ImportadorasBusca";
 import ImportadorasFavoritos from "./pages/importadoras/ImportadorasFavoritos";
+import BolsasProtected from "./pages/bolsas/BolsasProtected";
+import BolsasHub from "./pages/bolsas/BolsasHub";
+import BolsasLista from "./pages/bolsas/BolsasLista";
+import BolsasBusca from "./pages/bolsas/BolsasBusca";
+import BolsasFavoritos from "./pages/bolsas/BolsasFavoritos";
 import EstruturePage from "./pages/Estruture";
 import VendasPage from "./pages/Vendas";
 import VendasMarketplacesPage from "./pages/VendasMarketplaces";
@@ -63,6 +68,12 @@ const App = () => (
               <Route path="/fornecedores/importadoras-25/fornecedor/:id" element={<ImportadorasFornecedor />} />
               <Route path="/fornecedores/importadoras-25/busca" element={<ImportadorasBusca />} />
               <Route path="/fornecedores/importadoras-25/favoritos" element={<ImportadorasFavoritos />} />
+              {/* Nicho: Bolsas, Mochilas e Malas */}
+              <Route path="/fornecedores/bolsas-mochilas-malas" element={<BolsasProtected><BolsasHub /></BolsasProtected>} />
+              <Route path="/fornecedores/bolsas-mochilas-malas/lista" element={<BolsasProtected><BolsasLista /></BolsasProtected>} />
+              <Route path="/fornecedores/bolsas-mochilas-malas/busca" element={<BolsasProtected><BolsasBusca /></BolsasProtected>} />
+              <Route path="/fornecedores/bolsas-mochilas-malas/favoritos" element={<BolsasProtected><BolsasFavoritos /></BolsasProtected>} />
+              <Route path="/fornecedores/bolsas-mochilas-malas/fornecedor/:id" element={<BolsasProtected><ImportadorasFornecedor /></BolsasProtected>} />
               <Route path="/estruture" element={<EstruturePage />} />
               <Route path="/vendas" element={<VendasPage />} />
               <Route path="/vendas/marketplaces" element={<VendasMarketplacesPage />} />
