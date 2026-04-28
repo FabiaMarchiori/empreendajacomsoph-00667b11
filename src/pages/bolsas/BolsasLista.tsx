@@ -73,7 +73,7 @@ export default function BolsasLista() {
                 logo={s.logo_url || undefined}
                 isFavorite={s.allIds.some((id) => isFavorite(id))}
                 onToggleFavorite={() => toggle(s.id)}
-                detailRoute={`/fornecedores/bolsas-mochilas-malas/fornecedor/${s.id}`}
+                basePath="/fornecedores/bolsas-mochilas-malas"
               />
             </motion.div>
           ))}
