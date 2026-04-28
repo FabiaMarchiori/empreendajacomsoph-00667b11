@@ -1,13 +1,14 @@
-import { useNichoAccess } from "@/hooks/useNichoAccess";
-import BolsasGate from "./BolsasGate";
 import { Loader2 } from "lucide-react";
+import { usePlanAccess } from "@/hooks/usePlanAccess";
+import BolsasGate from "./BolsasGate";
+import BolsasIncluded from "./BolsasIncluded";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export default function BolsasProtected({ children }: Props) {
-  const { hasAccess, isLoading } = useNichoAccess(["bolsas", "starter_bolsas", "nicho_bolsas"]);
+  const { isAdmin, hasEcosystem, hasBolsasPlan, isLoading } = usePlanAccess();
 
   if (isLoading) {
     return (
@@ -17,7 +18,15 @@ export default function BolsasProtected({ children }: Props) {
     );
   }
 
-  if (!hasAccess) return <BolsasGate />;
+  // Admin: acesso total
+  if (isAdmin) return <>{children}</>;
 
-  return <>{children}</>;
+  // Assinante do Ecossistema: redireciona elegantemente para 25 de Março
+  if (hasEcosystem) return <BolsasIncluded />;
+
+  // Plano Bolsas: acesso liberado
+  if (hasBolsasPlan) return <>{children}</>;
+
+  // Sem acesso: tela de compra
+  return <BolsasGate />;
 }
