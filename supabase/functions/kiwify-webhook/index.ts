@@ -37,10 +37,23 @@ Deno.serve(async (req) => {
     const customerName = payload?.Customer?.full_name || null;
     const customerId = payload?.Customer?.id || null;
     const subscriptionId = payload?.Subscription?.id || payload?.order_id || payload?.Transaction?.order_id || null;
-    const productName = payload?.Product?.name || payload?.product?.name || "Ecossistema EmpreendaJá";
+    const rawProductName = payload?.Product?.name || payload?.product?.name || "Ecossistema EmpreendaJá";
+    const productId = payload?.Product?.id || payload?.product_id || payload?.Product?.product_id || null;
     const amount = payload?.Commissions?.charge_amount
       ? parseFloat(payload.Commissions.charge_amount) / 100
       : payload?.purchase?.price || null;
+
+    // Normaliza o nome do plano para os tokens que o app usa em usePlanAccess
+    // Detecta o nicho "Bolsas, Mochilas e Malas" pelo nome do produto OU valor R$19,99
+    const lowerName = String(rawProductName).toLowerCase();
+    const isBolsasNicho =
+      lowerName.includes("bolsa") ||
+      lowerName.includes("mochila") ||
+      lowerName.includes("mala") ||
+      (amount !== null && Math.abs(Number(amount) - 19.99) < 0.5);
+
+    const productName = isBolsasNicho ? "bolsas_1999" : rawProductName;
+    console.log(`[kiwify-webhook] Produto detectado: ${rawProductName} -> plano: ${productName} (nicho_bolsas=${isBolsasNicho})`);
 
     console.log(`[kiwify-webhook] Event: ${eventType}, Email: ${email}, SubID: ${subscriptionId}`);
 

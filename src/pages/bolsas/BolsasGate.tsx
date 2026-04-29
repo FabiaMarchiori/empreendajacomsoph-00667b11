@@ -2,8 +2,8 @@ import { Lock, ExternalLink, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 
-// TODO: substituir pelo link de checkout Kiwify do nicho Bolsas
-const CHECKOUT_URL = "#";
+// Checkout Kiwify do nicho Bolsas, Mochilas e Malas (R$ 19,99)
+const CHECKOUT_URL = "https://pay.kiwify.com.br/0QsQfdh";
 
 export default function BolsasGate() {
   const navigate = useNavigate();
