@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
-import { Search, Package, Gem, Factory, Shirt, Footprints, ShoppingBag, Baby, Heart, Dumbbell, MapPin } from "lucide-react";
+import { Search, Package, Gem, Factory, Shirt, Footprints, ShoppingBag, Baby, Heart, Dumbbell, MapPin, Lock } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePlanAccess } from "@/hooks/usePlanAccess";
+
+const UPGRADE_URL = "https://appempreendajacomsoph.lovable.app/conta";
 
 const categories = [
   { label: "Todos", key: "Todos" },
@@ -142,6 +145,7 @@ export default function FornecedoresPage() {
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const { hasBolsasOnly } = usePlanAccess();
 
   const filtered = suppliers.filter(
     (s) =>
@@ -222,18 +226,29 @@ export default function FornecedoresPage() {
           key={activeCategory + search}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
         >
-          {filtered.map((s) => (
-            <motion.div key={s.title} variants={item}>
-              <ProductCard
-                title={s.title}
-                description={s.desc}
-                status={s.status}
-                icon={s.icon}
-                isPremium={s.isPremium}
-                onClick={s.route ? () => navigate(s.route!) : undefined}
-              />
-            </motion.div>
-          ))}
+          {filtered.map((s) => {
+            // Para usuários do plano Bolsas-only, somente o card de Bolsas fica liberado
+            const isBolsasCard = s.cat === "Bolsas, Mochilas e Malas";
+            const lockedForBolsasOnly = hasBolsasOnly && !isBolsasCard;
+            const effectiveStatus = lockedForBolsasOnly ? ("em_breve" as const) : s.status;
+            const handleClick = lockedForBolsasOnly
+              ? () => window.open(UPGRADE_URL, "_blank")
+              : s.route
+              ? () => navigate(s.route!)
+              : undefined;
+            return (
+              <motion.div key={s.title} variants={item}>
+                <ProductCard
+                  title={s.title}
+                  description={lockedForBolsasOnly ? "Disponível no Ecossistema Completo — faça upgrade para liberar." : s.desc}
+                  status={effectiveStatus}
+                  icon={lockedForBolsasOnly ? <Lock className="h-5 w-5" /> : s.icon}
+                  isPremium={s.isPremium}
+                  onClick={handleClick}
+                />
+              </motion.div>
+            );
+          })}
         </motion.div>
       )}
     </div>
