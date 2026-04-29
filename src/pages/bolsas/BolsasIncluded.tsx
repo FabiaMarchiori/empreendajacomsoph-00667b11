@@ -35,14 +35,15 @@ export default function BolsasIncluded() {
           </p>
           <h1 className="text-xl font-bold text-white mb-3">Tudo certo por aqui ✨</h1>
           <p className="text-sm text-white/70 mb-6 leading-relaxed">
-            Esse nicho já está incluído dentro da categoria{" "}
-            <strong className="text-white">"Bolsas, Mochilas e Malas"</strong> no seu plano atual.
+            Esse nicho já está incluído no seu plano atual através da categoria{" "}
+            <strong className="text-white">"Bolsas, Mochilas e Malas"</strong> em{" "}
+            <strong className="text-white">Importadoras 25 de Março</strong>.
           </p>
 
           <div className="space-y-3">
             <button
               onClick={() =>
-                navigate("/fornecedores/importadoras-25/categoria/bolsas-mochilas-malas")
+                navigate("/fornecedores/importadoras-25/categoria/bolsas-mochilas-e-malas")
               }
               className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
               style={{
@@ -50,7 +51,7 @@ export default function BolsasIncluded() {
                 color: "#0A192F",
               }}
             >
-              Ver fornecedores na 25 de Março <ArrowRight className="h-4 w-4" />
+              Ver fornecedores agora <ArrowRight className="h-4 w-4" />
             </button>
 
             <button
