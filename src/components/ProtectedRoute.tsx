@@ -54,7 +54,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
             <div className="space-y-3">
               <a
-                href="https://wa.me/5511999999999"
+                href="https://wa.me/5511983348749?text=Suporte%3A%20Tela%20de%20acesso"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
