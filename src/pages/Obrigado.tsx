@@ -34,20 +34,27 @@ export default function ObrigadoPage() {
   const planoFromUrl = searchParams.get("plano");
   const emailFromUrl = searchParams.get("email");
   const [planoDetectado, setPlanoDetectado] = useState<string | null>(planoFromUrl);
+  // Loading só quando precisamos consultar (sem plano na URL)
+  const [detecting, setDetecting] = useState<boolean>(!planoFromUrl);
 
-  // Se vier email mas não vier plano, consulta a edge function pública
+  // Detecta o plano: prioriza email da URL (recém-comprado),
+  // fallback para a assinatura ativa mais recente nos últimos 10 minutos.
   useEffect(() => {
-    if (planoFromUrl) return;
-    if (!emailFromUrl) return;
+    if (planoFromUrl) {
+      setDetecting(false);
+      return;
+    }
     let cancelled = false;
     (async () => {
       try {
         const { data } = await supabase.functions.invoke("lookup-subscription", {
-          body: { email: emailFromUrl },
+          body: emailFromUrl ? { email: emailFromUrl } : {},
         });
         if (!cancelled && data?.plano) setPlanoDetectado(data.plano);
       } catch {
         // silencioso — fallback é a versão Ecossistema
+      } finally {
+        if (!cancelled) setDetecting(false);
       }
     })();
     return () => { cancelled = true; };
