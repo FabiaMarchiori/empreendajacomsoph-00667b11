@@ -30,6 +30,31 @@ export default function ObrigadoPage() {
   const [showAndroidModal, setShowAndroidModal] = useState(false);
   const { canInstall, isInstalled, isAndroid, isDesktop, install, serviceWorker, desktopFallback, androidFallback } = useInstallPWA();
 
+  const [searchParams] = useSearchParams();
+  const planoFromUrl = searchParams.get("plano");
+  const emailFromUrl = searchParams.get("email");
+  const [planoDetectado, setPlanoDetectado] = useState<string | null>(planoFromUrl);
+
+  // Se vier email mas não vier plano, consulta a edge function pública
+  useEffect(() => {
+    if (planoFromUrl) return;
+    if (!emailFromUrl) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase.functions.invoke("lookup-subscription", {
+          body: { email: emailFromUrl },
+        });
+        if (!cancelled && data?.plano) setPlanoDetectado(data.plano);
+      } catch {
+        // silencioso — fallback é a versão Ecossistema
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [emailFromUrl, planoFromUrl]);
+
+  const isBolsas = useMemo(() => isBolsasPlan(planoDetectado), [planoDetectado]);
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(LOGIN_URL);
