@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor } from "lucide-react";
-import { Link } from "react-router-dom";
+import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor, ShoppingBag } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useInstallPWA } from "@/hooks/useInstallPWA";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,12 @@ import {
 const LOGIN_URL = "https://appempreendajacomsoph.netlify.app/login";
 const WHATSAPP_URL = "https://wa.me/5511983348749?text=Suporte%20App%20ecossistema%20Soph";
 const INSTAGRAM_URL = "https://www.instagram.com/fornecedoresda25ebras";
+
+function isBolsasPlan(plano: string | null | undefined): boolean {
+  if (!plano) return false;
+  const p = plano.toLowerCase();
+  return p.includes("bolsas_1999") || p.includes("bolsas") || p.includes("starter_bolsas") || p.includes("nicho_bolsas");
+}
 
 export default function ObrigadoPage() {
   const [copied, setCopied] = useState(false);
