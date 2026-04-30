@@ -8,7 +8,7 @@ import { InterestModal } from "./InterestModal";
 interface ProductCardProps {
   title: string;
   description: string;
-  status: "liberado" | "bonus" | "disponivel" | "em_breve";
+  status: "liberado" | "bonus" | "disponivel" | "em_breve" | "upgrade";
   icon: React.ReactNode;
   isPremium?: boolean;
   onClick?: () => void;
@@ -17,6 +17,7 @@ interface ProductCardProps {
 export function ProductCard({ title, description, status, icon, isPremium, onClick }: ProductCardProps) {
   const isAccessible = status === "liberado" || status === "bonus";
   const isComingSoon = status === "em_breve";
+  const isUpgrade = status === "upgrade";
   const [interestOpen, setInterestOpen] = useState(false);
 
   return (
