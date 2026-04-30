@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor } from "lucide-react";
-import { Link } from "react-router-dom";
+import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor, ShoppingBag } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useInstallPWA } from "@/hooks/useInstallPWA";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -16,12 +17,43 @@ const LOGIN_URL = "https://appempreendajacomsoph.netlify.app/login";
 const WHATSAPP_URL = "https://wa.me/5511983348749?text=Suporte%20App%20ecossistema%20Soph";
 const INSTAGRAM_URL = "https://www.instagram.com/fornecedoresda25ebras";
 
+function isBolsasPlan(plano: string | null | undefined): boolean {
+  if (!plano) return false;
+  const p = plano.toLowerCase();
+  return p.includes("bolsas_1999") || p.includes("bolsas") || p.includes("starter_bolsas") || p.includes("nicho_bolsas");
+}
+
 export default function ObrigadoPage() {
   const [copied, setCopied] = useState(false);
   const [showIOSModal, setShowIOSModal] = useState(false);
   const [showDesktopModal, setShowDesktopModal] = useState(false);
   const [showAndroidModal, setShowAndroidModal] = useState(false);
   const { canInstall, isInstalled, isAndroid, isDesktop, install, serviceWorker, desktopFallback, androidFallback } = useInstallPWA();
+
+  const [searchParams] = useSearchParams();
+  const planoFromUrl = searchParams.get("plano");
+  const emailFromUrl = searchParams.get("email");
+  const [planoDetectado, setPlanoDetectado] = useState<string | null>(planoFromUrl);
+
+  // Se vier email mas não vier plano, consulta a edge function pública
+  useEffect(() => {
+    if (planoFromUrl) return;
+    if (!emailFromUrl) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase.functions.invoke("lookup-subscription", {
+          body: { email: emailFromUrl },
+        });
+        if (!cancelled && data?.plano) setPlanoDetectado(data.plano);
+      } catch {
+        // silencioso — fallback é a versão Ecossistema
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [emailFromUrl, planoFromUrl]);
+
+  const isBolsas = useMemo(() => isBolsasPlan(planoDetectado), [planoDetectado]);
 
   const handleCopy = async () => {
     try {
@@ -82,19 +114,51 @@ export default function ObrigadoPage() {
           Pagamento confirmado!
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle dinâmico */}
         <p className="text-muted-foreground text-base mb-6">
-          Seu acesso ao Ecossistema está sendo liberado automaticamente.
+          {isBolsas
+            ? "Seu acesso ao nicho Bolsas, Mochilas e Malas foi liberado."
+            : "Seu acesso ao Ecossistema está sendo liberado automaticamente."}
         </p>
 
-        {/* Info card */}
-        <div className="rounded-2xl border border-primary/20 bg-card/90 backdrop-blur p-6 mb-6 text-left" style={{ boxShadow: '0 0 16px -4px hsl(184 100% 50% / 0.08)' }}>
-          <p className="text-sm text-white leading-relaxed">
-            Para acessar o Ecossistema, utilize o{" "}
-            <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail informado na compra</span>.
-            Caso ainda não tenha uma conta, crie uma com esse e-mail na tela de login.
-          </p>
-        </div>
+        {/* Info card dinâmico */}
+        {isBolsas ? (
+          <div className="rounded-2xl border border-primary/20 bg-card/90 backdrop-blur p-6 mb-6 text-left" style={{ boxShadow: '0 0 16px -4px hsl(184 100% 50% / 0.08)' }}>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/30">
+                <ShoppingBag className="h-5 w-5 text-primary" />
+              </div>
+              <h2 className="text-sm font-extrabold text-white tracking-tight">Plano Bolsas, Mochilas e Malas</h2>
+            </div>
+            <p className="text-sm text-white/90 leading-relaxed mb-4">
+              Use o{" "}
+              <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail da compra</span>{" "}
+              para entrar ou criar conta.
+            </p>
+            <ul className="space-y-2">
+              <li className="flex items-center gap-2 text-sm text-white/90">
+                <Check className="h-4 w-4 text-primary shrink-0" />
+                Central de fornecedores
+              </li>
+              <li className="flex items-center gap-2 text-sm text-white/90">
+                <Check className="h-4 w-4 text-primary shrink-0" />
+                Nicho Bolsas, Mochilas e Malas
+              </li>
+              <li className="flex items-center gap-2 text-sm text-white/90">
+                <Check className="h-4 w-4 text-primary shrink-0" />
+                Atualizações futuras
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-primary/20 bg-card/90 backdrop-blur p-6 mb-6 text-left" style={{ boxShadow: '0 0 16px -4px hsl(184 100% 50% / 0.08)' }}>
+            <p className="text-sm text-white leading-relaxed">
+              Para acessar o Ecossistema, utilize o{" "}
+              <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail informado na compra</span>.
+              Caso ainda não tenha uma conta, crie uma com esse e-mail na tela de login.
+            </p>
+          </div>
+        )}
 
         {/* CTA buttons */}
         <div className="flex flex-col gap-3 mb-10">
@@ -102,7 +166,7 @@ export default function ObrigadoPage() {
             to="/login"
             className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm hover:brightness-110 transition-all bg-gradient-primary-btn text-primary-foreground shadow-glow-sm"
           >
-            Ir para o login
+            {isBolsas ? "Acessar agora" : "Ir para o login"}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
