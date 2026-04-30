@@ -15,13 +15,14 @@ const statusConfig: Record<AccessStatus, { label: string; classes: string }> = {
 export function StatusBadge({ status }: { status: AccessStatus }) {
   const config = statusConfig[status];
   const isAdquirido = status === "adquirido";
+  const isUpgrade = status === "upgrade";
   return (
     <span
       className={cn(
         "inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider border",
         config.classes
       )}
-      style={isAdquirido ? { backgroundImage: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" } : undefined}
+      style={isAdquirido || isUpgrade ? { backgroundImage: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" } : undefined}
     >
       {config.label}
     </span>
