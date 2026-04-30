@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type AccessStatus = "adquirido" | "liberado" | "bonus" | "brinde" | "disponivel" | "em_breve";
+type AccessStatus = "adquirido" | "liberado" | "bonus" | "brinde" | "disponivel" | "em_breve" | "upgrade";
 
 const statusConfig: Record<AccessStatus, { label: string; classes: string }> = {
   adquirido: { label: "Adquirido", classes: "text-[#0A192F] font-bold border-primary/40 shadow-glow-sm", },
@@ -9,6 +9,7 @@ const statusConfig: Record<AccessStatus, { label: string; classes: string }> = {
   brinde: { label: "Brinde", classes: "bg-accent/20 text-white border-primary/30" },
   disponivel: { label: "Disponível", classes: "bg-muted/40 text-foreground/60 border-border" },
   em_breve: { label: "Em Breve", classes: "bg-muted/60 text-white/70 border-border/60" },
+  upgrade: { label: "Premium", classes: "text-[#0A192F] font-bold border-primary/40 shadow-glow-sm" },
 };
 
 export function StatusBadge({ status }: { status: AccessStatus }) {
