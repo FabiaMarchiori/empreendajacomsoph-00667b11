@@ -114,19 +114,51 @@ export default function ObrigadoPage() {
           Pagamento confirmado!
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle dinâmico */}
         <p className="text-muted-foreground text-base mb-6">
-          Seu acesso ao Ecossistema está sendo liberado automaticamente.
+          {isBolsas
+            ? "Seu acesso ao nicho Bolsas, Mochilas e Malas foi liberado."
+            : "Seu acesso ao Ecossistema está sendo liberado automaticamente."}
         </p>
 
-        {/* Info card */}
-        <div className="rounded-2xl border border-primary/20 bg-card/90 backdrop-blur p-6 mb-6 text-left" style={{ boxShadow: '0 0 16px -4px hsl(184 100% 50% / 0.08)' }}>
-          <p className="text-sm text-white leading-relaxed">
-            Para acessar o Ecossistema, utilize o{" "}
-            <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail informado na compra</span>.
-            Caso ainda não tenha uma conta, crie uma com esse e-mail na tela de login.
-          </p>
-        </div>
+        {/* Info card dinâmico */}
+        {isBolsas ? (
+          <div className="rounded-2xl border border-primary/20 bg-card/90 backdrop-blur p-6 mb-6 text-left" style={{ boxShadow: '0 0 16px -4px hsl(184 100% 50% / 0.08)' }}>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/30">
+                <ShoppingBag className="h-5 w-5 text-primary" />
+              </div>
+              <h2 className="text-sm font-extrabold text-white tracking-tight">Plano Bolsas, Mochilas e Malas</h2>
+            </div>
+            <p className="text-sm text-white/90 leading-relaxed mb-4">
+              Use o{" "}
+              <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail da compra</span>{" "}
+              para entrar ou criar conta.
+            </p>
+            <ul className="space-y-2">
+              <li className="flex items-center gap-2 text-sm text-white/90">
+                <Check className="h-4 w-4 text-primary shrink-0" />
+                Central de fornecedores
+              </li>
+              <li className="flex items-center gap-2 text-sm text-white/90">
+                <Check className="h-4 w-4 text-primary shrink-0" />
+                Nicho Bolsas, Mochilas e Malas
+              </li>
+              <li className="flex items-center gap-2 text-sm text-white/90">
+                <Check className="h-4 w-4 text-primary shrink-0" />
+                Atualizações futuras
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-primary/20 bg-card/90 backdrop-blur p-6 mb-6 text-left" style={{ boxShadow: '0 0 16px -4px hsl(184 100% 50% / 0.08)' }}>
+            <p className="text-sm text-white leading-relaxed">
+              Para acessar o Ecossistema, utilize o{" "}
+              <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail informado na compra</span>.
+              Caso ainda não tenha uma conta, crie uma com esse e-mail na tela de login.
+            </p>
+          </div>
+        )}
 
         {/* CTA buttons */}
         <div className="flex flex-col gap-3 mb-10">
@@ -134,7 +166,7 @@ export default function ObrigadoPage() {
             to="/login"
             className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm hover:brightness-110 transition-all bg-gradient-primary-btn text-primary-foreground shadow-glow-sm"
           >
-            Ir para o login
+            {isBolsas ? "Acessar agora" : "Ir para o login"}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
