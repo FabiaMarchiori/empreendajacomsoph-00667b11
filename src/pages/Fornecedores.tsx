@@ -227,9 +227,10 @@ export default function FornecedoresPage() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           {filtered.map((s) => {
-            // Para usuários do plano Bolsas-only, somente o card de Bolsas fica liberado
-            const isBolsasCard = s.cat === "Bolsas, Mochilas e Malas";
-            const lockedForBolsasOnly = hasBolsasOnly && !isBolsasCard;
+            // Para usuários do plano Bolsas-only, apenas o card "Importadoras 25 de Março"
+            // vira oferta de upgrade. Os demais mantêm o status original ("em_breve" -> modal de interesse).
+            const isImportadoras25 = s.cat === "Importadoras 25 de Março";
+            const lockedForBolsasOnly = hasBolsasOnly && isImportadoras25;
             const effectiveStatus = lockedForBolsasOnly ? ("upgrade" as const) : s.status;
             const handleClick = lockedForBolsasOnly
               ? () => navigate("/fornecedores/importadoras-25")
