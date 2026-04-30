@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor, ShoppingBag } from "lucide-react";
+import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor, ShoppingBag, Loader2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useInstallPWA } from "@/hooks/useInstallPWA";
@@ -34,20 +34,27 @@ export default function ObrigadoPage() {
   const planoFromUrl = searchParams.get("plano");
   const emailFromUrl = searchParams.get("email");
   const [planoDetectado, setPlanoDetectado] = useState<string | null>(planoFromUrl);
+  // Loading só quando precisamos consultar (sem plano na URL)
+  const [detecting, setDetecting] = useState<boolean>(!planoFromUrl);
 
-  // Se vier email mas não vier plano, consulta a edge function pública
+  // Detecta o plano: prioriza email da URL (recém-comprado),
+  // fallback para a assinatura ativa mais recente nos últimos 10 minutos.
   useEffect(() => {
-    if (planoFromUrl) return;
-    if (!emailFromUrl) return;
+    if (planoFromUrl) {
+      setDetecting(false);
+      return;
+    }
     let cancelled = false;
     (async () => {
       try {
         const { data } = await supabase.functions.invoke("lookup-subscription", {
-          body: { email: emailFromUrl },
+          body: emailFromUrl ? { email: emailFromUrl } : {},
         });
         if (!cancelled && data?.plano) setPlanoDetectado(data.plano);
       } catch {
         // silencioso — fallback é a versão Ecossistema
+      } finally {
+        if (!cancelled) setDetecting(false);
       }
     })();
     return () => { cancelled = true; };
@@ -89,6 +96,29 @@ export default function ObrigadoPage() {
 
     setShowAndroidModal(true);
   };
+
+  if (detecting) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center px-4 py-12"
+        style={{ background: "linear-gradient(135deg, #0A192F 0%, #102A43 55%, #0A192F 100%)" }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-center"
+        >
+          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-14 w-auto max-w-[220px] mx-auto object-contain mb-6" />
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 ring-2 ring-primary/30 mb-4" style={{ boxShadow: '0 0 20px hsl(184 100% 50% / 0.2)' }}>
+            <Loader2 className="h-7 w-7 text-primary animate-spin" />
+          </div>
+          <h2 className="font-display text-lg font-bold text-white mb-1.5">Confirmando seu acesso…</h2>
+          <p className="text-sm text-white/70">Estamos identificando seu plano. Só um instante.</p>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div
