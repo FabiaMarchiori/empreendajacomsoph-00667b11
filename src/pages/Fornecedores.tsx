@@ -230,9 +230,9 @@ export default function FornecedoresPage() {
             // Para usuários do plano Bolsas-only, somente o card de Bolsas fica liberado
             const isBolsasCard = s.cat === "Bolsas, Mochilas e Malas";
             const lockedForBolsasOnly = hasBolsasOnly && !isBolsasCard;
-            const effectiveStatus = lockedForBolsasOnly ? ("em_breve" as const) : s.status;
+            const effectiveStatus = lockedForBolsasOnly ? ("upgrade" as const) : s.status;
             const handleClick = lockedForBolsasOnly
-              ? () => window.open(UPGRADE_URL, "_blank")
+              ? () => navigate("/fornecedores/importadoras-25")
               : s.route
               ? () => navigate(s.route!)
               : undefined;
