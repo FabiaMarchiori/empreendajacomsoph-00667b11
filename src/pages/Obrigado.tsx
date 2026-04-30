@@ -97,6 +97,29 @@ export default function ObrigadoPage() {
     setShowAndroidModal(true);
   };
 
+  if (detecting) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center px-4 py-12"
+        style={{ background: "linear-gradient(135deg, #0A192F 0%, #102A43 55%, #0A192F 100%)" }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-center"
+        >
+          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-14 w-auto max-w-[220px] mx-auto object-contain mb-6" />
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 ring-2 ring-primary/30 mb-4" style={{ boxShadow: '0 0 20px hsl(184 100% 50% / 0.2)' }}>
+            <Loader2 className="h-7 w-7 text-primary animate-spin" />
+          </div>
+          <h2 className="font-display text-lg font-bold text-white mb-1.5">Confirmando seu acesso…</h2>
+          <p className="text-sm text-white/70">Estamos identificando seu plano. Só um instante.</p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="min-h-screen flex items-center justify-center px-4 py-12"
