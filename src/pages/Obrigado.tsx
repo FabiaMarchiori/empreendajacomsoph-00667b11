@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor, ShoppingBag, Loader2 } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useInstallPWA } from "@/hooks/useInstallPWA";
 import { supabase } from "@/integrations/supabase/client";
@@ -132,11 +132,13 @@ export default function ObrigadoPage() {
         className="w-full max-w-lg text-center"
       >
         {/* Logo */}
-        <div className="mx-auto mb-6">
-          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-20 w-auto max-w-[300px] mx-auto object-contain mb-4" />
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 ring-2 ring-primary/40" style={{ boxShadow: '0 0 20px hsl(184 100% 50% / 0.2)' }}>
-            <CheckCircle className="h-8 w-8 text-primary drop-shadow-[0_0_6px_hsl(184,100%,50%,0.4)]" />
-          </div>
+        <div className="mx-auto mb-8">
+          <img src={logoOficial} alt="EmpreendaJá com Soph" className="h-20 w-auto max-w-[300px] mx-auto object-contain" />
+        </div>
+
+        {/* Ícone de confirmação */}
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 ring-2 ring-primary/40 mb-5" style={{ boxShadow: '0 0 20px hsl(184 100% 50% / 0.2)' }}>
+          <CheckCircle className="h-8 w-8 text-primary drop-shadow-[0_0_6px_hsl(184,100%,50%,0.4)]" />
         </div>
 
         {/* Title */}
@@ -144,11 +146,10 @@ export default function ObrigadoPage() {
           Pagamento confirmado!
         </h1>
 
-        {/* Subtitle dinâmico */}
+        {/* Mensagem tranquilizadora */}
         <p className="text-muted-foreground text-base mb-6">
-          {isBolsas
-            ? "Seu acesso ao nicho Bolsas, Mochilas e Malas foi liberado."
-            : "Seu acesso ao Ecossistema está sendo liberado automaticamente."}
+          Seu acesso está sendo liberado. Você já pode entrar na{" "}
+          <span className="font-bold text-white">Plataforma EmpreendaJá com Soph</span>.
         </p>
 
         {/* Info card dinâmico */}
@@ -162,8 +163,8 @@ export default function ObrigadoPage() {
             </div>
             <p className="text-sm text-white/90 leading-relaxed mb-4">
               Use o{" "}
-              <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail da compra</span>{" "}
-              para entrar ou criar conta.
+              <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail informado na compra</span>{" "}
+              para acessar sua conta. Se ainda não tiver uma conta, basta criar uma utilizando esse mesmo e-mail.
             </p>
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-white/90">
@@ -182,24 +183,33 @@ export default function ObrigadoPage() {
           </div>
         ) : (
           <div className="rounded-2xl border border-primary/20 bg-card/90 backdrop-blur p-6 mb-6 text-left" style={{ boxShadow: '0 0 16px -4px hsl(184 100% 50% / 0.08)' }}>
-            <p className="text-sm text-white leading-relaxed">
-              Para acessar o Ecossistema, utilize o{" "}
-              <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail informado na compra</span>.
-              Caso ainda não tenha uma conta, crie uma com esse e-mail na tela de login.
-            </p>
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/30">
+                <Check className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-sm font-extrabold text-white tracking-tight mb-1.5">Use o mesmo e-mail da compra</h2>
+                <p className="text-sm text-white/90 leading-relaxed">
+                  Use o{" "}
+                  <span className="font-bold text-primary drop-shadow-[0_0_4px_hsl(184,100%,50%,0.3)]">mesmo e-mail informado na compra</span>{" "}
+                  para acessar sua conta. Se ainda não tiver uma conta, basta criar uma utilizando esse mesmo e-mail.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* CTA buttons */}
+        {/* CTA principal */}
         <div className="flex flex-col gap-3 mb-10">
-          <Link
-            to="/login"
+          <a
+            href={LOGIN_URL}
             className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm hover:brightness-110 transition-all bg-gradient-primary-btn text-primary-foreground shadow-glow-sm"
           >
-            {isBolsas ? "Acessar agora" : "Ir para o login"}
+            ACESSAR MINHA PLATAFORMA
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </a>
         </div>
+
 
         {/* ── Bloco 1: Instalar o App (DESTAQUE) ── */}
         <motion.div
