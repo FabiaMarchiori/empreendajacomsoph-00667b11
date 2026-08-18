@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, MessageCircle, Smartphone, Copy, Check, Instagram, ExternalLink, Download, Share, PlusSquare, Monitor, ShoppingBag, Loader2 } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useInstallPWA } from "@/hooks/useInstallPWA";
 import { supabase } from "@/integrations/supabase/client";
