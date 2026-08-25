@@ -121,11 +121,11 @@ Deno.serve(async (req) => {
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Lovable-API-Key": LOVABLE_API_KEY,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-3.7-flash",
         messages: aiMessages,
         stream: true,
       }),
@@ -146,9 +146,16 @@ Deno.serve(async (req) => {
       }
       const errText = await response.text();
       console.error("[soph-chat] AI gateway error:", response.status, errText);
+      let gatewayMessage = "Erro ao processar sua mensagem. Tente novamente.";
+      try {
+        const gatewayError = JSON.parse(errText) as { message?: string };
+        if (gatewayError.message) gatewayMessage = gatewayError.message;
+      } catch {
+        // Keep the safe fallback when the gateway response is not JSON.
+      }
       return new Response(
-        JSON.stringify({ error: "Erro ao processar sua mensagem. Tente novamente." }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: gatewayMessage }),
+        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
