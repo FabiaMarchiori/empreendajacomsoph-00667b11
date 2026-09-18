@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
       }
 
       // Upsert assinatura
-      const { error: subError } = await supabase.from("assinaturas").upsert(
+      const { data: subscription, error: subError } = await supabase.from("assinaturas").upsert(
         {
           kiwify_subscription_id: subscriptionId || `manual_${Date.now()}`,
           kiwify_customer_id: customerId,
@@ -94,11 +94,12 @@ Deno.serve(async (req) => {
           data_expiracao: null,
         },
         { onConflict: "kiwify_subscription_id" }
-      );
+      ).select("status").single();
 
-      if (subError) {
-        console.error("[kiwify-webhook] Upsert assinatura error:", subError.message);
-        await logWebhook(supabase, eventType, payload, "error", subError.message);
+      if (subError || subscription?.status !== "ativa") {
+        const message = subError?.message || "Assinatura não ficou ativa após o registro";
+        console.error("[kiwify-webhook] Upsert assinatura error:", message);
+        await logWebhook(supabase, eventType, payload, "error", message);
         return jsonResponse({ error: "Erro ao registrar assinatura" }, 500);
       }
 
@@ -110,18 +111,30 @@ Deno.serve(async (req) => {
         .maybeSingle();
 
       if (existingClient) {
-        await supabase
+        const { error: clientAuthError } = await supabase
           .from("clientes_autorizados")
           .update({ status_assinatura: "ativa", data_compra: new Date().toISOString() })
           .eq("email", email);
+
+        if (clientAuthError) {
+          console.error("[kiwify-webhook] Atualização cliente autorizado error:", clientAuthError.message);
+          await logWebhook(supabase, eventType, payload, "error", clientAuthError.message);
+          return jsonResponse({ error: "Erro ao liberar acesso do cliente" }, 500);
+        }
       } else {
-        await supabase.from("clientes_autorizados").insert({
+        const { error: clientAuthError } = await supabase.from("clientes_autorizados").insert({
           email,
           status_assinatura: "ativa",
           customer_id: customerId,
           produto_id: subscriptionId,
           data_compra: new Date().toISOString(),
         });
+
+        if (clientAuthError) {
+          console.error("[kiwify-webhook] Inserção cliente autorizado error:", clientAuthError.message);
+          await logWebhook(supabase, eventType, payload, "error", clientAuthError.message);
+          return jsonResponse({ error: "Erro ao liberar acesso do cliente" }, 500);
+        }
       }
 
       // Link to existing user if possible
