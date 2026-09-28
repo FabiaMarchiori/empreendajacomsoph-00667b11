@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { usePlanAccess } from "@/hooks/usePlanAccess";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 
-const UPGRADE_URL = "https://empreendajacomsophi.netlify.app/";
+const UPGRADE_URL = "https://empreendajacomsoph.com.br/";
 
 interface Props {
   children: React.ReactNode;

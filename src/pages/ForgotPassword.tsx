@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 
-const RESET_REDIRECT_URL = "https://appempreendajacomsoph.netlify.app/reset-password";
+const RESET_REDIRECT_URL = "https://app.empreendajacomsoph.com.br/reset-password";
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();

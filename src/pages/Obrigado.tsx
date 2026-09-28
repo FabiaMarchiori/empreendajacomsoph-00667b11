@@ -13,7 +13,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-const LOGIN_URL = "https://appempreendajacomsoph.netlify.app/login";
+const LOGIN_URL = "https://app.empreendajacomsoph.com.br/login";
 const WHATSAPP_URL = "https://wa.me/5511983348749?text=Suporte%20App%20ecossistema%20Soph";
 const INSTAGRAM_URL = "https://www.instagram.com/fornecedoresda25ebras";
 
