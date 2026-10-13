@@ -11,6 +11,7 @@ export interface SupabaseSupplier {
   Endereco: string | null;
   logo_url: string | null;
   mockup_url: string | null;
+  codigo_fornecedor: string | null;
 }
 
 function toSlug(name: string): string {
@@ -47,6 +48,7 @@ export function useSupabaseSuppliers(categorySlug?: string) {
         Endereco: s.Endereco,
         logo_url: s.logo_url,
         mockup_url: s.mockup_url,
+        codigo_fornecedor: s.codigo_fornecedor ?? null,
       })) as SupabaseSupplier[];
 
       if (categorySlug) {

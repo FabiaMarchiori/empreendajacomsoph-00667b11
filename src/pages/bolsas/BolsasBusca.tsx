@@ -3,6 +3,7 @@ import { ArrowLeft, Search, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useBolsasSuppliers } from "@/hooks/useBolsasSuppliers";
+import { matchesSupplier } from "@/lib/supplierSearch";
 import { SupplierCircle } from "@/components/SupplierCircle";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 
@@ -12,8 +13,8 @@ export default function BolsasBusca() {
   const { toggle, isFavorite } = useSupabaseFavorites();
   const { data: allSuppliers, isLoading } = useBolsasSuppliers();
 
-  const filtered = search.length >= 2
-    ? (allSuppliers || []).filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
+  const filtered = (search.trim().length >= 2 || /^f?\d+$/i.test(search.trim()))
+    ? (allSuppliers || []).filter((s) => matchesSupplier(s, search))
     : (allSuppliers || []);
 
   return (
@@ -33,7 +34,7 @@ export default function BolsasBusca() {
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           <input
             type="text"
-            placeholder="Nome do fornecedor..."
+            placeholder="Nome da loja ou código (ex.: F012)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus

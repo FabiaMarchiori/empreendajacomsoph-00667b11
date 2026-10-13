@@ -12,6 +12,7 @@ export interface BolsasSupplier {
   Endereco: string | null;
   logo_url: string | null;
   mockup_url: string | null;
+  codigo_fornecedor: string | null;
 }
 
 export function useBolsasSuppliers() {
@@ -47,6 +48,7 @@ export function useBolsasSuppliers() {
             Endereco: s.Endereco,
             logo_url: s.logo_url,
             mockup_url: s.mockup_url,
+            codigo_fornecedor: s.codigo_fornecedor ?? null,
             allIds: [s.id],
           });
         }
