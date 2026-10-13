@@ -88,6 +88,7 @@ export default function ImportadorasBusca() {
               key={s.allIds.join("-")}
               id={String(s.id)}
               name={s.nome_loja}
+              code={(s as any).codigo_fornecedor || undefined}
               logo={s.logo_url || undefined}
               isFavorite={s.allIds.some((id) => isFavorite(id))}
               onToggleFavorite={() => toggle(s.id)}
