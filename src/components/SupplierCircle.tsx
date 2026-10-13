@@ -9,9 +9,10 @@ interface SupplierCircleProps {
   isFavorite?: boolean;
   onToggleFavorite?: (id: string) => void | (() => void);
   basePath?: string;
+  code?: string;
 }
 
-export function SupplierCircle({ id, name, logo, isFavorite, onToggleFavorite, basePath = "/fornecedores/importadoras-25" }: SupplierCircleProps) {
+export function SupplierCircle({ id, name, logo, isFavorite, onToggleFavorite, code, basePath = "/fornecedores/importadoras-25" }: SupplierCircleProps) {
   const navigate = useNavigate();
   const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
@@ -38,6 +39,7 @@ export function SupplierCircle({ id, name, logo, isFavorite, onToggleFavorite, b
         )}
       </button>
       <span className="text-xs text-white text-center leading-tight max-w-[90px] truncate">{name}</span>
+      {code && <span className="text-[10px] font-mono tracking-wide text-muted-foreground -mt-1">{code}</span>}
     </div>
   );
 }

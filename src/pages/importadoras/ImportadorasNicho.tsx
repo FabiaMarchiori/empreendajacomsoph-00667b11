@@ -69,6 +69,7 @@ export default function ImportadorasNicho() {
               <SupplierCircle
                 id={String(s.id)}
                 name={s.nome_loja}
+                code={(s as any).codigo_fornecedor || undefined}
                 logo={s.logo_url || undefined}
                 isFavorite={isFavorite(s.id)}
                 onToggleFavorite={() => toggle(s.id)}

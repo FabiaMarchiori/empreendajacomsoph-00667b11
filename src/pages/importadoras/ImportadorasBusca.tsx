@@ -3,6 +3,7 @@ import { ArrowLeft, Search, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSupabaseSuppliers } from "@/hooks/useSupabaseSuppliers";
+import { matchesSupplier } from "@/lib/supplierSearch";
 import { SupplierCircle } from "@/components/SupplierCircle";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 
@@ -12,8 +13,8 @@ export default function ImportadorasBusca() {
   const { toggle, isFavorite } = useSupabaseFavorites();
   const { data: allSuppliers, isLoading } = useSupabaseSuppliers();
 
-  const base = search.length >= 2
-    ? (allSuppliers || []).filter((s) => s.nome_loja.toLowerCase().includes(search.toLowerCase()))
+  const base = (search.trim().length >= 2 || /^f?\d+$/i.test(search.trim()))
+    ? (allSuppliers || []).filter((s) => matchesSupplier(s, search))
     : (allSuppliers || []);
 
   // Normaliza nome para chave de agrupamento (lowercase + sem acentos + trim)
@@ -60,7 +61,7 @@ export default function ImportadorasBusca() {
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           <input
             type="text"
-            placeholder="Nome da importadora..."
+            placeholder="Nome da loja ou código (ex.: F012)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus
@@ -88,6 +89,7 @@ export default function ImportadorasBusca() {
               key={s.allIds.join("-")}
               id={String(s.id)}
               name={s.nome_loja}
+              code={(s as any).codigo_fornecedor || undefined}
               logo={s.logo_url || undefined}
               isFavorite={s.allIds.some((id) => isFavorite(id))}
               onToggleFavorite={() => toggle(s.id)}

@@ -207,6 +207,7 @@ export type Database = {
       fornecedores: {
         Row: {
           categoria: string | null
+          codigo_fornecedor: string | null
           created_at: string
           Endereco: string | null
           id: number
@@ -218,6 +219,7 @@ export type Database = {
         }
         Insert: {
           categoria?: string | null
+          codigo_fornecedor?: string | null
           created_at?: string
           Endereco?: string | null
           id?: number
@@ -229,6 +231,7 @@ export type Database = {
         }
         Update: {
           categoria?: string | null
+          codigo_fornecedor?: string | null
           created_at?: string
           Endereco?: string | null
           id?: number

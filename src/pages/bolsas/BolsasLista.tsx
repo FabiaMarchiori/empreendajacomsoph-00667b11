@@ -3,6 +3,7 @@ import { ArrowLeft, Search, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useBolsasSuppliers } from "@/hooks/useBolsasSuppliers";
+import { matchesSupplier } from "@/lib/supplierSearch";
 import { SupplierCircle } from "@/components/SupplierCircle";
 import { useSupabaseFavorites } from "@/hooks/useSupabaseFavorites";
 
@@ -12,9 +13,7 @@ export default function BolsasLista() {
   const { toggle, isFavorite } = useSupabaseFavorites();
   const { data: suppliers, isLoading } = useBolsasSuppliers();
 
-  const filtered = (suppliers || []).filter((s) =>
-    s.nome_loja.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = (suppliers || []).filter((s) => matchesSupplier(s, search));
 
   return (
     <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
@@ -70,6 +69,7 @@ export default function BolsasLista() {
               <SupplierCircle
                 id={String(s.id)}
                 name={s.nome_loja}
+                code={(s as any).codigo_fornecedor || undefined}
                 logo={s.logo_url || undefined}
                 isFavorite={s.allIds.some((id) => isFavorite(id))}
                 onToggleFavorite={() => toggle(s.id)}
