@@ -34,7 +34,9 @@ Deno.serve(async (req) => {
       auth: { persistSession: false, autoRefreshToken: false },
     });
     const { data: { user }, error: authError } = await authClient.auth.getUser(token);
-    if (authError || !user?.id) return respond(401, { error: "Invalid session" });
+    if (authError || !user?.id || !user.email || !user.email_confirmed_at) {
+      return respond(401, { error: "Verified session required" });
+    }
 
     const admin = createClient(url, serviceKey, {
       auth: { persistSession: false, autoRefreshToken: false },
@@ -48,7 +50,21 @@ Deno.serve(async (req) => {
       .limit(1)
       .maybeSingle();
     if (error) return respond(500, { error: "Unable to load subscription" });
-    return respond(200, { plano: data?.plano ?? null });
+    if (data?.plano) return respond(200, { plano: data.plano });
+
+    // Kiwify can record a purchase before the buyer creates an app account.
+    // For presentation only, look up the email verified by Supabase Auth.
+    // Never accept an email from the request body or URL.
+    const { data: emailSubscription, error: emailError } = await admin
+      .from("assinaturas")
+      .select("plano")
+      .eq("email", user.email.trim().toLowerCase())
+      .eq("status", "ativa")
+      .order("data_inicio", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (emailError) return respond(500, { error: "Unable to load subscription" });
+    return respond(200, { plano: emailSubscription?.plano ?? null });
   } catch {
     return respond(500, { error: "Unable to load subscription" });
   }
