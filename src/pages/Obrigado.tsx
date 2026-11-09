@@ -32,13 +32,12 @@ export default function ObrigadoPage() {
 
   const [searchParams] = useSearchParams();
   const planoFromUrl = searchParams.get("plano");
-  const emailFromUrl = searchParams.get("email");
   const [planoDetectado, setPlanoDetectado] = useState<string | null>(planoFromUrl);
-  // Loading só quando precisamos consultar (sem plano na URL)
   const [detecting, setDetecting] = useState<boolean>(!planoFromUrl);
 
-  // Detecta o plano: prioriza email da URL (recém-comprado),
-  // fallback para a assinatura ativa mais recente nos últimos 10 minutos.
+  // Never look up a subscription by a URL-supplied email, or by the most recent buyer.
+  // A logged-in customer can request only their own plan; anonymous buyers see
+  // the generic confirmation until they log in. A URL plan is display-only.
   useEffect(() => {
     if (planoFromUrl) {
       setDetecting(false);
@@ -47,18 +46,22 @@ export default function ObrigadoPage() {
     let cancelled = false;
     (async () => {
       try {
-        const { data } = await supabase.functions.invoke("lookup-subscription", {
-          body: emailFromUrl ? { email: emailFromUrl } : {},
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user || cancelled) return;
+        const { data, error } = await supabase.functions.invoke("lookup-subscription", {
+          body: {},
         });
-        if (!cancelled && data?.plano) setPlanoDetectado(data.plano);
+        if (!error && !cancelled && typeof data?.plano === "string") {
+          setPlanoDetectado(data.plano);
+        }
       } catch {
-        // silencioso — fallback é a versão Ecossistema
+        // Anonymous or unavailable: show the generic confirmation.
       } finally {
         if (!cancelled) setDetecting(false);
       }
     })();
     return () => { cancelled = true; };
-  }, [emailFromUrl, planoFromUrl]);
+  }, [planoFromUrl]);
 
   const isBolsas = useMemo(() => isBolsasPlan(planoDetectado), [planoDetectado]);
 

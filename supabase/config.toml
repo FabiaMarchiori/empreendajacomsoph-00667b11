@@ -3,8 +3,5 @@ project_id = "ospnuclymrxjoqwyolfn"
 [functions.kiwify-webhook]
 verify_jwt = false
 
-[functions.create-test-user]
-verify_jwt = false
-
 [functions.lookup-subscription]
 verify_jwt = false

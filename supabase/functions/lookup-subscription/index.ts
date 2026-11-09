@@ -1,74 +1,71 @@
-// Public edge function: returns the active subscription plan for the user.
-// Strategy:
-// 1. If `email` is provided, look up the most recent active subscription for that email.
-// 2. Otherwise (or as fallback), return the most recent active subscription created in the last 10 minutes.
-// Used by /obrigado to render dynamic content based on the purchased plan.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
+// Only authenticated customers may look up their own active plan.
+// Never trust an email supplied by a caller or reveal another buyer's details.
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Cache-Control": "no-store",
 };
 
+function respond(status: number, body: Record<string, unknown>) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method !== "POST") return respond(405, { error: "Method not allowed" });
+
+  const token = req.headers.get("Authorization")?.match(/^Bearer\s+(.+)$/i)?.[1];
+  if (!token) return respond(401, { error: "Authentication required" });
+
+  const url = Deno.env.get("SUPABASE_URL");
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!url || !anonKey || !serviceKey) return respond(500, { error: "Service unavailable" });
 
   try {
-    const url = new URL(req.url);
-    let email = url.searchParams.get("email");
-    if (!email && req.method === "POST") {
-      const body = await req.json().catch(() => ({}));
-      email = body?.email ?? null;
+    const authClient = createClient(url, anonKey, {
+      global: { headers: { Authorization: `Bearer ${token}` } },
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data: { user }, error: authError } = await authClient.auth.getUser(token);
+    if (authError || !user?.id || !user.email || !user.email_confirmed_at) {
+      return respond(401, { error: "Verified session required" });
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-
-    // 1) Try by email first (priority)
-    if (email && email.trim()) {
-      const { data } = await supabase
-        .from("assinaturas")
-        .select("plano, email, data_inicio")
-        .ilike("email", email.trim())
-        .eq("status", "ativa")
-        .order("data_inicio", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (data?.plano) {
-        return jsonResponse({ plano: data.plano, email: data.email, source: "email" });
-      }
-    }
-
-    // 2) Fallback: most recent active subscription in the last 10 minutes
-    const tenMinAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
-    const { data: recent } = await supabase
+    const admin = createClient(url, serviceKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error } = await admin
       .from("assinaturas")
-      .select("plano, email, data_inicio")
+      .select("plano")
+      .eq("user_id", user.id)
       .eq("status", "ativa")
-      .gte("data_inicio", tenMinAgo)
       .order("data_inicio", { ascending: false })
       .limit(1)
       .maybeSingle();
+    if (error) return respond(500, { error: "Unable to load subscription" });
+    if (data?.plano) return respond(200, { plano: data.plano });
 
-    if (recent?.plano) {
-      return jsonResponse({ plano: recent.plano, email: recent.email, source: "recent" });
-    }
-
-    return jsonResponse({ plano: null });
-  } catch (err: any) {
-    return jsonResponse({ plano: null, error: String(err?.message ?? err) });
+    // Kiwify can record a purchase before the buyer creates an app account.
+    // For presentation only, look up the email verified by Supabase Auth.
+    // Never accept an email from the request body or URL.
+    const { data: emailSubscription, error: emailError } = await admin
+      .from("assinaturas")
+      .select("plano")
+      .eq("email", user.email.trim().toLowerCase())
+      .eq("status", "ativa")
+      .order("data_inicio", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (emailError) return respond(500, { error: "Unable to load subscription" });
+    return respond(200, { plano: emailSubscription?.plano ?? null });
+  } catch {
+    return respond(500, { error: "Unable to load subscription" });
   }
 });
-
-function jsonResponse(data: Record<string, unknown>) {
-  return new Response(JSON.stringify(data), {
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-    status: 200,
-  });
-}
