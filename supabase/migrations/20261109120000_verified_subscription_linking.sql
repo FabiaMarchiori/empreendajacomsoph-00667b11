@@ -41,7 +41,7 @@ SET search_path TO ''
 AS $$
 BEGIN
   IF new.email_confirmed_at IS NOT NULL
-     AND (old.email_confirmed_at IS NULL OR new.email IS DISTINCT FROM old.email)
+     AND old.email_confirmed_at IS NULL
      AND new.email IS NOT NULL THEN
     UPDATE public.assinaturas
     SET user_id = new.id, updated_at = now()
@@ -53,7 +53,7 @@ $$;
 
 DROP TRIGGER IF EXISTS link_subscriptions_after_email_confirmation ON auth.users;
 CREATE TRIGGER link_subscriptions_after_email_confirmation
-AFTER UPDATE OF email_confirmed_at, email ON auth.users
+AFTER UPDATE OF email_confirmed_at ON auth.users
 FOR EACH ROW
 EXECUTE FUNCTION public.link_subscriptions_after_email_confirmation();
 
