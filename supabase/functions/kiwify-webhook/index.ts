@@ -145,11 +145,22 @@ Deno.serve(async (req) => {
         .maybeSingle();
 
       if (profile) {
-        await supabase
-          .from("assinaturas")
-          .update({ user_id: profile.id })
-          .eq("kiwify_subscription_id", subscriptionId || `manual_${Date.now()}`)
-          .is("user_id", null);
+        // Never bind a paid subscription to an unverified profile merely by email.
+        const { data: verifiedAccount, error: verificationError } =
+          await supabase.auth.admin.getUserById(profile.id);
+        const account = verifiedAccount?.user;
+        const isVerifiedOwner =
+          !verificationError &&
+          !!account?.email_confirmed_at &&
+          account.email?.trim().toLowerCase() === email;
+
+        if (isVerifiedOwner) {
+          await supabase
+            .from("assinaturas")
+            .update({ user_id: profile.id })
+            .eq("id", subscription.id)
+            .is("user_id", null);
+        }
       }
 
       const emailStatus = await sendAccessEmail({
