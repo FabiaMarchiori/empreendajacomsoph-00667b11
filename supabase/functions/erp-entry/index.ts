@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
 
     const userId = user.id;
     const userEmail = user.email!;
-    console.log(`[erp-entry] Authenticated user: ${userId} (${userEmail})`);
+    console.log("[erp-entry] Authenticated request validated");
 
     // 2. Validate ERP-specific access (not just any subscription)
     const { data: hasAccess, error: accessError } = await supabase.rpc(
@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
 
     // 4. Call ERP edge function securely
     const ecosystemSecret = Deno.env.get("ECOSYSTEM_SHARED_SECRET");
-    console.log(`[erp-entry] ECOSYSTEM_SHARED_SECRET present: ${!!ecosystemSecret}, length: ${ecosystemSecret?.length ?? 0}, first4: ${ecosystemSecret?.substring(0, 4) ?? "N/A"}`);
+    // Never log any part of the shared secret or its metadata.
     if (!ecosystemSecret) {
       console.error("ECOSYSTEM_SHARED_SECRET not configured");
       return new Response(
@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
       full_name: fullName,
     };
 
-    console.log(`[erp-entry] Calling ERP for user ${userId} (${userEmail})`);
+    console.log("[erp-entry] Calling ERP integration");
 
     const erpResponse = await fetch(erpEndpoint, {
       method: "POST",
@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
     }
 
     console.log(
-      `[erp-entry] Success for user ${userId} — is_new: ${erpData.is_new_user}, erp_user_id: ${erpData.erp_user_id}`
+      `[erp-entry] ERP integration succeeded — is_new: ${Boolean(erpData.is_new_user)}`
     );
 
     // 5. Return success with ERP data
