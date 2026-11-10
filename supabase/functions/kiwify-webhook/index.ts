@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
     const productName = isBolsasNicho ? "bolsas_1999" : rawProductName;
     console.log(`[kiwify-webhook] Produto detectado: ${rawProductName} -> plano: ${productName} (nicho_bolsas=${isBolsasNicho})`);
 
-    console.log(`[kiwify-webhook] Event: ${eventType}, Email: ${email}, SubID: ${subscriptionId}`);
+    console.log(`[kiwify-webhook] Event: ${eventType}, SubID: ${subscriptionId}`);
 
     if (!email) {
       await logWebhook(supabase, eventType, payload, "error", "Email ausente no payload");
@@ -175,10 +175,10 @@ Deno.serve(async (req) => {
 
       const accessMessage =
         emailStatus === "skipped_missing_subscription_id"
-          ? `Acesso liberado para ${email}; e-mail não enviado: identificador estável da compra ausente`
-          : `Acesso liberado para ${email}`;
+          ? "Acesso registrado; e-mail não enviado: identificador estável da compra ausente"
+          : "Acesso registrado";
       await logWebhook(supabase, eventType, payload, "success", accessMessage);
-      console.log(`[kiwify-webhook] Access granted for ${email}`);
+      console.log("[kiwify-webhook] Access granted");
       return jsonResponse({ success: true, message: "Acesso liberado" });
 
     } else if (
@@ -206,8 +206,8 @@ Deno.serve(async (req) => {
         .update({ status_assinatura: "inativa" })
         .eq("email", email);
 
-      await logWebhook(supabase, eventType, payload, "success", `Acesso revogado para ${email}`);
-      console.log(`[kiwify-webhook] Access revoked for ${email}`);
+      await logWebhook(supabase, eventType, payload, "success", "Acesso revogado");
+      console.log("[kiwify-webhook] Access revoked");
       return jsonResponse({ success: true, message: "Acesso revogado" });
 
     } else {
