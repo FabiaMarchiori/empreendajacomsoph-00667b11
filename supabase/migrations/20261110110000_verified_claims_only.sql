@@ -110,3 +110,31 @@ EXECUTE FUNCTION public.link_subscriptions_after_email_confirmation();
 
 REVOKE ALL ON FUNCTION public.handle_new_user() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.link_subscriptions_after_email_confirmation() FROM PUBLIC, anon, authenticated;
+
+-- Guard every future association, including service-role and legacy callers.
+-- Existing associations and all commercial fields remain untouched.
+CREATE OR REPLACE FUNCTION public.require_verified_subscription_owner()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path TO '' AS $$
+BEGIN
+  IF TG_OP = 'UPDATE' THEN
+    IF NEW.user_id IS NOT DISTINCT FROM OLD.user_id THEN RETURN NEW; END IF;
+    IF OLD.user_id IS NOT NULL THEN
+      RAISE EXCEPTION 'Existing subscription owner cannot be reassigned' USING ERRCODE = '23514';
+    END IF;
+  END IF;
+  IF NEW.user_id IS NOT NULL AND NOT EXISTS (
+    SELECT 1 FROM auth.users u WHERE u.id = NEW.user_id
+      AND u.email_confirmed_at IS NOT NULL
+      AND lower(trim(u.email)) = lower(trim(NEW.email))
+      AND nullif(trim(u.email), '') IS NOT NULL
+  ) THEN
+    RAISE EXCEPTION 'Confirmed subscription owner required' USING ERRCODE = '23514';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS require_verified_subscription_owner ON public.assinaturas;
+CREATE TRIGGER require_verified_subscription_owner
+BEFORE INSERT OR UPDATE OF user_id ON public.assinaturas
+FOR EACH ROW EXECUTE FUNCTION public.require_verified_subscription_owner();
+REVOKE ALL ON FUNCTION public.require_verified_subscription_owner() FROM PUBLIC, anon, authenticated;

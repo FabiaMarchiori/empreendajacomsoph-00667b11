@@ -68,12 +68,13 @@ Deno.serve(async (req) => {
       if (subscriptionId) {
         const { data: existing } = await supabase
           .from("assinaturas")
-          .select("id")
+          .select("id, email")
           .eq("kiwify_subscription_id", subscriptionId)
           .eq("status", "ativa")
           .maybeSingle();
 
         if (existing) {
+          await linkVerifiedOwner(supabase, existing.id, existing.email);
           console.log(`[kiwify-webhook] Duplicate ignored: ${subscriptionId}`);
           await logWebhook(supabase, eventType, payload, "duplicate", "Assinatura já existe e está ativa");
           return jsonResponse({ success: true, message: "Já processado" });
@@ -137,30 +138,7 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Link to existing user if possible
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("email", email)
-        .maybeSingle();
-
-      if (profile) {
-        // Only confirmed owners can have a purchase linked to their account.
-        const { data: verifiedAccount, error: verificationError } =
-          await supabase.auth.admin.getUserById(profile.id);
-        const account = verifiedAccount?.user;
-        if (
-          !verificationError &&
-          account?.email_confirmed_at &&
-          account.email?.trim().toLowerCase() === email
-        ) {
-          await supabase
-            .from("assinaturas")
-            .update({ user_id: profile.id })
-            .eq("id", subscription.id)
-            .is("user_id", null);
-        }
-      }
+      await linkVerifiedOwner(supabase, subscription.id, email);
 
       const emailStatus = await sendAccessEmail({
         supabase,
@@ -371,5 +349,39 @@ async function logWebhook(
     });
   } catch (e) {
     console.error("[kiwify-webhook] Failed to log:", e);
+  }
+}
+
+async function linkVerifiedOwner(
+  supabase: ReturnType<typeof createClient>,
+  subscriptionId: string,
+  email: string,
+) {
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (profileError) throw new Error("Unable to load subscription owner");
+  if (profile) {
+    // Only confirmed owners can have a purchase linked to their account.
+    const { data: verifiedAccount, error: verificationError } =
+      await supabase.auth.admin.getUserById(profile.id);
+    if (verificationError)
+      throw new Error("Unable to verify subscription owner");
+    const account = verifiedAccount?.user;
+    if (
+      !verificationError &&
+      account?.email_confirmed_at &&
+      account.email?.trim().toLowerCase() === email
+    ) {
+      const { error: linkError } = await supabase
+        .from("assinaturas")
+        .update({ user_id: profile.id })
+        .eq("id", subscriptionId)
+        .is("user_id", null);
+      if (linkError) throw new Error("Unable to link verified subscription");
+    }
   }
 }
