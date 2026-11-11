@@ -1,5 +1,7 @@
 # Verified subscription ownership release
 
+> PR #4 foi ampliado pela matriz aprovada em 11/11/2026. O roteiro atual está em `docs/approved-matrix-release.md`; este documento preserva o histórico da primeira correção. Nenhuma etapa autoriza produção antes de Pro, recuperação comprovada e aprovação final.
+
 Status: prepared locally; production unchanged. One final approval is required for integration and deployment.
 Target: ospnuclymrxjoqwyolfn. Never apply unrelated pending migrations.
 
