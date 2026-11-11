@@ -1,6 +1,6 @@
 # Política de Cookies e Armazenamento Local
 
-Versão 1.0 para revisão · Atualização: 11 de novembro de 2026.
+Versão 1.0 · Atualização: 11 de novembro de 2026.
 
 ## 1. O que esta política abrange
 
