@@ -14,6 +14,10 @@ async function webhook({
   linked = false,
   failLink = false,
   invalidToken = false,
+  emailState = "sent",
+  providerStatus = 201,
+  timeout = false,
+  terminal = false,
 } = {}) {
   const rows = {
     assinaturas: duplicate
@@ -22,7 +26,7 @@ async function webhook({
             id: "purchase",
             email: "buyer@example.test",
             kiwify_subscription_id: "order",
-            status: "ativa",
+            status: terminal ? "cancelada" : "ativa",
             user_id: linked ? "original" : null,
           },
         ]
@@ -32,8 +36,24 @@ async function webhook({
     comunicacoes_transacionais: [],
     webhook_logs: [],
   };
-  let updates = 0;
+  let updates = 0,
+    providerCalls = 0,
+    finishes = [];
   const client = {
+    rpc: async (name, args) => {
+      if (name === "reserve_access_email")
+        return {
+          data: {
+            state: emailState,
+            id: "communication",
+            token: "fenced",
+            email: "buyer@example.test",
+          },
+          error: null,
+        };
+      if (name === "finish_access_email") finishes.push(args);
+      return { data: true, error: null };
+    },
     auth: {
       admin: {
         getUserById: async () => ({
@@ -98,6 +118,12 @@ async function webhook({
         } else if (op === "insert" || op === "upsert") {
           if (table === "comunicacoes_transacionais")
             return { data: null, error: { code: "23505" } };
+          const key =
+            table === "clientes_autorizados"
+              ? "email"
+              : "kiwify_subscription_id";
+          if (op === "upsert" && rows[table].some((r) => r[key] === value[key]))
+            return { data: null, error: null };
           const r = { id: "purchase", user_id: null, ...value };
           rows[table].push(r);
           found = [r];
@@ -118,12 +144,23 @@ async function webhook({
       module: ts.ModuleKind.None,
     },
   }).outputText;
-  new Function("createClient", "Deno", js)(() => client, {
-    serve: (h) => (handler = h),
-    env: {
-      get: (k) => (k === "KIWIFY_WEBHOOK_TOKEN" ? "test-token" : "isolated"),
+  new Function("createClient", "Deno", "fetch", js)(
+    () => client,
+    {
+      serve: (h) => (handler = h),
+      env: {
+        get: (k) => (k === "KIWIFY_WEBHOOK_TOKEN" ? "test-token" : "isolated"),
+      },
     },
-  });
+    async (_url, options) => {
+      providerCalls++;
+      assert.equal(JSON.parse(options.body).templateId, 5);
+      if (timeout) throw new Error("fictional timeout");
+      return new Response(JSON.stringify({ messageId: "fictional-receipt" }), {
+        status: providerStatus,
+      });
+    },
+  );
   const response = await handler(
     new Request("https://isolated.test/webhook", {
       method: "POST",
@@ -139,7 +176,7 @@ async function webhook({
       }),
     }),
   );
-  return { response, rows, updates };
+  return { response, rows, updates, providerCalls, finishes };
 }
 await test("purchase after confirmed signup links owner", async () => {
   const r = await webhook();
@@ -199,7 +236,8 @@ async function legacy({ confirmed = false, linked = false } = {}) {
         error: null,
       }),
     },
-    rpc: async () => {
+    rpc: async (name) => {
+      if (name === "is_admin") return { data: false, error: null };
       claims++;
       if (confirmed) linked = true;
       return { error: null };
@@ -212,8 +250,8 @@ async function legacy({ confirmed = false, linked = false } = {}) {
         eq() {
           return q;
         },
-        or() {
-          emailFallback = true;
+        or(filter) {
+          emailFallback = filter.includes("email.eq");
           return q;
         },
         gt() {
@@ -308,3 +346,49 @@ await test("failed purchase recovery does not interrupt existing access checks",
   assert.equal(calls, 1);
 });
 console.log(`${passed} total handler/recovery tests passed`);
+
+await test("duplicate webhook retries failed Brevo email with original association", async () => {
+  const r = await webhook({ duplicate: true, emailState: "reserved" });
+  assert.equal(r.response.status, 200);
+  assert.equal(r.providerCalls, 1);
+  assert.equal(r.finishes[0].p_success, true);
+  assert.equal(r.rows.assinaturas.length, 1);
+  assert.equal(r.rows.clientes_autorizados.length, 1);
+});
+await test("already sent and concurrent busy communications are never resent", async () => {
+  for (const emailState of ["sent", "busy"]) {
+    const r = await webhook({ duplicate: true, emailState });
+    assert.equal(r.providerCalls, 0);
+  }
+});
+await test("Brevo rejection is marked failed and webhook remains retryable", async () => {
+  const r = await webhook({
+    duplicate: true,
+    emailState: "reserved",
+    providerStatus: 400,
+  });
+  assert.equal(r.response.status, 503);
+  assert.equal(r.finishes[0].p_success, false);
+  assert.equal(r.finishes[0].p_uncertain, false);
+});
+await test("Brevo network timeout requires receipt reconciliation", async () => {
+  const r = await webhook({
+    duplicate: true,
+    emailState: "reserved",
+    timeout: true,
+  });
+  assert.equal(r.response.status, 503);
+  assert.equal(r.finishes[0].p_uncertain, true);
+});
+await test("ambiguous delivery is not resent", async () => {
+  const r = await webhook({ duplicate: true, emailState: "reconcile" });
+  assert.equal(r.response.status, 503);
+  assert.equal(r.providerCalls, 0);
+});
+await test("approval after cancellation cannot reactivate a terminal purchase", async () => {
+  const r = await webhook({ duplicate: true, terminal: true });
+  assert.equal(r.response.status, 409);
+  assert.equal(r.rows.assinaturas[0].status, "cancelada");
+  assert.equal(r.providerCalls, 0);
+});
+console.log(`${passed} webhook/legacy/recovery tests passed`);

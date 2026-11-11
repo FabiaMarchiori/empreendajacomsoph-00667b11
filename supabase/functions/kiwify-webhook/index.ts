@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -62,19 +62,27 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Email ausente" }, 400);
     }
 
+    if (!subscriptionId) return jsonResponse({ error: "Identificador estável da compra necessário" }, 422);
+
     // 3. Handle events
     if (eventType === "approved" || eventType === "order_approved" || eventType === "paid") {
       // Check for duplicate
       if (subscriptionId) {
         const { data: existing } = await supabase
           .from("assinaturas")
-          .select("id, email")
+          .select("id, email, nome_cliente, status")
           .eq("kiwify_subscription_id", subscriptionId)
-          .eq("status", "ativa")
           .maybeSingle();
 
+        if (existing && existing.status !== "ativa") {
+          await logWebhook(supabase, eventType, {}, "review_required", "Aprovação após estado terminal exige conciliação de renovação/eventos");
+          return jsonResponse({ error: "Conciliação de eventos necessária" }, 409);
+        }
         if (existing) {
+          await ensureAuthorizedClient(supabase, existing.email, customerId, subscriptionId);
           await linkVerifiedOwner(supabase, existing.id, existing.email);
+          const retriedEmail = await sendAccessEmail({ supabase, eventType, payload, subscriptionId, assinaturaId: existing.id, email: existing.email, customerName: existing.nome_cliente });
+          if (retriedEmail === "failed") return jsonResponse({ error: "Comunicação pendente de recuperação" }, 503);
           console.log(`[kiwify-webhook] Duplicate ignored: ${subscriptionId}`);
           await logWebhook(supabase, eventType, payload, "duplicate", "Assinatura já existe e está ativa");
           return jsonResponse({ success: true, message: "Já processado" });
@@ -82,9 +90,9 @@ Deno.serve(async (req) => {
       }
 
       // Upsert assinatura
-      const { data: subscription, error: subError } = await supabase.from("assinaturas").upsert(
+      const { data: insertedSubscription, error: subError } = await supabase.from("assinaturas").upsert(
         {
-          kiwify_subscription_id: subscriptionId || `manual_${Date.now()}`,
+          kiwify_subscription_id: subscriptionId,
           kiwify_customer_id: customerId,
           email,
           nome_cliente: customerName,
@@ -94,51 +102,22 @@ Deno.serve(async (req) => {
           data_inicio: new Date().toISOString(),
           data_expiracao: null,
         },
-        { onConflict: "kiwify_subscription_id" }
-      ).select("id, status").single();
+        { onConflict: "kiwify_subscription_id", ignoreDuplicates: true }
+      ).select("id, status, email, nome_cliente").maybeSingle();
 
-      if (subError || subscription?.status !== "ativa") {
+      const { data: storedSubscription, error: storedError } = insertedSubscription ? { data: insertedSubscription, error: null } : await supabase.from("assinaturas").select("id, status, email, nome_cliente").eq("kiwify_subscription_id", subscriptionId).maybeSingle();
+      const subscription = storedSubscription;
+
+      if (subError || storedError || subscription?.status !== "ativa") {
         const message = subError?.message || "Assinatura não ficou ativa após o registro";
         console.error("[kiwify-webhook] Upsert assinatura error:", message);
         await logWebhook(supabase, eventType, payload, "error", message);
         return jsonResponse({ error: "Erro ao registrar assinatura" }, 500);
       }
 
-      // Upsert clientes_autorizados
-      const { data: existingClient } = await supabase
-        .from("clientes_autorizados")
-        .select("id")
-        .eq("email", email)
-        .maybeSingle();
+      await ensureAuthorizedClient(supabase, subscription.email, customerId, subscriptionId);
 
-      if (existingClient) {
-        const { error: clientAuthError } = await supabase
-          .from("clientes_autorizados")
-          .update({ status_assinatura: "ativa", data_compra: new Date().toISOString() })
-          .eq("email", email);
-
-        if (clientAuthError) {
-          console.error("[kiwify-webhook] Atualização cliente autorizado error:", clientAuthError.message);
-          await logWebhook(supabase, eventType, payload, "error", clientAuthError.message);
-          return jsonResponse({ error: "Erro ao liberar acesso do cliente" }, 500);
-        }
-      } else {
-        const { error: clientAuthError } = await supabase.from("clientes_autorizados").insert({
-          email,
-          status_assinatura: "ativa",
-          customer_id: customerId,
-          produto_id: subscriptionId,
-          data_compra: new Date().toISOString(),
-        });
-
-        if (clientAuthError) {
-          console.error("[kiwify-webhook] Inserção cliente autorizado error:", clientAuthError.message);
-          await logWebhook(supabase, eventType, payload, "error", clientAuthError.message);
-          return jsonResponse({ error: "Erro ao liberar acesso do cliente" }, 500);
-        }
-      }
-
-      await linkVerifiedOwner(supabase, subscription.id, email);
+      await linkVerifiedOwner(supabase, subscription.id, subscription.email);
 
       const emailStatus = await sendAccessEmail({
         supabase,
@@ -146,9 +125,11 @@ Deno.serve(async (req) => {
         payload,
         subscriptionId,
         assinaturaId: subscription.id,
-        email,
-        customerName,
+        email: subscription.email,
+        customerName: subscription.nome_cliente,
       });
+
+      if (emailStatus === "failed") return jsonResponse({ error: "Comunicação pendente de recuperação" }, 503);
 
       const accessMessage =
         emailStatus === "skipped_missing_subscription_id"
@@ -172,16 +153,18 @@ Deno.serve(async (req) => {
           : "cancelada";
 
       if (subscriptionId) {
-        await supabase
+        const { error: revokeError } = await supabase
           .from("assinaturas")
           .update({ status: newStatus, updated_at: new Date().toISOString() })
           .eq("kiwify_subscription_id", subscriptionId);
+        if (revokeError) throw new Error("Unable to record cancellation");
       }
 
-      await supabase
+      const { error: clientRevokeError } = await supabase
         .from("clientes_autorizados")
         .update({ status_assinatura: "inativa" })
         .eq("email", email);
+      if (clientRevokeError) throw new Error("Unable to record client cancellation");
 
       await logWebhook(supabase, eventType, payload, "success", `Acesso revogado para ${email}`);
       console.log(`[kiwify-webhook] Access revoked for ${email}`);
@@ -201,7 +184,7 @@ Deno.serve(async (req) => {
 });
 
 type SendAccessEmailInput = {
-  supabase: any;
+  supabase: SupabaseClient;
   eventType: string;
   payload: unknown;
   subscriptionId: string | null;
@@ -224,106 +207,54 @@ async function sendAccessEmail({
     return "skipped_missing_subscription_id";
   }
 
-  const { data: communication, error: reservationError } = await supabase
-    .from("comunicacoes_transacionais")
-    .insert({
-      kiwify_subscription_id: subscriptionId,
-      assinatura_id: assinaturaId,
-      email,
-      tipo: "acesso_liberado",
-      provider: "brevo",
-      template_id: 5,
-      status: "sending",
-    })
-    .select("id")
-    .single();
-
-  if (reservationError || !communication) {
-    if (reservationError?.code === "23505") {
-      console.log(`[kiwify-webhook] E-mail de acesso já reservado para: ${subscriptionId}`);
-      return "already_processed";
-    }
-
-    const message = reservationError?.message || "Reserva de comunicação não retornou registro";
-    console.error("[kiwify-webhook] Erro ao reservar e-mail de acesso:", message);
-    await logWebhook(supabase, eventType, payload, "error", `E-mail de acesso não reservado: ${message}`);
-    return "failed";
-  }
-
-  const recipientName = customerName?.trim() || "Empreendedor(a)";
-  const brevoApiKey = Deno.env.get("BREVO_API_KEY");
-
-  if (!brevoApiKey) {
-    const message = "BREVO_API_KEY não configurada";
-    await markCommunicationFailed(supabase, communication.id, message);
-    await logWebhook(supabase, eventType, payload, "error", message);
-    return "failed";
-  }
-
-  try {
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "accept": "application/json",
-        "api-key": brevoApiKey,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        to: [{ email, name: recipientName }],
-        templateId: 5,
-        params: { nome: recipientName },
-        tags: ["acesso_liberado"],
-      }),
+  const { data: reservation, error: reservationError } = await supabase.rpc("reserve_access_email", {
+    p_subscription_id: subscriptionId, p_assinatura_id: assinaturaId,
+  });
+  if (reservationError || !reservation) return "failed";
+  const communication = reservation as { state: string; id: string; token: string; email: string };
+  if (communication.state === "sent" || communication.state === "busy") return "already_processed";
+  if (communication.state !== "reserved") return "failed";
+  const finish = async (success: boolean, messageId: string | null, error: string | null, uncertain = false) => {
+    const { data, error: writeError } = await supabase.rpc("finish_access_email", {
+      p_id: communication.id, p_token: communication.token, p_success: success,
+      p_message_id: messageId, p_error: error, p_uncertain: uncertain,
     });
-
+    return !writeError && data === true;
+  };
+  const brevoApiKey = Deno.env.get("BREVO_API_KEY");
+  if (!brevoApiKey) {
+    await finish(false, null, "BREVO_API_KEY não configurada");
+    return "failed";
+  }
+  const { data: canDispatch, error: dispatchError } = await supabase.rpc("begin_access_email_dispatch", { p_id: communication.id, p_token: communication.token });
+  if (dispatchError || !canDispatch) return "failed";
+  try {
+    const recipientName = customerName?.trim() || "Empreendedor(a)";
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST", signal: AbortSignal.timeout(30000),
+      headers: { accept: "application/json", "api-key": brevoApiKey, "content-type": "application/json" },
+      body: JSON.stringify({ to: [{ email: communication.email, name: recipientName }], templateId: 5, params: { nome: recipientName }, tags: ["acesso_liberado"] }),
+    });
     if (!response.ok) {
-      const body = (await response.text()).slice(0, 500);
-      const message = `Brevo respondeu HTTP ${response.status}${body ? `: ${body}` : ""}`;
-      await markCommunicationFailed(supabase, communication.id, message);
-      await logWebhook(supabase, eventType, payload, "error", message);
+      await finish(false, null, `Brevo HTTP ${response.status}`, response.status >= 500);
       return "failed";
     }
-
-    const responseBody: { messageId?: unknown } = await response.json().catch(() => ({}));
-    const messageId = typeof responseBody?.messageId === "string" ? responseBody.messageId : null;
-    const { error: sentUpdateError } = await supabase
-      .from("comunicacoes_transacionais")
-      .update({
-        status: "sent",
-        provider_message_id: messageId,
-        sent_at: new Date().toISOString(),
-        error_message: null,
-      })
-      .eq("id", communication.id);
-
-    if (sentUpdateError) {
-      console.error("[kiwify-webhook] E-mail Brevo enviado, mas status não atualizado:", sentUpdateError.message);
-      await logWebhook(supabase, eventType, payload, "error", `E-mail Brevo enviado; falha ao atualizar comunicação: ${sentUpdateError.message}`);
-      return "failed";
-    }
-
-    return "sent";
-  } catch (error) {
-    const message = `Falha ao chamar Brevo: ${error instanceof Error ? error.message : String(error)}`;
-    await markCommunicationFailed(supabase, communication.id, message);
-    await logWebhook(supabase, eventType, payload, "error", message);
+    const body: { messageId?: unknown } = await response.json().catch(() => ({}));
+    const messageId = typeof body.messageId === "string" ? body.messageId : null;
+    return await finish(true, messageId, null) ? "sent" : "failed";
+  } catch {
+    // The provider may have accepted the request before a network failure.
+    await finish(false, null, "Entrega incerta: conciliar recibo Brevo antes de repetir", true);
     return "failed";
   }
 }
 
-async function markCommunicationFailed(
-  supabase: any,
-  communicationId: string,
-  errorMessage: string,
-) {
-  const { error } = await supabase
-    .from("comunicacoes_transacionais")
-    .update({ status: "failed", error_message: errorMessage })
-    .eq("id", communicationId);
-
-  if (error) {
-    console.error("[kiwify-webhook] Falha ao registrar erro da comunicação:", error.message);
-  }
+async function ensureAuthorizedClient(supabase: SupabaseClient, email: string, customerId: string | null, subscriptionId: string) {
+  // Unique email + ignoreDuplicates preserves original customer/product identifiers.
+  const { error: insertError } = await supabase.from("clientes_autorizados").upsert({ email, status_assinatura: "ativa", customer_id: customerId, produto_id: subscriptionId, data_compra: new Date().toISOString() }, { onConflict: "email", ignoreDuplicates: true });
+  if (insertError) throw new Error("Unable to register authorized client");
+  const { error: updateError } = await supabase.from("clientes_autorizados").update({ status_assinatura: "ativa" }).eq("email", email);
+  if (updateError) throw new Error("Unable to authorize client");
 }
 
 function jsonResponse(data: Record<string, unknown>, status = 200) {
@@ -334,7 +265,7 @@ function jsonResponse(data: Record<string, unknown>, status = 200) {
 }
 
 async function logWebhook(
-  supabase: any,
+  supabase: SupabaseClient,
   evento: string,
   payload: unknown,
   status: string,
@@ -353,7 +284,7 @@ async function logWebhook(
 }
 
 async function linkVerifiedOwner(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   subscriptionId: string,
   email: string,
 ) {
