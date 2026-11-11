@@ -596,6 +596,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      has_soph_access: { Args: never; Returns: boolean };
+      stage1_current_benefits: { Args: never; Returns: Json };
       current_product_access: { Args: never; Returns: Json };
       has_product_access: { Args: { requested_product: string }; Returns: boolean };
       claim_subscriptions_for_current_user: { Args: never; Returns: number }

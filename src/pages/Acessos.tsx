@@ -17,7 +17,7 @@ const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } };
 interface AccessItem {
   title: string;
   description: string;
-  status: "adquirido" | "brinde" | "em_breve";
+  status: "adquirido" | "brinde" | "em_breve" | "incluido" | "promocional" | "liberado";
   icon: React.ReactNode;
   route?: string;
 }
@@ -106,7 +106,13 @@ export default function AcessosPage() {
   const access = usePlanAccess();
   const visibleRoutes = visibleBenefitRoutes(access);
   const primary = [...produtoPrincipal, { title: "Bolsas, Mochilas e Malas", description: "Fornecedores do seu nicho", status: "adquirido" as const, icon: <Package className="h-5 w-5" />, route: "/fornecedores/bolsas-mochilas-malas" }].filter(a => visibleRoutes.includes(a.route || ""));
-  const included = brindes.filter(a => visibleRoutes.includes(a.route || ""));
+  const included = brindes.filter(a => visibleRoutes.includes(a.route || "")).map(a => {
+    if (a.route === "/soph") return { ...a, status: "incluido" as const };
+    if (a.route !== "/erp") return a;
+    const status = access.erpBenefit === "promotional" ? "promocional" as const : access.erpBenefit === "legacy" ? "liberado" as const : "incluido" as const;
+    const description = access.erpBenefit === "promotional" ? "Concessão promocional individual vigente" : access.erpBenefit === "legacy" ? "Benefício individual existente preservado" : a.description;
+    return { ...a, status, description };
+  });
   if (access.isLoading) return <p role="status">Carregando seus acessos…</p>;
 
   return (

@@ -1,0 +1,40 @@
+{
+  "baseRef": "origin/main",
+  "migration": "supabase/migrations/20261111152724_stage1_plan_benefits.sql",
+  "edgeFunctions": ["soph-chat"],
+  "frontend": [
+    "src/App.tsx",
+    "src/components/AppSidebar.tsx",
+    "src/components/ProductProtected.tsx",
+    "src/components/ProtectedRoute.tsx",
+    "src/components/SophFloatingButton.tsx",
+    "src/components/StatusBadge.tsx",
+    "src/hooks/usePlanAccess.ts",
+    "src/hooks/useErpAccess.ts",
+    "src/hooks/useNichoAccess.ts",
+    "src/lib/product-access.ts",
+    "src/integrations/supabase/types.ts",
+    "src/pages/Acessos.tsx",
+    "src/pages/Erp.tsx",
+    "src/pages/Home.tsx",
+    "src/pages/bolsas/BolsasGate.tsx",
+    "src/pages/bolsas/BolsasProtected.tsx"
+  ],
+  "tests": [
+    "tests/subscriptions/stage1-benefits.mjs",
+    "tests/subscriptions/endpoints.mjs",
+    "src/pages/Acessos.test.tsx",
+    "src/components/stage1-navigation.test.tsx",
+    "tests/subscriptions/fixtures/stage1-live-erp.sql"
+  ],
+  "deferred": [
+    "supplier/pricing RLS and supplier_shared_access",
+    "Kiwify/renewals/review receipts",
+    "Brevo/outbox",
+    "subscription linking and email confirmation",
+    "administrator creation/grants",
+    "generate-soph-token",
+    "all other pending migrations"
+  ],
+  "validationOnlyFromBase": ["supabase/functions/erp-entry/index.ts"]
+}

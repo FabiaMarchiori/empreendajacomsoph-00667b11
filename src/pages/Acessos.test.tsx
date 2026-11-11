@@ -3,7 +3,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { afterEach, describe, it, expect, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import { noProductAccess, type ProductAccess } from "@/lib/product-access";
-const state = vi.hoisted(() => ({ access: {} as Record<string, boolean> }));
+const state = vi.hoisted(() => ({ access: {} as ProductAccess }));
 vi.mock("@/hooks/usePlanAccess", () => ({
   usePlanAccess: () => ({ ...state.access, isLoading: false }),
 }));
@@ -71,7 +71,9 @@ describe("Meus Acessos reflects server entitlements", () => {
       soph: true,
       erp: true,
       basic: true,
+      erpBenefit: "promotional",
     });
+    expect(screen.getByText("Promocional")).toBeInTheDocument();
     expect(screen.getByText("ERP – Soph Gestão")).toBeInTheDocument();
     expect(
       screen.queryByText("Sistema de Precificação"),
@@ -86,14 +88,43 @@ describe("Meus Acessos reflects server entitlements", () => {
   });
 });
 
-import { SophFloatingButton } from '@/components/SophFloatingButton';
-describe('Soph entry follows the server entitlement',()=>{
- it('ERP-only or unsubscribed client is not offered a Soph entry',()=>{
-  state.access={...noProductAccess,erp:true};render(<MemoryRouter><SophFloatingButton /></MemoryRouter>);
-  expect(screen.queryByRole('button',{name:'Abrir Soph'})).not.toBeInTheDocument();
- });
- it('Bolsas client can open Soph',()=>{
-  state.access={...noProductAccess,bolsas:true,soph:true};render(<MemoryRouter><SophFloatingButton /></MemoryRouter>);
-  expect(screen.getByRole('button',{name:'Abrir Soph'})).toBeInTheDocument();
- });
+import { SophFloatingButton } from "@/components/SophFloatingButton";
+describe("Soph entry follows the server entitlement", () => {
+  it("ERP-only or unsubscribed client is not offered a Soph entry", () => {
+    state.access = { ...noProductAccess, erp: true };
+    render(
+      <MemoryRouter>
+        <SophFloatingButton />
+      </MemoryRouter>,
+    );
+    expect(
+      screen.queryByRole("button", { name: "Abrir Soph" }),
+    ).not.toBeInTheDocument();
+  });
+  it("Bolsas client can open Soph", () => {
+    state.access = { ...noProductAccess, bolsas: true, soph: true };
+    render(
+      <MemoryRouter>
+        <SophFloatingButton />
+      </MemoryRouter>,
+    );
+    expect(
+      screen.getByRole("button", { name: "Abrir Soph" }),
+    ).toBeInTheDocument();
+  });
+});
+
+it("legacy individual ERP is preserved without claiming it is a new promotion", () => {
+  show({
+    ...noProductAccess,
+    bolsas: true,
+    soph: true,
+    erp: true,
+    basic: true,
+    erpBenefit: "legacy",
+  });
+  expect(
+    screen.getByText("Benefício individual existente preservado"),
+  ).toBeInTheDocument();
+  expect(screen.queryByText("Promocional")).not.toBeInTheDocument();
 });

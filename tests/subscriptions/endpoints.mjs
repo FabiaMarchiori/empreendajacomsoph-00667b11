@@ -86,8 +86,8 @@ for (const plan of ["Ecossistema", "Anual", "Mensal", "Bolsas"]) {
   await test(`${plan}: Soph endpoint accepts only server authorization`, async () => {
     const r = await invoke("soph-chat", { allowed: true });
     assert.equal(r.response.status, 200);
-    assert.equal(r.rpcArgs.name, "has_product_access");
-    assert.equal(r.rpcArgs.args.requested_product, "soph");
+    assert.equal(r.rpcArgs.name, "has_soph_access");
+
     assert.equal(r.providerCalls, 1);
   });
   await test(`${plan}: ERP endpoint enforces plan eligibility`, async () => {

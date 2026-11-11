@@ -4,7 +4,7 @@ export function ProductProtected({
   product,
   children,
 }: {
-  product: keyof ProductAccess;
+  product: Exclude<keyof ProductAccess, "erpBenefit">;
   children: React.ReactNode;
 }) {
   const access = usePlanAccess();

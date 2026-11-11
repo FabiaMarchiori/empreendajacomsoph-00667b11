@@ -1,3 +1,5 @@
+> Etapa 1 atual: seguir [stage1-plan-benefits.md](stage1-plan-benefits.md) e o manifesto isolado. O roteiro amplo abaixo fica adiado e não deve ser aplicado em conjunto com a migration independente desta etapa.
+
 # Matriz comercial e recuperação transacional — preparada, não implantada
 
 > Contrato HTTP atual de conciliação, deduplicação e migration adicional: `docs/durable-webhook-reviews.md`.

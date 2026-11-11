@@ -10,11 +10,6 @@ export function usePlanAccess() {
     queryKey: ["product-access", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      try {
-        await supabase.rpc("claim_subscriptions_for_current_user");
-      } catch {
-        /* Existing links remain usable if recovery is unavailable. */
-      }
       const { data, error } = await supabase.rpc("current_product_access");
       if (error) throw error;
       return parseProductAccess(data);

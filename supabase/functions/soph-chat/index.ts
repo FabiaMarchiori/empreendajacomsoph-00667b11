@@ -30,7 +30,7 @@ async function authenticateUser(req: Request): Promise<{ userId: string } | Resp
     );
   }
 
-  const { data: allowed, error: accessError } = await supabase.rpc("has_product_access", { requested_product: "soph" });
+  const { data: allowed, error: accessError } = await supabase.rpc("has_soph_access");
   if (accessError || !allowed) return new Response(JSON.stringify({ error: "Assinatura ativa com acesso à Soph necessária." }), { status: accessError ? 503 : 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   return { userId: user.id };
 }

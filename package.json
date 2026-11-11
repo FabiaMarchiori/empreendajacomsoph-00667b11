@@ -11,7 +11,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:subscriptions": "node tests/subscriptions/run.mjs && node tests/subscriptions/products.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/endpoints.mjs && node tests/subscriptions/renewals.mjs && node tests/subscriptions/review-receipts.mjs"
+    "test:subscriptions": "node tests/subscriptions/run.mjs && node tests/subscriptions/products.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/endpoints.mjs && node tests/subscriptions/renewals.mjs && node tests/subscriptions/review-receipts.mjs",
+    "test:stage1": "node tests/subscriptions/stage1-benefits.mjs && node tests/subscriptions/endpoints.mjs",
+    "prepare:stage1": "node scripts/prepare-stage1.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
