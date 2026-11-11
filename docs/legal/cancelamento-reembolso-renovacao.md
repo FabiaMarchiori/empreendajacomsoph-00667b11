@@ -1,6 +1,6 @@
 # Cancelamento, Reembolso e Renovação
 
-Versão 1.0 para revisão · Atualização: 11 de novembro de 2026.
+Versão 1.0 · Atualização: 11 de novembro de 2026.
 
 ## 1. Três procedimentos diferentes
 
@@ -38,11 +38,20 @@ Reconhecido o arrependimento, aplica-se a restituição prevista em lei. A forma
 
 Depois do prazo de arrependimento, continuam existindo os direitos relativos a vício, descumprimento da oferta, cobrança indevida e demais hipóteses legais ou garantias mais favoráveis oferecidas na contratação. Não se adota uma proibição absoluta de reembolso após sete dias.
 
-## 6. Renovação e pagamento recusado
+## 6. Renovação conforme o meio de pagamento
 
-Frequência, valor, vencimento, prazo e condições de renovação devem ser os informados no checkout e no contrato correspondente. Não deduza a próxima cobrança apenas do nome “Mensal” ou “Anual”, nem confunda parcelas com renovações. Consulte a confirmação da compra e o gerenciamento da assinatura.
+A frequência e as condições da cobrança são as exibidas no checkout no momento da compra. O meio de pagamento escolhido define como ocorre a renovação:
 
-Uma tentativa de pagamento ou cobrança recusada não comprova aprovação. Problemas de conciliação devem ser analisados com os registros da compra, sem presumir uma nova contratação, reativação ou perda de período pago. Este documento não cria regra automática de retomada após reembolso ou cancelamento.
+- **Cartão de crédito:** a cobrança da renovação é automática, conforme a frequência contratada, até que o cliente cancele a assinatura.
+- **Pix Automático:** nas novas assinaturas via Pix, a Kiwify utiliza o Pix Automático como opção padrão. O cliente autoriza a cobrança uma vez no aplicativo do banco e, enquanto a autorização estiver ativa, as próximas renovações são debitadas automaticamente. O cliente pode cancelar a assinatura pelo gerenciamento da Kiwify ou cancelar a autorização no aplicativo do banco.
+- **Pix manual:** quando o Pix Automático estiver desativado para o produto ou não for compatível com a configuração do checkout, o cliente precisará gerar e pagar um novo Pix a cada período.
+- **Boleto:** a renovação é manual; o cliente deve pagar o boleto ou utilizar o link de renovação disponibilizado pela Kiwify a cada período.
+
+O cliente pode solicitar o cancelamento a qualquer momento. Para isso, use o botão **Gerenciar assinatura** enviado pela Kiwify por e-mail após a compra e as renovações. No Pix Automático, também é possível cancelar a autorização diretamente no aplicativo do banco. O cancelamento impede as próximas renovações, mas não gera reembolso automático.
+
+Se uma cobrança automática não for aprovada ou se um pagamento manual não for realizado, a assinatura poderá entrar no fluxo de atraso, novas tentativas ou cancelamento previsto pela Kiwify. Uma tentativa de pagamento ou cobrança recusada não comprova aprovação. Problemas de conciliação devem ser analisados com os registros da compra, sem presumir nova contratação, reativação ou perda de período já pago.
+
+Consulte as orientações oficiais da Kiwify: [Pix Automático](https://ajuda.kiwify.com.br/pt-br/article/como-funciona-a-assinatura-no-pix-automatico-pjvmtz/), [assinatura por boleto e Pix manual](https://ajuda.kiwify.com.br/pt-br/article/como-funciona-a-assinatura-no-boleto-e-pix-nsw99t/) e [cancelamento de assinatura](https://ajuda.kiwify.com.br/pt-br/article/como-cancelar-a-assinatura-do-produto-que-comprei-19d0my1/).
 
 ## 7. Compras independentes e acesso
 
