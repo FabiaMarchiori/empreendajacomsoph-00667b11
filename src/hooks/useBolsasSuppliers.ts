@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -16,8 +17,10 @@ export interface BolsasSupplier {
 }
 
 export function useBolsasSuppliers() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["bolsas-suppliers"],
+    queryKey: ["bolsas-suppliers", user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data: shared, error: sharedError } = await supabase
         .from("supplier_shared_access")

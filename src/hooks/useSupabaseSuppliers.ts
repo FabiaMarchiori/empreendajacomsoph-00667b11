@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -25,8 +26,10 @@ function toSlug(name: string): string {
 }
 
 export function useSupabaseSuppliers(categorySlug?: string) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["supabase-suppliers", categorySlug],
+    queryKey: ["supabase-suppliers", user?.id, categorySlug],
+    enabled: !!user,
     queryFn: async () => {
       // Query the table directly to get ALL rows (each row = supplier+category pair)
       const query = supabase
@@ -38,7 +41,7 @@ export function useSupabaseSuppliers(categorySlug?: string) {
       const { data, error } = await query;
       if (error) throw error;
 
-      const mapped = (data || []).map((s: any) => ({
+      const mapped = (data || []).map((s) => ({
         id: s.id,
         nome_loja: s.nome_loja || "Sem nome",
         categoria: s.categoria || "",
@@ -60,9 +63,10 @@ export function useSupabaseSuppliers(categorySlug?: string) {
 }
 
 export function useSupabaseSupplierById(id: string | number | undefined) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["supabase-supplier", id],
-    enabled: !!id,
+    queryKey: ["supabase-supplier", user?.id, id],
+    enabled: !!id && !!user,
     queryFn: async () => {
       const numId = typeof id === "string" ? parseInt(id, 10) : id;
       const { data, error } = await supabase

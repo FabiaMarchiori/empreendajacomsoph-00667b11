@@ -3,12 +3,15 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { usePlanAccess } from "@/hooks/usePlanAccess";
+
 export function SophFloatingButton() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const access = usePlanAccess();
 
-  if (location.pathname === "/soph") return null;
+  if (!access.soph || location.pathname === "/soph") return null;
 
   const quickActions = [
     { label: "Por onde começo?", action: () => navigate("/soph", { state: { initialMessage: "Por onde começo?" } }) },
@@ -52,6 +55,7 @@ export function SophFloatingButton() {
       </AnimatePresence>
 
       <motion.button
+        aria-label="Abrir Soph"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(!open)}

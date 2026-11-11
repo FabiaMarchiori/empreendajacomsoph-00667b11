@@ -74,8 +74,10 @@ Testes de PostgreSQL/PGlite com RLS executada sob authenticated/anon, grants e u
 ### Resultado desta execução
 
 - 79 testes de segurança passaram: 12 vínculo/identidade, 18 autorização/RLS, 10 reserva/recuperação de comunicação, 18 webhook/legado/recuperação e 21 endpoints diretos.
-- 11 testes Vitest passaram (5 existentes e 6 renderizações de Meus Acessos).
+- 17 testes Vitest passaram (5 existentes, 8 de Meus Acessos/entrada Soph e 4 de isolamento de cache de fornecedores por usuário).
 - Build Vite passou; mantém os avisos anteriores de tamanho de bundle e Browserslist.
 - TypeScript da aplicação passou; Deno check passou para as quatro Edge Functions alteradas.
 - Lint dos TS/TSX alterados e git diff --check passaram.
 - Sem compras, e-mails reais, escrita em produção ou uso de contas reais nos testes.
+
+Os caches de fornecedores e contagens são separados pela identidade autenticada e desabilitados sem login, para impedir reapresentação de conteúdo de outro usuário após troca de conta. A entrada flutuante Soph também respeita o direito retornado pelo servidor.

@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, type ReactNode } from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import { afterEach, describe, it, expect, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
@@ -8,6 +8,7 @@ vi.mock("@/hooks/usePlanAccess", () => ({
   usePlanAccess: () => ({ ...state.access, isLoading: false }),
 }));
 vi.mock("framer-motion", () => ({
+  AnimatePresence: ({ children }: { children: ReactNode }) => children,
   motion: new Proxy(
     {},
     {
@@ -83,4 +84,16 @@ describe("Meus Acessos reflects server entitlements", () => {
       screen.queryByText("Soph, sua Sócia Digital"),
     ).not.toBeInTheDocument();
   });
+});
+
+import { SophFloatingButton } from '@/components/SophFloatingButton';
+describe('Soph entry follows the server entitlement',()=>{
+ it('ERP-only or unsubscribed client is not offered a Soph entry',()=>{
+  state.access={...noProductAccess,erp:true};render(<MemoryRouter><SophFloatingButton /></MemoryRouter>);
+  expect(screen.queryByRole('button',{name:'Abrir Soph'})).not.toBeInTheDocument();
+ });
+ it('Bolsas client can open Soph',()=>{
+  state.access={...noProductAccess,bolsas:true,soph:true};render(<MemoryRouter><SophFloatingButton /></MemoryRouter>);
+  expect(screen.getByRole('button',{name:'Abrir Soph'})).toBeInTheDocument();
+ });
 });

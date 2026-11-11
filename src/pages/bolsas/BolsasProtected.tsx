@@ -20,7 +20,7 @@ export default function BolsasProtected({ children }: Props) {
   // Admin: acesso total
   if (isAdmin) return <>{children}</>;
 
-  // Assinante do Ecossistema: redireciona elegantemente para 25 de Março
+  // Ecossistema também inclui o nicho Bolsas.
   if (hasEcosystem) return <>{children}</>;
 
   // Plano Bolsas: acesso liberado
