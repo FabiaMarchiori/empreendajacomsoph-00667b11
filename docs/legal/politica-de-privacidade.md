@@ -1,6 +1,6 @@
 # Política de Privacidade e LGPD
 
-Versão 1.0 para revisão · Atualização: 11 de novembro de 2026.
+Versão 1.0 · Atualização: 11 de novembro de 2026.
 
 ## 1. Quem atende você
 
@@ -77,7 +77,7 @@ Nos termos da LGPD, você pode solicitar, conforme o tratamento e as hipóteses 
 - revogação do consentimento e eliminação dos dados tratados com essa base, ressalvadas as hipóteses legais de conservação;
 - oposição nos casos previstos em lei e revisão de decisões tomadas unicamente com base em tratamento automatizado que afetem seus interesses.
 
-Escreva para [acesso@empreendajacomsoph.com.br](mailto:acesso@empreendajacomsoph.com.br). Poderemos pedir comprovação proporcional de identidade para não revelar ou alterar dados de outra pessoa. Não envie sua senha. O pedido deve receber resposta e, quando cabível, explicação de eventual limitação legal, observados os prazos aplicáveis. Você também pode recorrer à ANPD e aos órgãos de defesa do consumidor.
+Escreva para [acesso@empreendajacomsoph.com.br](mailto:acesso@empreendajacomsoph.com.br). Ao receber uma solicitação, registramos o pedido, confirmamos a identidade de forma proporcional, identificamos os sistemas e serviços envolvidos, avaliamos o direito solicitado e eventuais hipóteses legais de conservação e respondemos conforme os prazos aplicáveis. Poderemos pedir informações adicionais estritamente necessárias para localizar os dados. Não envie sua senha. Se houver limitação legal, explicaremos o motivo. Você também pode recorrer à ANPD e aos órgãos de defesa do consumidor.
 
 ## 9. Armazenamento no dispositivo e atualizações
 
