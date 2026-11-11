@@ -42,6 +42,9 @@ import ContaPage from "./pages/Conta";
 import TermosPage from "./pages/Termos";
 import PrivacidadePage from "./pages/Privacidade";
 import CookiesPage from "./pages/Cookies";
+import CancelamentoReembolsoPage from "./pages/CancelamentoReembolso";
+import AvisoSophIaPage from "./pages/AvisoSophIa";
+import { LegalLayout } from "./legal/LegalLayout";
 import NotFound from "./pages/NotFound";
 import ObrigadoPage from "./pages/Obrigado";
 
@@ -60,6 +63,13 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/obrigado" element={<ObrigadoPage />} />
+            <Route element={<LegalLayout />}>
+              <Route path="/termos" element={<TermosPage />} />
+              <Route path="/privacidade" element={<PrivacidadePage />} />
+              <Route path="/cookies" element={<CookiesPage />} />
+              <Route path="/cancelamento-reembolso" element={<CancelamentoReembolsoPage />} />
+              <Route path="/aviso-soph-ia" element={<AvisoSophIaPage />} />
+            </Route>
             <Route element={<AppLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/fornecedores" element={<FornecedoresPage />} />
@@ -92,9 +102,6 @@ const App = () => (
               <Route path="/soph" element={<EcosystemProtected><SophPage /></EcosystemProtected>} />
               <Route path="/acessos" element={<AcessosPage />} />
               <Route path="/conta" element={<ContaPage />} />
-              <Route path="/termos" element={<TermosPage />} />
-              <Route path="/privacidade" element={<PrivacidadePage />} />
-              <Route path="/cookies" element={<CookiesPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
