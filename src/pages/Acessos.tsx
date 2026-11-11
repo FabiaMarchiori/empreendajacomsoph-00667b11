@@ -8,6 +8,9 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { useNavigate } from "react-router-dom";
 import sophAvatar from "@/assets/soph-avatar.png";
 
+import { usePlanAccess } from "@/hooks/usePlanAccess";
+import { visibleBenefitRoutes } from "@/lib/product-access";
+
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.04 } } };
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } };
 
@@ -20,18 +23,18 @@ interface AccessItem {
 }
 
 const produtoPrincipal: AccessItem[] = [
-  { title: "Importadoras 25 de Março", description: "Catálogo completo de fornecedores e importadoras", status: "adquirido", icon: <Package className="h-5 w-5" />, route: "/fornecedores" },
+  { title: "Importadoras 25 de Março", description: "Catálogo completo de fornecedores e importadoras", status: "adquirido", icon: <Package className="h-5 w-5" />, route: "/fornecedores/importadoras-25" },
 ];
 
 const brindes: AccessItem[] = [
-  { title: "Sistema de Precificação", description: "Margens, markup e preço ideal", status: "brinde", icon: <BarChart3 className="h-5 w-5" />, route: "/gestao" },
+  { title: "Sistema de Precificação", description: "Margens, markup e preço ideal", status: "brinde", icon: <BarChart3 className="h-5 w-5" />, route: "/gestao/precificacao" },
   { title: "Soph, sua Sócia Digital", description: "Assistente estratégica para seu negócio", status: "brinde", icon: <MessageCircle className="h-5 w-5" />, route: "/soph" },
   { title: "Abrir CNPJ / MEI", description: "Passo a passo para formalizar", status: "brinde", icon: <FileText className="h-5 w-5" />, route: "/estrutura/abrir-mei" },
   { title: "Criar sua Logo Marca", description: "Identidade visual profissional", status: "brinde", icon: <Star className="h-5 w-5" />, route: "/estrutura/logo-marca" },
   { title: "Registrar sua Marca", description: "Proteja seu nome legalmente", status: "brinde", icon: <FileText className="h-5 w-5" />, route: "/estrutura/registrar-marca" },
   { title: "Domínio e Site", description: "Presença digital profissional", status: "brinde", icon: <Globe className="h-5 w-5" />, route: "/vendas/dominio-site" },
   { title: "Vender em Marketplaces", description: "Mercado Livre, Shopee e mais", status: "brinde", icon: <ShoppingBag className="h-5 w-5" />, route: "/vendas/marketplaces" },
-  { title: "ERP – Soph Gestão", description: "Estoque, vendas e financeiro", status: "brinde", icon: <Database className="h-5 w-5" />, route: "/gestao" },
+  { title: "ERP – Soph Gestão", description: "Estoque, vendas e financeiro", status: "brinde", icon: <Database className="h-5 w-5" />, route: "/erp" },
 ];
 
 const allEmBreve: AccessItem[] = [
@@ -100,6 +103,12 @@ function GridCard({ item: a, isPrimary }: { item: AccessItem; isPrimary?: boolea
 }
 
 export default function AcessosPage() {
+  const access = usePlanAccess();
+  const visibleRoutes = visibleBenefitRoutes(access);
+  const primary = [...produtoPrincipal, { title: "Bolsas, Mochilas e Malas", description: "Fornecedores do seu nicho", status: "adquirido" as const, icon: <Package className="h-5 w-5" />, route: "/fornecedores/bolsas-mochilas-malas" }].filter(a => visibleRoutes.includes(a.route || ""));
+  const included = brindes.filter(a => visibleRoutes.includes(a.route || ""));
+  if (access.isLoading) return <p role="status">Carregando seus acessos…</p>;
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-6 sm:space-y-8">
       {/* ── HERO ── */}
@@ -112,7 +121,7 @@ export default function AcessosPage() {
           Tudo o que está incluído no seu acesso, brindes exclusivos e os próximos módulos do ecossistema.
         </p>
         <div className="flex flex-wrap gap-2 pt-1">
-          {["Produto Principal", "8 Brindes", "Novos Módulos em Breve"].map(t => (
+          {["Seus produtos", `${included.length} benefícios incluídos`, "Novos Módulos em Breve"].map(t => (
             <span key={t} className="px-3 py-1 rounded-full text-[11px] font-semibold border text-white" style={{ borderColor: "rgba(0,239,255,0.25)", background: "rgba(0,239,255,0.08)" }}>{t}</span>
           ))}
         </div>
@@ -123,7 +132,7 @@ export default function AcessosPage() {
         <h2 className="font-display font-bold text-lg text-white mb-1">Seu produto principal</h2>
         <p className="text-sm text-white mb-4">O acesso principal que você adquiriu</p>
         <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {produtoPrincipal.map(a => (
+          {primary.map(a => (
             <GridCard key={a.title} item={a} isPrimary />
           ))}
         </motion.div>
@@ -134,7 +143,7 @@ export default function AcessosPage() {
         <h2 className="font-display font-bold text-lg text-white mb-1">Brindes inclusos no seu acesso</h2>
         <p className="text-sm text-white mb-4">Módulos e ferramentas liberados como benefício do seu plano</p>
         <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          {brindes.map(a => (
+          {included.map(a => (
             <GridCard key={a.title} item={a} />
           ))}
         </motion.div>

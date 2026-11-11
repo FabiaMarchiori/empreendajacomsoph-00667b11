@@ -1,7 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { usePlanAccess } from "@/hooks/usePlanAccess";
 import BolsasGate from "./BolsasGate";
-import BolsasIncluded from "./BolsasIncluded";
 
 interface Props {
   children: React.ReactNode;
@@ -22,7 +21,7 @@ export default function BolsasProtected({ children }: Props) {
   if (isAdmin) return <>{children}</>;
 
   // Assinante do Ecossistema: redireciona elegantemente para 25 de Março
-  if (hasEcosystem) return <BolsasIncluded />;
+  if (hasEcosystem) return <>{children}</>;
 
   // Plano Bolsas: acesso liberado
   if (hasBolsasPlan) return <>{children}</>;

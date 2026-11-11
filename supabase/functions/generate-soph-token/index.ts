@@ -87,15 +87,12 @@ serve(async (req) => {
       .select("id, status")
       .eq("user_id", user.id)
       .eq("status", "ativa")
+      .or(`data_expiracao.is.null,data_expiracao.gt.${new Date().toISOString()}`)
+      .limit(1)
       .maybeSingle();
 
-    const { data: profile } = await supabaseAdmin
-      .from("profiles")
-      .select("is_admin")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    const isAdmin = profile?.is_admin === true;
+    const { data: isAdmin, error: adminError } = await supabaseAuth.rpc("is_admin");
+    if (adminError) throw new Error("Unable to verify administrator role");
     const hasActiveSubscription = !!subscription;
 
     if (!hasActiveSubscription && !isAdmin) {
