@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:subscriptions": "node tests/subscriptions/run.mjs && node tests/subscriptions/products.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/endpoints.mjs"
+    "test:subscriptions": "node tests/subscriptions/run.mjs && node tests/subscriptions/products.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/endpoints.mjs && node tests/subscriptions/renewals.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

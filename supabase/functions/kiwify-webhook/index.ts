@@ -32,12 +32,14 @@ Deno.serve(async (req) => {
 
     // 2. Parse payload
     const payload = await req.json();
-    const eventType = payload?.order_status || payload?.event || "unknown";
+    const identity = kiwifyIdentity(payload);
+    if (identity.error) return jsonResponse({ error: identity.error }, 422);
+    const eventType = identity.eventType;
     const email = payload?.Customer?.email?.toLowerCase()?.trim();
     const customerName = payload?.Customer?.full_name || null;
     const customerId = payload?.Customer?.id || null;
-    const subscriptionId = payload?.Subscription?.id || payload?.order_id || payload?.Transaction?.order_id || null;
-    const rawProductName = payload?.Product?.name || payload?.product?.name || "Ecossistema EmpreendaJá";
+    const subscriptionId = identity.subscriptionId;
+    const rawProductName = payload?.Product?.product_name || payload?.Product?.name || payload?.product?.name || "Ecossistema EmpreendaJá";
     const productId = payload?.Product?.id || payload?.product_id || payload?.Product?.product_id || null;
     const amount = payload?.Commissions?.charge_amount
       ? parseFloat(payload.Commissions.charge_amount) / 100
@@ -64,24 +66,35 @@ Deno.serve(async (req) => {
 
     if (!subscriptionId) return jsonResponse({ error: "Identificador estável da compra necessário" }, 422);
 
+    if (eventType === "subscription_renewed") return await processRenewal(supabase, payload, identity);
+    // A cancellation can retain the already-paid period; a recurring refund can
+    // refer to an older charge. Never infer an entitlement reversal from paid.
+    if (eventType === "subscription_canceled" || eventType === "subscription_cancelled" || eventType === "subscription_late" || (identity.canonicalId && ["refunded", "order_refunded", "chargeback"].includes(eventType))) {
+      await logWebhook(supabase, eventType, payload, "review_required", "Evento de ciclo recorrente exige conciliação de cobrança e período pago");
+      return jsonResponse({ error: "Conciliação do ciclo recorrente necessária" }, 409);
+    }
+
+    if (!identity.canonicalId && Object.keys(identity.subscription).length > 0) return jsonResponse({ error: "Assinatura recorrente sem identificador de contrato" }, 422);
+
     // 3. Handle events
     if (eventType === "approved" || eventType === "order_approved" || eventType === "paid") {
       // Check for duplicate
       if (subscriptionId) {
-        const { data: existing } = await supabase
-          .from("assinaturas")
-          .select("id, email, nome_cliente, status")
-          .eq("kiwify_subscription_id", subscriptionId)
-          .maybeSingle();
+        const resolved = await findStoredSubscription(supabase, identity.candidates);
+        if (resolved.ambiguous) {
+          await logWebhook(supabase, eventType, payload, "review_required", "Identidade corresponde a múltiplas assinaturas legadas");
+          return jsonResponse({ error: "Conciliação de identidade necessária" }, 409);
+        }
+        const existing = resolved.subscription;
 
         if (existing && existing.status !== "ativa") {
           await logWebhook(supabase, eventType, {}, "review_required", "Aprovação após estado terminal exige conciliação de renovação/eventos");
           return jsonResponse({ error: "Conciliação de eventos necessária" }, 409);
         }
         if (existing) {
-          await ensureAuthorizedClient(supabase, existing.email, customerId, subscriptionId);
+          await ensureAuthorizedClient(supabase, existing.email, customerId, existing.kiwify_subscription_id);
           await linkVerifiedOwner(supabase, existing.id, existing.email);
-          const retriedEmail = await sendAccessEmail({ supabase, eventType, payload, subscriptionId, assinaturaId: existing.id, email: existing.email, customerName: existing.nome_cliente });
+          const retriedEmail = await sendAccessEmail({ supabase, eventType, payload, subscriptionId: existing.kiwify_subscription_id, assinaturaId: existing.id, email: existing.email, customerName: existing.nome_cliente });
           if (retriedEmail === "failed") return jsonResponse({ error: "Comunicação pendente de recuperação" }, 503);
           console.log(`[kiwify-webhook] Duplicate ignored: ${subscriptionId}`);
           await logWebhook(supabase, eventType, payload, "duplicate", "Assinatura já existe e está ativa");
@@ -103,9 +116,9 @@ Deno.serve(async (req) => {
           data_expiracao: null,
         },
         { onConflict: "kiwify_subscription_id", ignoreDuplicates: true }
-      ).select("id, status, email, nome_cliente").maybeSingle();
+      ).select("id, status, email, nome_cliente, kiwify_subscription_id").maybeSingle();
 
-      const { data: storedSubscription, error: storedError } = insertedSubscription ? { data: insertedSubscription, error: null } : await supabase.from("assinaturas").select("id, status, email, nome_cliente").eq("kiwify_subscription_id", subscriptionId).maybeSingle();
+      const { data: storedSubscription, error: storedError } = insertedSubscription ? { data: insertedSubscription, error: null } : await supabase.from("assinaturas").select("id, status, email, nome_cliente, kiwify_subscription_id").eq("kiwify_subscription_id", subscriptionId).maybeSingle();
       const subscription = storedSubscription;
 
       if (subError || storedError || subscription?.status !== "ativa") {
@@ -115,7 +128,7 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Erro ao registrar assinatura" }, 500);
       }
 
-      await ensureAuthorizedClient(supabase, subscription.email, customerId, subscriptionId);
+      await ensureAuthorizedClient(supabase, subscription.email, customerId, subscription.kiwify_subscription_id);
 
       await linkVerifiedOwner(supabase, subscription.id, subscription.email);
 
@@ -123,7 +136,7 @@ Deno.serve(async (req) => {
         supabase,
         eventType,
         payload,
-        subscriptionId,
+        subscriptionId: subscription.kiwify_subscription_id,
         assinaturaId: subscription.id,
         email: subscription.email,
         customerName: subscription.nome_cliente,
@@ -315,4 +328,99 @@ async function linkVerifiedOwner(
       if (linkError) throw new Error("Unable to link verified subscription");
     }
   }
+}
+
+
+type KiwifyRecord = Record<string, unknown>;
+function record(value: unknown): KiwifyRecord {
+  return value !== null && typeof value === "object" && !Array.isArray(value) ? value as KiwifyRecord : {};
+}
+function text(value: unknown): string | null {
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+function kiwifyIdentity(value: unknown) {
+  const payload = record(value);
+  const subscription = record(payload.Subscription);
+  const topId = text(payload.subscription_id);
+  const nestedId = text(subscription.id);
+  const orderId = text(payload.order_id) || text(record(payload.Transaction).order_id);
+  // An explicit event must never be overwritten by the status of the last order.
+  const eventType = text(payload.webhook_event_type) || text(payload.event) || text(payload.order_status) || "unknown";
+  const charges = record(subscription.charges).completed;
+  const completed = Array.isArray(charges) ? charges.map(record) : [];
+  const canonicalId = topId || nestedId;
+  const candidates = [...new Set([canonicalId, orderId, ...completed.map(c => text(c.order_id))].filter((id): id is string => !!id))];
+  const error = topId && nestedId && topId !== nestedId ? "Identificadores de assinatura conflitantes" : candidates.length > 128 ? "Histórico de cobranças exige conciliação" : null;
+  return { eventType, canonicalId, orderId, subscriptionId: canonicalId || orderId, candidates, completed, subscription, error };
+}
+
+type StoredSubscription = {
+  id: string; kiwify_subscription_id: string; email: string; nome_cliente: string | null;
+  status: string; data_expiracao: string | null;
+};
+async function findStoredSubscription(supabase: SupabaseClient, candidates: string[]) {
+  const { data, error } = await supabase.from("assinaturas")
+    .select("id, kiwify_subscription_id, email, nome_cliente, status, data_expiracao")
+    .in("kiwify_subscription_id", candidates);
+  if (error) throw new Error("Unable to resolve subscription identity");
+  const rows = (data || []) as StoredSubscription[];
+  return { subscription: rows.length === 1 ? rows[0] : null, ambiguous: rows.length > 1 };
+}
+function explicitInstant(value: unknown): number | null {
+  // No interpretation of unzoned approved_date/updated_at and no month arithmetic.
+  if (typeof value !== "string") return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/.exec(value);
+  if (!match) return null;
+  const [, y, m, d, h, minute, second] = match;
+  if (+m < 1 || +m > 12 || +d < 1 || +d > new Date(Date.UTC(+y, +m, 0)).getUTCDate() || +h > 23 || +minute > 59 || +second > 59) return null;
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : null;
+}
+async function processRenewal(supabase: SupabaseClient, payload: unknown, identity: ReturnType<typeof kiwifyIdentity>) {
+  const event = record(payload);
+  const review = async (reason: string) => {
+    // Keep the event for reconciliation without copying buyer details into errors.
+    await logWebhook(supabase, identity.eventType, payload, "review_required", reason);
+    return jsonResponse({ error: reason }, 409);
+  };
+  if (!identity.canonicalId || !identity.orderId) return review("Renovação sem identidade de assinatura e cobrança");
+  const access = record(identity.subscription.customer_access);
+  const paidCharge = identity.completed.find(c => text(c.order_id) === identity.orderId && c.status === "paid");
+  const until = explicitInstant(access.access_until);
+  const paidAt = explicitInstant(paidCharge?.created_at);
+  if (event.order_status !== "paid" || identity.subscription.status !== "active" || access.has_access !== true || access.active_period !== true || !paidCharge || until === null || paidAt === null || until <= paidAt) {
+    return review("Renovação sem comprovação consistente de pagamento e período autorizado");
+  }
+  const resolved = await findStoredSubscription(supabase, identity.candidates);
+  if (resolved.ambiguous) return review("Mais de uma assinatura legada corresponde ao contrato; não consolidar automaticamente");
+  const existing = resolved.subscription;
+  if (!existing) return review("Renovação sem assinatura local identificada; não criar outra assinatura");
+  if (existing.status !== "ativa") return review("Renovação de registro encerrado exige conciliação; não reativar automaticamente");
+  if (existing.email.trim().toLowerCase() !== text(record(event.Customer).email)?.toLowerCase()) return review("Identidade da renovação diverge da compra original");
+  if (until <= Date.now()) return review("Período da renovação já encerrado; verificar estado atual na Kiwify");
+  const { data: prior, error: priorError } = await supabase.from("webhook_logs").select("id")
+    .eq("evento", "subscription_renewed").eq("status", "renewal_recognized")
+    .eq("payload->>order_id", identity.orderId).limit(1).maybeSingle();
+  if (priorError) return review("Não foi possível verificar a cobrança já reconhecida");
+  if (prior) {
+    await logWebhook(supabase, identity.eventType, payload, "renewal_duplicate", "Cobrança de renovação já reconhecida");
+    return jsonResponse({ success: true, message: "Renovação já reconhecida" });
+  }
+  // A null expiry is historical indefinite access, not permission to invent a term.
+  // Only extend a known finite term using Kiwify's explicit authorized access_until.
+  if (existing.data_expiracao !== null) {
+    const current = explicitInstant(existing.data_expiracao);
+    if (current === null) return review("Validade local sem instante inequívoco");
+    if (until > current) {
+      const { data, error } = await supabase.from("assinaturas")
+        .update({ data_expiracao: new Date(until).toISOString() })
+        .eq("id", existing.id).eq("status", "ativa")
+        .eq("data_expiracao", existing.data_expiracao)
+        .select("id").maybeSingle();
+      if (error || !data) return review("Estado mudou durante a renovação; conciliar sem sobrescrever");
+    }
+  }
+  // No upsert, owner assignment, benefit change or new Brevo onboarding message.
+  await logWebhook(supabase, identity.eventType, payload, "renewal_recognized", "Renovação reconhecida sem recriar compra ou reenviar boas-vindas");
+  return jsonResponse({ success: true, message: "Renovação reconhecida" });
 }

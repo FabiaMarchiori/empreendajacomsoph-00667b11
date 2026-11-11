@@ -1,5 +1,7 @@
 # Matriz comercial e recuperação transacional — preparada, não implantada
 
+> Atualização sobre renovações e campos Kiwify: `docs/kiwify-renewals.md`. O reconhecimento de eventos/IDs e a extensão de período explícito em contratos ativos únicos foram corrigidos; cancelamento/reembolso recorrente e correspondências legadas ambíguas permanecem para conciliação.
+
 ## Estado e compatibilidade
 
 A branch incorpora origin/main a4f5809 e o commit Lovable 20d399761f10e07803f944b30971d853a4661f42 via merge b2d01c5. O commit d7ba659 e a proteção de identidade confirmada foram preservados. A modificação de tipos da Lovable foi incorporada e refinada para SupabaseClient (sem any explícito); Deno check valida a compatibilidade.

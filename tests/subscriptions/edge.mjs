@@ -77,6 +77,7 @@ async function webhook({
         select() {
           return q;
         },
+        in(k, values) { filters.push(r => values.includes(r[k])); return q; },
         eq(k, v) {
           filters.push((r) => r[k] === v);
           return q;
