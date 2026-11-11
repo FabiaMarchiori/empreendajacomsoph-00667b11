@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { LegalLinks } from "@/legal/LegalLinks";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
 
 export default function LoginPage() {
@@ -56,7 +57,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "linear-gradient(135deg, #0A192F 0%, #102A43 55%, #0A192F 100%)" }}>
+    <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ background: "linear-gradient(135deg, #0A192F 0%, #102A43 55%, #0A192F 100%)" }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -191,6 +192,9 @@ export default function LoginPage() {
               </button>
             )}
           </div>
+        </div>
+        <div className="mt-6 text-center text-xs text-white/80">
+          <LegalLinks label="Documentos jurídicos no login e cadastro" />
         </div>
       </motion.div>
     </div>
