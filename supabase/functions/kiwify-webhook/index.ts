@@ -201,7 +201,7 @@ Deno.serve(async (req) => {
 });
 
 type SendAccessEmailInput = {
-  supabase: ReturnType<typeof createClient>;
+  supabase: any;
   eventType: string;
   payload: unknown;
   subscriptionId: string | null;
@@ -312,7 +312,7 @@ async function sendAccessEmail({
 }
 
 async function markCommunicationFailed(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   communicationId: string,
   errorMessage: string,
 ) {
@@ -334,7 +334,7 @@ function jsonResponse(data: Record<string, unknown>, status = 200) {
 }
 
 async function logWebhook(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   evento: string,
   payload: unknown,
   status: string,
