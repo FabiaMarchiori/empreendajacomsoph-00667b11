@@ -76,7 +76,9 @@ async function environment(rows = [{ ...baseRow }], race = false) {
     authCalls = 0,
     raced = false;
   const client = {
-    rpc: async () => {
+    rpc: async (name) => {
+      if (name === "kiwify_event_context") return { data: { pending: false, recurring: false }, error: null };
+      if (name === "authorize_kiwify_purchase") return { data: true, error: null };
       emails++;
       return { data: { state: "sent" }, error: null };
     },
@@ -320,13 +322,13 @@ await test("unrecognized explicit event cannot fall back to paid", async () => {
   assert.equal(e.db.webhook_logs[0].status, "ignored");
   assert.deepEqual(e.db.assinaturas, [baseRow]);
 });
-await test("conflicting root and nested IDs fail before any write", async () => {
+await test("conflicting root and nested IDs create durable review without purchase writes", async () => {
   const e = await environment();
   const p = payload();
   p.Subscription.id = "another-contract";
-  assert.equal((await e.invoke(p)).status, 422);
+  await expectPending(await e.invoke(p));
   assert.deepEqual(e.db.assinaturas, [baseRow]);
-  assert.equal(e.db.webhook_logs.length, 0);
+  assert.equal(e.db.webhook_logs[0].status, "review_required");
 });
 await test("matching root/nested IDs and nested-only compatibility are accepted", async () => {
   for (const nestedOnly of [false, true]) {
@@ -368,6 +370,8 @@ await test("first recurring purchase uses official contract ID and product_name"
   const e = await environment([]);
   const p = payload();
   p.webhook_event_type = "order_approved";
+  p.order_id = "first-charge";
+  p.Subscription.charges.completed = [p.Subscription.charges.completed[0]];
   assert.equal((await e.invoke(p)).status, 200);
   assert.equal(e.db.assinaturas[0].kiwify_subscription_id, "contract");
   assert.equal(e.db.assinaturas[0].plano, "Anual");

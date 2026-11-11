@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
     // 2. Parse payload
     const payload = await req.json();
     const identity = kiwifyIdentity(payload);
-    if (identity.error) return jsonResponse({ error: identity.error }, 422);
+    if (identity.error) return await receiveForReview(supabase, identity.eventType, payload, identity.error);
     const eventType = identity.eventType;
     // A persisted manual review stays pending on transport retries, even if local
     // business state changed. HTTP receipt is not a financial authorization.
@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
       .select("id").eq("event_key", pendingKey).eq("status", "review_required").maybeSingle();
     if (pendingReadError) throw new Error("Unable to verify pending webhook receipt");
     if (pendingReview) return pendingReviewResponse(pendingReview.id, true);
-    const email = payload?.Customer?.email?.toLowerCase()?.trim();
+    const email = text(record(payload?.Customer).email)?.toLowerCase();
     const customerName = payload?.Customer?.full_name || null;
     const customerId = payload?.Customer?.id || null;
     const subscriptionId = identity.subscriptionId;
@@ -66,6 +66,8 @@ Deno.serve(async (req) => {
 
     console.log(`[kiwify-webhook] Event: ${eventType}, Email: ${email}, SubID: ${subscriptionId}`);
 
+    const changesPurchase = ["approved", "order_approved", "paid", "subscription_renewed", "refunded", "order_refunded", "chargeback"].includes(eventType);
+    if (!email && subscriptionId && (changesPurchase || ["subscription_canceled", "subscription_cancelled", "subscription_late"].includes(eventType))) return await receiveForReview(supabase, eventType, payload, "Identidade de e-mail ausente; não conceder, vincular ou revogar automaticamente");
     if (!email) {
       await logWebhook(supabase, eventType, payload, "error", "Email ausente no payload");
       return jsonResponse({ error: "Email ausente" }, 400);
@@ -73,10 +75,12 @@ Deno.serve(async (req) => {
 
     if (!subscriptionId) return jsonResponse({ error: "Identificador estável da compra necessário" }, 422);
 
+    const context = changesPurchase ? await loadEventContext(supabase, identity.candidates) : null;
+    if (context?.pending) return await receiveForReview(supabase, eventType, payload, "Compra ou contrato possui conciliação pendente; não aprovar outra observação automaticamente");
     if (eventType === "subscription_renewed") return await processRenewal(supabase, payload, identity);
     // A cancellation can retain the already-paid period; a recurring refund can
     // refer to an older charge. Never infer an entitlement reversal from paid.
-    if (eventType === "subscription_canceled" || eventType === "subscription_cancelled" || eventType === "subscription_late" || (identity.canonicalId && ["refunded", "order_refunded", "chargeback"].includes(eventType))) {
+    if (eventType === "subscription_canceled" || eventType === "subscription_cancelled" || eventType === "subscription_late" || ((identity.canonicalId || Object.keys(identity.subscription).length > 0 || context?.recurring) && ["refunded", "order_refunded", "chargeback"].includes(eventType))) {
       return await receiveForReview(supabase, eventType, payload, "Evento de ciclo recorrente exige conciliação de cobrança e período pago");
     }
 
@@ -84,6 +88,10 @@ Deno.serve(async (req) => {
 
     // 3. Handle events
     if (eventType === "approved" || eventType === "order_approved" || eventType === "paid") {
+      if (payload.order_status !== "paid" || payload.refunded_at || (identity.canonicalId && (identity.subscription.status !== "active" || record(identity.subscription.customer_access).has_access === false))) {
+        return await receiveForReview(supabase, eventType, payload, "Aprovação contradiz o estado de pagamento ou da recorrência");
+      }
+      if (!identity.canonicalId && context?.recurring) return await receiveForReview(supabase, eventType, payload, "Pedido conhecido como recorrente chegou sem identidade de contrato");
       // Check for duplicate
       if (subscriptionId) {
         const resolved = await findStoredSubscription(supabase, identity.candidates);
@@ -96,7 +104,8 @@ Deno.serve(async (req) => {
           return await receiveForReview(supabase, eventType, payload, "Aprovação após estado terminal exige conciliação de renovação/eventos");
         }
         if (existing) {
-          await ensureAuthorizedClient(supabase, existing.email, customerId, existing.kiwify_subscription_id);
+          if (existing.email.trim().toLowerCase() !== email) return await receiveForReview(supabase, eventType, payload, "Identidade da aprovação diverge da compra original");
+          if (!await ensureAuthorizedClient(supabase, existing.id)) return await receiveForReview(supabase, eventType, payload, "Estado da compra mudou antes da autorização");
           await linkVerifiedOwner(supabase, existing.id, existing.email);
           const retriedEmail = await sendAccessEmail({ supabase, eventType, payload, subscriptionId: existing.kiwify_subscription_id, assinaturaId: existing.id, email: existing.email, customerName: existing.nome_cliente });
           if (retriedEmail === "failed") return jsonResponse({ error: "Comunicação pendente de recuperação" }, 503);
@@ -104,6 +113,12 @@ Deno.serve(async (req) => {
           await logWebhook(supabase, eventType, payload, "duplicate", "Assinatura já existe e está ativa");
           return jsonResponse({ success: true, message: "Já processado" });
         }
+      }
+
+      // A delayed order_approved from a later recurring charge is not a first
+      // purchase. Missing/ambiguous history is reviewed rather than recreated.
+      if (identity.canonicalId && (identity.completed.length !== 1 || text(identity.completed[0].order_id) !== identity.orderId || identity.completed[0].status !== "paid")) {
+        return await receiveForReview(supabase, eventType, payload, "Primeira compra recorrente não comprovada por uma única cobrança paga");
       }
 
       // Upsert assinatura
@@ -132,7 +147,8 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Erro ao registrar assinatura" }, 500);
       }
 
-      await ensureAuthorizedClient(supabase, subscription.email, customerId, subscription.kiwify_subscription_id);
+      if (subscription.email.trim().toLowerCase() !== email) return await receiveForReview(supabase, eventType, payload, "Conflito de identidade na aprovação concorrente");
+      if (!await ensureAuthorizedClient(supabase, subscription.id)) return await receiveForReview(supabase, eventType, payload, "Estado da compra mudou antes da autorização");
 
       await linkVerifiedOwner(supabase, subscription.id, subscription.email);
 
@@ -169,19 +185,13 @@ Deno.serve(async (req) => {
           ? "cancelada"
           : "cancelada";
 
-      if (subscriptionId) {
-        const { error: revokeError } = await supabase
-          .from("assinaturas")
-          .update({ status: newStatus, updated_at: new Date().toISOString() })
-          .eq("kiwify_subscription_id", subscriptionId);
-        if (revokeError) throw new Error("Unable to record cancellation");
-      }
-
-      const { error: clientRevokeError } = await supabase
-        .from("clientes_autorizados")
-        .update({ status_assinatura: "inativa" })
-        .eq("email", email);
-      if (clientRevokeError) throw new Error("Unable to record client cancellation");
+      const resolved = await findStoredSubscription(supabase, identity.candidates);
+      if (resolved.ambiguous || !resolved.subscription) return await receiveForReview(supabase, eventType, payload, "Reembolso sem compra local única; não revogar outro produto nem permitir recriação posterior");
+      const { data: refunded, error: refundError } = await supabase.rpc("refund_kiwify_single_purchase", {
+        p_assinatura_id: resolved.subscription.id, p_email: email, p_status: newStatus,
+      });
+      if (refundError) throw new Error("Unable to persist single purchase refund");
+      if (refunded !== true) return await receiveForReview(supabase, eventType, payload, "Reembolso exige conciliação de identidade ou recorrência");
 
       await logWebhook(supabase, eventType, payload, "success", `Acesso revogado para ${email}`);
       console.log(`[kiwify-webhook] Access revoked for ${email}`);
@@ -272,12 +282,16 @@ async function sendAccessEmail({
   }
 }
 
-async function ensureAuthorizedClient(supabase: SupabaseClient, email: string, customerId: string | null, subscriptionId: string) {
-  // Unique email + ignoreDuplicates preserves original customer/product identifiers.
-  const { error: insertError } = await supabase.from("clientes_autorizados").upsert({ email, status_assinatura: "ativa", customer_id: customerId, produto_id: subscriptionId, data_compra: new Date().toISOString() }, { onConflict: "email", ignoreDuplicates: true });
-  if (insertError) throw new Error("Unable to register authorized client");
-  const { error: updateError } = await supabase.from("clientes_autorizados").update({ status_assinatura: "ativa" }).eq("email", email);
-  if (updateError) throw new Error("Unable to authorize client");
+async function ensureAuthorizedClient(supabase: SupabaseClient, assinaturaId: string): Promise<boolean> {
+  const { data, error } = await supabase.rpc("authorize_kiwify_purchase", { p_assinatura_id: assinaturaId });
+  if (error) throw new Error("Unable to authorize stored purchase");
+  return data === true;
+}
+
+async function loadEventContext(supabase: SupabaseClient, candidates: string[]): Promise<{ pending: boolean; recurring: boolean }> {
+  const { data, error } = await supabase.rpc("kiwify_event_context", { p_candidate_ids: candidates });
+  if (error || !data || typeof data.pending !== "boolean" || typeof data.recurring !== "boolean") throw new Error("Unable to verify Kiwify reconciliation context");
+  return { pending: data.pending, recurring: data.recurring };
 }
 
 function jsonResponse(data: Record<string, unknown>, status = 200) {
@@ -430,7 +444,8 @@ async function processRenewal(supabase: SupabaseClient, payload: unknown, identi
   };
   if (!identity.canonicalId || !identity.orderId) return review("Renovação sem identidade de assinatura e cobrança");
   const access = record(identity.subscription.customer_access);
-  const paidCharge = identity.completed.find(c => text(c.order_id) === identity.orderId && c.status === "paid");
+  const matchingCharges = identity.completed.filter(c => text(c.order_id) === identity.orderId);
+  const paidCharge = matchingCharges.length === 1 && matchingCharges[0].status === "paid" ? matchingCharges[0] : null;
   const until = explicitInstant(access.access_until);
   const paidAt = explicitInstant(paidCharge?.created_at);
   if (event.order_status !== "paid" || identity.subscription.status !== "active" || access.has_access !== true || access.active_period !== true || !paidCharge || until === null || paidAt === null || until <= paidAt) {
@@ -463,7 +478,15 @@ async function processRenewal(supabase: SupabaseClient, payload: unknown, identi
         .eq("data_expiracao", existing.data_expiracao)
         .select("id").maybeSingle();
       if (error) throw new Error("Unable to persist renewal period");
-      if (!data) return review("Estado mudou durante a renovação; conciliar sem sobrescrever");
+      if (!data) {
+        // A concurrent duplicate may already have extended the same active row.
+        // Re-read instead of creating a pending case that blocks later renewals.
+        const { data: latest, error: latestError } = await supabase.from("assinaturas")
+          .select("status, data_expiracao").eq("id", existing.id).maybeSingle();
+        if (latestError) throw new Error("Unable to confirm concurrent renewal state");
+        const latestUntil = explicitInstant(latest?.data_expiracao);
+        if (latest?.status !== "ativa" || latestUntil === null || latestUntil < until) return review("Estado mudou durante a renovação; conciliar sem sobrescrever");
+      }
     }
   }
   // No upsert, owner assignment, benefit change or new Brevo onboarding message.

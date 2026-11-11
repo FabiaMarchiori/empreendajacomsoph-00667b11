@@ -68,7 +68,8 @@ function env(options = {}) {
     providerCalls = 0;
   const business = structuredClone(subscription);
   const client = {
-    rpc: () => {
+    rpc: (name) => {
+      if (name === "kiwify_event_context") return { data: { pending: false, recurring: false }, error: null };
       providerCalls++;
       throw new Error("Provider calls prohibited");
     },

@@ -7,7 +7,7 @@ CREATE TABLE public.assinaturas(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),ki
 CREATE FUNCTION public.update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at=now(); RETURN NEW; END $$;`);
 await db.exec(
   await readFile(
-    "supabase/migrations/20260918163000_create_comunicacoes_transacionais.sql",
+    "tests/subscriptions/fixtures/existing-outbox.sql",
     "utf8",
   ),
 );

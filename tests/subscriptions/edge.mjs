@@ -41,6 +41,8 @@ async function webhook({
     finishes = [];
   const client = {
     rpc: async (name, args) => {
+      if (name === "kiwify_event_context") return { data: { pending: false, recurring: false }, error: null };
+      if (name === "authorize_kiwify_purchase") return { data: true, error: null };
       if (name === "reserve_access_email")
         return {
           data: {
