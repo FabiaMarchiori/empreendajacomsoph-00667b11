@@ -153,7 +153,7 @@ async function environment(rows = [{ ...baseRow }], race = false) {
         if (op === "update") for (const r of found) Object.assign(r, value);
         if (op === "insert" || op === "upsert") {
           const key =
-            table === "assinaturas" ? "kiwify_subscription_id" : "email";
+            table === "webhook_logs" ? "event_key" : table === "assinaturas" ? "kiwify_subscription_id" : "email";
           const exists =
             op === "upsert" && db[table].some((r) => r[key] === value[key]);
           if (!exists) {
@@ -204,6 +204,14 @@ async function environment(rows = [{ ...baseRow }], race = false) {
       return authCalls;
     },
   };
+}
+async function expectPending(response) {
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.status, "review_required");
+  assert.equal(body.received, true);
+  assert.equal(body.access_changed, false);
+  assert.equal(body.success, undefined);
 }
 let passed = 0;
 const test = async (n, f) => {
@@ -269,24 +277,24 @@ await test("several legacy rows are not merged, transferred or recreated", async
     { ...baseRow, id: "other-row", kiwify_subscription_id: "charge-2" },
   ];
   const e = await environment(rows);
-  assert.equal((await e.invoke(payload())).status, 409);
+  await expectPending(await e.invoke(payload()));
   assert.deepEqual(e.db.assinaturas, rows);
 });
 await test("renewal without local contract never creates an additional subscription", async () => {
   const e = await environment([]);
-  assert.equal((await e.invoke(payload())).status, 409);
+  await expectPending(await e.invoke(payload()));
   assert.equal(e.db.assinaturas.length, 0);
 });
 for (const status of ["cancelada", "reembolsada", "inativa", "expirada"])
   await test(`${status} record is never reactivated by renewal`, async () => {
     const row = { ...baseRow, status };
     const e = await environment([row]);
-    assert.equal((await e.invoke(payload())).status, 409);
+    await expectPending(await e.invoke(payload()));
     assert.deepEqual(e.db.assinaturas, [row]);
   });
 await test("refund racing with renewal cannot be overwritten", async () => {
   const e = await environment(undefined, true);
-  assert.equal((await e.invoke(payload())).status, 409);
+  await expectPending(await e.invoke(payload()));
   assert.equal(e.db.assinaturas[0].status, "reembolsada");
   assert.equal(e.db.assinaturas[0].data_expiracao, baseRow.data_expiracao);
 });
@@ -299,7 +307,7 @@ for (const type of [
     const e = await environment();
     const p = payload();
     p.webhook_event_type = type;
-    assert.equal((await e.invoke(p)).status, 409);
+    await expectPending(await e.invoke(p));
     assert.deepEqual(e.db.assinaturas, [baseRow]);
     assert.equal(e.emails, 0);
     assert.equal(e.db.webhook_logs[0].evento, type);
@@ -334,27 +342,27 @@ for (const missing of ["access_until", "has_access", "active_period"])
     const e = await environment();
     const p = payload();
     delete p.Subscription.customer_access[missing];
-    assert.equal((await e.invoke(p)).status, 409);
+    await expectPending(await e.invoke(p));
     assert.deepEqual(e.db.assinaturas, [baseRow]);
   });
 await test("timezone-free access date is not guessed from order timestamps or next_payment", async () => {
   const e = await environment();
   const p = payload();
   p.Subscription.customer_access.access_until = "2030-02-01 00:00";
-  assert.equal((await e.invoke(p)).status, 409);
+  await expectPending(await e.invoke(p));
 });
 await test("charge not paid or not associated with current order cannot grant renewal", async () => {
   const e = await environment();
   const p = payload();
   p.order_id = "unknown-charge";
-  assert.equal((await e.invoke(p)).status, 409);
+  await expectPending(await e.invoke(p));
   assert.deepEqual(e.db.assinaturas, [baseRow]);
 });
 await test("expired historical renewal is not treated as current access", async () => {
   const e = await environment();
   const p = payload();
   p.Subscription.customer_access.access_until = "2030-01-02T00:00:00Z";
-  assert.equal((await e.invoke(p)).status, 409);
+  await expectPending(await e.invoke(p));
 });
 await test("first recurring purchase uses official contract ID and product_name", async () => {
   const e = await environment([]);
@@ -377,7 +385,7 @@ await test("invalid calendar date is rejected rather than normalized into access
   const e = await environment();
   const p = payload();
   p.Subscription.customer_access.access_until = "2030-02-30T00:00:00Z";
-  assert.equal((await e.invoke(p)).status, 409);
+  await expectPending(await e.invoke(p));
   assert.deepEqual(e.db.assinaturas, [baseRow]);
 });
 console.log(`${passed} Kiwify identity/renewal regression tests passed`);

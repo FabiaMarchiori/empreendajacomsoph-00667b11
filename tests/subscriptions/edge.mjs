@@ -120,7 +120,7 @@ async function webhook({
           if (table === "comunicacoes_transacionais")
             return { data: null, error: { code: "23505" } };
           const key =
-            table === "clientes_autorizados"
+            table === "webhook_logs" ? "event_key" : table === "clientes_autorizados"
               ? "email"
               : "kiwify_subscription_id";
           if (op === "upsert" && rows[table].some((r) => r[key] === value[key]))
@@ -388,7 +388,8 @@ await test("ambiguous delivery is not resent", async () => {
 });
 await test("approval after cancellation cannot reactivate a terminal purchase", async () => {
   const r = await webhook({ duplicate: true, terminal: true });
-  assert.equal(r.response.status, 409);
+  assert.equal(r.response.status, 200);
+  assert.equal((await r.response.json()).status, "review_required");
   assert.equal(r.rows.assinaturas[0].status, "cancelada");
   assert.equal(r.providerCalls, 0);
 });

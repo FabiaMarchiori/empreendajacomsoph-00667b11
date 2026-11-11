@@ -35,6 +35,13 @@ Deno.serve(async (req) => {
     const identity = kiwifyIdentity(payload);
     if (identity.error) return jsonResponse({ error: identity.error }, 422);
     const eventType = identity.eventType;
+    // A persisted manual review stays pending on transport retries, even if local
+    // business state changed. HTTP receipt is not a financial authorization.
+    const pendingKey = await reviewEventKey(eventType, payload);
+    const { data: pendingReview, error: pendingReadError } = await supabase.from("webhook_logs")
+      .select("id").eq("event_key", pendingKey).eq("status", "review_required").maybeSingle();
+    if (pendingReadError) throw new Error("Unable to verify pending webhook receipt");
+    if (pendingReview) return pendingReviewResponse(pendingReview.id, true);
     const email = payload?.Customer?.email?.toLowerCase()?.trim();
     const customerName = payload?.Customer?.full_name || null;
     const customerId = payload?.Customer?.id || null;
@@ -70,8 +77,7 @@ Deno.serve(async (req) => {
     // A cancellation can retain the already-paid period; a recurring refund can
     // refer to an older charge. Never infer an entitlement reversal from paid.
     if (eventType === "subscription_canceled" || eventType === "subscription_cancelled" || eventType === "subscription_late" || (identity.canonicalId && ["refunded", "order_refunded", "chargeback"].includes(eventType))) {
-      await logWebhook(supabase, eventType, payload, "review_required", "Evento de ciclo recorrente exige conciliação de cobrança e período pago");
-      return jsonResponse({ error: "Conciliação do ciclo recorrente necessária" }, 409);
+      return await receiveForReview(supabase, eventType, payload, "Evento de ciclo recorrente exige conciliação de cobrança e período pago");
     }
 
     if (!identity.canonicalId && Object.keys(identity.subscription).length > 0) return jsonResponse({ error: "Assinatura recorrente sem identificador de contrato" }, 422);
@@ -82,14 +88,12 @@ Deno.serve(async (req) => {
       if (subscriptionId) {
         const resolved = await findStoredSubscription(supabase, identity.candidates);
         if (resolved.ambiguous) {
-          await logWebhook(supabase, eventType, payload, "review_required", "Identidade corresponde a múltiplas assinaturas legadas");
-          return jsonResponse({ error: "Conciliação de identidade necessária" }, 409);
+          return await receiveForReview(supabase, eventType, payload, "Identidade corresponde a múltiplas assinaturas legadas");
         }
         const existing = resolved.subscription;
 
         if (existing && existing.status !== "ativa") {
-          await logWebhook(supabase, eventType, {}, "review_required", "Aprovação após estado terminal exige conciliação de renovação/eventos");
-          return jsonResponse({ error: "Conciliação de eventos necessária" }, 409);
+          return await receiveForReview(supabase, eventType, payload, "Aprovação após estado terminal exige conciliação de renovação/eventos");
         }
         if (existing) {
           await ensureAuthorizedClient(supabase, existing.email, customerId, existing.kiwify_subscription_id);
@@ -191,7 +195,13 @@ Deno.serve(async (req) => {
     }
   } catch (err) {
     console.error("[kiwify-webhook] Internal error:", err);
-    await logWebhook(supabase, "internal_error", {}, "error", String(err));
+    try {
+      await logWebhook(supabase, "internal_error", {}, "error", "Falha interna no recebimento do webhook");
+    } catch {
+      // Diagnostic failure must not escape the handler or turn a failed durable
+      // receipt into 2xx. Kiwify must still receive a controlled retryable 5xx.
+      console.error("[kiwify-webhook] Unable to persist internal error diagnostic");
+    }
     return jsonResponse({ error: "Erro interno" }, 500);
   }
 });
@@ -277,23 +287,60 @@ function jsonResponse(data: Record<string, unknown>, status = 200) {
   });
 }
 
+// Canonical JSON makes transport retries independent of object property order.
+// Arrays and changed provider snapshots remain distinct evidence.
+function canonicalJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value !== null && typeof value === "object") {
+    const object = value as Record<string, unknown>;
+    return `{${Object.keys(object).sort().map(key => `${JSON.stringify(key)}:${canonicalJson(object[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value) ?? "null";
+}
+async function reviewEventKey(eventType: string, payload: unknown): Promise<string> {
+  const identity = kiwifyIdentity(payload);
+  const body = record(payload);
+  // Stable contract/order identifiers + provider revision/evidence, never Date.now,
+  // retry count, local failure reason, random IDs or customer email alone.
+  const stable = canonicalJson({ version: "kiwify-review-v1", eventType,
+    subscriptionId: identity.canonicalId, orderId: identity.orderId,
+    updatedAt: body.updated_at ?? null, refundedAt: body.refunded_at ?? null, payload });
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(stable));
+  return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, "0")).join("");
+}
+function pendingReviewResponse(id: string, duplicate: boolean) {
+  return jsonResponse({ received: true, status: "review_required", event_id: id,
+    duplicate, access_changed: false, message: "Evento recebido; pendente de análise" });
+}
+async function receiveForReview(supabase: SupabaseClient, eventType: string, payload: unknown, reason: string) {
+  const receipt = await logWebhook(supabase, eventType, payload, "review_required", reason);
+  return pendingReviewResponse(receipt.id, receipt.duplicate);
+}
 async function logWebhook(
   supabase: SupabaseClient,
   evento: string,
   payload: unknown,
   status: string,
   message: string | null
-) {
-  try {
-    await supabase.from("webhook_logs").insert({
-      evento,
-      payload: payload as Record<string, unknown>,
-      status,
-      error_message: message,
-    });
-  } catch (e) {
-    console.error("[kiwify-webhook] Failed to log:", e);
+): Promise<{ id: string; duplicate: boolean }> {
+  const entry = { evento, payload: payload as Record<string, unknown>, status, error_message: message };
+  if (status === "review_required") {
+    const eventKey = await reviewEventKey(evento, payload);
+    const { data, error } = await supabase.from("webhook_logs")
+      .upsert({ ...entry, event_key: eventKey }, { onConflict: "event_key", ignoreDuplicates: true })
+      .select("id").maybeSingle();
+    if (error) throw new Error("Unable to persist pending webhook event");
+    if (data?.id) return { id: data.id, duplicate: false };
+    // ON CONFLICT DO NOTHING also succeeds without returning a row. Confirm the
+    // existing durable receipt; do not treat an empty successful write as proof.
+    const { data: existing, error: readError } = await supabase.from("webhook_logs")
+      .select("id").eq("event_key", eventKey).eq("status", "review_required").maybeSingle();
+    if (readError || !existing?.id) throw new Error("Unable to confirm pending webhook receipt");
+    return { id: existing.id, duplicate: true };
   }
+  const { data, error } = await supabase.from("webhook_logs").insert(entry).select("id").single();
+  if (error || !data?.id) throw new Error("Unable to persist webhook log");
+  return { id: data.id, duplicate: false };
 }
 
 async function linkVerifiedOwner(
@@ -379,9 +426,7 @@ function explicitInstant(value: unknown): number | null {
 async function processRenewal(supabase: SupabaseClient, payload: unknown, identity: ReturnType<typeof kiwifyIdentity>) {
   const event = record(payload);
   const review = async (reason: string) => {
-    // Keep the event for reconciliation without copying buyer details into errors.
-    await logWebhook(supabase, identity.eventType, payload, "review_required", reason);
-    return jsonResponse({ error: reason }, 409);
+    return await receiveForReview(supabase, identity.eventType, payload, reason);
   };
   if (!identity.canonicalId || !identity.orderId) return review("Renovação sem identidade de assinatura e cobrança");
   const access = record(identity.subscription.customer_access);
@@ -401,7 +446,7 @@ async function processRenewal(supabase: SupabaseClient, payload: unknown, identi
   const { data: prior, error: priorError } = await supabase.from("webhook_logs").select("id")
     .eq("evento", "subscription_renewed").eq("status", "renewal_recognized")
     .eq("payload->>order_id", identity.orderId).limit(1).maybeSingle();
-  if (priorError) return review("Não foi possível verificar a cobrança já reconhecida");
+  if (priorError) throw new Error("Unable to verify recognized renewal charge");
   if (prior) {
     await logWebhook(supabase, identity.eventType, payload, "renewal_duplicate", "Cobrança de renovação já reconhecida");
     return jsonResponse({ success: true, message: "Renovação já reconhecida" });
@@ -417,7 +462,8 @@ async function processRenewal(supabase: SupabaseClient, payload: unknown, identi
         .eq("id", existing.id).eq("status", "ativa")
         .eq("data_expiracao", existing.data_expiracao)
         .select("id").maybeSingle();
-      if (error || !data) return review("Estado mudou durante a renovação; conciliar sem sobrescrever");
+      if (error) throw new Error("Unable to persist renewal period");
+      if (!data) return review("Estado mudou durante a renovação; conciliar sem sobrescrever");
     }
   }
   // No upsert, owner assignment, benefit change or new Brevo onboarding message.

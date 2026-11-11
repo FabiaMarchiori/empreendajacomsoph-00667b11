@@ -1,6 +1,8 @@
 # Kiwify: renovação, identidade de contrato e cobrança
 
-Estado: correção preparada no PR #4, sem publicar em produção. Nenhuma migration nova é necessária para esta correção. Nenhum webhook real foi enviado/reprocessado.
+> Garantia de recebimento e reenvio de pendências: `docs/durable-webhook-reviews.md` substitui o antigo uso de HTTP 409 para review_required.
+
+Estado: correção preparada no PR #4, sem publicar em produção. O reconhecimento de renovações não exigia migration; a atualização de recebimento durável exige a migration adicional descrita em durable-webhook-reviews.md antes da publicação da função. Nenhum webhook real foi enviado/reprocessado.
 
 ## Fontes oficiais consultadas
 
@@ -34,7 +36,7 @@ Os resultados exportados foram contagens, tipos de eventos, presença/relação 
 6. Atualização usa comparação do estado/validade originais (compare-and-set). Reembolso ou renovação concorrente não pode ser sobrescrito. Não modifica status nem user_id.
 7. Cobrança de renovação já reconhecida é identificada pelo order_id no histórico próprio do webhook. O processamento permanece idempotente mesmo se o registro de log falhar: compare-and-set e máximo de prazo, sem inserção de compra ou envio de e-mail. O log não é um ledger financeiro completo nem oferece ordenação global.
 8. Renovação não dispara novo e-mail inicial Brevo. Primeira compra e repetição de aprovação continuam usando template 5 e a outbox do PR, com a chave persistida da assinatura, inclusive quando esta ainda for um order_id legado. Produto, cliente e identidade confirmada são preservados.
-9. Cancelamento/atraso recorrente e reembolso/chargeback de recorrência são reconhecidos e encaminhados para conciliação (409), sem se disfarçarem de compra paga. Não se inventa revogação imediata de período já pago nem se revoga um contrato inteiro por uma cobrança antiga. Reembolso de compra avulsa mantém o caminho existente. Falhas não são mascaradas como sucesso.
+9. Cancelamento/atraso recorrente e reembolso/chargeback de recorrência são reconhecidos e gravados para conciliação com confirmação HTTP 200 após persistência durável (review_required; 5xx se a gravação falhar), sem se disfarçarem de compra paga. Não se inventa revogação imediata de período já pago nem se revoga um contrato inteiro por uma cobrança antiga. Reembolso de compra avulsa mantém o caminho existente. Falhas não são mascaradas como sucesso.
 
 ## O que ainda precisa ser confirmado na Kiwify
 

@@ -1,5 +1,7 @@
 # Matriz comercial e recuperação transacional — preparada, não implantada
 
+> Contrato HTTP atual de conciliação, deduplicação e migration adicional: `docs/durable-webhook-reviews.md`.
+
 > Atualização sobre renovações e campos Kiwify: `docs/kiwify-renewals.md`. O reconhecimento de eventos/IDs e a extensão de período explícito em contratos ativos únicos foram corrigidos; cancelamento/reembolso recorrente e correspondências legadas ambíguas permanecem para conciliação.
 
 ## Estado e compatibilidade
@@ -50,7 +52,7 @@ Template 5, destinatário associado à compra, parâmetros, finalidade, página 
 - Timeout, HTTP 5xx, crash após início de despacho, erro ao persistir sucesso e reservas antigas sending sem recibo podem representar entrega já aceita. Ficam requires_reconciliation: não se faz reenvio cego. É necessário conferir recibo na Brevo e então registrar sent ou liberar uma nova tentativa após confirmar ausência de entrega. Não há promessa falsa de exatamente uma entrega entre dois sistemas sem idempotência comprovada do provedor.
 - Não foi criado worker/cron de reenvio automático em produção. A nova tentativa acontece na entrega repetida do webhook. Pendências incertas são explícitas, não descartadas como sucesso.
 - Payload sem identificador estável recebe 422 antes de gravar compra: um timestamp local não é chave idempotente.
-- Aprovação após estado não ativo retorna 409 para conciliação; não reativa automaticamente uma assinatura cancelada/reembolsada. A regra para renovação legítima usando o mesmo Subscription.id e a ordem/identificador de cada transação Kiwify ainda depende de confirmação. Não foi inventada uma regra de renovação/precedência temporal. Cancelamentos/reembolsos mantêm o mapeamento de status existente e passam a propagar falhas de gravação. Um evento negativo antigo que reutilize Subscription.id ainda precisa dessa política de ordenação; não se afirma que o problema geral de ordem de eventos está resolvido.
+- Aprovação após estado não ativo é gravada para conciliação e recebe HTTP 200 somente após persistência durável (5xx se falhar); não reativa automaticamente uma assinatura cancelada/reembolsada. A regra para renovação legítima usando o mesmo Subscription.id e a ordem/identificador de cada transação Kiwify ainda depende de confirmação. Não foi inventada uma regra de renovação/precedência temporal. Cancelamentos/reembolsos mantêm o mapeamento de status existente e passam a propagar falhas de gravação. Um evento negativo antigo que reutilize Subscription.id ainda precisa dessa política de ordenação; não se afirma que o problema geral de ordem de eventos está resolvido.
 
 ## Migrations e sequência futura, após Pro e backup recuperável
 
@@ -58,8 +60,9 @@ Não executar db push genérico. Reconciliar histórico somente pelos objetos es
 1. 20261110110000_verified_claims_only.sql — primeira correção, ainda não aplicada.
 2. 20261111132917_approved_product_access.sql — matriz, concessões, RLS e admin.
 3. 20261111133107_transactional_email_recovery.sql — amplia a outbox existente e cria RPCs de reserva/finalização.
+4. 20261111141651_durable_webhook_reviews.sql — recibos únicos de pendências, sem alterar registros comerciais.
 
-A tabela comunicacoes_transacionais já existe em produção: NÃO executar novamente 20260918163000_create_comunicacoes_transacionais.sql, apesar de ausente no histórico. As duas novas migrations são criadas pela CLI, têm versões distintas e foram aplicadas somente em banco fictício de testes. As migrations dependem da estrutura auditada, não reconstroem sozinhas todo o histórico anterior.
+A tabela comunicacoes_transacionais já existe em produção: NÃO executar novamente 20260918163000_create_comunicacoes_transacionais.sql, apesar de ausente no histórico. As novas migrations são criadas pela CLI, têm versões distintas e foram aplicadas somente em banco fictício de testes. As migrations dependem da estrutura auditada, não reconstroem sozinhas todo o histórico anterior.
 
 Depois de confirmar Pro, backup recuperável e revisão das pendências comerciais acima: capturar definições/ACLs/policies/functions atuais, aplicar apenas o conjunto aprovado em transações e implantar soph-chat, erp-entry, kiwify-webhook e generate-soph-token preservando configurações de gateway. Só então integrar frontend. Não alterar validate-soph-code sem recuperar e revisar seu código. A publicação continua exigindo autorização final específica.
 
