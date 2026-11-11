@@ -71,3 +71,11 @@ A reversão é do commit de interface/documentos desta branch, após revisão; n
 - Markdown é a fonte exibida em runtime. Nenhuma dependência adicionada ou arquivo de autenticação/backend/produto alterado. As dependências já disponíveis no ambiente foram reutilizadas; package.json e lockfile permanecem iguais à main.
 - A base e a ancestralidade foram conferidas: sem commits das Etapas 1/2, sem alterações na main ou no PR #4. Não foram executados testes reais de pagamento, IA externa, ERP externo ou envio de e-mail.
 - A validação do preview deve usar a mesma suíte com `LEGAL_BASE_URL=https://deploy-preview-N--appempreendajacomsoph.netlify.app`. Os interceptadores impedem acesso a APIs reais; o teste usa somente dados fictícios locais. O status/URL específicos são registrados no PR, sem marcar as pendências jurídicas como resolvidas.
+
+## Preview de revisão
+
+PR separado: #5. Preview: https://deploy-preview-5--appempreendajacomsoph.netlify.app.
+
+A mesma suíte de 30 testes passou também contra os arquivos publicados nesse preview, em mobile e desktop. No ambiente gerenciado, o Chromium não reconheceu diretamente a CA do proxy; o harness usa o cliente HTTPS do Playwright, com a CA já fornecida ao ambiente, para buscar os arquivos e renderizá-los em contexto descartável. A validação TLS permanece habilitada; nenhum certificado foi adicionado ao perfil persistente e nenhum ignoreHTTPSErrors foi usado. APIs externas continuam interceptadas com dados fictícios. Essa metodologia valida o frontend publicado, não autenticação/pagamentos reais nem o handshake TLS direto de todos os navegadores dos clientes.
+
+O resultado técnico não resolve as pendências jurídicas/cadastrais acima e não autoriza publicação definitiva.

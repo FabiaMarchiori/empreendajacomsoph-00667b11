@@ -41,7 +41,14 @@ async function fakeSession(page: Page) {
 async function isolate(page: Page, origin: string, subscribed = false) {
   await page.route("**/*", async (route) => {
     const url = new URL(route.request().url());
-    if (url.origin === origin) return route.continue();
+    if (url.origin === origin) {
+      // Preview files are fetched by Playwright's HTTPS client, which inherits
+      // the environment CA. TLS validation stays enabled; no persistent browser
+      // trust change or ignoreHTTPSErrors is used. Local tests use normal I/O.
+      if (process.env.LEGAL_BASE_URL)
+        return route.fulfill({ response: await route.fetch() });
+      return route.continue();
+    }
     if (url.hostname.endsWith(".supabase.co")) {
       let body: unknown = [];
       if (url.pathname.includes("/auth/")) body = fictionalUser;
@@ -78,6 +85,10 @@ async function isolate(page: Page, origin: string, subscribed = false) {
 test.beforeEach(async ({ page, baseURL }) =>
   isolate(page, new URL(baseURL!).origin),
 );
+test.afterEach(async ({ page }) => {
+  // Finish verified HTTPS fetches before the disposable context is closed.
+  await page.unrouteAll({ behavior: "wait" });
+});
 for (const [path, title] of docs)
   test(`${path} is public, readable and accessible without login`, async ({
     page,
