@@ -1,6 +1,6 @@
 # Aviso de Uso da Soph IA
 
-Versão 1.0 para revisão · Atualização: 11 de novembro de 2026.
+Versão 1.0 · Atualização: 11 de novembro de 2026.
 
 ## 1. Ferramenta integrada ao aplicativo
 
