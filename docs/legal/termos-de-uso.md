@@ -1,6 +1,6 @@
 # Termos de Uso
 
-Versão 1.0 para revisão · Atualização: 11 de novembro de 2026.
+Versão 1.0 · Atualização: 11 de novembro de 2026.
 
 ## 1. Plataforma e atendimento
 
@@ -50,7 +50,7 @@ Pagamento recusado ou tentativa de cobrança não equivale a pagamento aprovado.
 
 ## 6. Renovação, cancelamento e reembolso
 
-Quando houver contratação recorrente, a renovação segue as condições informadas no checkout. Cancelar a recorrência impede novas renovações; não significa reembolso automático nem, por si só, elimina parcelas de um período completo já contratado.
+Quando houver contratação recorrente, o meio de pagamento define a renovação: cartão de crédito e Pix Automático geram cobranças automáticas conforme a autorização e a frequência contratada; boleto e Pix manual exigem que o cliente realize o pagamento de cada período. No Pix Automático, a autorização é concedida uma vez no aplicativo do banco e pode ser cancelada pelo gerenciamento da assinatura na Kiwify ou no próprio banco. O cliente pode cancelar a assinatura a qualquer momento; o cancelamento impede novas renovações, mas não significa reembolso automático nem, por si só, elimina parcelas de um período completo já contratado.
 
 O arrependimento nas contratações fora do estabelecimento segue o artigo 49 do Código de Defesa do Consumidor, inclusive o prazo legal de sete dias, quando aplicável. É necessário manifestar o pedido de arrependimento ou reembolso: apenas cancelar a assinatura não substitui essa solicitação. Permanecem os demais direitos legais por vício, descumprimento da oferta ou outras hipóteses cabíveis.
 
