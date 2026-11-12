@@ -1,0 +1,80 @@
+[
+  {
+    "signature": "claim_subscriptions_for_current_user()",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public"
+    ],
+    "proacl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "owner": "postgres",
+    "definition": "CREATE OR REPLACE FUNCTION public.claim_subscriptions_for_current_user()\n RETURNS integer\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n  v_email text;\n  v_user uuid;\n  v_updated int;\nBEGIN\n  v_user := auth.uid();\n  v_email := auth.email();\n\n  IF v_user IS NULL OR v_email IS NULL THEN\n    RETURN 0;\n  END IF;\n\n  UPDATE public.assinaturas\n  SET user_id = v_user,\n      updated_at = now()\n  WHERE user_id IS NULL\n    AND email = v_email;\n\n  GET DIAGNOSTICS v_updated = ROW_COUNT;\n  RETURN v_updated;\nEND;\n$function$\n",
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": true
+  },
+  {
+    "signature": "get_is_admin(uuid)",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public"
+    ],
+    "proacl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "owner": "postgres",
+    "definition": "CREATE OR REPLACE FUNCTION public.get_is_admin(_user_id uuid)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n  SELECT COALESCE(is_admin, false) FROM public.profiles WHERE id = _user_id;\n$function$\n",
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": true
+  },
+  {
+    "signature": "has_active_subscription(uuid)",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public"
+    ],
+    "proacl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "owner": "postgres",
+    "definition": "CREATE OR REPLACE FUNCTION public.has_active_subscription(user_uuid uuid DEFAULT auth.uid())\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n  SELECT EXISTS (\n    SELECT 1 \n    FROM public.assinaturas \n    WHERE user_id = user_uuid \n    AND status = 'ativa' \n    AND (data_expiracao IS NULL OR data_expiracao > now())\n  );\n$function$\n",
+    "anon_execute": true,
+    "authenticated_execute": true,
+    "service_execute": true
+  },
+  {
+    "signature": "has_erp_access(uuid)",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=public"
+    ],
+    "proacl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "owner": "postgres",
+    "definition": "CREATE OR REPLACE FUNCTION public.has_erp_access(check_user_id uuid DEFAULT auth.uid())\n RETURNS boolean\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n  v_email text;\nBEGIN\n  -- Admins always have access\n  IF EXISTS (\n    SELECT 1 FROM public.user_roles\n    WHERE user_id = check_user_id AND role = 'admin'\n  ) THEN\n    RETURN true;\n  END IF;\n\n  -- Check soph_access_codes (active + not expired)\n  IF EXISTS (\n    SELECT 1 FROM public.soph_access_codes\n    WHERE user_id = check_user_id\n      AND is_active = true\n      AND expires_at > now()\n  ) THEN\n    RETURN true;\n  END IF;\n\n  -- Get user email for clientes_autorizados check\n  SELECT email INTO v_email FROM public.profiles WHERE id = check_user_id;\n\n  -- Check clientes_autorizados\n  IF v_email IS NOT NULL AND EXISTS (\n    SELECT 1 FROM public.clientes_autorizados\n    WHERE email = v_email\n      AND status_assinatura = 'ativa'\n  ) THEN\n    RETURN true;\n  END IF;\n\n  -- Check assinaturas with ERP-eligible plans\n  -- Plans containing 'erp', 'completo', 'premium', 'ecossistema' grant ERP access\n  IF EXISTS (\n    SELECT 1 FROM public.assinaturas\n    WHERE user_id = check_user_id\n      AND status = 'ativa'\n      AND (data_expiracao IS NULL OR data_expiracao > now())\n      AND (\n        lower(plano) LIKE '%erp%'\n        OR lower(plano) LIKE '%completo%'\n        OR lower(plano) LIKE '%premium%'\n        OR lower(plano) LIKE '%ecossistema%'\n      )\n  ) THEN\n    RETURN true;\n  END IF;\n\n  RETURN false;\nEND;\n$function$\n",
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": true
+  },
+  {
+    "signature": "has_role(user_role)",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "proacl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "owner": "postgres",
+    "definition": "CREATE OR REPLACE FUNCTION public.has_role(requested_role user_role)\n RETURNS boolean\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\r\nBEGIN\r\n  PERFORM set_config('search_path', '', true);\r\n  RETURN EXISTS (\r\n    SELECT 1\r\n    FROM public.user_roles\r\n    WHERE user_id = auth.uid() AND role = requested_role\r\n  );\r\nEND;\r\n$function$\n",
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "service_execute": true
+  },
+  {
+    "signature": "is_admin()",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "proacl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+    "owner": "postgres",
+    "definition": "CREATE OR REPLACE FUNCTION public.is_admin()\n RETURNS boolean\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nBEGIN\n  PERFORM set_config('search_path', '', true);\n  RETURN auth.role() = 'authenticated'\n      AND auth.uid() IN (\n        SELECT id FROM public.profiles WHERE is_admin = true\n      );\nEND;\n$function$\n",
+    "anon_execute": true,
+    "authenticated_execute": true,
+    "service_execute": true
+  }
+]
