@@ -1,12 +1,36 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const ALLOWED_ORIGINS = new Set([
+  "https://appempreendajacomsoph.netlify.app",
+  "https://empreendajacomsophi.netlify.app",
+  "https://appempreendajacomsoph.lovable.app",
+]);
+const ALLOWED_ORIGIN_PATTERNS = [
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^http:\/\/localhost(:\d+)?$/,
+];
+
+// CORS is not authentication: it only stops other websites from reading responses in a browser.
+function buildCorsHeaders(req: Request): Record<string, string> {
+  const origin = req.headers.get("Origin") ?? "";
+  const allowed = ALLOWED_ORIGINS.has(origin) || ALLOWED_ORIGIN_PATTERNS.some((p) => p.test(origin));
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : "https://appempreendajacomsoph.netlify.app",
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  };
+}
+
+function maskEmail(email: string | null | undefined): string {
+  if (!email) return "n/a";
+  const [user, domain] = email.split("@");
+  if (!domain) return "***";
+  return `${user.slice(0, 2)}***@${domain}`;
+}
 
 Deno.serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -39,7 +63,7 @@ Deno.serve(async (req) => {
 
     const userId = user.id;
     const userEmail = user.email!;
-    console.log(`[erp-entry] Authenticated user: ${userId} (${userEmail})`);
+    console.log(`[erp-entry] Authenticated user: ${userId} (${maskEmail(userEmail)})`);
 
     // 2. Validate ERP-specific access (not just any subscription)
     const { data: hasAccess, error: accessError } = await supabase.rpc(
@@ -48,7 +72,7 @@ Deno.serve(async (req) => {
     );
 
     if (accessError) {
-      console.error("Access check error:", accessError.message);
+      console.error(`[erp-entry] Access check error for user ${userId}:`, accessError.code ?? accessError.message);
       return new Response(
         JSON.stringify({ error: "ACCESS_CHECK_FAILED", message: "Erro ao verificar acesso." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -78,9 +102,8 @@ Deno.serve(async (req) => {
 
     // 4. Call ERP edge function securely
     const ecosystemSecret = Deno.env.get("ECOSYSTEM_SHARED_SECRET");
-    console.log(`[erp-entry] ECOSYSTEM_SHARED_SECRET present: ${!!ecosystemSecret}, length: ${ecosystemSecret?.length ?? 0}, first4: ${ecosystemSecret?.substring(0, 4) ?? "N/A"}`);
     if (!ecosystemSecret) {
-      console.error("ECOSYSTEM_SHARED_SECRET not configured");
+      console.error("[erp-entry] Integration secret not configured");
       return new Response(
         JSON.stringify({ error: "CONFIG_ERROR", message: "Configuração de integração ausente." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -96,7 +119,7 @@ Deno.serve(async (req) => {
       full_name: fullName,
     };
 
-    console.log(`[erp-entry] Calling ERP for user ${userId} (${userEmail})`);
+    console.log(`[erp-entry] Calling ERP for user ${userId}`);
 
     const erpResponse = await fetch(erpEndpoint, {
       method: "POST",
@@ -107,10 +130,10 @@ Deno.serve(async (req) => {
       body: JSON.stringify(erpPayload),
     });
 
-    const erpData = await erpResponse.json();
+    const erpData = await erpResponse.json().catch(() => ({}));
 
     if (!erpResponse.ok) {
-      console.error(`[erp-entry] ERP returned ${erpResponse.status}:`, erpData);
+      console.error(`[erp-entry] ERP returned ${erpResponse.status} for user ${userId}, code: ${erpData?.error ?? "unknown"}`);
       return new Response(
         JSON.stringify({
           error: erpData.error || "ERP_ERROR",
@@ -139,7 +162,7 @@ Deno.serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
-    console.error("[erp-entry] Internal error:", err);
+    console.error("[erp-entry] Internal error:", err instanceof Error ? err.message : "unknown");
     return new Response(
       JSON.stringify({ error: "INTERNAL_ERROR", message: "Erro interno na integração." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
