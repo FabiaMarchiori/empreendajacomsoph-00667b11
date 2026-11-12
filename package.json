@@ -14,7 +14,9 @@
     "test:security": "node tests/security/edge.mjs && node tests/security/config.mjs",
     "security:audit": "node scripts/security-audit.mjs",
     "test:subscriptions": "node tests/subscriptions/run.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/renewals.mjs && node tests/subscriptions/review-receipts.mjs && node tests/subscriptions/stage2-integration.mjs",
-    "prepare:integration": "node scripts/prepare-integration.mjs"
+    "prepare:integration": "node scripts/prepare-integration.mjs",
+    "test:privileged": "node tests/security/privileged.mjs",
+    "test:remaining": "node tests/security/remaining.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.11",

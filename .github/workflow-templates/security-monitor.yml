@@ -1,0 +1,38 @@
+# PREPARED TEMPLATE ONLY: not executed outside .github/workflows/.
+# Before enabling: confirm Actions allowance/settings and native failure notifications.
+name: Security dependency monitor
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 8 * * 1"
+permissions:
+  contents: read
+concurrency:
+  group: security-dependency-monitor
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24"
+      - run: npm ci --ignore-scripts --no-audit --fund=false
+      - name: Detect new high or critical findings
+        id: audit
+        continue-on-error: true
+        run: npm run security:audit > security-audit.txt 2>&1
+      - name: Publish technical summary
+        if: always()
+        shell: bash
+        run: |
+          printf '## Dependency audit\nKnown baseline findings remain; this is not a clean audit.\n\n```text\n' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f security-audit.txt ]; then cat security-audit.txt >> "$GITHUB_STEP_SUMMARY"; else printf 'Audit did not complete.\n' >> "$GITHUB_STEP_SUMMARY"; fi
+          printf '\n```\n' >> "$GITHUB_STEP_SUMMARY"
+      - name: Fail visibly for new findings or registry failures
+        if: always() && steps.audit.outcome != 'success'
+        run: exit 1

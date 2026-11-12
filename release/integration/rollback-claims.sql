@@ -31,7 +31,7 @@ BEGIN
   GET DIAGNOSTICS v_updated = ROW_COUNT;
   RETURN v_updated;
 END;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.handle_new_user()
  RETURNS trigger
@@ -65,5 +65,5 @@ EXCEPTION
     RAISE LOG 'Error in handle_new_user: %', SQLERRM;
     RETURN new;
 END;
-$function$
+$function$;
 COMMIT;
