@@ -22,14 +22,14 @@ export default function ResetPasswordPage() {
     const hash = window.location.hash;
     const search = window.location.search;
 
-    console.log("[ResetPassword] hash:", hash);
-    console.log("[ResetPassword] search:", search);
+    console.log("[ResetPassword] Recovery flow initialized");
+    console.log("[ResetPassword] Recovery parameters received");
 
     // Captura erros vindos do Supabase no hash (link expirado etc.)
     if (hash.includes("error")) {
       const params = new URLSearchParams(hash.substring(1));
       const errorDescription = params.get("error_description") || "Link inválido ou expirado.";
-      console.error("[ResetPassword] Erro no hash:", errorDescription);
+      console.error("[ResetPassword] Invalid recovery link");
       setErrorMsg(decodeURIComponent(errorDescription).replace(/\+/g, " "));
       return;
     }
@@ -71,7 +71,7 @@ export default function ResetPasswordPage() {
     setLoading(false);
 
     if (error) {
-      console.error("[ResetPassword] updateUser error:", error);
+      console.error("[ResetPassword] Password update failed");
       toast.error(error.message || "Não foi possível atualizar a senha.");
       return;
     }
