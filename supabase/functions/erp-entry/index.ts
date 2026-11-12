@@ -1,47 +1,36 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const ALLOWED_ORIGINS = new Set([
-  "https://appempreendajacomsoph.netlify.app",
-  "https://empreendajacomsophi.netlify.app",
-  "https://appempreendajacomsoph.lovable.app",
-]);
-const ALLOWED_ORIGIN_PATTERNS = [
-  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
-  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
-  /^http:\/\/localhost(:\d+)?$/,
-];
-
-// CORS is not authentication: it only stops other websites from reading responses in a browser.
-function buildCorsHeaders(req: Request): Record<string, string> {
-  const origin = req.headers.get("Origin") ?? "";
-  const allowed = ALLOWED_ORIGINS.has(origin) || ALLOWED_ORIGIN_PATTERNS.some((p) => p.test(origin));
-  return {
-    "Access-Control-Allow-Origin": allowed ? origin : "https://appempreendajacomsoph.netlify.app",
-    "Vary": "Origin",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-  };
-}
-
-function maskEmail(email: string | null | undefined): string {
-  if (!email) return "n/a";
-  const [user, domain] = email.split("@");
-  if (!domain) return "***";
-  return `${user.slice(0, 2)}***@${domain}`;
-}
+import { buildCorsHeaders } from "../_shared/http.ts";
+import { logEvent } from "../_shared/diagnostics.ts";
 
 Deno.serve(async (req) => {
-  const corsHeaders = buildCorsHeaders(req);
+  const requestId = crypto.randomUUID();
+  const corsHeaders = { ...buildCorsHeaders(req), "X-Request-Id": requestId };
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+  if (req.method !== "POST")
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: {
+        ...corsHeaders,
+        Allow: "POST, OPTIONS",
+        "Content-Type": "application/json",
+      },
+    });
 
   try {
     // 1. Authenticate the calling user
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(
-        JSON.stringify({ error: "UNAUTHORIZED", message: "Token de autenticação ausente." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          error: "UNAUTHORIZED",
+          message: "Token de autenticação ausente.",
+        }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
@@ -52,30 +41,52 @@ Deno.serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      console.error("[erp-entry] Auth error:", userError?.message);
+      logEvent("warn", "erp.auth_failed", { request_id: requestId });
       return new Response(
-        JSON.stringify({ error: "UNAUTHORIZED", message: "Token inválido ou expirado." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          error: "UNAUTHORIZED",
+          message: "Token inválido ou expirado.",
+        }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
     const userId = user.id;
     const userEmail = user.email!;
-    console.log(`[erp-entry] Authenticated user: ${userId} (${maskEmail(userEmail)})`);
+    logEvent("info", "erp.authenticated", {
+      request_id: requestId,
+      user_id: userId,
+    });
 
     // 2. Validate ERP-specific access (not just any subscription)
     const { data: hasAccess, error: accessError } = await supabase.rpc(
       "has_erp_access",
-      { check_user_id: userId }
+      { check_user_id: userId },
     );
 
     if (accessError) {
-      console.error(`[erp-entry] Access check error for user ${userId}:`, accessError.code ?? accessError.message);
+      logEvent("error", "erp.access_check_failed", {
+        request_id: requestId,
+        user_id: userId,
+        code: accessError,
+      });
       return new Response(
-        JSON.stringify({ error: "ACCESS_CHECK_FAILED", message: "Erro ao verificar acesso." }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          error: "ACCESS_CHECK_FAILED",
+          message: "Erro ao verificar acesso.",
+        }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
@@ -83,9 +94,13 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({
           error: "NO_ERP_ACCESS",
-          message: "O ERP Soph é um módulo premium. Ative este módulo para acessar gestão completa.",
+          message:
+            "O ERP Soph é um módulo premium. Ative este módulo para acessar gestão completa.",
         }),
-        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
@@ -97,20 +112,29 @@ Deno.serve(async (req) => {
       .single();
 
     const fullName = profile
-      ? [profile.first_name, profile.last_name].filter(Boolean).join(" ") || userEmail
+      ? [profile.first_name, profile.last_name].filter(Boolean).join(" ") ||
+        userEmail
       : userEmail;
 
     // 4. Call ERP edge function securely
     const ecosystemSecret = Deno.env.get("ECOSYSTEM_SHARED_SECRET");
     if (!ecosystemSecret) {
-      console.error("[erp-entry] Integration secret not configured");
+      logEvent("error", "erp.configuration_missing", { request_id: requestId });
       return new Response(
-        JSON.stringify({ error: "CONFIG_ERROR", message: "Configuração de integração ausente." }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          error: "CONFIG_ERROR",
+          message: "Configuração de integração ausente.",
+        }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
-    const erpUrl = Deno.env.get("ERP_SOPH_URL") || "https://kgbodlrfbtpiqjbinpxn.supabase.co";
+    const erpUrl =
+      Deno.env.get("ERP_SOPH_URL") ||
+      "https://kgbodlrfbtpiqjbinpxn.supabase.co";
     const erpEndpoint = `${erpUrl}/functions/v1/ecosystem-receive-user`;
 
     const erpPayload = {
@@ -119,7 +143,10 @@ Deno.serve(async (req) => {
       full_name: fullName,
     };
 
-    console.log(`[erp-entry] Calling ERP for user ${userId}`);
+    logEvent("info", "erp.upstream_request", {
+      request_id: requestId,
+      user_id: userId,
+    });
 
     const erpResponse = await fetch(erpEndpoint, {
       method: "POST",
@@ -133,19 +160,34 @@ Deno.serve(async (req) => {
     const erpData = await erpResponse.json().catch(() => ({}));
 
     if (!erpResponse.ok) {
-      console.error(`[erp-entry] ERP returned ${erpResponse.status} for user ${userId}, code: ${erpData?.error ?? "unknown"}`);
+      logEvent("error", "erp.upstream_failed", {
+        request_id: requestId,
+        user_id: userId,
+        http_status: erpResponse.status,
+      });
+      const knownErrors = [
+        "NO_ACCESS",
+        "UNAUTHORIZED",
+        "MISSING_ECOSYSTEM_USER_ID",
+        "MISSING_OR_INVALID_EMAIL",
+        "UPSERT_FAILED",
+      ];
+      const errorCode = knownErrors.includes(erpData.error)
+        ? erpData.error
+        : "ERP_ERROR";
       return new Response(
         JSON.stringify({
-          error: erpData.error || "ERP_ERROR",
-          message: erpData.message || "Erro ao comunicar com o ERP Soph.",
+          error: errorCode,
+          message: "Erro ao comunicar com o ERP Soph.",
         }),
-        { status: erpResponse.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        {
+          status: erpResponse.status,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
-    console.log(
-      `[erp-entry] Success for user ${userId} — is_new: ${erpData.is_new_user}, erp_user_id: ${erpData.erp_user_id}`
-    );
+    logEvent("info", "erp.success", { request_id: requestId, user_id: userId });
 
     // 5. Return success with ERP data
     return new Response(
@@ -159,13 +201,22 @@ Deno.serve(async (req) => {
         entry_url: erpData.entry_url,
         message: erpData.message,
       }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
     );
   } catch (err) {
-    console.error("[erp-entry] Internal error:", err instanceof Error ? err.message : "unknown");
+    logEvent("error", "erp.internal_error", { request_id: requestId });
     return new Response(
-      JSON.stringify({ error: "INTERNAL_ERROR", message: "Erro interno na integração." }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({
+        error: "INTERNAL_ERROR",
+        message: "Erro interno na integração.",
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
     );
   }
 });

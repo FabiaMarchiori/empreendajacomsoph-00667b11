@@ -1,0 +1,298 @@
+{
+  "reviewedOn": "2026-11-12",
+  "counts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 18,
+    "high": 1,
+    "critical": 2,
+    "total": 21
+  },
+  "knownHighCritical": [
+    {
+      "name": "tinypool",
+      "severity": "critical",
+      "advisories": [
+        "https://github.com/advisories/GHSA-5gmw-xhrv-c9v3",
+        "https://github.com/advisories/GHSA-85c8-ppgw-ccpr"
+      ]
+    },
+    {
+      "name": "vite",
+      "severity": "high",
+      "advisories": [
+        "https://github.com/advisories/GHSA-4w7w-66w2-5vf9",
+        "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+        "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+        "https://github.com/advisories/GHSA-9jrq-w75r-8gcw",
+        "https://github.com/advisories/GHSA-fx2h-pf6j-xcff",
+        "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+        "https://github.com/advisories/GHSA-rq7h-c2jc-7f22",
+        "https://github.com/advisories/GHSA-v6wh-96g9-6wx3"
+      ]
+    },
+    {
+      "name": "vitest",
+      "severity": "critical",
+      "advisories": [
+        "https://github.com/advisories/GHSA-82fw-gwwq-j7x9"
+      ]
+    }
+  ],
+  "note": "Known unresolved dev-tool findings require a tested major toolchain migration. This baseline never suppresses npm audit output or means zero vulnerabilities.",
+  "productionCounts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 2,
+    "high": 0,
+    "critical": 0,
+    "total": 2
+  },
+  "remainingFindings": [
+    {
+      "name": "@lovable.dev/vite-plugin-dev-server-bridge",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "@lovable.dev/vite-plugin-hmr-gate",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "@tailwindcss/typography",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "@typescript-eslint/type-utils",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "@typescript-eslint/typescript-estree",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "@typescript-eslint/utils",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "@vitejs/plugin-react-swc",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "@vitest/mocker",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+          "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+          "range": ">=2.1.0 <4.1.11"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-qxg6-89mg-rqv8",
+          "title": "Vitest: Code injection via unauthenticated manual mock registration",
+          "range": ">=2.1.0-beta.7 <4.1.12"
+        }
+      ]
+    },
+    {
+      "name": "esbuild",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+          "title": "esbuild enables any website to send any requests to the development server and read the response",
+          "range": "<=0.24.2"
+        }
+      ]
+    },
+    {
+      "name": "lovable-tagger",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "minimatch",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+          "title": "minimatch has potential denial of service via globparts amplification",
+          "range": ">=7.0.0 <11.0.1"
+        }
+      ]
+    },
+    {
+      "name": "postcss-selector-parser",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+          "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+          "range": "<6.1.5"
+        }
+      ]
+    },
+    {
+      "name": "react-router",
+      "severity": "moderate",
+      "production": true,
+      "fixAvailable": false,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wrjc-x8rr-h8h6",
+          "title": "React Router: Open redirect via backslash in <Link> and useNavigate (CVE-2025-68470 bypass)",
+          "range": ">=6.0.0 <7.18.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-337j-9hxr-rhxg",
+          "title": "React Router: Arbitrary Constructor Injection via deserializeErrors() in React Router SSR Hydration",
+          "range": ">=6.4.0 <7.18.0"
+        }
+      ]
+    },
+    {
+      "name": "react-router-dom",
+      "severity": "moderate",
+      "production": true,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "tinypool",
+      "severity": "critical",
+      "production": false,
+      "fixAvailable": true,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5gmw-xhrv-c9v3",
+          "title": "Tinypool: Prototype Pollution gadget in worker options leads to Remote Code Execution",
+          "range": "<=2.1.0"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-85c8-ppgw-ccpr",
+          "title": "Tinypool: Prototype Pollution Gadget to RCE in run() options",
+          "range": "<2.1.2"
+        }
+      ]
+    },
+    {
+      "name": "typescript-eslint",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": []
+    },
+    {
+      "name": "vite",
+      "severity": "high",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4w7w-66w2-5vf9",
+          "title": "Vite Vulnerable to Path Traversal in Optimized Deps `.map` Handling",
+          "range": "<=6.4.1"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-v6wh-96g9-6wx3",
+          "title": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+          "range": "<=6.4.2"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+          "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+          "range": "<=6.4.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+          "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+          "range": "<=6.4.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+          "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+          "range": "<=6.4.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-9jrq-w75r-8gcw",
+          "title": "Vite: Cross origin script execution through Vite custom middleware",
+          "range": "<=6.4.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-rq7h-c2jc-7f22",
+          "title": "Vite: Files outside `server.fs.allow` could be served when project paths match system paths on non-Windows machine",
+          "range": "<=6.4.3"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff",
+          "title": "vite: `server.fs.deny` bypass on Windows alternate paths",
+          "range": "<=6.4.2"
+        }
+      ]
+    },
+    {
+      "name": "vite-node",
+      "severity": "moderate",
+      "production": false,
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "vitest",
+      "severity": "critical",
+      "production": false,
+      "fixAvailable": false,
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+          "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+          "range": ">=2.1.0 <4.1.11"
+        }
+      ]
+    }
+  ]
+}
