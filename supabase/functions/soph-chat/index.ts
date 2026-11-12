@@ -1,12 +1,40 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const ALLOWED_ORIGINS = new Set([
+  "https://appempreendajacomsoph.netlify.app",
+  "https://empreendajacomsophi.netlify.app",
+  "https://appempreendajacomsoph.lovable.app",
+]);
+const ALLOWED_ORIGIN_PATTERNS = [
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^http:\/\/localhost(:\d+)?$/,
+];
 
-async function authenticateUser(req: Request): Promise<{ userId: string } | Response> {
+// CORS is not authentication: it only stops other websites from reading responses in a browser.
+function buildCorsHeaders(req: Request): Record<string, string> {
+  const origin = req.headers.get("Origin") ?? "";
+  const allowed = ALLOWED_ORIGINS.has(origin) || ALLOWED_ORIGIN_PATTERNS.some((p) => p.test(origin));
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : "https://appempreendajacomsoph.netlify.app",
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  };
+}
+
+function maskEmail(email: string | null | undefined): string {
+  if (!email) return "n/a";
+  const [user, domain] = email.split("@");
+  if (!domain) return "***";
+  return `${user.slice(0, 2)}***@${domain}`;
+}
+
+// Hard caps against oversized requests that would burn AI credits.
+const MAX_MESSAGES = 60;
+const MAX_MESSAGE_CHARS = 8000;
+const MAX_TOTAL_CHARS = 60000;
+
+async function authenticateUser(req: Request, corsHeaders: Record<string, string>): Promise<{ userId: string } | Response> {
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return new Response(
@@ -68,13 +96,14 @@ Você é uma consultora de negócios especializada em ajudar empreendedores bras
 Quando receber informações sobre o usuário (nome, módulo atual, etc), use para personalizar a resposta. Trate o usuário pelo primeiro nome quando disponível.`;
 
 Deno.serve(async (req) => {
+  const corsHeaders = buildCorsHeaders(req);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     // Authenticate user
-    const authResult = await authenticateUser(req);
+    const authResult = await authenticateUser(req, corsHeaders);
     if (authResult instanceof Response) return authResult;
 
     const { messages, userContext } = await req.json();
@@ -83,6 +112,20 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({ error: "Mensagens são obrigatórias." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const contents = messages.map((m: { content?: unknown }) => (typeof m?.content === "string" ? m.content : ""));
+    const totalChars = contents.reduce((sum: number, c: string) => sum + c.length, 0);
+    if (
+      messages.length > MAX_MESSAGES ||
+      contents.some((c: string) => c.length > MAX_MESSAGE_CHARS) ||
+      totalChars > MAX_TOTAL_CHARS
+    ) {
+      console.warn(`[soph-chat] Oversized request rejected for user ${authResult.userId}: ${messages.length} msgs, ${totalChars} chars`);
+      return new Response(
+        JSON.stringify({ error: "Conversa muito longa. Inicie uma nova conversa e tente novamente." }),
+        { status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -114,7 +157,7 @@ Deno.serve(async (req) => {
       { role: "system", content: systemContent },
       ...messages.map((m: { role: string; content: string }) => ({
         role: m.role === "soph" || m.role === "assistant" ? "assistant" : "user",
-        content: m.content,
+        content: typeof m.content === "string" ? m.content : "",
       })),
     ];
 
@@ -145,16 +188,16 @@ Deno.serve(async (req) => {
         );
       }
       const errText = await response.text();
-      console.error("[soph-chat] AI gateway error:", response.status, errText);
-      let gatewayMessage = "Erro ao processar sua mensagem. Tente novamente.";
+      let gatewayCode = "unknown";
       try {
-        const gatewayError = JSON.parse(errText) as { message?: string };
-        if (gatewayError.message) gatewayMessage = gatewayError.message;
+        const gatewayError = JSON.parse(errText) as { code?: string; type?: string; error?: { code?: string } };
+        gatewayCode = gatewayError.code ?? gatewayError.error?.code ?? gatewayError.type ?? "unknown";
       } catch {
-        // Keep the safe fallback when the gateway response is not JSON.
+        // Gateway response is not JSON; keep the generic code.
       }
+      console.error(`[soph-chat] AI gateway error for user ${authResult.userId}: status ${response.status}, code ${gatewayCode}`);
       return new Response(
-        JSON.stringify({ error: gatewayMessage }),
+        JSON.stringify({ error: "Erro ao processar sua mensagem. Tente novamente." }),
         { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -163,7 +206,7 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (err) {
-    console.error("[soph-chat] Internal error:", err);
+    console.error("[soph-chat] Internal error:", err instanceof Error ? err.message : "unknown");
     return new Response(
       JSON.stringify({ error: "Erro interno. Tente novamente em instantes." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

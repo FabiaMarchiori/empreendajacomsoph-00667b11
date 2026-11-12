@@ -1,5 +1,13 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+function maskEmail(email: string | null | undefined): string {
+  if (!email) return "n/a";
+  const [user, domain] = email.split("@");
+  if (!domain) return "***";
+  return `${user.slice(0, 2)}***@${domain}`;
+}
+
+// Server-to-server webhook: keep CORS open so Kiwify retries are never blocked.
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -55,7 +63,7 @@ Deno.serve(async (req) => {
     const productName = isBolsasNicho ? "bolsas_1999" : rawProductName;
     console.log(`[kiwify-webhook] Produto detectado: ${rawProductName} -> plano: ${productName} (nicho_bolsas=${isBolsasNicho})`);
 
-    console.log(`[kiwify-webhook] Event: ${eventType}, Email: ${email}, SubID: ${subscriptionId}`);
+    console.log(`[kiwify-webhook] Event: ${eventType}, Email: ${maskEmail(email)}, SubID: ${subscriptionId}`);
 
     if (!email) {
       await logWebhook(supabase, eventType, payload, "error", "Email ausente no payload");
@@ -177,7 +185,7 @@ Deno.serve(async (req) => {
           ? `Acesso liberado para ${email}; e-mail não enviado: identificador estável da compra ausente`
           : `Acesso liberado para ${email}`;
       await logWebhook(supabase, eventType, payload, "success", accessMessage);
-      console.log(`[kiwify-webhook] Access granted for ${email}`);
+      console.log(`[kiwify-webhook] Access granted, SubID: ${subscriptionId}, email: ${maskEmail(email)}`);
       return jsonResponse({ success: true, message: "Acesso liberado" });
 
     } else if (
@@ -206,7 +214,7 @@ Deno.serve(async (req) => {
         .eq("email", email);
 
       await logWebhook(supabase, eventType, payload, "success", `Acesso revogado para ${email}`);
-      console.log(`[kiwify-webhook] Access revoked for ${email}`);
+      console.log(`[kiwify-webhook] Access revoked (${eventType}), SubID: ${subscriptionId}, email: ${maskEmail(email)}`);
       return jsonResponse({ success: true, message: "Acesso revogado" });
 
     } else {
@@ -216,7 +224,7 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, message: "Evento ignorado" });
     }
   } catch (err) {
-    console.error("[kiwify-webhook] Internal error:", err);
+    console.error("[kiwify-webhook] Internal error:", err instanceof Error ? err.message : "unknown");
     await logWebhook(supabase, "internal_error", {}, "error", String(err));
     return jsonResponse({ error: "Erro interno" }, 500);
   }
