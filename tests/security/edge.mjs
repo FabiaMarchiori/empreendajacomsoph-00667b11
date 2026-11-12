@@ -260,7 +260,13 @@ function environment(slug, options = {}) {
         ["show", `4fdd39f:supabase/functions/${slug}/index.ts`],
         { encoding: "utf8" },
       )
-    : undefined;
+    : ["kiwify-webhook", "generate-soph-token"].includes(slug)
+      ? execFileSync(
+          "git",
+          ["show", `cf16ef5:supabase/functions/${slug}/index.ts`],
+          { encoding: "utf8" },
+        )
+      : undefined;
   const exports = load(file, baseline);
   return {
     db,

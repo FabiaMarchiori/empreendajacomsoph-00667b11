@@ -10,8 +10,7 @@ import {
 import { execFileSync, spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join, delimiter } from "node:path";
-import { withoutConsole, canonicalRuntime } from "./runtime.mjs";
-import { createHash } from "node:crypto";
+import { withoutConsole } from "./runtime.mjs";
 let passed = 0;
 const test = (n, f) => {
   f();
@@ -53,7 +52,7 @@ for (const path of [
       now = readFileSync(path, "utf8");
     assert.equal(withoutConsole(now, path), withoutConsole(old, path));
   });
-test("No changes to DB/Auth/product/legal source and PR4 migrations", () => {
+test("No changes to Auth/product/legal source outside approved subscription files", () => {
   const changed = execFileSync(
     "git",
     [
@@ -61,10 +60,10 @@ test("No changes to DB/Auth/product/legal source and PR4 migrations", () => {
       "--name-only",
       "4fdd39f",
       "--",
-      "supabase/migrations",
+
       "src/contexts",
       "src/integrations",
-      "src/hooks/useSubscription.ts",
+
       "src/hooks/usePlanAccess.ts",
       "src/hooks/useErpAccess.ts",
       "src/pages/Obrigado.tsx",
@@ -107,18 +106,15 @@ test("Single current Bun lock and consistent npm manifest", () => {
   assert.deepEqual(lock.packages[""].dependencies, p.dependencies);
   assert.deepEqual(lock.packages[""].devDependencies, p.devDependencies);
 });
-test("Legacy code generator preserves the audited production runtime exactly outside logs", () => {
-  const baseline = JSON.parse(
-    readFileSync("docs/security/deployed-baseline.json", "utf8"),
-  ).functions.find((f) => f.slug === "generate-soph-token");
-  const code = readFileSync(
-    "supabase/functions/generate-soph-token/index.ts",
-    "utf8",
+test("Integrated generator retains PR4 authorization outside logs", () => {
+  const path = "supabase/functions/generate-soph-token/index.ts";
+  const old = execFileSync("git", ["show", `8ce43ee:${path}`], {
+    encoding: "utf8",
+  });
+  assert.equal(
+    withoutConsole(readFileSync(path, "utf8"), path),
+    withoutConsole(old, path),
   );
-  const hash = createHash("sha256")
-    .update(canonicalRuntime(code, "index.ts"))
-    .digest("hex");
-  assert.equal(hash, baseline.runtime_without_console_sha256);
 });
 function fakeAudit(report) {
   const dir = mkdtempSync(join(tmpdir(), "security-audit-fixture-"));

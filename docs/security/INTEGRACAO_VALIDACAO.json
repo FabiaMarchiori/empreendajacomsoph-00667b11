@@ -1,0 +1,39 @@
+{
+  "production_mutations": false,
+  "general_checks": {
+    "passed": 102,
+    "detail": "Package A webhook/generator pinned to cf16ef5; other handlers integrated source"
+  },
+  "subscription_checks": {
+    "passed": 116,
+    "detail": "Actual integrated handlers, PGlite and provider fakes; includes two new privacy checks"
+  },
+  "scope_checks": {
+    "passed": 5
+  },
+  "application_tests": {
+    "passed": 20
+  },
+  "browser_local": {
+    "passed": 12,
+    "external_services": "mocked"
+  },
+  "build": "passed",
+  "typescript": "passed",
+  "deno_five_handlers": "passed",
+  "lint_changed_files": {
+    "errors": 0,
+    "existing_warnings": 1
+  },
+  "audit": {
+    "moderate": 18,
+    "high": 1,
+    "critical": 2
+  },
+  "production_dependencies_audit": {
+    "moderate": 2,
+    "high": 0,
+    "critical": 0
+  },
+  "recovery_proof": "NOT_VERIFIED_BLOCKS_B_PRODUCTION"
+}
