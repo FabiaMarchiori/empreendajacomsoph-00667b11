@@ -12,12 +12,12 @@ const ALLOWED_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 function generateShortCode(): string {
   let part1 = '';
   let part2 = '';
-  
+
   for (let i = 0; i < 4; i++) {
     part1 += ALLOWED_CHARS[Math.floor(Math.random() * ALLOWED_CHARS.length)];
     part2 += ALLOWED_CHARS[Math.floor(Math.random() * ALLOWED_CHARS.length)];
   }
-  
+
   return `SOPH-${part1}-${part2}`;
 }
 
@@ -29,7 +29,7 @@ serve(async (req) => {
 
   try {
     console.log('[generate-soph-token] Request received');
-    
+
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       console.log('[generate-soph-token] No auth header');
@@ -42,18 +42,18 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    
+
     // Cliente para autenticação do usuário
     const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } }
     });
-    
+
     // Cliente com service role para operações no banco
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
     // Verificar usuário autenticado
     const { data: { user }, error: userError } = await supabaseAuth.auth.getUser();
-    
+
     if (userError || !user) {
       console.log('[generate-soph-token] User not authenticated');
       return new Response(
@@ -105,7 +105,7 @@ serve(async (req) => {
     if (existingCode) {
       console.log('[generate-soph-token] Returning existing access code');
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           token: existingCode.code,
           expires_at: existingCode.expires_at,
           is_existing: true
@@ -128,7 +128,7 @@ serve(async (req) => {
         .maybeSingle();
 
       if (!existing) break;
-      
+
       code = generateShortCode();
       attempts++;
     }
@@ -166,7 +166,7 @@ serve(async (req) => {
     console.log('[generate-soph-token] Access code generated');
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         token: code,
         expires_at: expiresAt.toISOString(),
         is_existing: false
@@ -182,4 +182,3 @@ serve(async (req) => {
     );
   }
 });
-
