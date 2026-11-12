@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      supplier_shared_access: {
+        Row: { fornecedor_id: number; reason: string; authorized_by: string };
+        Insert: { fornecedor_id: number; reason: string; authorized_by: string };
+        Update: { fornecedor_id?: number; reason?: string; authorized_by?: string };
+        Relationships: [];
+      };
       assinaturas: {
         Row: {
           created_at: string | null
@@ -590,6 +596,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      has_soph_access: { Args: never; Returns: boolean };
+      stage1_current_benefits: { Args: never; Returns: Json };
+      current_product_access: { Args: never; Returns: Json };
+      has_product_access: { Args: { requested_product: string }; Returns: boolean };
       claim_subscriptions_for_current_user: { Args: never; Returns: number }
       get_distinct_fornecedores: {
         Args: never

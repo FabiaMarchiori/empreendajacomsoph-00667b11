@@ -21,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import { ProductCard } from "@/components/ProductCard";
 import sophHero from "@/assets/soph-hero.png";
 
+import { usePlanAccess } from "@/hooks/usePlanAccess";
+
 const container = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.08 } },
@@ -45,6 +47,7 @@ const GRAD = "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const access = usePlanAccess();
 
   // Track last visited page for "Último acesso"
   useEffect(() => {
@@ -117,10 +120,10 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
             { title: "Central de Fornecedores", desc: "Encontre os melhores fornecedores para seu negócio", status: "liberado" as const, icon: <Package className="h-5 w-5" />, premium: true, url: "/fornecedores" },
-            { title: "Sistema de Precificação", desc: "Calcule o preço ideal dos seus produtos", status: "liberado" as const, icon: <BarChart3 className="h-5 w-5" />, premium: true, url: "/gestao" },
-            { title: "ERP – Soph Gestão", desc: "Gerencie seu negócio em um só lugar", status: "bonus" as const, icon: <Star className="h-5 w-5" />, premium: true, url: "/gestao" },
+            { title: "Sistema de Precificação", desc: "Calcule o preço ideal dos seus produtos", status: "liberado" as const, icon: <BarChart3 className="h-5 w-5" />, premium: true, url: "/erp" },
+            { title: "ERP – Soph Gestão", desc: "Gerencie seu negócio em um só lugar", status: "bonus" as const, icon: <Star className="h-5 w-5" />, premium: true, url: "/erp" },
             { title: "Soph, sua Sócia Digital", desc: "Sua agente inteligente de orientação", status: "liberado" as const, icon: <MessageCircle className="h-5 w-5" />, premium: true, url: "/soph" },
-          ].map((p) => (
+          ].filter(p => p.url === "/erp" ? access.erp : p.url === "/soph" ? access.soph : access.ecosystem).map((p) => (
             <motion.div key={p.title} variants={item}>
               <ProductCard {...p} description={p.desc} isPremium={p.premium} onClick={() => navigate(p.url)} />
             </motion.div>

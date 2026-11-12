@@ -48,6 +48,9 @@ import { LegalLayout } from "./legal/LegalLayout";
 import NotFound from "./pages/NotFound";
 import ObrigadoPage from "./pages/Obrigado";
 
+import { ProductProtected } from "./components/ProductProtected";
+import ErpPage from "./pages/Erp";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -99,7 +102,8 @@ const App = () => (
                 <Route path="canais" element={<PrecificacaoCanais />} />
                 <Route path="configuracoes" element={<PrecificacaoConfiguracoes />} />
               </Route>
-              <Route path="/soph" element={<EcosystemProtected><SophPage /></EcosystemProtected>} />
+              <Route path="/soph" element={<ProductProtected product="soph"><SophPage /></ProductProtected>} />
+              <Route path="/erp" element={<ProductProtected product="erp"><ErpPage /></ProductProtected>} />
               <Route path="/acessos" element={<AcessosPage />} />
               <Route path="/conta" element={<ContaPage />} />
             </Route>

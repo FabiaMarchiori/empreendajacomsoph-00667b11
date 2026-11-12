@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Key,
   User,
+  Database,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -26,6 +27,8 @@ import { SidebarAccountBlock } from "@/components/SidebarAccountBlock";
 import logoOficialCropped from "@/assets/logo-oficial-cropped.png";
 import iconeOficial from "@/assets/icone-oficial.png";
 
+import { usePlanAccess } from "@/hooks/usePlanAccess";
+
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "Fornecedores", url: "/fornecedores", icon: Package },
@@ -44,6 +47,10 @@ export function AppSidebar() {
   const { state, setOpenMobile, isMobile } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const access = usePlanAccess();
+  const visibleMain = mainItems.filter(i => ["/", "/fornecedores"].includes(i.url) || access.ecosystem);
+  const visibleSecondary = secondaryItems.filter(i => i.url !== "/soph" || access.soph);
+  if (access.erp) visibleSecondary.push({ title: "ERP — Soph Gestão", url: "/erp", icon: Database });
 
   const isActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
@@ -106,7 +113,7 @@ export function AppSidebar() {
       <SidebarContent className="px-2">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>{mainItems.map(renderItem)}</SidebarMenu>
+            <SidebarMenu>{visibleMain.map(renderItem)}</SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
@@ -114,7 +121,7 @@ export function AppSidebar() {
 
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>{secondaryItems.map(renderItem)}</SidebarMenu>
+            <SidebarMenu>{visibleSecondary.map(renderItem)}</SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

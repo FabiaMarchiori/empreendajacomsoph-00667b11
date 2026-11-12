@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -16,20 +17,31 @@ export interface BolsasSupplier {
 }
 
 export function useBolsasSuppliers() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["bolsas-suppliers"],
+    queryKey: ["bolsas-suppliers", user?.id],
+    enabled: !!user,
     queryFn: async () => {
+      const { data: shared, error: sharedError } = await supabase
+        .from("supplier_shared_access")
+        .select("fornecedor_id");
+      if (sharedError) throw sharedError;
+      const sharedIds = (shared || [])
+        .map((s) => s.fornecedor_id)
+        .filter(Number.isSafeInteger);
       const { data, error } = await supabase
         .from("fornecedores")
         .select("*")
-        .eq("categoria", NICHO_CATEGORIA)
+        .or(
+          `categoria.eq."${NICHO_CATEGORIA}",id.in.(${sharedIds.length ? sharedIds.join(",") : "-1"})`,
+        )
         .not("nome_loja", "is", null)
         .order("nome_loja");
       if (error) throw error;
 
       // Deduplica por nome (caso existam linhas repetidas)
       const map = new Map<string, BolsasSupplier & { allIds: number[] }>();
-      for (const s of (data || []) as any[]) {
+      for (const s of (data || []) as (BolsasSupplier & { id: number })[]) {
         const key = (s.nome_loja || "")
           .toLowerCase()
           .normalize("NFD")
@@ -53,7 +65,9 @@ export function useBolsasSuppliers() {
           });
         }
       }
-      return Array.from(map.values()).sort((a, b) => a.nome_loja.localeCompare(b.nome_loja, "pt-BR"));
+      return Array.from(map.values()).sort((a, b) =>
+        a.nome_loja.localeCompare(b.nome_loja, "pt-BR"),
+      );
     },
   });
 }

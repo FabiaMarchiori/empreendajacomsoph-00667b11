@@ -1,0 +1,42 @@
+{
+  "baseRef": "origin/main",
+  "preserveStage1Commit": "d2608f81ac88ce300edd667854386971f161c207",
+  "stage1Manifest": "release/stage1-plan-benefits.json",
+  "migrationsInOrder": [
+    "supabase/migrations/20261110110000_verified_claims_only.sql",
+    "supabase/migrations/20261111133107_transactional_email_recovery.sql",
+    "supabase/migrations/20261111141651_durable_webhook_reviews.sql",
+    "supabase/migrations/20261111160309_stage2_kiwify_event_guards.sql"
+  ],
+  "edgeFunctions": ["kiwify-webhook", "generate-soph-token"],
+  "frontend": ["src/hooks/useSubscription.ts"],
+  "tests": [
+    "tests/subscriptions/run.mjs",
+    "tests/subscriptions/outbox.mjs",
+    "tests/subscriptions/edge.mjs",
+    "tests/subscriptions/renewals.mjs",
+    "tests/subscriptions/review-receipts.mjs",
+    "tests/subscriptions/stage2-integration.mjs",
+    "tests/subscriptions/fixtures/stage2-live-schema.sql",
+    "tests/subscriptions/fixtures/existing-outbox.sql",
+    "src/hooks/useSubscription.test.tsx"
+  ],
+  "documentation": [
+    "docs/stage2-subscriptions-release.md",
+    "docs/stage2-contract-lineage.sql",
+    "docs/subscription-preflight.sql"
+  ],
+  "existingDatabaseRequirements": [
+    "assinaturas with unique kiwify_subscription_id and subscription_status enum",
+    "comunicacoes_transacionais already exists: never recreate it",
+    "profiles, user_roles, clientes_autorizados, webhook_logs and auth.users",
+    "existing handle_new_user admin behavior preserved verbatim"
+  ],
+  "deferred": [
+    "20261111132917_approved_product_access.sql",
+    "supplier/pricing RLS",
+    "administrator creation/grant changes",
+    "manual consolidation/reassignment/deletion of existing subscriptions",
+    "automatic recurring refund/cancellation/resumption without authoritative evidence"
+  ]
+}

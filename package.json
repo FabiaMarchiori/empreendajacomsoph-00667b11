@@ -10,7 +10,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:subscriptions": "node tests/subscriptions/run.mjs && node tests/subscriptions/products.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/endpoints.mjs && node tests/subscriptions/renewals.mjs && node tests/subscriptions/review-receipts.mjs && node tests/subscriptions/stage2-integration.mjs && STAGE2_WITH_STAGE1=1 node tests/subscriptions/stage2-integration.mjs",
+    "test:stage1": "node tests/subscriptions/stage1-benefits.mjs && node tests/subscriptions/endpoints.mjs",
+    "prepare:stage1": "node scripts/prepare-stage1.mjs",
+    "test:stage2": "node tests/subscriptions/run.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/renewals.mjs && node tests/subscriptions/review-receipts.mjs && node tests/subscriptions/stage2-integration.mjs && STAGE2_WITH_STAGE1=1 node tests/subscriptions/stage2-integration.mjs",
+    "prepare:stage2": "node scripts/prepare-stage2.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -67,6 +72,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-plugin-dev-server-bridge": "^1.0.2",
     "@lovable.dev/vite-plugin-hmr-gate": "^1.8.0",

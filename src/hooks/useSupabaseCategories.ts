@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -20,8 +21,10 @@ function toSlug(name: string): string {
 }
 
 export function useSupabaseCategories() {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ["supabase-categories"],
+    queryKey: ["supabase-categories", user?.id],
+    enabled: !!user,
     queryFn: async () => {
       // Fetch categories
       const { data: cats, error: catError } = await supabase
@@ -41,7 +44,7 @@ export function useSupabaseCategories() {
 
       // Count suppliers per category
       const countMap: Record<string, number> = {};
-      (suppliers || []).forEach((s: any) => {
+      (suppliers || []).forEach((s) => {
         const cat = s.categoria || "";
         countMap[cat] = (countMap[cat] || 0) + 1;
       });

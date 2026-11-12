@@ -30,7 +30,7 @@ export default function BolsasGate() {
           </p>
           <h1 className="text-xl font-bold text-white mb-2">Bolsas, Mochilas e Malas</h1>
           <p className="text-sm text-white/60 mb-6 leading-relaxed">
-            Esse nicho é liberado para clientes do plano <strong className="text-white/80">Starter Bolsas</strong> ou
+            Esse nicho é liberado para clientes do plano <strong className="text-white/80">Bolsas, Mochilas e Malas</strong> ou
             do <strong className="text-white/80">Ecossistema Completo</strong>.
           </p>
 
