@@ -131,7 +131,7 @@ export const registerPWAServiceWorker = async () => {
         return registration;
       })
       .catch((error) => {
-        console.error("PWA service worker registration failed", error);
+        console.error("PWA service worker registration failed");
         return null;
       });
   }

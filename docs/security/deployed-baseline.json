@@ -1,0 +1,56 @@
+{
+  "readOn": "2026-11-12",
+  "baseCommit": "4fdd39fd0c536b4ecb14907c0e7a5e4a5da72979",
+  "projectRef": "ospnuclymrxjoqwyolfn",
+  "organizationPlan": "free",
+  "functions": [
+    {
+      "slug": "soph-chat",
+      "version": 39,
+      "verify_jwt": false,
+      "deployed_source_sha256": "29ce29af0163a42bfb3453e3421ed97257bf2a1a6e542cb3e66253ecd408f942",
+      "baseline_repo_sha256": "540f22c5f884eff760efbbd3e448d3d5b0db361fbdc751fda7cbf57ef03f3585",
+      "comparison": "Deployed source includes official app origin missing from main"
+    },
+    {
+      "slug": "erp-entry",
+      "version": 44,
+      "verify_jwt": false,
+      "deployed_source_sha256": "73d40a44644198d5543d52d75f8323a1a4b367508d6ee9aa39fabe63ba2f6011",
+      "baseline_repo_sha256": "5ab110d4b38749ca35beea91590d20135c9962ee8792b78b9901e685001e1cbc",
+      "comparison": "Deployed source includes official app origin missing from main"
+    },
+    {
+      "slug": "lookup-subscription",
+      "version": 16,
+      "verify_jwt": false,
+      "deployed_source_sha256": "f0aa6ae035c29785184ae51699edb5c4ebe5e94724559097cdc875689db0352b",
+      "baseline_repo_sha256": "cbf242dd9bb809622da248d8a4322301c185f7a375014c5180d7980506762693",
+      "comparison": "Deployed source includes official app origin missing from main"
+    },
+    {
+      "slug": "kiwify-webhook",
+      "version": 80,
+      "verify_jwt": false,
+      "deployed_source_sha256": "551fd4db63cec4692c1322f3a31a9b41a8bf266e85e2c10f0307d45cc374bb88",
+      "baseline_repo_sha256": "f28388c84ccfab2ad3bb77d106a89c2211f6311e6df11c0167b484c92d2fae19",
+      "comparison": "Equivalent except trailing whitespace"
+    },
+    {
+      "slug": "generate-soph-token",
+      "version": 14,
+      "verify_jwt": false,
+      "deployed_source_sha256": "0d58fe58e18da2f02e122cfa18d290d22278d0e2987a5eb6e862298f969be595",
+      "baseline_repo_sha256": null,
+      "comparison": "Missing from main; vendored from deployed v14 with logging-only changes",
+      "runtime_without_console_sha256": "c09056d3f167166f19b9601127cd33eb8bbf121bc8634fb632049f9e58e97a15"
+    }
+  ],
+  "productionHttpHeadersObserved": [
+    "X-Content-Type-Options: nosniff",
+    "Referrer-Policy: strict-origin-when-cross-origin",
+    "Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+    "X-Frame-Options: SAMEORIGIN",
+    "Strict-Transport-Security: max-age=31536000; includeSubDomains"
+  ]
+}

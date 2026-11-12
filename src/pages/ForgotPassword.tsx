@@ -19,9 +19,9 @@ export default function ForgotPasswordPage() {
     if (!email) return;
 
     setLoading(true);
-    console.log("[ForgotPassword] → Enviando reset para:", email);
-    console.log("[ForgotPassword] → redirectTo:", RESET_REDIRECT_URL);
-    console.log("[ForgotPassword] → origin atual:", window.location.origin);
+    console.log("[ForgotPassword] Reset requested");
+    console.log("[ForgotPassword] Redirect configured");
+    console.log("[ForgotPassword] Request initialized");
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
       setLoading(false);
 
       if (error) {
-        console.error("[ForgotPassword] ✗ Erro Supabase:", error);
+        console.error("[ForgotPassword] Provider error");
         toast.error(error.message || "Não foi possível enviar o e-mail. Tente novamente.");
         return;
       }
@@ -39,9 +39,9 @@ export default function ForgotPasswordPage() {
       console.log("[ForgotPassword] ✓ E-mail enviado com sucesso.");
       setSent(true);
       toast.success("E-mail de recuperação enviado!");
-    } catch (err: any) {
+    } catch (err) {
       setLoading(false);
-      console.error("[ForgotPassword] ✗ Erro de rede/fetch:", err);
+      console.error("[ForgotPassword] Network error");
       const isPreview = window.location.hostname.includes("lovable.app");
       if (err?.message === "Failed to fetch" && isPreview) {
         toast.error(

@@ -166,9 +166,9 @@ export default function SophPage() {
 
     try {
       await streamChat(updated);
-    } catch (e: any) {
+    } catch (e) {
       if (e.name === "AbortError") return;
-      console.error("[Soph] Error:", e);
+      console.error("[Soph] Request failed");
       toast.error(e.message || "Erro ao enviar mensagem");
       // Remove failed assistant partial if any
       setMessages((prev) => {
@@ -186,7 +186,7 @@ export default function SophPage() {
 
   // Auto-send initial message from floating widget navigation
   useEffect(() => {
-    const initialMessage = (location.state as any)?.initialMessage;
+    const initialMessage = (location.state as { initialMessage?: string } | null)?.initialMessage;
     if (initialMessage && !initialMessageHandled.current) {
       initialMessageHandled.current = true;
       // Clear the state to prevent re-sending on re-render

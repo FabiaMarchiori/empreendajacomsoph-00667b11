@@ -4,3 +4,5 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
   X-Frame-Options: SAMEORIGIN
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-DNS-Prefetch-Control: off
+  X-Permitted-Cross-Domain-Policies: none

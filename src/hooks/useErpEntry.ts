@@ -46,8 +46,8 @@ export function useErpEntry() {
       );
 
       if (error) {
-        console.error("[useErpEntry] Invoke error:", error);
-        const msg = (error as any)?.message || "Erro ao conectar com o ERP Soph. Tente novamente.";
+        console.error("[useErpEntry] Invoke failed");
+        const msg = (error as Error)?.message || "Erro ao conectar com o ERP Soph. Tente novamente.";
         toast.error(msg);
         return false;
       }
@@ -57,13 +57,13 @@ export function useErpEntry() {
         const friendlyMessage =
           ERROR_MESSAGES[errorKey] || data?.message || "Erro desconhecido.";
         toast.error(friendlyMessage);
-        console.warn("[useErpEntry] ERP entry denied:", errorKey, data?.message);
+        console.warn("[useErpEntry] ERP entry denied");
         return false;
       }
 
       // Success — validate entry_url
       if (!data.entry_url) {
-        console.error("[useErpEntry] ERP did not return entry_url:", data);
+        console.error("[useErpEntry] Entry URL missing");
         toast.error("Erro de integração: URL de entrada não retornada pelo ERP.");
         return false;
       }
@@ -75,9 +75,7 @@ export function useErpEntry() {
           : "Acesso verificado! Redirecionando ao ERP Soph..."
       );
 
-      console.info(
-        `[useErpEntry] ERP entry success — new_user: ${isNew}, erp_user_id: ${data.erp_user_id}, entry_url: ${data.entry_url}`
-      );
+      console.info("[useErpEntry] ERP entry authorized");
 
       // Redirect using the dynamic entry_url from ERP
       setTimeout(() => {
@@ -86,7 +84,7 @@ export function useErpEntry() {
 
       return true;
     } catch (err) {
-      console.error("[useErpEntry] Unexpected error:", err);
+      console.error("[useErpEntry] Unexpected error");
       toast.error("Erro inesperado ao acessar o ERP. Tente novamente.");
       return false;
     } finally {
