@@ -1,0 +1,39 @@
+{
+  "base": "4fdd39fd0c536b4ecb14907c0e7a5e4a5da72979",
+  "A": {
+    "source": "cf16ef5c63cfa43055b3083d434b396ea0cd00c3",
+    "migrations": [],
+    "functions": [
+      "soph-chat",
+      "erp-entry",
+      "lookup-subscription",
+      "kiwify-webhook",
+      "generate-soph-token"
+    ],
+    "frontend": true,
+    "warning": "A is optional before B. Never deploy A webhook/generator after B; it would restore legacy subscription behavior."
+  },
+  "B": {
+    "source": "HEAD",
+    "migrations": [
+      "20261110110000_verified_claims_only.sql",
+      "20261111133107_transactional_email_recovery.sql",
+      "20261111141651_durable_webhook_reviews.sql",
+      "20261111160309_stage2_kiwify_event_guards.sql"
+    ],
+    "functions": ["kiwify-webhook", "generate-soph-token"],
+    "frontend": ["src/hooks/useSubscription.ts"],
+    "requires": "All four migrations must commit before B functions. Deploy B frontend after B functions. B integrated frontend includes A."
+  },
+  "excluded": [
+    "stage1_plan_benefits",
+    "approved_product_access",
+    "suppliers",
+    "pricing",
+    "administrator changes",
+    "CSP",
+    "global rate limiting",
+    "major framework upgrades"
+  ],
+  "productionAuthorized": false
+}

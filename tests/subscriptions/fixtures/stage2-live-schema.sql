@@ -1,0 +1,22 @@
+-- Minimal structural fixture from the read-only audited live schema. No real users.
+CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role BYPASSRLS;
+CREATE SCHEMA auth;
+CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql AS $$ SELECT nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+CREATE TYPE public.subscription_status AS ENUM('ativa','inativa','cancelada','expirada','reembolsada');
+CREATE TABLE auth.users(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb DEFAULT '{}');
+CREATE TABLE profiles(id uuid PRIMARY KEY,email text,first_name text,last_name text,is_admin boolean DEFAULT false);
+CREATE TABLE user_roles(user_id uuid,role text);
+CREATE TABLE assinaturas(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),user_id uuid,kiwify_subscription_id text UNIQUE,kiwify_customer_id text,email text NOT NULL,nome_cliente text,status subscription_status DEFAULT 'ativa',plano text,valor numeric,data_inicio timestamptz,data_expiracao timestamptz,created_at timestamptz DEFAULT now(),updated_at timestamptz DEFAULT now());
+CREATE TABLE clientes_autorizados(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),email text UNIQUE,status_assinatura text,customer_id text,produto_id text,data_compra timestamptz);
+CREATE TABLE webhook_logs(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),evento text NOT NULL,payload jsonb NOT NULL,status text NOT NULL,error_message text,created_at timestamptz DEFAULT now());
+CREATE TABLE comunicacoes_transacionais(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),kiwify_subscription_id text NOT NULL,assinatura_id uuid NOT NULL REFERENCES assinaturas(id) ON DELETE RESTRICT,email text NOT NULL,tipo text NOT NULL,provider text DEFAULT 'brevo',template_id integer DEFAULT 5,status text NOT NULL,provider_message_id text,error_message text,attempt_count integer DEFAULT 1,attempted_at timestamptz DEFAULT now(),sent_at timestamptz,created_at timestamptz DEFAULT now(),updated_at timestamptz DEFAULT now(),UNIQUE(kiwify_subscription_id,tipo));
+CREATE FUNCTION public.is_admin() RETURNS boolean LANGUAGE sql SECURITY DEFINER AS $$ SELECT coalesce((SELECT is_admin FROM public.profiles WHERE id=auth.uid()),false) $$;
+CREATE FUNCTION public.has_role(requested_role text) RETURNS boolean LANGUAGE sql AS $$ SELECT false $$;
+CREATE FUNCTION public.current_product_access() RETURNS jsonb LANGUAGE sql AS $$ SELECT '{"stage1":"unchanged"}'::jsonb $$;
+CREATE TABLE fornecedores(id int);
+ALTER TABLE fornecedores ENABLE ROW LEVEL SECURITY;
+CREATE POLICY untouched_supplier_policy ON fornecedores USING(true);
+CREATE TABLE pricing_settings(id int);
+ALTER TABLE pricing_settings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY untouched_pricing_policy ON pricing_settings USING(false);
+GRANT USAGE ON SCHEMA public,auth TO anon,authenticated,service_role;

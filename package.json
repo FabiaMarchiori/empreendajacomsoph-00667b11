@@ -10,10 +10,13 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:security": "node tests/security/edge.mjs && node tests/security/config.mjs",
+    "security:audit": "node scripts/security-audit.mjs",
+    "test:subscriptions": "node tests/subscriptions/run.mjs && node tests/subscriptions/outbox.mjs && node tests/subscriptions/edge.mjs && node tests/subscriptions/renewals.mjs && node tests/subscriptions/review-receipts.mjs && node tests/subscriptions/stage2-integration.mjs",
+    "prepare:integration": "node scripts/prepare-integration.mjs"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -63,10 +66,10 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^0.9.9",
-    "zod": "^3.25.76"
+    "vaul": "^0.9.9"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-plugin-dev-server-bridge": "^1.0.2",
     "@lovable.dev/vite-plugin-hmr-gate": "^1.8.0",
