@@ -1,19 +1,21 @@
 # Home premium — implementação para avaliação visual
 
-Branch exclusiva: `codex/redesign-home-premium`. Base: `4fdd39fd0c536b4ecb14907c0e7a5e4a5da72979`.
+Branch exclusiva: `codex/redesign-home-premium`; PR Draft #9. Base da main: `4fdd39fd0c536b4ecb14907c0e7a5e4a5da72979`. Refinamento visual sobre a primeira implementação aprovada (`3bfc1ff`).
 Entrega preparada para PR Draft e Deploy Preview do Netlify, sem merge nem publicação em produção. Nenhuma configuração de hospedagem alterada.
 
-## Interface
+## Interface após o refinamento
 
-- Hero usa os dois PNGs originais, texto React e nenhum botão. A imagem inteira é mantida, sem object-fit cover ou recorte de produtos. No espaço estreito, texto acima da fotografia; a sobreposição na área esquerda é usada quando o contêiner comporta o texto com legibilidade. Essa composição mobile fica sujeita à avaliação visual da proprietária.
-- Cinco atalhos locais, na ordem solicitada, apontam para a primeira ferramenta da seção correspondente na Home. Em 320 px, Fornecedores pode quebrar em duas linhas sem abreviar o nome.
-- Nove cards React/CSS com os nove PNGs transparentes e cores-base exatamente como solicitadas. O kit não trouxe tokens de cores de cards que substituam esses valores. Gradientes e sombras acrescentam profundidade.
-- Duas colunas no espaço estreito; três quando a largura interna da Home alcança 620 px. Com a sidebar aberta, 768 px de viewport ainda usa duas colunas; 1024 e 1440 usam três. Descrições aparecem na composição ampla.
-- Barra mobile: Início, Fornecedores, Vendas, Gestão e Mais. Mais abre sheet acessível com Estruture seu Negócio, Soph, Meus Acessos e Conta / Plano, usando rotas existentes. Fechamento por seleção, botão, toque fora ou Escape do componente existente.
-- A faixa lateral de ícones mobile foi desativada apenas no AppSidebar por uma nova opção da primitiva Sidebar. O menu lateral expansível permanece disponível e o desktop preserva a sidebar.
-- Barra inferior considera env(safe-area-inset-bottom), com espaço reservado no final do layout e viewport-fit=cover. O atalho Soph fica no cabeçalho e o painel abre abaixo dele, sem ocultar títulos ou setas dos cards.
-- Pequena irregularidade do círculo Estruture seu Negócio ocultada por clip-path na exibição. Nenhum PNG foi retocado ou regravado. Os 24 hashes SHA-256 conferem com o inventário original; 21 recursos são usados na UI e três imagens são exclusivamente referências.
-- Favoritos, Histórico, Último acesso, Suporte e soluções Em breve continuam acessíveis. O registro de última rota usa observação do router, substituindo a interceptação de history.pushState da Home antiga. Contadores e progresso estáticos foram retirados da apresentação.
+- Hero desktop com proporção 3,75:1: 20% mais baixa que a anterior em 1440 px (377,3 → 301,9 px) e em 1024 px (240 → 192 px). Imagem original inteira, com object-fit: contain, sem distorção; texto à esquerda e produtos à direita.
+- Hero mobile horizontal dentro do mesmo banner. Saudação usa o first_name do useProfile já existente: primeiro token de nome válido, sem e-mail, com fallback “Olá! 👋”. Mensagem: “Tudo para fazer seu negócio crescer.” Nenhuma alteração no hook, cadastro, Auth ou banco. Nomes longos podem aumentar a altura do banner para preservar legibilidade, mantendo a composição horizontal.
+- Fotografias e todos os PNGs permanecem originais. A composição horizontal funcionou com os arquivos existentes, sem edição de imagens.
+- Cinco atalhos circulares preservados, com mesmas imagens, rótulos, ordem e destinos locais.
+- Nove cards React/CSS preservados nas mesmas cores, ordem e destinos. Desktop em três colunas a partir de 620 px internos; altura mínima 252 → 196 px (-22,2%), ícones e espaços reduzidos. Em 1440 px todos mediram 196 px. Em 1024 px os cards crescem conforme títulos/descrições para evitar cortes.
+- Mobile com duas colunas e altura 192 → 160 px (-16,7%). Mostra ícone, título e seta; descrições ocultas e informação de acesso mantida para leitores de tela. Fonte usa largura do contêiner para evitar sobreposição em 768 px com sidebar aberta.
+- Desktop: Último acesso, Favoritos, Histórico e Suporte em barra compacta e discreta abaixo dos cards. Mobile: mesmos comandos somente no menu Mais; nenhum botão fixo adicional. Links e lógica compartilhados por QuickActions.
+- Último acesso usa a rota anterior já registrada no layout e fallback /fornecedores. Favoritos mantém /fornecedores/importadoras-25/favoritos. Histórico agora leva à tela existente /gestao/precificacao/simulador, que contém RecentSimulations, em vez de levar apenas ao hub. Não há novo histórico, tabela, rota ou dado fictício. Suporte conserva o WhatsApp existente.
+- Explorar novas soluções removido exclusivamente da Home. Nenhuma página ou ferramenta foi excluída.
+- Navegação inferior, suas cinco imagens, ordem, cores, destaque ativo e área segura preservados. Mais mantém suas quatro áreas existentes e recebe os quatro atalhos, com fechamento ao navegar. Atalho Soph continua no cabeçalho.
+- Máscara CSS anterior do círculo Estruture seu Negócio mantida, sem regravar o PNG. Os 24 hashes SHA-256 continuam conferindo com o inventário original: 21 recursos da UI e três referências separadas.
 
 ## Autorizações e integrações
 
@@ -21,29 +23,25 @@ A apresentação consulta usePlanAccess e useErpAccess sem modificar os hooks. N
 
 Conferidos sem alterações: App.tsx, AuthContext, ProtectedRoute, EcosystemProtected, hooks, integrações, Supabase/SQL/RLS/Edge Functions, Kiwify, Brevo, manifestos de dependências, lockfiles, Vite e configurações de publicação. Nenhuma operação nos PRs #4, #6, #7 ou #8.
 
-## Arquivos de implementação
+## Arquivos deste refinamento
 
 - src/pages/Home.tsx
-- src/components/MobileNavigation.tsx (novo)
-- src/components/home/assets.ts (novo)
-- src/components/home/home-premium.css (novo)
-- src/components/home/home-premium.test.tsx (novo)
-- src/components/AppLayout.tsx
-- src/components/AppSidebar.tsx
-- src/components/ui/sidebar.tsx
-- src/components/SophFloatingButton.tsx
-- index.html (somente viewport-fit=cover)
-- docs/design/home-premium/IMPLEMENTACAO.md (este relatório)
+- src/components/MobileNavigation.tsx
+- src/components/home/home-premium.css
+- src/components/home/home-premium.test.tsx
+- src/components/home/QuickActions.tsx (novo; comportamentos existentes compartilhados)
+- src/components/home/firstName.ts (novo; validação do nome somente para apresentação)
+- docs/design/home-premium/IMPLEMENTACAO.md
 
-O inventário, metadados e recursos adicionados na etapa anterior permanecem nas mesmas pastas.
+Demais componentes do primeiro redesign, imagens, referências e metadados preservados.
 
 ## Validação executada
 
 - npm run build: passou. O Vite continua avisando sobre o tamanho do bundle JS (aproximadamente 1,36 MB sem gzip). Não houve divisão de bundle nem conversão dos PNGs nesta etapa.
-- npm test: 22 testes passaram em quatro arquivos, incluindo sete testes novos de navegação, carregamento e apresentação de acesso.
+- npm test: 36 testes passaram em quatro arquivos, incluindo navegação, carregamento, apresentação de acesso, validação de nomes/fallback e Último acesso no menu Mais.
 - tsc --noEmit -p tsconfig.app.json: passou.
 - ESLint dos arquivos de implementação novos/alterados, exceto a primitiva sidebar que já tinha aviso: sem erros ou avisos. Lint geral: 32 erros e nove avisos, os mesmos da base main, conferidos em cópia do commit de origem. A primitiva sidebar mantém apenas seu aviso anterior de fast refresh.
-- git diff --check: passou.
+- git diff --check do refinamento: passou. O CSV de metadados original preserva seus finais de linha CRLF da etapa anterior.
 - Chromium/Playwright local: Home conferida em 320, 375, 390, 428, 768, 1024 e 1440 px. Sem overflow horizontal, títulos ou rótulos transbordando, imagens quebradas ou erros JavaScript. Imagem inteira contida na Hero, fotos e PNGs originais preservados.
 - Verificados: cinco atalhos por hash, fechamento do menu Mais por navegação e Escape, acesso a Estruture, popover da Soph, separação do botão de ajuda e conteúdo e possibilidade de rolar o rodapé inteiro acima da barra mobile.
 - Cinco páginas internas reais renderizadas em 390 px: Abrir MEI, Logo e Marca, Registrar Marca, Domínio/Site e Marketplaces. Guardas de rota originais também exercitados com fixtures de visitante, assinatura inativa, plano somente Bolsas e ecossistema sem ERP.
@@ -51,7 +49,7 @@ O inventário, metadados e recursos adicionados na etapa anterior permanecem nas
 
 ## Pendências e limites
 
-- Avaliação visual da proprietária, incluindo composição mobile da Hero e reposicionamento do atalho Soph no cabeçalho.
+- Avaliação visual da proprietária do refinamento, especialmente da nova Hero mobile horizontal e da redução dos cards.
 - Login, renovação de sessão, assinaturas reais e abertura externa do ERP não foram exercitados com credenciais reais; código e proteções originais foram preservados. Os testes com fixtures verificam apresentação e guardas existentes, não certificam integrações de produção.
 - Safe area física em iPhone e navegadores Safari/Firefox ainda requerem conferência em dispositivo. A validação automatizada usou Chromium com as larguras solicitadas.
 - Os PNGs foram mantidos em resolução original, sem compressão adicional. Brilhos/sombras foram inspecionados nos tamanhos usados pela interface; não se certifica ausência de artefatos em toda escala possível.
@@ -66,6 +64,6 @@ npm ci --cache /tmp/empreendaja-npm-cache
 npm run dev -- --host 0.0.0.0
 ```
 
-Abra a prévia local na porta 8080 e entre com uma conta de teste autorizada. O aplicativo mantém as proteções normais de autenticação/assinatura. O servidor local de desenvolvimento já foi iniciado neste ambiente. Nenhum modo de demonstração ou bypass de autorização foi adicionado ao aplicativo.
+Abra a prévia local na porta 8080 e entre com uma conta de teste autorizada. O aplicativo mantém as proteções normais de autenticação/assinatura. O servidor local de desenvolvimento já foi iniciado neste ambiente. Nenhum modo de demonstração ou bypass de autorização foi adicionado ao aplicativo. O PR #9 e seu Deploy Preview são os únicos destinos da atualização autorizada: https://deploy-preview-9--appempreendajacomsoph.netlify.app .
 
 Aguardar avaliação visual antes de qualquer publicação.

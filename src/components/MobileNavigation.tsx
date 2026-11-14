@@ -7,6 +7,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
+import { QuickActions } from "@/components/home/QuickActions";
 import { homeAssets } from "@/components/home/assets";
 import "@/components/home/home-premium.css";
 
@@ -100,6 +101,12 @@ export function MobileNavigation() {
               {item.title}
             </Link>
           ))}
+        </nav>
+        <nav
+          aria-label="Ações rápidas no menu Mais"
+          className="premium-more-quick-actions grid grid-cols-2 gap-3 mt-4 border-t border-white/10 pt-4"
+        >
+          <QuickActions onNavigate={() => setOpen(false)} />
         </nav>
       </SheetContent>
     </Sheet>

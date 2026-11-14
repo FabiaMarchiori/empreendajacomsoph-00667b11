@@ -7,9 +7,14 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
+import { getFirstName } from "@/components/home/firstName";
 import HomePage from "@/pages/Home";
 import { MobileNavigation } from "@/components/MobileNavigation";
 
+const profile = vi.hoisted(() => ({ first_name: "Lia" }));
+vi.mock("@/hooks/useProfile", () => ({
+  useProfile: () => ({ data: profile }),
+}));
 const access = vi.hoisted(() => ({
   ecosystem: true,
   erp: true,
@@ -123,7 +128,16 @@ describe("Navegação mobile", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: "Mais" }));
     const dialog = await screen.findByRole("dialog");
-    expect(within(dialog).getAllByRole("link")).toHaveLength(4);
+    expect(
+      within(
+        screen.getByRole("navigation", { name: "Mais áreas" }),
+      ).getAllByRole("link"),
+    ).toHaveLength(4);
+    expect(
+      within(
+        screen.getByRole("navigation", { name: "Ações rápidas no menu Mais" }),
+      ).getByRole("link", { name: "Histórico" }),
+    ).toHaveAttribute("href", "/gestao/precificacao/simulador");
     fireEvent.click(
       within(dialog).getByRole("link", { name: "Conta / Plano" }),
     );
@@ -147,5 +161,68 @@ describe("Navegação mobile", () => {
     expect(screen.getByRole("link", { name: "Início" })).not.toHaveAttribute(
       "aria-current",
     );
+  });
+});
+
+describe("Saudação mobile com perfil existente", () => {
+  it.each([
+    ["  Maria Clara  ", "Maria"],
+    ["João", "João"],
+    ["Ana-Maria", "Ana-Maria"],
+    ["", null],
+    ["   ", null],
+    ["cliente@example.test", null],
+    ["123", null],
+    ["<script>", null],
+    [null, null],
+    [123, null],
+    ["A".repeat(41), null],
+  ])("valida %s sem usar e-mail como nome", (input, expected) => {
+    expect(getFirstName(input)).toBe(expected);
+  });
+  it("apresenta o primeiro nome e a mensagem curta", () => {
+    profile.first_name = "Maria Clara";
+    renderHome();
+    expect(
+      screen.getByText("Olá, Maria!", { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Tudo para fazer seu negócio crescer."),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("Explorar novas soluções"),
+    ).not.toBeInTheDocument();
+  });
+  it("usa a saudação genérica para valor inválido", () => {
+    profile.first_name = "cliente@example.test";
+    renderHome();
+    expect(document.querySelector(".premium-hero-mobile")!.textContent).toBe(
+      "Olá! 👋",
+    );
+    expect(screen.queryByText("cliente@example.test")).not.toBeInTheDocument();
+  });
+});
+
+describe("Atalhos reais no menu Mais", () => {
+  it("navega para o último acesso salvo e fecha Mais", async () => {
+    localStorage.setItem("empreendaja_last_page", "/estrutura/abrir-mei");
+    render(
+      <MemoryRouter>
+        <MobileNavigation />
+        <Routes>
+          <Route path="*" element={<Location />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Mais" }));
+    const dialog = await screen.findByRole("dialog");
+    fireEvent.click(
+      within(dialog).getByRole("button", { name: "Último acesso" }),
+    );
+    expect(screen.getByTestId("location")).toHaveTextContent(
+      "/estrutura/abrir-mei",
+    );
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    localStorage.removeItem("empreendaja_last_page");
   });
 });

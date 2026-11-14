@@ -7,39 +7,66 @@
 }
 .premium-hero {
   position: relative;
-  display: flex;
-  flex-direction: column-reverse;
+  min-height: clamp(168px, 48cqw, 208px);
   overflow: hidden;
   border-radius: 24px;
   background: #031429;
   box-shadow: 0 10px 32px #0003;
 }
 .premium-hero picture {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
+  height: 100%;
 }
 .premium-hero picture img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+}
+.premium-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #031429d9, #03142990 28%, transparent 46%);
+  pointer-events: none;
 }
 .premium-hero-copy {
-  padding: 23px 22px 12px;
+  position: relative;
+  min-height: inherit;
+  z-index: 1;
+  inset: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 44%;
+  padding: 12px;
 }
 .premium-hero h1 {
-  font-size: clamp(25px, 6.7vw, 42px);
+  font-size: clamp(16px, 4.5cqw, 20px);
   font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -1px;
+  line-height: 1.18;
+  letter-spacing: -0.4px;
+  overflow-wrap: anywhere;
 }
-.premium-hero h1 span {
+.premium-hero h1 .premium-hero-mobile {
   color: #00edfa;
 }
+.premium-hero-wave {
+  white-space: nowrap;
+}
 .premium-hero p {
-  font-size: 14px;
-  line-height: 1.55;
-  margin-top: 13px;
-  max-width: 34ch;
+  font-size: clamp(12px, 3.4cqw, 14px);
+  line-height: 1.4;
+  margin-top: 8px;
+  max-width: 30ch;
+  text-shadow: 0 1px 3px #001325;
+}
+.premium-hero .premium-hero-desktop {
+  display: none;
 }
 .premium-categories {
   display: grid;
@@ -79,8 +106,8 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  min-height: 192px;
-  padding: 10px 12px 44px;
+  min-height: 160px;
+  padding: 8px 10px 42px;
   isolation: isolate;
   scroll-margin-top: 82px;
   border-radius: 22px;
@@ -105,7 +132,7 @@
 }
 .premium-tool-icon {
   width: 100%;
-  height: 88px;
+  height: 62px;
   object-fit: contain;
   filter: drop-shadow(0 4px 3px #00142930);
 }
@@ -114,7 +141,7 @@
   z-index: 1;
 }
 .premium-tool-copy h2 {
-  font-size: clamp(14px, 3.8vw, 22px);
+  font-size: clamp(14px, 3.8cqw, 18px);
   font-weight: 800;
   line-height: 1.18;
   letter-spacing: -0.4px;
@@ -157,47 +184,34 @@
   flex-shrink: 0;
 }
 .premium-quick-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 26px;
+  display: none;
 }
 .premium-quick-actions > a,
-.premium-quick-actions > button {
+.premium-quick-actions > button,
+.premium-more-quick-actions > a,
+.premium-more-quick-actions > button {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 10px;
   text-align: left;
   font-size: 12px;
-  border: 1px solid #ffffff15;
-  border-radius: 12px;
-  background: #0b243a;
+  border-radius: 10px;
 }
-.premium-quick-actions svg {
+.premium-quick-actions svg,
+.premium-more-quick-actions svg {
   color: #00efff;
   flex-shrink: 0;
 }
-.premium-explore {
-  margin-top: 20px;
-  padding: 16px;
-  border-radius: 16px;
-  background: #0b243a;
-  font-size: 13px;
+.premium-more-quick-actions > a,
+.premium-more-quick-actions > button {
+  padding: 12px;
+  background: #102a43;
+  color: white;
 }
-.premium-explore summary {
-  cursor: pointer;
-  font-weight: 700;
-}
-.premium-explore p {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding-top: 15px;
-}
-.premium-explore p span {
-  color: #a9bed1;
-  white-space: nowrap;
+.premium-more-quick-actions > a:focus-visible,
+.premium-more-quick-actions > button:focus-visible {
+  outline: 2px solid #00efff;
+  outline-offset: 2px;
 }
 .home-premium a:focus-visible,
 .home-premium button:focus-visible,
@@ -264,20 +278,20 @@
     gap: 18px;
   }
   .premium-tool-card {
-    padding: 16px 20px 48px;
-    min-height: 252px;
+    padding: 10px 16px 42px;
+    min-height: 196px;
   }
   .premium-tool-icon {
-    height: 112px;
+    height: 76px;
   }
   .premium-tool-copy h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
   .premium-tool-copy p {
     display: block;
-    margin-top: 9px;
-    font-size: 13px;
-    line-height: 1.45;
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.4;
     color: #fff;
     text-shadow: 0 1px 3px #00132590;
   }
@@ -288,33 +302,45 @@
   .premium-categories span {
     font-size: 15px;
   }
-  .premium-quick-actions {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
   .premium-hero {
-    display: block;
-    min-height: 240px;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 3.75;
+  }
+  .premium-hero picture {
+    position: absolute;
+    inset: 0;
   }
   .premium-hero picture img {
-    min-height: 240px;
-    object-fit: contain;
-    object-position: right bottom;
+    width: 80%;
+    margin-left: auto;
   }
   .premium-hero-copy {
     position: absolute;
     inset: 0 auto 0 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    min-height: 0;
     width: 44%;
-    padding: 24px;
+    padding: 18px 24px;
   }
   .premium-hero h1 {
-    font-size: clamp(28px, 3.2vw, 42px);
+    font-size: clamp(26px, 3.7cqw, 38px);
+    line-height: 1.08;
+    letter-spacing: -1px;
+  }
+  .premium-hero h1 strong {
+    color: #00edfa;
+    font-weight: inherit;
   }
   .premium-hero p {
-    font-size: clamp(13px, 1.3vw, 17px);
+    font-size: clamp(12px, 1.45cqw, 16px);
     max-width: 29ch;
+    margin-top: 10px;
+  }
+  .premium-hero .premium-hero-desktop {
+    display: block;
+  }
+  .premium-hero .premium-hero-mobile {
+    display: none;
   }
   .premium-access {
     font-size: 10px;
@@ -328,6 +354,23 @@
   .premium-mobile-nav {
     display: none;
   }
+  .premium-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 20px;
+    padding: 4px;
+    border-top: 1px solid #ffffff15;
+  }
+  .premium-quick-actions > a,
+  .premium-quick-actions > button {
+    padding: 9px 6px;
+    background: transparent;
+  }
+  .premium-quick-actions > a:hover,
+  .premium-quick-actions > button:hover {
+    background: #ffffff08;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .premium-tool-card {
@@ -335,5 +378,17 @@
   }
   .premium-tool-card:hover {
     transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .premium-access {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }

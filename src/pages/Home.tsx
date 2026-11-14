@@ -1,13 +1,9 @@
-import {
-  ArrowRight,
-  Heart,
-  History,
-  HelpCircle,
-  Lock,
-  RotateCcw,
-} from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
+import { useProfile } from "@/hooks/useProfile";
+import { QuickActions } from "@/components/home/QuickActions";
+import { getFirstName } from "@/components/home/firstName";
 import { usePlanAccess } from "@/hooks/usePlanAccess";
 import { useErpAccess } from "@/hooks/useErpAccess";
 import { homeAssets } from "@/components/home/assets";
@@ -95,7 +91,8 @@ const homeCards = [
 export default function HomePage() {
   const { hasEcosystemAccess, isLoading } = usePlanAccess();
   const { hasErpAccess, isLoading: erpLoading } = useErpAccess();
-  const navigate = useNavigate();
+  const { data: profile } = useProfile();
+  const firstName = getFirstName(profile?.first_name);
 
   return (
     <div className="home-premium">
@@ -112,13 +109,22 @@ export default function HomePage() {
         </picture>
         <div className="premium-hero-copy">
           <h1 id="home-title">
-            Olá,
-            <br />
-            <span>empreendedora!</span>
+            <span className="premium-hero-desktop">
+              Olá,
+              <br />
+              <strong>empreendedora!</strong>
+            </span>
+            <span className="premium-hero-mobile">
+              {firstName ? `Olá, ${firstName}!` : "Olá!"}{" "}
+              <span className="premium-hero-wave">👋</span>
+            </span>
           </h1>
-          <p>
+          <p className="premium-hero-desktop">
             Encontre fornecedores e explore as ferramentas para transformar suas
             ideias em negócios.
+          </p>
+          <p className="premium-hero-mobile">
+            Tudo para fazer seu negócio crescer.
           </p>
         </div>
       </section>
@@ -200,51 +206,8 @@ export default function HomePage() {
       </section>
 
       <nav className="premium-quick-actions" aria-label="Ações rápidas">
-        <button
-          onClick={() => {
-            const last = localStorage.getItem("empreendaja_last_page");
-            navigate(
-              last?.startsWith("/") && !last.startsWith("//") && last !== "/"
-                ? last
-                : "/fornecedores",
-            );
-          }}
-        >
-          <RotateCcw size={16} />
-          Último acesso
-        </button>
-        <Link to="/fornecedores/importadoras-25/favoritos">
-          <Heart size={16} />
-          Favoritos
-        </Link>
-        <Link to="/gestao/precificacao">
-          <History size={16} />
-          Histórico
-        </Link>
-        <a
-          href="https://wa.me/5511983348749?text=Suporte%20Ecossistema"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <HelpCircle size={16} />
-          Suporte
-        </a>
+        <QuickActions />
       </nav>
-      <details className="premium-explore">
-        <summary>Explorar novas soluções</summary>
-        <div>
-          {[
-            "Semi-jóias de Limeira",
-            "Calçados dos Polos",
-            "Fabricantes Nacionais",
-          ].map((title) => (
-            <p key={title}>
-              {title}
-              <span>Em breve</span>
-            </p>
-          ))}
-        </div>
-      </details>
     </div>
   );
 }
