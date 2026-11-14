@@ -1,17 +1,17 @@
 # Home premium — implementação para avaliação visual
 
-Branch exclusiva: `codex/redesign-home-premium`; PR Draft #9. Base da main: `4fdd39fd0c536b4ecb14907c0e7a5e4a5da72979`. Correção do fundo contínuo e compactação adicional sobre o refinamento `d7d98a2`.
+Branch exclusiva: `codex/redesign-home-premium`; PR Draft #9. Base da main: `4fdd39fd0c536b4ecb14907c0e7a5e4a5da72979`. Implementação da Alternativa B aprovada e ajustes locais de tipografia/cards mobile, sobre `5de1cdc`.
 Entrega preparada para PR Draft e Deploy Preview do Netlify, sem merge nem publicação em produção. Nenhuma configuração de hospedagem alterada.
 
 ## Interface após o refinamento
 
-- Correção visual após reavaliação: Hero desktop em proporção natural 3:1, explicitamente autorizada pela proprietária para preservar a foto inteira. Altura em 1440 px: 377,3 px, substituindo os 301,9 px do banner 3,75:1. O arquivo é 3:1: preencher 3,75:1 sem distorção exigiria recortar 20% da altura; essa limitação foi informada antes da implementação, e a opção de foto inteira/altura natural foi escolhida.
-- Uma única fotografia original preenche toda a Hero, incluindo os efeitos luminosos atrás do texto. Removidos fundo sólido, overlay e imagem limitada a 80% da largura. object-fit: cover com contêiner na mesma proporção natural do arquivo garante preenchimento sem cortes, distorção ou painel artificial.
-- Hero mobile horizontal dentro do mesmo banner. Saudação usa o first_name do useProfile já existente: primeiro token de nome válido, sem e-mail, com fallback “Olá! 👋”. Mensagem: “Tudo para fazer seu negócio crescer.” Nenhuma alteração no hook, cadastro, Auth ou banco. Nomes acima de 20 caracteres recebem ajuste de fonte somente na saudação mobile para caberem no banner sem cortes. O banner mobile usa a proporção natural 1752:897 da imagem correspondente, mantendo a disposição horizontal.
+- Alternativa B aprovada: Hero desktop centralizada, largura responsiva limitada a 1020 px e proporção 3:1. Em viewport de 1440 px: exatamente 1020 × 340 px. Em espaços menores, largura e altura diminuem proporcionalmente, sem recorte ou distorção. Uma única instância do PNG original, sem duplicação, máscaras, overlays, emendas ou painel sólido. A abordagem de duas camadas foi abandonada.
+- Saudação personalizada também no desktop, com 30–34 px e descrição de 16–17 px, alinhadas verticalmente no banner. Primeiro nome válido do perfil existente ou “Olá! 👋”; nenhuma consulta/alteração adicional de Auth ou cadastro foi implementada.
+- Hero mobile horizontal dentro do mesmo banner. Saudação usa o first_name do useProfile já existente: primeiro token de nome válido, sem e-mail, com fallback “Olá! 👋”. Mensagem: “Tudo para fazer seu negócio crescer.” Nenhuma alteração no hook, cadastro, Auth ou banco. Margem esquerda mobile de 16 px, saudação de 17–20 px e frase curta em 13–14 px, com largura de leitura limitada para preservar legibilidade sobre o fundo original. Nomes longos mantêm o ajuste de fonte já existente. O banner mobile usa a proporção natural 1752:897 da imagem correspondente, mantendo a disposição horizontal.
 - Fotografias e todos os PNGs permanecem originais. A composição horizontal funcionou com os arquivos existentes, sem edição de imagens.
 - Cinco atalhos circulares preservados, com mesmas imagens, rótulos, ordem e destinos locais.
-- Nove cards React/CSS preservados nas mesmas cores, ordem e destinos. Nova compactação: desktop mínimo 196 → 167 px (-14,8%), ícones de 62 px e menor intervalo entre título/descrição. Em 1024 px os cards crescem para cerca de 189,4 px para preservar a leitura; continuam em três colunas quando há espaço.
-- Mobile com duas colunas, altura 160 → 146 px (-8,75%) e ícones de 54 px. Fonte e títulos preservam legibilidade em 320 px, sem sobreposição de título/seta. Descrições ocultas e informação de acesso mantida para leitores de tela.
+- Nove cards React/CSS preservados nas mesmas cores, ordem e destinos. Dimensões desktop mantidas: 167 px em 1440 px; cerca de 189,4 px em 1024 px, com três colunas quando há espaço.
+- Cards mobile mantêm duas colunas e altura mínima de 146 px, sem nova redução. Ícones passaram de 54 para 64 px, títulos de 14–15 px, grupo de conteúdo centralizado e seta em coluna própria ao lado do título. Menor distância entre ícone e texto e distribuição equilibrada do espaço restante. Não há cortes ou interseções entre título e seta em 320, 375, 390 e 428 px. Descrições permanecem ocultas no mobile.
 - Utilidades desktop em quatro botões compactos com cantos arredondados, ícones e textos brancos: Último acesso #087BCE; Favoritos #A617DA; Histórico #009D97; Suporte #CE247C. No mobile, continuam somente no menu Mais, com a aparência anterior e sem novo botão fixo.
 - Último acesso usa a rota anterior já registrada no layout e fallback /fornecedores. Favoritos mantém /fornecedores/importadoras-25/favoritos. Histórico agora leva à tela existente /gestao/precificacao/simulador, que contém RecentSimulations, em vez de levar apenas ao hub. Não há novo histórico, tabela, rota ou dado fictício. Suporte conserva o WhatsApp existente.
 - Explorar novas soluções removido exclusivamente da Home. Nenhuma página ou ferramenta foi excluída.
@@ -24,13 +24,14 @@ A apresentação consulta usePlanAccess e useErpAccess sem modificar os hooks. N
 
 Conferidos sem alterações: App.tsx, AuthContext, ProtectedRoute, EcosystemProtected, hooks, integrações, Supabase/SQL/RLS/Edge Functions, Kiwify, Brevo, manifestos de dependências, lockfiles, Vite e configurações de publicação. Nenhuma operação nos PRs #4, #6, #7 ou #8.
 
-## Arquivos desta correção visual
+## Arquivos deste refinamento
 
 - src/components/home/home-premium.css
-- src/pages/Home.tsx (somente classe de apresentação para nomes longos)
+- src/pages/Home.tsx (saudação desktop personalizada com o nome já disponível)
+- src/components/home/home-premium.test.tsx (verifica saudação nas duas versões)
 - docs/design/home-premium/IMPLEMENTACAO.md
 
-Demais componentes, lógica dos atalhos, hooks, navegação mobile, imagens, referências e metadados preservados.
+Demais componentes, lógica dos atalhos, hooks, navegação mobile, cores, imagens, referências e metadados preservados.
 
 ## Validação executada
 
@@ -46,7 +47,7 @@ Demais componentes, lógica dos atalhos, hooks, navegação mobile, imagens, ref
 
 ## Pendências e limites
 
-- Avaliação visual da proprietária da Hero com fundo contínuo, da nova compactação e dos botões coloridos. A proporção desktop 3:1 foi autorizada antes desta correção.
+- Avaliação visual da implementação definitiva da Alternativa B e da redistribuição interna dos cards mobile. Dimensões, cores e botões desktop permanecem preservados.
 - Login, renovação de sessão, assinaturas reais e abertura externa do ERP não foram exercitados com credenciais reais; código e proteções originais foram preservados. Os testes com fixtures verificam apresentação e guardas existentes, não certificam integrações de produção.
 - Safe area física em iPhone e navegadores Safari/Firefox ainda requerem conferência em dispositivo. A validação automatizada usou Chromium com as larguras solicitadas.
 - Os PNGs foram mantidos em resolução original, sem compressão adicional. Brilhos/sombras foram inspecionados nos tamanhos usados pela interface; não se certifica ausência de artefatos em toda escala possível.

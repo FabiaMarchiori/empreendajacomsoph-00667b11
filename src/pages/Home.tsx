@@ -112,9 +112,14 @@ export default function HomePage() {
         >
           <h1 id="home-title">
             <span className="premium-hero-desktop">
-              Olá,
-              <br />
-              <strong>empreendedora!</strong>
+              {firstName ? (
+                <>
+                  Olá, <strong>{firstName}!</strong>
+                </>
+              ) : (
+                "Olá!"
+              )}{" "}
+              <span className="premium-hero-wave">👋</span>
             </span>
             <span className="premium-hero-mobile">
               {firstName ? `Olá, ${firstName}!` : "Olá!"}{" "}

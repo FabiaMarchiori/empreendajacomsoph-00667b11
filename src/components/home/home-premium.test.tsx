@@ -183,9 +183,12 @@ describe("Saudação mobile com perfil existente", () => {
   it("apresenta o primeiro nome e a mensagem curta", () => {
     profile.first_name = "Maria Clara";
     renderHome();
+    expect(document.querySelector("h1 .premium-hero-mobile")!.textContent).toBe(
+      "Olá, Maria! 👋",
+    );
     expect(
-      screen.getByText("Olá, Maria!", { exact: false }),
-    ).toBeInTheDocument();
+      document.querySelector("h1 .premium-hero-desktop")!.textContent,
+    ).toBe("Olá, Maria! 👋");
     expect(
       screen.getByText("Tudo para fazer seu negócio crescer."),
     ).toBeInTheDocument();
