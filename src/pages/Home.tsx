@@ -127,8 +127,7 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="premium-hero-desktop">
-            Encontre fornecedores e explore as ferramentas para transformar suas
-            ideias em negócios.
+            Tudo para fazer seu negócio crescer.
           </p>
           <p className="premium-hero-mobile">
             Tudo para fazer seu negócio crescer.

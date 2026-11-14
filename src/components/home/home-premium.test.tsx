@@ -190,8 +190,8 @@ describe("Saudação mobile com perfil existente", () => {
       document.querySelector("h1 .premium-hero-desktop")!.textContent,
     ).toBe("Olá, Maria! 👋");
     expect(
-      screen.getByText("Tudo para fazer seu negócio crescer."),
-    ).toBeInTheDocument();
+      screen.getAllByText("Tudo para fazer seu negócio crescer."),
+    ).toHaveLength(2);
     expect(
       screen.queryByText("Explorar novas soluções"),
     ).not.toBeInTheDocument();
