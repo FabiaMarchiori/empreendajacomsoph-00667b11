@@ -1,0 +1,386 @@
+[
+  {
+    "path": "Botoes Rodape/Imagem do botão do rodape - Home.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 939516,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 893711,
+    "partial_alpha_pixels": 678705,
+    "sha256": "6ec141f8e947ddf0761fcd68e614ce3fc5cd6a1f06b705dc4d0e6b1fa992bf46",
+    "final_path": "src/assets/home/navigation/Imagem do botão do rodape - Home.png"
+  },
+  {
+    "path": "Botoes Rodape/Imagem do botão do rodape Fornecedores.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 973848,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 873405,
+    "partial_alpha_pixels": 698951,
+    "sha256": "5860fb672dcc2a4632367378b41520a0745672d5cbce2d837cd3dc9953cb73e8",
+    "final_path": "src/assets/home/navigation/Imagem do botão do rodape Fornecedores.png"
+  },
+  {
+    "path": "Botoes Rodape/Imagem do botão do rodape Gestão.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1062458,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 657893,
+    "partial_alpha_pixels": 914551,
+    "sha256": "d3b43575169833390ed2039bf73fc9832d4e3990813f7a49b2f549eb34f49d55",
+    "final_path": "src/assets/home/navigation/Imagem do botão do rodape Gestão.png"
+  },
+  {
+    "path": "Botoes Rodape/Imagem do botão do rodape Mais.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 773149,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 954306,
+    "partial_alpha_pixels": 617211,
+    "sha256": "9a853dc59c7c1a5b1b3f434796db02a9ad65ca83693c8f160b3e949b30a9adb5",
+    "final_path": "src/assets/home/navigation/Imagem do botão do rodape Mais.png"
+  },
+  {
+    "path": "Botoes Rodape/Imagem do botão do rodape Vendas.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1010226,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 842381,
+    "partial_alpha_pixels": 730113,
+    "sha256": "c3f8c86a012aaf8663a6a52ea99c582de07a5d98d2bd8628e3954bb1bcc4f5e1",
+    "final_path": "src/assets/home/navigation/Imagem do botão do rodape Vendas.png"
+  },
+  {
+    "path": "cards/01-central-fornecedores.png",
+    "format": "PNG",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 1598550,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "transparent_pixels": 730199,
+    "partial_alpha_pixels": 842665,
+    "sha256": "651cb189484004245f6bb4f7bb8bcd1f09085673a57a0e198e2bf446282b1371",
+    "final_path": "src/assets/home/cards/01-central-fornecedores.png"
+  },
+  {
+    "path": "cards/02-abrir-mei.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1132181,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 657223,
+    "partial_alpha_pixels": 914879,
+    "sha256": "b6abb24c2d281eb4230e3b2f82df5ea87a715d4f4453c1258436a6c5eafeb555",
+    "final_path": "src/assets/home/cards/02-abrir-mei.png"
+  },
+  {
+    "path": "cards/03-identidade-visual.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1182044,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 851354,
+    "partial_alpha_pixels": 720392,
+    "sha256": "02503aba21e9cca67e258b9fe60f0bfe8ab06ff562454203170adc7bebe8c805",
+    "final_path": "src/assets/home/cards/03-identidade-visual.png"
+  },
+  {
+    "path": "cards/04-registrar-marca.png",
+    "format": "PNG",
+    "width": 1402,
+    "height": 1122,
+    "bytes": 924669,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 933234,
+    "partial_alpha_pixels": 639529,
+    "sha256": "33373e20618ed25ebf7d2633ead98257d1934034c2f2d764c588ce69191846b9",
+    "final_path": "src/assets/home/cards/04-registrar-marca.png"
+  },
+  {
+    "path": "cards/05-dominio-site.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1061417,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 879529,
+    "partial_alpha_pixels": 692045,
+    "sha256": "625539fbc8c9838bc30d76f6e6fc526fe7da9db85cb15be509ea91a0cbc1eb52",
+    "final_path": "src/assets/home/cards/05-dominio-site.png"
+  },
+  {
+    "path": "cards/06-marketplaces.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1118704,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 777119,
+    "partial_alpha_pixels": 794729,
+    "sha256": "fd9abcc32b112d19519d4dc6385fc394c417ffa1f68fd2174ce1ace3ef7a1464",
+    "final_path": "src/assets/home/cards/06-marketplaces.png"
+  },
+  {
+    "path": "cards/07-erp.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1123785,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 882196,
+    "partial_alpha_pixels": 689677,
+    "sha256": "fb89f251c8e85ec4f7763d881ac14591ff05ee022e506b85fb8d21f5fec0bb53",
+    "final_path": "src/assets/home/cards/07-erp.png"
+  },
+  {
+    "path": "cards/08-precificacao.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 900762,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 990934,
+    "partial_alpha_pixels": 581060,
+    "sha256": "9d3afac21896085b6bf6cf400cd975f7b6c18c04fe3cac1c4502658ea268fc4f",
+    "final_path": "src/assets/home/cards/08-precificacao.png"
+  },
+  {
+    "path": "cards/09-soph-ia.png",
+    "format": "PNG",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 1139510,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 906913,
+    "partial_alpha_pixels": 664984,
+    "sha256": "a6d2cba5dff7ab4e7f8ff6bf01d603ed9871e53f29dfb7b7d96870f7fb3f4874",
+    "final_path": "src/assets/home/cards/09-soph-ia.png"
+  },
+  {
+    "path": "categories/01-Botão circular fornecedores.png",
+    "format": "PNG",
+    "width": 512,
+    "height": 512,
+    "bytes": 209726,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 122169,
+    "partial_alpha_pixels": 139934,
+    "sha256": "efbadd9f2039db77cfb086909fe869c1285035ea0f66f797c7adc5129f937667",
+    "final_path": "src/assets/home/categories/01-Botão circular fornecedores.png"
+  },
+  {
+    "path": "categories/02- Botão circular estruture-seu-negocio.png",
+    "format": "PNG",
+    "width": 512,
+    "height": 512,
+    "bytes": 226049,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 122677,
+    "partial_alpha_pixels": 139383,
+    "sha256": "2bef2c51aea18a81e7a4320d1ac3bbf88bbafaa4499db5838b9cf292775c0bd6",
+    "final_path": "src/assets/home/categories/02- Botão circular estruture-seu-negocio.png"
+  },
+  {
+    "path": "categories/03-Botão circular  vendas-e-presenca.png",
+    "format": "PNG",
+    "width": 512,
+    "height": 512,
+    "bytes": 198097,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 122722,
+    "partial_alpha_pixels": 139390,
+    "sha256": "53a71cbf9cd3816d1bee0b2d42110762d334fdf48a223d8446ee732bc297dedf",
+    "final_path": "src/assets/home/categories/03-Botão circular  vendas-e-presenca.png"
+  },
+  {
+    "path": "categories/04- Botão circular  gestao-do-negocio.png",
+    "format": "PNG",
+    "width": 512,
+    "height": 512,
+    "bytes": 170244,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 125331,
+    "partial_alpha_pixels": 136790,
+    "sha256": "e3feeb4f2d892bb97dc57f2c5acb4092eec784d58ba7a5f1adc0c79d8f677fda",
+    "final_path": "src/assets/home/categories/04- Botão circular  gestao-do-negocio.png"
+  },
+  {
+    "path": "categories/05- Botão circular  soph-socia-digital.png",
+    "format": "PNG",
+    "width": 512,
+    "height": 512,
+    "bytes": 216302,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 129482,
+    "partial_alpha_pixels": 132357,
+    "sha256": "d5457aac9f83e73124ab1127832ea7956897ac9f9db57a2b93f8be20f05a6661",
+    "final_path": "src/assets/home/categories/05- Botão circular  soph-socia-digital.png"
+  },
+  {
+    "path": "hero/Desktop 01.png",
+    "format": "PNG",
+    "width": 2172,
+    "height": 724,
+    "bytes": 2997785,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "sha256": "38f3e1c6cda03aec36d78822ef5691709077d60bc77a834f37c413fb29c3d396",
+    "final_path": "src/assets/home/hero/Desktop 01.png"
+  },
+  {
+    "path": "hero/Versão Mobile.png",
+    "format": "PNG",
+    "width": 1752,
+    "height": 897,
+    "bytes": 2905546,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "sha256": "f36a0cf3147026dcc265e62638f0cccad312491a8cb643c87014d2c0d0e5e3cf",
+    "final_path": "src/assets/home/hero/Versão Mobile.png"
+  },
+  {
+    "path": "references/Imagem de Referencia - Novo desing Mobile.png",
+    "format": "PNG",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 1610856,
+    "mode": "RGB",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "sha256": "0111bffaecd2e7cfce78abefd4259826bc87affc04b944ecae30cedc72f02a19",
+    "final_path": "docs/design/home-premium/references/Imagem de Referencia - Novo desing Mobile.png"
+  },
+  {
+    "path": "references/home-desktop.png",
+    "format": "PNG",
+    "width": 2048,
+    "height": 1523,
+    "bytes": 357433,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "sha256": "fa9322d65567b1b37eba95a959e0904957e3f9c3b916ce7ae6debf1f7e9815e0",
+    "final_path": "docs/design/home-premium/references/home-desktop.png"
+  },
+  {
+    "path": "references/home-mobile.png",
+    "format": "PNG",
+    "width": 683,
+    "height": 2048,
+    "bytes": 310564,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      255,
+      255
+    ],
+    "transparent_pixels": 0,
+    "partial_alpha_pixels": 0,
+    "sha256": "b837c9a070d14d4054e871648b3c68ae409a5a721ff6f51236ed3a9614972ac2",
+    "final_path": "docs/design/home-premium/references/home-mobile.png"
+  }
+]

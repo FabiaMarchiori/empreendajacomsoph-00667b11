@@ -1,0 +1,11 @@
+KIT VISUAL HOME EMPREENDAJÁ COM SOPH — SOMENTE TESTE
+
+Arquivos de referência e recursos visuais para análise no Codex, não autoriza implementação.
+
+hero/hero-desktop.png: Hero desktop aprovada.
+hero/hero-mobile-proposta.png: versão horizontal de Hero encaminhada como mobile; validar enquadramento mobile no navegador antes de implementar.
+categories/: cinco atalhos circulares.
+cards/: nove ícones 3D dos cards em PNG RGBA.
+references/: capturas do protótipo para comparação, NÃO colocar como imagens no aplicativo.
+
+ATENÇÃO: os PNGs dos ícones foram extraídos/gerados ao longo dos testes. O Codex deve verificar visualmente cada um em fundo sólido e confirmar ausência de halos/artefatos e recortes. Ter canal alfa não garante transparência perfeita. Não modificar o app nem publicar durante a inspeção.

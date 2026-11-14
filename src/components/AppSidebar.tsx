@@ -82,6 +82,7 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
+      mobileIconStrip={false}
       className="border-r border-border/40"
       style={{
         background: 'linear-gradient(180deg, #041329 0%, #030E1F 100%)',
