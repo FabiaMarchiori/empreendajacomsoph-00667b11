@@ -98,7 +98,7 @@ export default function HomePage() {
     <div className="home-premium">
       <section className="premium-hero" aria-labelledby="home-title">
         <picture>
-          <source media="(min-width: 1024px)" srcSet={homeAssets.hero[0]} />
+          <source media="(min-width: 768px)" srcSet={homeAssets.hero[0]} />
           <img
             src={homeAssets.hero[1]}
             width="1752"
@@ -108,7 +108,7 @@ export default function HomePage() {
           />
         </picture>
         <div
-          className={`premium-hero-copy${firstName && firstName.length > 20 ? " premium-hero-copy-long-name" : ""}`}
+          className={`premium-hero-copy${firstName && firstName.length > 20 ? " premium-hero-copy-long-name" : ""}${firstName && firstName.length > 30 ? " premium-hero-copy-very-long-name" : ""}`}
         >
           <h1 id="home-title">
             <span className="premium-hero-desktop">
