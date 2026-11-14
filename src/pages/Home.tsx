@@ -107,7 +107,9 @@ export default function HomePage() {
             loading="eager"
           />
         </picture>
-        <div className="premium-hero-copy">
+        <div
+          className={`premium-hero-copy${firstName && firstName.length > 20 ? " premium-hero-copy-long-name" : ""}`}
+        >
           <h1 id="home-title">
             <span className="premium-hero-desktop">
               Olá,
