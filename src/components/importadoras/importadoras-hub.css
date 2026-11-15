@@ -285,6 +285,7 @@
     font-size: 36px;
   }
   .importadoras-hub-stat dt {
+    min-height: 2.5em;
     font-size: 12px;
   }
   .importadoras-hub-card {
@@ -361,7 +362,10 @@
     min-height: 132px;
   }
   .importadoras-hub-stat-art {
+    display: grid;
+    place-items: center;
     width: 38px;
+    height: 38px;
   }
   .importadoras-hub-stat dd {
     font-size: 30px;
