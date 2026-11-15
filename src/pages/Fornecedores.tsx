@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import { Search, Package, Gem, Factory, Shirt, Footprints, ShoppingBag, Baby, Heart, Dumbbell, MapPin, Lock } from "lucide-react";
+import { Search, Lock, X } from "lucide-react";
+import { SupplierArtwork } from "@/components/suppliers/SupplierArtwork";
+import "@/components/suppliers/suppliers-central.css";
 import { ProductCard } from "@/components/ProductCard";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlanAccess } from "@/hooks/usePlanAccess";
-
-const UPGRADE_URL = "https://appempreendajacomsoph.lovable.app/conta";
 
 const categories = [
   { label: "Todos", key: "Todos" },
@@ -24,7 +24,7 @@ const suppliers = [
     desc: "Produtos importados direto das melhores importadoras de SP",
     status: "liberado" as const,
     cat: "Importadoras 25 de Março",
-    icon: <Package className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="importadoras" />,
     isPremium: true,
     route: "/fornecedores/importadoras-25",
   },
@@ -34,7 +34,7 @@ const suppliers = [
     desc: "Fornecedores curados do nicho de bolsas, mochilas e malas",
     status: "liberado" as const,
     cat: "Bolsas, Mochilas e Malas",
-    icon: <ShoppingBag className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="bolsas" />,
     isPremium: true,
     route: "/fornecedores/bolsas-mochilas-malas",
   },
@@ -44,7 +44,7 @@ const suppliers = [
     desc: "Fornecedores de moda feminina no Brás",
     status: "em_breve" as const,
     cat: "Moda Brás",
-    icon: <Shirt className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="feminina" />,
     isPremium: false,
   },
   {
@@ -52,7 +52,7 @@ const suppliers = [
     desc: "Fornecedores de moda masculina no Brás",
     status: "em_breve" as const,
     cat: "Moda Brás",
-    icon: <ShoppingBag className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="masculina" />,
     isPremium: false,
   },
   {
@@ -60,7 +60,7 @@ const suppliers = [
     desc: "Fornecedores de moda infantil no Brás",
     status: "em_breve" as const,
     cat: "Moda Brás",
-    icon: <Baby className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="infantil" />,
     isPremium: false,
   },
   {
@@ -68,7 +68,7 @@ const suppliers = [
     desc: "Fornecedores de moda íntima no Brás",
     status: "em_breve" as const,
     cat: "Moda Brás",
-    icon: <Heart className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="intima" />,
     isPremium: false,
   },
   {
@@ -76,7 +76,7 @@ const suppliers = [
     desc: "Fornecedores de moda fitness no Brás",
     status: "em_breve" as const,
     cat: "Moda Brás",
-    icon: <Dumbbell className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="fitness" />,
     isPremium: false,
   },
   // Calçados subcards
@@ -85,7 +85,7 @@ const suppliers = [
     desc: "Polo calçadista de Jaú — SP",
     status: "em_breve" as const,
     cat: "Calçados Atacadistas",
-    icon: <Footprints className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="localizacao" />,
     isPremium: false,
   },
   {
@@ -93,7 +93,7 @@ const suppliers = [
     desc: "Polo calçadista de Nova Serrana — MG",
     status: "em_breve" as const,
     cat: "Calçados Atacadistas",
-    icon: <Footprints className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="localizacao" />,
     isPremium: false,
   },
   {
@@ -101,7 +101,7 @@ const suppliers = [
     desc: "Polo calçadista de Birigui — SP",
     status: "em_breve" as const,
     cat: "Calçados Atacadistas",
-    icon: <Footprints className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="localizacao" />,
     isPremium: false,
   },
   {
@@ -109,7 +109,7 @@ const suppliers = [
     desc: "Polo calçadista da Região Sul do Brasil",
     status: "em_breve" as const,
     cat: "Calçados Atacadistas",
-    icon: <MapPin className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="sul" />,
     isPremium: false,
   },
   // Semi-jóias
@@ -118,7 +118,7 @@ const suppliers = [
     desc: "Fabricantes de semi-jóias direto do polo de Limeira",
     status: "em_breve" as const,
     cat: "Semi-jóias de Limeira",
-    icon: <Gem className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="semijoias" />,
     isPremium: false,
   },
   // Fabricantes Nacionais
@@ -127,19 +127,10 @@ const suppliers = [
     desc: "Brinquedos, Decoração, Eletrônicos e outros nichos nacionais",
     status: "em_breve" as const,
     cat: "Fabricantes Nacionais",
-    icon: <Factory className="h-5 w-5" />,
+    icon: <SupplierArtwork kind="fabricantes" />,
     isPremium: false,
   },
 ];
-
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
-const item = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-};
 
 export default function FornecedoresPage() {
   const [activeCategory, setActiveCategory] = useState("Todos");
@@ -150,107 +141,139 @@ export default function FornecedoresPage() {
   const filtered = suppliers.filter(
     (s) =>
       (activeCategory === "Todos" || s.cat === activeCategory) &&
-      s.title.toLowerCase().includes(search.toLowerCase())
+      s.title.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const isSearching = search.length > 0;
+  const available = filtered.filter((supplier) => supplier.route);
+  const upcoming = filtered.filter((supplier) => !supplier.route);
+
+  const renderCard = (supplier: (typeof suppliers)[number]) => {
+    const lockedForBolsasOnly =
+      hasBolsasOnly && supplier.cat === "Importadoras 25 de Março";
+    const effectiveStatus = lockedForBolsasOnly
+      ? ("upgrade" as const)
+      : supplier.status;
+    const handleClick = supplier.route
+      ? () => navigate(supplier.route!)
+      : undefined;
+    return (
+      <ProductCard
+        key={supplier.title}
+        title={supplier.title}
+        description={
+          lockedForBolsasOnly
+            ? "Disponível no Ecossistema Completo — faça upgrade para liberar."
+            : supplier.desc
+        }
+        status={effectiveStatus}
+        icon={
+          lockedForBolsasOnly ? <Lock className="h-8 w-8" /> : supplier.icon
+        }
+        isPremium={supplier.isPremium}
+        onClick={handleClick}
+        className={`supplier-product-card ${supplier.route ? "supplier-product-card--featured" : "supplier-product-card--upcoming"} ${supplier.cat === "Bolsas, Mochilas e Malas" ? "supplier-product-card--bolsas" : ""}`}
+      />
+    );
+  };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto space-y-6 sm:space-y-8">
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-3xl lg:text-4xl font-extrabold mb-3 tracking-tight">
-          <span className="text-white">Central de </span>
-          <span className="text-gradient-primary inline-block">Fornecedores</span>
-        </h1>
-         <p className="text-sm lg:text-base text-white/80 leading-relaxed max-w-2xl">
-          Acesse as maiores importadoras e polos calçadistas para ampliar suas margens e encontrar novas oportunidades para o seu negócio.
-        </p>
-      </motion.div>
-
-      {/* Search */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
-        <div className="relative max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
-          <input
-            type="text"
-            placeholder="Buscar importadoras..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-border bg-card pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50"
-          />
-        </div>
-      </motion.div>
-
-      {/* Category pills */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.15 }}
-        className="flex flex-wrap gap-2.5"
+    <div className="suppliers-central">
+      <motion.header
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="suppliers-central-header"
       >
-        {categories.map((cat) => {
-          const isActive = activeCategory === cat.key;
-          return (
-            <button
-              key={cat.key}
-              onClick={() => setActiveCategory(cat.key)}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 ${
-                isActive
-                  ? "text-[#0A192F] shadow-[0_0_16px_-2px_rgba(0,239,255,0.5)]"
-                  : "text-white border-2 border-[#1E3A5F] hover:border-[#007A7A]"
-              }`}
-              style={
-                isActive
-                  ? { background: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)", border: "2px solid #00EFFF" }
-                  : { background: "#102A43" }
-              }
-            >
-              {cat.label}
-            </button>
-          );
-        })}
-      </motion.div>
+        <div className="suppliers-central-heading-art">
+          <SupplierArtwork kind="heading" />
+        </div>
+        <div className="suppliers-central-heading-copy">
+          <h1>
+            Central de <span>Fornecedores</span>
+          </h1>
+          <p>Encontre fornecedores e novas oportunidades para o seu negócio.</p>
+        </div>
+        <div className="suppliers-central-banner-art">
+          <SupplierArtwork kind="banner" />
+        </div>
+      </motion.header>
 
-      {/* Grid */}
-      {filtered.length === 0 && isSearching ? (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
-          <p className="text-white/50 text-sm">Nenhuma importadora encontrada para "<span className="text-white/70">{search}</span>".</p>
-          <button onClick={() => setSearch("")} className="mt-3 text-xs text-primary hover:underline font-medium">Limpar busca</button>
-        </motion.div>
+      <div className="suppliers-central-search">
+        <Search aria-hidden="true" size={20} />
+        <input
+          type="search"
+          aria-label="Buscar fornecedores"
+          placeholder="Buscar fornecedores..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+        {search && (
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            aria-label="Limpar busca"
+          >
+            <X size={18} />
+          </button>
+        )}
+      </div>
+
+      <nav
+        className="suppliers-central-filters"
+        aria-label="Filtrar categorias de fornecedores"
+      >
+        {categories.map((category) => (
+          <button
+            key={category.key}
+            type="button"
+            aria-pressed={activeCategory === category.key}
+            onClick={() => setActiveCategory(category.key)}
+          >
+            {category.label}
+          </button>
+        ))}
+      </nav>
+
+      {filtered.length === 0 ? (
+        <div className="suppliers-central-empty" role="status">
+          <p>
+            Nenhuma importadora encontrada
+            {search ? ` para “${search}”` : " nesta categoria"}.
+          </p>
+          {search && (
+            <button type="button" onClick={() => setSearch("")}>
+              Limpar busca
+            </button>
+          )}
+        </div>
       ) : (
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          key={activeCategory + search}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          {filtered.map((s) => {
-            // Para usuários do plano Bolsas-only, apenas o card "Importadoras 25 de Março"
-            // vira oferta de upgrade. Os demais mantêm o status original ("em_breve" -> modal de interesse).
-            const isImportadoras25 = s.cat === "Importadoras 25 de Março";
-            const lockedForBolsasOnly = hasBolsasOnly && isImportadoras25;
-            const effectiveStatus = lockedForBolsasOnly ? ("upgrade" as const) : s.status;
-            const handleClick = lockedForBolsasOnly
-              ? () => navigate("/fornecedores/importadoras-25")
-              : s.route
-              ? () => navigate(s.route!)
-              : undefined;
-            return (
-              <motion.div key={s.title} variants={item}>
-                <ProductCard
-                  title={s.title}
-                  description={lockedForBolsasOnly ? "Disponível no Ecossistema Completo — faça upgrade para liberar." : s.desc}
-                  status={effectiveStatus}
-                  icon={lockedForBolsasOnly ? <Lock className="h-5 w-5" /> : s.icon}
-                  isPremium={s.isPremium}
-                  onClick={handleClick}
-                />
-              </motion.div>
-            );
-          })}
-        </motion.div>
+        <>
+          {available.length > 0 && (
+            <section aria-labelledby="suppliers-available-title">
+              <h2
+                id="suppliers-available-title"
+                className="suppliers-central-section-title"
+              >
+                Categorias disponíveis
+              </h2>
+              <div className="suppliers-central-available">
+                {available.map(renderCard)}
+              </div>
+            </section>
+          )}
+          {upcoming.length > 0 && (
+            <section aria-labelledby="suppliers-upcoming-title">
+              <h2
+                id="suppliers-upcoming-title"
+                className="suppliers-central-section-title"
+              >
+                Próximas categorias
+              </h2>
+              <div className="suppliers-central-upcoming">
+                {upcoming.map(renderCard)}
+              </div>
+            </section>
+          )}
+        </>
       )}
     </div>
   );
