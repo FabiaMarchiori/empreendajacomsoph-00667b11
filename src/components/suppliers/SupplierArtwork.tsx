@@ -3,7 +3,6 @@ import artwork from "@/assets/suppliers/central-artwork-source.png";
 // Only decorative illustrations are exposed from the approved reference.
 // Labels, cards, controls and navigation remain real application elements.
 const regions = {
-  heading: [125, 10, 92, 92],
   banner: [1005, 0, 485, 174],
   importadoras: [140, 303, 171, 141],
   bolsas: [842, 293, 184, 156],
@@ -26,17 +25,19 @@ export function SupplierArtwork({ kind }: { kind: ArtworkKind }) {
     <span
       className={`supplier-artwork supplier-artwork--${kind}`}
       aria-hidden="true"
-      style={{ aspectRatio: `${width} / ${height}` }}
+      style={{
+        aspectRatio: `var(--supplier-art-aspect, ${width} / ${height})`,
+      }}
     >
       <img
         src={artwork}
         alt=""
         draggable={false}
         style={{
-          width: `${(1536 / width) * 100}%`,
-          height: `${(1024 / height) * 100}%`,
-          left: `${(-x / width) * 100}%`,
-          top: `${(-y / height) * 100}%`,
+          width: `var(--supplier-art-width, ${(1536 / width) * 100}%)`,
+          height: `var(--supplier-art-height, ${(1024 / height) * 100}%)`,
+          left: `var(--supplier-art-left, ${(-x / width) * 100}%)`,
+          top: `var(--supplier-art-top, ${(-y / height) * 100}%)`,
         }}
       />
     </span>

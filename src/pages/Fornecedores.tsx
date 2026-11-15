@@ -183,9 +183,6 @@ export default function FornecedoresPage() {
         animate={{ opacity: 1, y: 0 }}
         className="suppliers-central-header"
       >
-        <div className="suppliers-central-heading-art">
-          <SupplierArtwork kind="heading" />
-        </div>
         <div className="suppliers-central-heading-copy">
           <h1>
             Central de <span>Fornecedores</span>
