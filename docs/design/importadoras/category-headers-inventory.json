@@ -1,0 +1,156 @@
+[
+  {
+    "original": "Acessórios de cabelo com brilho turquesa.png",
+    "path": "src/assets/importadoras/category-headers/01-acessorios-lacos.png",
+    "dimensions": [2172, 724],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1945715,
+    "alpha": [0, 255],
+    "transparentFraction": 0.479,
+    "sha256": "4e5305329ea3b6b4ab1ca77da75bbd0d628cc4a8cfe9b8882d13bbd8e09a8ced"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_44_58-1.png",
+    "path": "src/assets/importadoras/category-headers/02-bijuterias-semijoias.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1570392,
+    "alpha": [0, 255],
+    "transparentFraction": 0.5017,
+    "sha256": "1fd0435856b678cf7c0f455bec5d53c877e62cdc5e54859d12666efbd24a5f53"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_00-2.png",
+    "path": "src/assets/importadoras/category-headers/03-bolsas-mochilas-malas.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1789725,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4298,
+    "sha256": "8871ce1a68bc2500d00fb497d7c396b7738981d31af568b0d3aff9906fa60c92"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_01-3.png",
+    "path": "src/assets/importadoras/category-headers/04-cosmeticos-perfumes.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1779960,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4242,
+    "sha256": "cdeec05c0963bea431837aacd753aea4e767b5cf89452758eb6ca4db3aaab149"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_02-4.png",
+    "path": "src/assets/importadoras/category-headers/05-embalagens-personalizadas.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1667672,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4572,
+    "sha256": "918e52dd24ab68fe44332bebd7f6efb95685a4d3ada51856ed799eea67a8400a"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_03-5.png",
+    "path": "src/assets/importadoras/category-headers/06-games-eletronicos.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1316796,
+    "alpha": [0, 255],
+    "transparentFraction": 0.5314,
+    "sha256": "87d410694b09548076e36c217e0ac4eaadba0eeae93bdb2f74d46ce981ef58f9"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_04-6.png",
+    "path": "src/assets/importadoras/category-headers/07-garrafas-marmitas.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1581725,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4973,
+    "sha256": "173a966b7363386b1b34bd4a22d4edbdbee77211cb6b3e6405e9fa5239049cbd"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_05-7.png",
+    "path": "src/assets/importadoras/category-headers/08-maquiagem.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1880667,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4467,
+    "sha256": "6c0f9222eea04884470cdc80a8e20d0f9fffc80ae7e39bac2d064f89ef6670d9"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_07-8.png",
+    "path": "src/assets/importadoras/category-headers/09-papelaria-fofa.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1978905,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4192,
+    "sha256": "712451211fb6d774ce89d11844fa061b2b7bdbd78ab377210ad18a3acf45a1c4"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_08-9.png",
+    "path": "src/assets/importadoras/category-headers/10-peliculas-capinhas.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1797167,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4493,
+    "sha256": "4b5d71ea181550ceba28ca8c9f44d6dd1c22dba65b42da9a5fa230364d8f1572"
+  },
+  {
+    "original": "Imagem do ChatGPT 15 de nov. de 2026, 13_45_09-10.png",
+    "path": "src/assets/importadoras/category-headers/11-perucas-cabelos.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 2178605,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4228,
+    "sha256": "7109306fce07382666fe99923046bb1a5640e46c533633c7fc7e52d0f447def6"
+  },
+  {
+    "original": "Ursinho e Presentes Luxuosos com Arco Turquesa-1.png",
+    "path": "src/assets/importadoras/category-headers/12-presentes-pelucias.png",
+    "dimensions": [1983, 793],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 2036489,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4155,
+    "sha256": "b4f3c2ecb901390e7183a6e24e0977378d40c7b0feb7f798230b79e36b9ac2ac"
+  },
+  {
+    "original": "Kit de Beleza Rosa e Turquesa-2.png",
+    "path": "src/assets/importadoras/category-headers/13-unhas-cilios.png",
+    "dimensions": [1890, 832],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 2118336,
+    "alpha": [0, 255],
+    "transparentFraction": 0.3481,
+    "sha256": "05d9f5263bdc4ee25922096ff45239d1d3e4e8e534db4d74996777715b942f6e"
+  },
+  {
+    "original": "Conjunto de Cozinha Rosa e Dourado-3.png",
+    "path": "src/assets/importadoras/category-headers/14-utilidades-domesticas.png",
+    "dimensions": [1983, 793],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1758546,
+    "alpha": [0, 255],
+    "transparentFraction": 0.4338,
+    "sha256": "3ba0c6fb595aa3a31cdc0f79fa3a141a662e94610b47246bf11674bc99a056ff"
+  }
+]
