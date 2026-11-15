@@ -1,4 +1,6 @@
 import artwork from "@/assets/suppliers/central-artwork-source.png";
+import importadorasIcon from "@/assets/suppliers/icons/importadoras-caixa-globo.png";
+import bolsasIcon from "@/assets/suppliers/icons/bolsas-mochilas-malas.png";
 
 // Only decorative illustrations are exposed from the approved reference.
 // Labels, cards, controls and navigation remain real application elements.
@@ -21,6 +23,23 @@ type ArtworkKind = keyof typeof regions;
 
 export function SupplierArtwork({ kind }: { kind: ArtworkKind }) {
   const [x, y, width, height] = regions[kind];
+  if (kind === "importadoras" || kind === "bolsas") {
+    return (
+      <span
+        className="supplier-category-icon"
+        aria-hidden="true"
+        style={{ aspectRatio: `${width} / ${height}` }}
+      >
+        <img
+          src={kind === "importadoras" ? importadorasIcon : bolsasIcon}
+          width={kind === "importadoras" ? 1536 : 1522}
+          height={kind === "importadoras" ? 1024 : 1033}
+          alt=""
+          draggable={false}
+        />
+      </span>
+    );
+  }
   return (
     <span
       className={`supplier-artwork supplier-artwork--${kind}`}

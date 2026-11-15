@@ -413,3 +413,23 @@
 .suppliers-central .supplier-product-card--featured .product-card-description {
   max-width: 330px;
 }
+
+.suppliers-central .product-card-icon .supplier-category-icon {
+  display: block;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.supplier-category-icon img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 125%;
+  height: 125%;
+  max-width: none;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  user-select: none;
+}
