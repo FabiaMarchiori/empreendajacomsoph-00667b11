@@ -436,3 +436,19 @@
     transition: none;
   }
 }
+
+.importadoras-icon-frame {
+  display: block;
+  position: relative;
+  width: 100%;
+  pointer-events: none;
+}
+.importadoras-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
