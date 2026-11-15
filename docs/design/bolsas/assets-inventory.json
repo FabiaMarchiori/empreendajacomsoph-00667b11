@@ -1,0 +1,46 @@
+[
+  {
+    "original": "Coroa dourada com gemas brilhantes-3.png",
+    "dimensions": [1536, 1024],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1928768,
+    "alpha": [0, 254],
+    "sha256": "5dd911758d73b63a244f112d1512c4c1e3be10afbf9e619c7ca67c855897111b",
+    "path": "src/assets/bolsas/nicho-premium-coroa.png",
+    "role": "Indicador Nicho Premium"
+  },
+  {
+    "original": "Sacola Rosa-choque com Alças Douradas-2.png",
+    "dimensions": [1320, 1192],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1305868,
+    "alpha": [0, 255],
+    "sha256": "ff64480b7e9711ecbd9b361024a3282841106bbf045ec9c00bb5b33bfbb94751",
+    "path": "src/assets/bolsas/fornecedores-sacola-rosa.png",
+    "role": "Indicador Fornecedores"
+  },
+  {
+    "original": "Sacolas brilhantes dourada e roxa em 3D-4.png",
+    "dimensions": [1448, 1086],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 1421798,
+    "alpha": [0, 255],
+    "sha256": "6f33883f1becb3b558c9c6e447281fc74924feae3a93e6494dde24db95fb6dbd",
+    "path": "src/assets/bolsas/todos-fornecedores-sacolas.png",
+    "role": "Card Ver Todos os Fornecedores"
+  },
+  {
+    "original": "Trio de Bolsas Elegantes Coloridas-1.png",
+    "dimensions": [1536, 1024],
+    "format": "PNG",
+    "mode": "RGBA",
+    "bytes": 2561218,
+    "alpha": [0, 254],
+    "sha256": "8af3a5aa79679a4a363243ee2e8280ea643324dda054477c7ce1be122db10ea7",
+    "path": "src/assets/bolsas/header-bolsas-mochilas-malas.png",
+    "role": "Cabeçalho"
+  }
+]

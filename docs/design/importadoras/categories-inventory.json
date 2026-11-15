@@ -1,0 +1,142 @@
+[
+  {
+    "file": "06 Laço de cetim rosa brilhante 3D-4.png",
+    "size": [1312, 1199],
+    "mode": "RGBA",
+    "bytes": 1221418,
+    "alpha": [0, 255],
+    "transparent": 0.484,
+    "sha256": "e63568b3a65bd6aae4096e535cc4c8669e4d3c4d2acef3b557228b8f12bd4bbe",
+    "path": "src/assets/importadoras/categories/01-acessorios-lacos.png"
+  },
+  {
+    "file": "01 -Busto de Joias com Colar Dourado-4.png",
+    "size": [1312, 1199],
+    "mode": "RGBA",
+    "bytes": 1166918,
+    "alpha": [0, 255],
+    "transparent": 0.545,
+    "sha256": "5767ab6dedbd8d2cf956d1c812b5619212d428a5c547bb99ed89d07303e78c56",
+    "path": "src/assets/importadoras/categories/02-bijuterias-semijoias.png"
+  },
+  {
+    "file": "02- Conjunto de Bolsas Rosa Brilhante-5.png",
+    "size": [1536, 1024],
+    "mode": "RGBA",
+    "bytes": 1999073,
+    "alpha": [0, 254],
+    "transparent": 0.45,
+    "sha256": "aed7ed5efb3e7acab5139faf8e8c21b5329066afe213622fefe51248110d2ae3",
+    "path": "src/assets/importadoras/categories/03-bolsas-mochilas-malas.png"
+  },
+  {
+    "file": "03- Frasco de Perfume Rosa Dourado-6.png",
+    "size": [1312, 1199],
+    "mode": "RGBA",
+    "bytes": 1080970,
+    "alpha": [0, 255],
+    "transparent": 0.426,
+    "sha256": "d02936f228187261a0c51f2551b05db51b66a1df83e56dff87cb55ffec1b4e72",
+    "path": "src/assets/importadoras/categories/04-cosmeticos-perfumes.png"
+  },
+  {
+    "file": "07- Sacola Presente Rosa com Estrela Dourada-7.png",
+    "size": [1312, 1199],
+    "mode": "RGBA",
+    "bytes": 1093503,
+    "alpha": [0, 255],
+    "transparent": 0.488,
+    "sha256": "9e661648a377d4bda7fd6836707779c1e11b2896a6869695733da72593e6c3e5",
+    "path": "src/assets/importadoras/categories/05-embalagens-personalizadas.png"
+  },
+  {
+    "file": "05- Ícone de controle branco colorido-8.png",
+    "size": [1536, 1024],
+    "mode": "RGBA",
+    "bytes": 1469935,
+    "alpha": [0, 254],
+    "transparent": 0.611,
+    "sha256": "d5b34fef94a7ac21c7ebda3345997f4a5eda7cbc9fda7f451a239b01ebe89072",
+    "path": "src/assets/importadoras/categories/06-games-eletronicos.png"
+  },
+  {
+    "file": "04- Ícone 3D de marmita amarela com tampa rosa brilhante.png",
+    "size": [1536, 1024],
+    "mode": "RGBA",
+    "bytes": 1422149,
+    "alpha": [0, 254],
+    "transparent": 0.507,
+    "sha256": "a5aa0a25e0e9275f8f3f6c1f22d6ea6a7eded50946dd87d594cc488577c03abe",
+    "path": "src/assets/importadoras/categories/07-garrafas-marmitas.png"
+  },
+  {
+    "file": "Imagem do ChatGPT 15 de nov. de 2026, 12_41_42-1.png",
+    "size": [1254, 1254],
+    "mode": "RGBA",
+    "bytes": 1115946,
+    "alpha": [0, 255],
+    "transparent": 0.624,
+    "sha256": "0917c98b93363150720df577309e1bb7cc16e3b4e1dfa015e8859028b471fd9f",
+    "path": "src/assets/importadoras/categories/08-maquiagem.png"
+  },
+  {
+    "file": "Imagem do ChatGPT 15 de nov. de 2026, 12_41_43-2.png",
+    "size": [1254, 1254],
+    "mode": "RGBA",
+    "bytes": 1312828,
+    "alpha": [0, 255],
+    "transparent": 0.541,
+    "sha256": "33d93490cd1c20541b94001fe6b730a431c4c07f6f7be4fdf801e851a9a97554",
+    "path": "src/assets/importadoras/categories/09-papelaria-fofa.png"
+  },
+  {
+    "file": "Imagem do ChatGPT 15 de nov. de 2026, 12_41_45-3.png",
+    "size": [1254, 1254],
+    "mode": "RGBA",
+    "bytes": 1210140,
+    "alpha": [0, 255],
+    "transparent": 0.497,
+    "sha256": "bd4f6666f7b06970bbaf1c3c879d76a15eb18e4bfdb09a8e0c5b22f1a0f3be5f",
+    "path": "src/assets/importadoras/categories/10-peliculas-capinhas.png"
+  },
+  {
+    "file": "Imagem do ChatGPT 15 de nov. de 2026, 12_41_46-4.png",
+    "size": [1254, 1254],
+    "mode": "RGBA",
+    "bytes": 1238676,
+    "alpha": [0, 255],
+    "transparent": 0.596,
+    "sha256": "384cfcda3ac7f7caae85348a5a4477a2056779d6eb5c3c2118cfc5a0c5dd0c82",
+    "path": "src/assets/importadoras/categories/11-perucas-cabelos.png"
+  },
+  {
+    "file": "Imagem do ChatGPT 15 de nov. de 2026, 12_41_47-5.png",
+    "size": [1254, 1254],
+    "mode": "RGBA",
+    "bytes": 1714289,
+    "alpha": [0, 255],
+    "transparent": 0.468,
+    "sha256": "684dbf83546e1c200d1c9ea4973be080c66292726825e09a6ced296333883ce8",
+    "path": "src/assets/importadoras/categories/12-presentes-pelucias.png"
+  },
+  {
+    "file": "Imagem do ChatGPT 15 de nov. de 2026, 12_41_48-6.png",
+    "size": [1254, 1254],
+    "mode": "RGBA",
+    "bytes": 1541473,
+    "alpha": [0, 255],
+    "transparent": 0.459,
+    "sha256": "1bc434fb345f96113ef9af3c02cf8aca9ba4a298177ea2e9d6a4ce66cd933f05",
+    "path": "src/assets/importadoras/categories/13-unhas-cilios.png"
+  },
+  {
+    "file": "Imagem do ChatGPT 15 de nov. de 2026, 12_41_01-7.png",
+    "size": [1254, 1254],
+    "mode": "RGBA",
+    "bytes": 1470878,
+    "alpha": [0, 255],
+    "transparent": 0.125,
+    "sha256": "22e1cd3cbace8f56344a197d426833117d419dae9f0b661980d89b299d31830c",
+    "path": "src/assets/importadoras/categories/14-utilidades-domesticas.png"
+  }
+]

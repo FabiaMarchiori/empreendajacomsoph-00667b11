@@ -134,8 +134,9 @@ const Sidebar = React.forwardRef<
     side?: "left" | "right";
     variant?: "sidebar" | "floating" | "inset";
     collapsible?: "offcanvas" | "icon" | "none";
+    mobileIconStrip?: boolean;
   }
->(({ side = "left", variant = "sidebar", collapsible = "offcanvas", className, children, ...props }, ref) => {
+>(({ side = "left", variant = "sidebar", collapsible = "offcanvas", mobileIconStrip = true, className, children, ...props }, ref) => {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
   if (collapsible === "none") {
@@ -153,22 +154,26 @@ const Sidebar = React.forwardRef<
   if (isMobile) {
     return (
       <>
-        {/* Always-visible icon strip on mobile */}
-        <div
-          className="fixed inset-y-0 left-0 z-30 flex h-svh w-[--sidebar-width-icon] flex-col bg-sidebar border-r border-sidebar-border"
-          style={
-            {
-              "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
-              ...props.style,
-            } as React.CSSProperties
-          }
-        >
-          <div data-sidebar="sidebar" data-mobile-icons="true" className="flex h-full w-full flex-col overflow-hidden">
-            {children}
-          </div>
-        </div>
-        {/* Spacer so content doesn't go under icon strip */}
-        <div className="w-[--sidebar-width-icon] flex-shrink-0" style={{ "--sidebar-width-icon": SIDEBAR_WIDTH_ICON } as React.CSSProperties} />
+        {/* Optional strip; the app uses bottom navigation instead. */}
+        {mobileIconStrip && (
+          <>
+            <div
+              className="fixed inset-y-0 left-0 z-30 flex h-svh w-[--sidebar-width-icon] flex-col bg-sidebar border-r border-sidebar-border"
+              style={
+                {
+                  "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+                  ...props.style,
+                } as React.CSSProperties
+              }
+            >
+              <div data-sidebar="sidebar" data-mobile-icons="true" className="flex h-full w-full flex-col overflow-hidden">
+                {children}
+              </div>
+            </div>
+            {/* Spacer so content doesn't go under icon strip */}
+            <div className="w-[--sidebar-width-icon] flex-shrink-0" style={{ "--sidebar-width-icon": SIDEBAR_WIDTH_ICON } as React.CSSProperties} />
+          </>
+        )}
         {/* Expanded sheet overlay */}
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent

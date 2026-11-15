@@ -1,0 +1,213 @@
+.importadoras-nicho {
+  container: importadoras-nicho / inline-size;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 16px 24px 48px;
+  color: #fff;
+  background: radial-gradient(ellipse at 90% 0%, #003e6020, transparent 45%);
+}
+.importadoras-nicho-header {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr) minmax(328px, 50%);
+  align-items: center;
+  gap: 22px;
+  min-height: 236px;
+  margin-bottom: 14px;
+}
+.importadoras-nicho-back {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #00d6ed40;
+  border-radius: 16px;
+  background: #07334e;
+  color: #fff;
+  transition: background 180ms;
+}
+.importadoras-nicho-back:hover {
+  background: #07516a;
+}
+.importadoras-nicho-back:focus-visible {
+  outline: 2px solid #00efff;
+  outline-offset: 4px;
+}
+.importadoras-nicho-heading {
+  min-width: 0;
+}
+.importadoras-nicho-eyebrow {
+  margin-bottom: 8px;
+  color: #00efff;
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+.importadoras-nicho-heading h1 {
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: clamp(30px, 3.6cqw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.12;
+}
+.importadoras-nicho-heading h1 span {
+  color: #00efff;
+}
+.importadoras-nicho-count {
+  margin-top: 9px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.importadoras-nicho-header-art {
+  width: 100%;
+  height: 236px;
+  object-fit: contain;
+  pointer-events: none;
+}
+.importadoras-nicho-search {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 50px;
+  padding: 0 18px;
+  border: 1px solid #00dcec;
+  border-radius: 20px;
+  background: linear-gradient(100deg, #073049, #022238);
+}
+.importadoras-nicho-search > svg {
+  flex-shrink: 0;
+  color: #d6fbff;
+}
+.importadoras-nicho-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.importadoras-nicho-search input::placeholder {
+  color: #d7eaf4;
+  opacity: 1;
+}
+.importadoras-nicho-search:focus-within {
+  box-shadow: 0 0 0 2px #00efff40;
+}
+.importadoras-nicho-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 28px;
+  row-gap: 28px;
+  margin-top: 30px;
+}
+.importadoras-nicho-supplier {
+  width: 100%;
+  max-width: 180px;
+  justify-self: center;
+  min-width: 0;
+}
+.importadoras-nicho-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 64px 12px;
+  text-align: center;
+  color: #d6e6f1;
+}
+@container importadoras-nicho (max-width: 850px) {
+  .importadoras-nicho-header {
+    grid-template-columns: 42px minmax(0, 1fr) minmax(234px, 42%);
+    gap: 14px;
+    min-height: 212px;
+  }
+  .importadoras-nicho-back {
+    width: 42px;
+    height: 44px;
+  }
+  .importadoras-nicho-header-art {
+    height: 206px;
+  }
+  .importadoras-nicho-eyebrow {
+    font-size: 12px;
+  }
+  .importadoras-nicho-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 18px;
+  }
+}
+@container importadoras-nicho (max-width: 560px) {
+  .importadoras-nicho-header {
+    /* Reserve whole words before assigning the remaining space to the art. */
+    grid-template-columns: 34px minmax(min-content, 1fr) minmax(0, 160px);
+    gap: 10px;
+    min-height: 160px;
+  }
+  .importadoras-nicho-back {
+    width: 34px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .importadoras-nicho-back svg {
+    width: 20px;
+  }
+  .importadoras-nicho-heading h1 {
+    font-size: clamp(23px, 6cqw, 30px);
+    letter-spacing: -0.5px;
+  }
+  .importadoras-nicho-eyebrow {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+  .importadoras-nicho-count {
+    font-size: 12px;
+    margin-top: 7px;
+  }
+  .importadoras-nicho-header-art {
+    height: 160px;
+  }
+  .importadoras-nicho-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 22px;
+    margin-top: 26px;
+  }
+  .importadoras-nicho-supplier {
+    max-width: 142px;
+  }
+  .importadoras-nicho-search {
+    padding: 0 13px;
+    gap: 10px;
+    min-height: 48px;
+    border-radius: 16px;
+  }
+  .importadoras-nicho-search input {
+    font-size: 14px;
+  }
+}
+@media (max-width: 767px) {
+  .importadoras-nicho {
+    padding: 12px 12px 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .importadoras-nicho-back {
+    transition: none;
+  }
+}
+/* Give long category names room on the narrowest phones. */
+@container importadoras-nicho (max-width: 330px) {
+  .importadoras-nicho-header {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 8px 10px;
+    min-height: 0;
+  }
+  .importadoras-nicho-header-art {
+    grid-column: 1 / -1;
+    justify-self: end;
+    width: 100%;
+    height: 150px;
+  }
+}
