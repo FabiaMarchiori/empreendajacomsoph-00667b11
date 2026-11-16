@@ -1,5 +1,5 @@
-import hero1 from "@/assets/home/hero/Desktop 01.png";
-import hero2 from "@/assets/home/hero/Versão Mobile.png";
+import hero1 from "@/assets/home/hero/premium-vibrante-desktop.png";
+import hero2 from "@/assets/home/hero/premium-vibrante-mobile.png";
 import category1 from "@/assets/home/categories/01-Botão circular fornecedores.png";
 import category2 from "@/assets/home/categories/02- Botão circular estruture-seu-negocio.png";
 import category3 from "@/assets/home/categories/03-Botão circular  vendas-e-presenca.png";

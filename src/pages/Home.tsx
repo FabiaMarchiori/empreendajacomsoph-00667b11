@@ -98,11 +98,16 @@ export default function HomePage() {
     <div className="home-premium">
       <section className="premium-hero" aria-labelledby="home-title">
         <picture>
-          <source media="(min-width: 768px)" srcSet={homeAssets.hero[0]} />
+          <source
+            media="(min-width: 768px)"
+            srcSet={homeAssets.hero[0]}
+            width="2172"
+            height="724"
+          />
           <img
             src={homeAssets.hero[1]}
-            width="1752"
-            height="897"
+            width="1254"
+            height="1254"
             alt="Caixa de fornecedores da 25 de Março com bolsas, presentes e outros produtos"
             loading="eager"
           />

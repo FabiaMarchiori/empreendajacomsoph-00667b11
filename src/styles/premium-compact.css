@@ -1,7 +1,4 @@
 /* Scoped refinements; original artwork, routes and access rules stay intact. */
-.home-premium .premium-hero picture img {
-  filter: saturate(0.82) contrast(0.97);
-}
 .suppliers-central .supplier-product-card.product-card--compact {
   grid-template-columns: 100px minmax(0, 1fr);
   grid-template-rows: 1fr;
@@ -36,6 +33,22 @@
   gap: 12px;
 }
 @media (max-width: 767px) {
+  .home-premium .premium-hero {
+    aspect-ratio: 1;
+  }
+  .home-premium .premium-hero-copy {
+    inset: clamp(18px, 5cqw, 24px) 20px auto;
+    width: auto;
+    padding: 0;
+    justify-content: flex-start;
+  }
+  .home-premium .premium-hero h1 {
+    font-size: clamp(21px, 6cqw, 26px);
+  }
+  .home-premium .premium-hero p.premium-hero-mobile {
+    max-width: none;
+  }
+
   .home-premium .premium-quick-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -69,13 +82,16 @@
     text-align: center;
   }
   .importadoras-hub-card {
-    grid-template-rows: 60px 1fr 28px;
-    min-height: 204px;
-    padding: 12px;
-    gap: 8px;
+    grid-template-rows: 88px 1fr 28px;
+    min-height: 224px;
+    padding: 10px;
+    gap: 6px;
   }
   .importadoras-hub-card-art {
-    width: 60px;
+    display: grid;
+    place-items: center;
+    width: min(100px, 100%);
+    height: 88px;
   }
   .importadoras-hub-card-description {
     margin-top: 5px;
@@ -149,5 +165,69 @@
   .importadoras-categories-header-art {
     grid-column: 3;
     grid-row: 2;
+  }
+}
+
+/* Quiet, high-contrast action surfaces on the approved coloured cards. */
+.importadoras-hub-card-arrow,
+.importadoras-category-arrow,
+.importadoras-category-count {
+  color: #143544;
+  background: #e4eef1;
+  border-color: #ffffff80;
+  box-shadow:
+    inset 0 1px 0 #fff9,
+    0 2px 5px #00132420;
+}
+:is(
+  .supplier-product-card,
+  .importadoras-hub-card,
+  .importadoras-category-card
+):focus-visible {
+  outline: 3px solid #d6f6f8;
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .importadoras-hub-card:hover .importadoras-hub-card-arrow,
+  .importadoras-category-card:hover
+    :is(.importadoras-category-arrow, .importadoras-category-count) {
+    background: #f5fafb;
+  }
+}
+.importadoras-hub-card:active .importadoras-hub-card-arrow,
+.importadoras-category-card:active
+  :is(.importadoras-category-arrow, .importadoras-category-count) {
+  background: #c8dde2;
+  box-shadow: inset 0 1px 3px #14354425;
+}
+/* Desktop stays three columns even when the sidebar reduces the content area. */
+@media (min-width: 1024px) {
+  .importadoras-categories-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @container importadoras-categories (max-width: 900px) {
+    .importadoras-category-card {
+      grid-template-columns: minmax(58px, 0.8fr) minmax(0, 1.2fr) 30px;
+      padding: 12px;
+      gap: 8px 4px;
+    }
+    .importadoras-category-title {
+      font-size: clamp(13px, 1.8cqw, 16px);
+      line-height: 1.35;
+    }
+    .importadoras-category-count {
+      gap: 4px;
+      padding: 6px 4px;
+      font-size: 10.5px;
+      line-height: 1.35;
+    }
+    .importadoras-category-count svg {
+      width: 14px;
+      height: 14px;
+    }
+    .importadoras-category-arrow {
+      width: 30px;
+      height: 30px;
+    }
   }
 }
