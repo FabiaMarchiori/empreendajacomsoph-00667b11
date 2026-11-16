@@ -6,7 +6,6 @@ import logoOficial from "@/assets/logo-oficial-cropped.png";
 import { useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { HeaderArtworkPalette } from "@/components/visual/HeaderArtworkPalette";
 
 function LayoutHeader() {
   return (
@@ -29,7 +28,6 @@ export function AppLayout() {
   return (
     <ProtectedRoute>
       <SidebarProvider>
-        <HeaderArtworkPalette />
         <div className="min-h-screen flex w-full">
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0 pb-[calc(100px+env(safe-area-inset-bottom))] md:pb-0">
