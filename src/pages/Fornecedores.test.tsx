@@ -36,8 +36,12 @@ describe("Central de Fornecedores", () => {
   it("preserva as duas categorias disponíveis e as onze futuras", () => {
     setup();
     expect(cards()).toHaveLength(13);
-    expect(screen.getAllByText("Liberado", { exact: true })).toHaveLength(2);
-    expect(screen.getAllByText("Em Breve", { exact: true })).toHaveLength(11);
+    expect(document.querySelectorAll('[data-status="liberado"]')).toHaveLength(
+      2,
+    );
+    expect(document.querySelectorAll('[data-status="em_breve"]')).toHaveLength(
+      11,
+    );
     expect(
       within(screen.getByRole("region", { name: "Categorias disponíveis" }))
         .getAllByRole("heading", { level: 3 })
@@ -106,9 +110,13 @@ describe("Central de Fornecedores", () => {
     const card = title.closest("[data-status]")!;
     expect(card).toHaveAttribute("data-status", "upgrade");
     expect(
-      within(card as HTMLElement).getByText("Fazer upgrade"),
+      within(card.parentElement as HTMLElement).getByRole("button", {
+        name: "Importadoras 25 de Março — Fazer upgrade",
+      }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText("Liberado", { exact: true })).toHaveLength(1);
+    expect(document.querySelectorAll('[data-status="liberado"]')).toHaveLength(
+      1,
+    );
     fireEvent.click(title);
     expect(screen.getByLabelText("Rota atual")).toHaveTextContent(
       "/fornecedores/importadoras-25",
@@ -116,16 +124,19 @@ describe("Central de Fornecedores", () => {
   });
   it("mantém o modal existente de Avise-me e não navega para categorias futuras", () => {
     setup();
-    fireEvent.click(screen.getAllByRole("button", { name: "Avise-me" })[0]);
+    fireEvent.keyDown(
+      screen.getByRole("button", {
+        name: "Moda Feminina — Em breve, Avise-me",
+      }),
+      { key: "Enter" },
+    );
     expect(
       screen.getByRole("dialog", { name: "Moda Feminina" }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Rota atual")).toHaveTextContent(
       /^\/fornecedores$/,
     );
-    fireEvent.click(
-      screen.getByRole("button", { name: "Voltar" }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Voltar" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

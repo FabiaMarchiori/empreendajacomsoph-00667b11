@@ -1,6 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { SophFloatingButton } from "@/components/SophFloatingButton";
 import { Footer } from "@/components/Footer";
 import { MobileNavigation } from "@/components/MobileNavigation";
 import logoOficial from "@/assets/logo-oficial-cropped.png";
@@ -38,7 +37,6 @@ export function AppLayout() {
             </main>
             <Footer />
           </div>
-          <SophFloatingButton />
           <MobileNavigation />
         </div>
       </SidebarProvider>

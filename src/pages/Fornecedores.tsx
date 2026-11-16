@@ -158,6 +158,7 @@ export default function FornecedoresPage() {
       : undefined;
     return (
       <ProductCard
+        compact
         key={supplier.title}
         title={supplier.title}
         description={
