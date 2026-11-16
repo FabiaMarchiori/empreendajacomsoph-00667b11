@@ -28,7 +28,7 @@ export function AppLayout() {
   return (
     <ProtectedRoute>
       <SidebarProvider>
-        <div className="min-h-screen flex w-full">
+        <div className="min-h-screen flex w-full" data-app-layout="">
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0 pb-[calc(100px+env(safe-area-inset-bottom))] md:pb-0">
             <LayoutHeader />

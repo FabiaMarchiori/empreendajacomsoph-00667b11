@@ -1,5 +1,12 @@
 import { motion } from "framer-motion";
-import { Sparkles, Send, Package, FileText, Shield, Globe, ShoppingCart, DollarSign, BarChart3, Building2, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Sparkles,
+  Send,
+  Package,
+  DollarSign,
+  Loader2,
+  UserRound,
+} from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,20 +16,10 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
-import sophAvatar from "@/assets/soph-avatar.png";
+import { SophViewport } from "@/components/soph/SophViewport";
+import "./soph-premium.css";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/soph-chat`;
-
-const shortcuts = [
-  { label: "Fornecedores", desc: "Encontre os melhores parceiros", icon: Package },
-  { label: "Abrir MEI", desc: "Formalize seu negócio", icon: FileText },
-  { label: "Registrar Marca", desc: "Proteja sua identidade", icon: Shield },
-  { label: "Presença Online", desc: "Domine o digital", icon: Globe },
-  { label: "Marketplaces", desc: "Venda em grandes canais", icon: ShoppingCart },
-  { label: "Precificação", desc: "Preço certo, lucro real", icon: DollarSign },
-  { label: "ERP / Gestão", desc: "Controle sua operação", icon: BarChart3 },
-  { label: "Gestão do Negócio", desc: "Visão completa do seu negócio", icon: Building2 },
-];
 
 const quickQuestions = [
   "Por onde devo começar meu negócio?",
@@ -48,113 +45,144 @@ export default function SophPage() {
   const userName = profile?.first_name || user?.email?.split("@")[0] || "";
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const end = messagesEndRef.current;
+    const viewport = end?.closest<HTMLElement>(
+      "[data-radix-scroll-area-viewport]",
+    );
+    if (viewport) {
+      viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" });
+    } else {
+      end?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
   }, [messages]);
 
-  const streamChat = useCallback(async (allMessages: ChatMessage[]) => {
-    const controller = new AbortController();
-    abortRef.current = controller;
+  const streamChat = useCallback(
+    async (allMessages: ChatMessage[]) => {
+      const controller = new AbortController();
+      abortRef.current = controller;
 
-    const userContext = {
-      userName,
-      currentModule: "Soph (Assistente)",
-      hasSubscription,
-    };
+      const userContext = {
+        userName,
+        currentModule: "Soph (Assistente)",
+        hasSubscription,
+      };
 
-    // Refresh session to ensure we have a valid, non-expired token
-    let token: string | undefined;
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    if (!sessionError && session?.access_token) {
-      token = session.access_token;
-    } else {
-      const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
-      if (!refreshError && refreshData?.session?.access_token) {
-        token = refreshData.session.access_token;
-      }
-    }
-    if (!token) {
-      throw new Error("Sua sessão expirou. Faça login novamente para conversar com a Soph.");
-    }
-
-    const resp = await fetch(CHAT_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
-        userContext,
-      }),
-      signal: controller.signal,
-    });
-
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({ error: "Erro desconhecido" }));
-      throw new Error(err.error || `Erro ${resp.status}`);
-    }
-
-    if (!resp.body) throw new Error("Sem resposta do servidor");
-
-    const reader = resp.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-    let assistantSoFar = "";
-
-    const upsert = (text: string) => {
-      assistantSoFar += text;
-      const snapshot = assistantSoFar;
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        if (last?.role === "assistant") {
-          return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: snapshot } : m));
+      // Refresh session to ensure we have a valid, non-expired token
+      let token: string | undefined;
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (!sessionError && session?.access_token) {
+        token = session.access_token;
+      } else {
+        const { data: refreshData, error: refreshError } =
+          await supabase.auth.refreshSession();
+        if (!refreshError && refreshData?.session?.access_token) {
+          token = refreshData.session.access_token;
         }
-        return [...prev, { role: "assistant", content: snapshot }];
+      }
+      if (!token) {
+        throw new Error(
+          "Sua sessão expirou. Faça login novamente para conversar com a Soph.",
+        );
+      }
+
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          messages: allMessages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+          userContext,
+        }),
+        signal: controller.signal,
       });
-    };
 
-    let streamDone = false;
-    while (!streamDone) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
+      if (!resp.ok) {
+        const err = await resp
+          .json()
+          .catch(() => ({ error: "Erro desconhecido" }));
+        throw new Error(err.error || `Erro ${resp.status}`);
+      }
 
-      let newlineIndex: number;
-      while ((newlineIndex = buffer.indexOf("\n")) !== -1) {
-        let line = buffer.slice(0, newlineIndex);
-        buffer = buffer.slice(newlineIndex + 1);
-        if (line.endsWith("\r")) line = line.slice(0, -1);
-        if (line.startsWith(":") || line.trim() === "") continue;
-        if (!line.startsWith("data: ")) continue;
-        const jsonStr = line.slice(6).trim();
-        if (jsonStr === "[DONE]") { streamDone = true; break; }
-        try {
-          const parsed = JSON.parse(jsonStr);
-          const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-          if (content) upsert(content);
-        } catch {
-          buffer = line + "\n" + buffer;
-          break;
+      if (!resp.body) throw new Error("Sem resposta do servidor");
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let assistantSoFar = "";
+
+      const upsert = (text: string) => {
+        assistantSoFar += text;
+        const snapshot = assistantSoFar;
+        setMessages((prev) => {
+          const last = prev[prev.length - 1];
+          if (last?.role === "assistant") {
+            return prev.map((m, i) =>
+              i === prev.length - 1 ? { ...m, content: snapshot } : m,
+            );
+          }
+          return [...prev, { role: "assistant", content: snapshot }];
+        });
+      };
+
+      let streamDone = false;
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = buffer.indexOf("\n")) !== -1) {
+          let line = buffer.slice(0, newlineIndex);
+          buffer = buffer.slice(newlineIndex + 1);
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") {
+            streamDone = true;
+            break;
+          }
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as
+              string | undefined;
+            if (content) upsert(content);
+          } catch {
+            buffer = line + "\n" + buffer;
+            break;
+          }
         }
       }
-    }
 
-    // flush remaining
-    if (buffer.trim()) {
-      for (let raw of buffer.split("\n")) {
-        if (!raw) continue;
-        if (raw.endsWith("\r")) raw = raw.slice(0, -1);
-        if (!raw.startsWith("data: ")) continue;
-        const jsonStr = raw.slice(6).trim();
-        if (jsonStr === "[DONE]") continue;
-        try {
-          const parsed = JSON.parse(jsonStr);
-          const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-          if (content) upsert(content);
-        } catch { /* ignore */ }
+      // flush remaining
+      if (buffer.trim()) {
+        for (let raw of buffer.split("\n")) {
+          if (!raw) continue;
+          if (raw.endsWith("\r")) raw = raw.slice(0, -1);
+          if (!raw.startsWith("data: ")) continue;
+          const jsonStr = raw.slice(6).trim();
+          if (jsonStr === "[DONE]") continue;
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as
+              string | undefined;
+            if (content) upsert(content);
+          } catch {
+            /* ignore */
+          }
+        }
       }
-    }
-  }, [userName, hasSubscription]);
+    },
+    [userName, hasSubscription],
+  );
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
@@ -201,169 +229,171 @@ export default function SophPage() {
     : "Olá! Sou a Soph, sua sócia digital. Como posso te ajudar hoje?";
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8">
-      {/* Hero */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
-        <div className="h-28 w-28 rounded-full border-2 border-primary/40 flex items-center justify-center mx-auto shadow-glow overflow-hidden">
-          <img src={sophAvatar} alt="Soph" width={112} height={112} className="h-full w-full object-cover" />
-        </div>
-        <div>
-          <h1 className="font-display text-xl lg:text-2xl font-bold text-white mb-1">
-            Soph, sua <span className="text-gradient-primary">Sócia Digital</span>
-          </h1>
-          <p className="text-sm text-white max-w-md mx-auto leading-relaxed">
-            Sua assistente estratégica para cada etapa do seu negócio.
-          </p>
-        </div>
-      </motion.div>
+    <SophViewport>
+      <div className="soph-panel">
+        <header className="soph-header">
+          <svg
+            className="soph-header-wave"
+            viewBox="0 0 1000 140"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="soph-header-glow" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stopColor="#00485c" stopOpacity="0" />
+                <stop offset="1" stopColor="#00dbe0" stopOpacity="0.6" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M380 140 C650 160 680 38 1000 4 L1000 140 Z"
+              fill="url(#soph-header-glow)"
+            />
+            <path
+              d="M380 140 C650 160 680 38 1000 4"
+              fill="none"
+              stroke="#22dce1"
+              strokeOpacity="0.55"
+            />
+          </svg>
+          <span className="soph-header-mark" aria-hidden="true">
+            <Sparkles />
+          </span>
+          <div className="soph-header-copy">
+            <h1 id="soph-title">
+              Soph — Sua Sócia <span>Digital</span>
+            </h1>
+            <p className="soph-header-subtitle">
+              Sua assistente estratégica para cada etapa do seu negócio.
+            </p>
+            <p className="soph-availability">
+              <span aria-hidden="true" />
+              {isLoading ? "Respondendo…" : "Online"}
+            </p>
+          </div>
+        </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Chat area */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 flex flex-col gap-4">
-          <div className="bg-[hsl(210,63%,10%)] backdrop-blur-sm rounded-xl border border-primary/20 flex flex-col h-[420px] sm:h-[500px]">
-            <div className="px-5 py-3 border-b border-primary/15 flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full overflow-hidden border border-primary/30">
-                <img src={sophAvatar} alt="Soph" width={32} height={32} className="h-full w-full object-cover" />
+        <ScrollArea
+          className="soph-messages"
+          aria-label="Histórico da conversa"
+        >
+          <div className="soph-message-list" role="log" aria-live="polite">
+            <article
+              className="soph-message"
+              data-role="assistant"
+              aria-label="Mensagem da Soph"
+            >
+              <span className="soph-message-avatar" aria-hidden="true">
+                <Sparkles />
+              </span>
+              <div className="soph-message-content">
+                <p className="soph-message-author">Soph</p>
+                <div className="soph-bubble">{greeting}</div>
               </div>
-              <div>
-                <p className="text-sm font-semibold text-white">Conversa com a Soph</p>
-                <div className="flex items-center gap-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  <p className="text-[10px] text-white">Online</p>
-                </div>
-              </div>
-            </div>
-
-            <ScrollArea className="flex-1 p-5 [&_[data-radix-scroll-area-scrollbar]]:bg-white/10 [&_[data-radix-scroll-area-thumb]]:bg-white">
-              <div className="space-y-4">
-                {/* Welcome message (static, not in state) */}
-                <div className="flex justify-start">
-                  <div className="max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed bg-[hsl(210,63%,14%)] text-white border border-primary/15 rounded-bl-md">
-                    <div className="flex items-center gap-1.5 mb-2">
-                      <Sparkles className="h-3 w-3 text-primary" />
-                      <span className="text-[11px] font-semibold text-gradient-primary">Soph</span>
-                    </div>
-                    {greeting}
+            </article>
+            {messages.map((msg, i) => (
+              <motion.article
+                key={i}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="soph-message"
+                data-role={msg.role}
+                aria-label={
+                  msg.role === "assistant" ? "Mensagem da Soph" : "Sua mensagem"
+                }
+              >
+                <span className="soph-message-avatar" aria-hidden="true">
+                  {msg.role === "assistant" ? <Sparkles /> : <UserRound />}
+                </span>
+                <div className="soph-message-content">
+                  <p className="soph-message-author">
+                    {msg.role === "assistant" ? "Soph" : userName || "Você"}
+                  </p>
+                  <div className="soph-bubble">
+                    {msg.role === "assistant" ? (
+                      <div className="soph-markdown">
+                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
-
-                {messages.map((msg, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    <div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                      msg.role === "user"
-                        ? "bg-gradient-primary-btn text-primary-foreground rounded-br-md shadow-[0_2px_12px_-2px_hsl(var(--primary)/0.4)]"
-                        : "bg-[hsl(210,63%,14%)] text-white border border-primary/15 rounded-bl-md"
-                    }`}>
-                      {msg.role === "assistant" && (
-                        <div className="flex items-center gap-1.5 mb-2">
-                          <Sparkles className="h-3 w-3 text-primary" />
-                          <span className="text-[11px] font-semibold text-gradient-primary">Soph</span>
-                        </div>
-                      )}
-                      {msg.role === "assistant" ? (
-                        <div className="prose prose-sm prose-invert max-w-none [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:mb-2 [&_ol]:mb-2 [&_li]:mb-0.5">
-                          <ReactMarkdown>{msg.content}</ReactMarkdown>
-                        </div>
-                      ) : (
-                        msg.content
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-
-                {isLoading && messages[messages.length - 1]?.role === "user" && (
-                  <div className="flex justify-start">
-                    <div className="max-w-[82%] rounded-2xl px-4 py-3 text-sm bg-[hsl(210,63%,14%)] text-white border border-primary/15 rounded-bl-md">
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <Sparkles className="h-3 w-3 text-primary" />
-                        <span className="text-[11px] font-semibold text-gradient-primary">Soph</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-white">
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                        <span className="text-xs">Pensando...</span>
-                      </div>
-                    </div>
+              </motion.article>
+            ))}
+            {isLoading && messages[messages.length - 1]?.role === "user" && (
+              <div className="soph-message" data-role="assistant" role="status">
+                <span className="soph-message-avatar" aria-hidden="true">
+                  <Sparkles />
+                </span>
+                <div className="soph-message-content">
+                  <p className="soph-message-author">Soph</p>
+                  <div className="soph-bubble soph-thinking">
+                    <Loader2 className="animate-spin" aria-hidden="true" />
+                    <span>Pensando...</span>
                   </div>
-                )}
-
-                <div ref={messagesEndRef} />
-              </div>
-            </ScrollArea>
-
-            {/* Quick questions */}
-            {messages.length === 0 && (
-              <div className="px-5 pb-2 flex flex-wrap gap-1.5">
-                {quickQuestions.map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => sendMessage(q)}
-                    disabled={isLoading}
-                    className="px-3 py-1.5 rounded-full bg-[hsl(210,63%,14%)] border border-primary/15 text-[10px] text-white font-medium hover:border-primary/30 hover:text-primary transition-all duration-200 cursor-pointer disabled:opacity-50"
-                  >
-                    {q}
-                  </button>
-                ))}
+                </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
+          </div>
+        </ScrollArea>
 
-            {/* Input */}
-            <div className="p-4 border-t border-primary/15">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage(input)}
-                  placeholder="Escreva sua dúvida..."
-                  disabled={isLoading}
-                  className="flex-1 bg-[hsl(210,63%,14%)] border border-primary/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all disabled:opacity-50"
-                />
+        <div className="soph-composer">
+          <div className="soph-suggestions" aria-label="Sugestões de perguntas">
+            {quickQuestions.map((q, i) => {
+              const Icon = [Sparkles, DollarSign, Package][i];
+              return (
                 <button
-                  onClick={() => sendMessage(input)}
-                  disabled={isLoading || !input.trim()}
-                  className="px-5 rounded-xl bg-gradient-primary-btn text-[#0A192F] font-medium hover:brightness-110 transition-all shadow-[0_0_20px_-4px_hsl(var(--primary)/0.5)] disabled:opacity-50"
+                  key={q}
+                  type="button"
+                  onClick={() => sendMessage(q)}
+                  disabled={isLoading}
+                  aria-label={q}
                 >
-                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                  <Icon aria-hidden="true" />
+                  <span>
+                    {
+                      [
+                        "Começar meu negócio",
+                        "Calcular meu preço",
+                        "Escolher fornecedores",
+                      ][i]
+                    }
+                  </span>
                 </button>
-              </div>
-            </div>
+              );
+            })}
           </div>
-        </motion.div>
-
-        {/* Sidebar - Shortcuts */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <div className="bg-[hsl(210,63%,10%)] backdrop-blur-sm rounded-xl border border-primary/15 p-5">
-            <h3 className="font-display font-semibold text-sm text-white mb-3">Atalhos rápidos</h3>
-            <div className="space-y-1">
-              {shortcuts.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <button
-                    key={s.label}
-                    onClick={() => sendMessage(`Me ajude com ${s.label.toLowerCase()}`)}
-                    disabled={isLoading}
-                    className="w-full flex items-center gap-3 p-2.5 rounded-lg text-left hover:bg-primary/10 transition-all duration-200 group disabled:opacity-50"
-                  >
-                    <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:border-primary/40 transition-colors">
-                      <Icon className="h-3.5 w-3.5 text-white group-hover:text-primary transition-colors" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-medium text-white truncate">{s.label}</p>
-                      <p className="text-[10px] text-white truncate">{s.desc}</p>
-                    </div>
-                    <ArrowRight className="h-3 w-3 text-white ml-auto flex-shrink-0 group-hover:text-primary transition-colors" />
-                  </button>
-                );
-              })}
-            </div>
+          <div className="soph-input-row">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) =>
+                e.key === "Enter" && !e.shiftKey && sendMessage(input)
+              }
+              placeholder="Escreva sua mensagem..."
+              enterKeyHint="send"
+              aria-label="Mensagem para a Soph"
+              disabled={isLoading}
+              autoComplete="off"
+            />
+            <button
+              type="button"
+              onClick={() => sendMessage(input)}
+              disabled={isLoading || !input.trim()}
+              className="soph-send"
+              aria-label="Enviar mensagem"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin" aria-hidden="true" />
+              ) : (
+                <Send aria-hidden="true" />
+              )}
+            </button>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </div>
+    </SophViewport>
   );
 }
