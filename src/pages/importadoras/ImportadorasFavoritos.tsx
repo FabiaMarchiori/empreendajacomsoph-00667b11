@@ -14,7 +14,7 @@ export default function ImportadorasFavoritos() {
   const favSuppliers = (allSuppliers || []).filter((s) => favorites.includes(s.id));
 
   return (
-    <div className="p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
+    <div className="importadoras-favorites p-6 lg:p-10 max-w-5xl mx-auto space-y-8">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
         <button onClick={() => navigate("/fornecedores/importadoras-25")} className="h-9 w-9 rounded-xl bg-card border border-border/60 flex items-center justify-center text-white/60 hover:text-white hover:border-primary/40 transition-colors">
           <ArrowLeft className="h-4 w-4" />
