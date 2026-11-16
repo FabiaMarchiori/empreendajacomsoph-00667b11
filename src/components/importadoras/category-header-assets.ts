@@ -23,11 +23,11 @@ const headers = [
     height: 341,
   },
   {
-    slugs: ["bijouterias-e-semijoias", "bijuterias-e-semijoias"],
+    slugs: ["bijouterias-e-semijoias", "bijuterias-e-semijoias", "bijuterias-semijoias"],
     title: "Bijouterias e Semijoias",
     image: bijuterias,
-    width: 384,
-    height: 342,
+    width: 1370,
+    height: 1148,
   },
   {
     slugs: [
