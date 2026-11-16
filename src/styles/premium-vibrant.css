@@ -9,26 +9,36 @@
 }
 .home-premium .premium-tool-card:nth-child(1),
 .suppliers-central .supplier-product-card--featured,
-.importadoras-hub-card[data-tone="0"] {
+.importadoras-hub-card[data-tone="0"],
+.bolsas-hub-card[data-tone="0"],
+.importadoras-category-card[data-tone="turquoise"] {
   --finish-light: #1ca6b1;
   --finish-base: #0b747e;
   --finish-deep: #154e5d;
 }
 .home-premium .premium-tool-card:nth-child(2),
 .suppliers-central .supplier-product-card--bolsas,
-.importadoras-hub-card[data-tone="1"] {
+.importadoras-hub-card[data-tone="1"],
+.bolsas-hub-card[data-tone="1"],
+.importadoras-category-card[data-tone="blue"],
+.supplier-profile-contact--map {
   --finish-light: #5797d8;
   --finish-base: #245ea9;
   --finish-deep: #193e7b;
 }
 .home-premium .premium-tool-card:nth-child(3),
-.importadoras-hub-card[data-tone="2"] {
+.importadoras-hub-card[data-tone="2"],
+.bolsas-hub-card[data-tone="2"],
+.importadoras-category-card[data-tone="purple"] {
   --finish-light: #9b6bb4;
   --finish-base: #68408d;
   --finish-deep: #44305f;
 }
 .home-premium .premium-tool-card:nth-child(4),
-.importadoras-hub-card[data-tone="3"] {
+.importadoras-hub-card[data-tone="3"],
+.bolsas-hub-card[data-tone="3"],
+.importadoras-category-card[data-tone="pink"],
+.supplier-profile-contact--instagram {
   --finish-light: #cf609f;
   --finish-base: #9b337b;
   --finish-deep: #6b2d60;
@@ -38,17 +48,21 @@
   --finish-base: #2466b2;
   --finish-deep: #193f7e;
 }
-.home-premium .premium-tool-card:nth-child(6) {
+.home-premium .premium-tool-card:nth-child(6),
+.importadoras-category-card[data-tone="coral"] {
   --finish-light: #d97c8e;
   --finish-base: #a44361;
   --finish-deep: #73344f;
 }
-.home-premium .premium-tool-card:nth-child(7) {
+.home-premium .premium-tool-card:nth-child(7),
+.importadoras-category-card[data-tone="green"],
+.supplier-profile-contact--whatsapp {
   --finish-light: #42b88f;
   --finish-base: #12745c;
   --finish-deep: #125843;
 }
-.home-premium .premium-tool-card:nth-child(8) {
+.home-premium .premium-tool-card:nth-child(8),
+.importadoras-category-card[data-tone="cyan"] {
   --finish-light: #41b1bc;
   --finish-base: #0d7584;
   --finish-deep: #124e62;
@@ -60,13 +74,16 @@
 }
 .home-premium .premium-tool-card,
 .suppliers-central .supplier-product-card--featured,
-.importadoras-hub .importadoras-hub-card {
+.importadoras-hub .importadoras-hub-card,
+.bolsas-hub .bolsas-hub-card,
+.importadoras-categories .importadoras-category-card,
+.supplier-profile .supplier-profile-contact {
   background:
     radial-gradient(ellipse at 0% 0%, #ffffff14, transparent 52%),
     linear-gradient(
       135deg,
       var(--finish-light) -18%,
-      var(--finish-base) 36%,
+      var(--finish-base) var(--finish-midpoint, 36%),
       var(--finish-deep) 100%
     );
   border-color: #ffffff30;
@@ -79,7 +96,10 @@
     box-shadow 180ms ease;
 }
 .home-premium .premium-tool-card:hover,
-.importadoras-hub-card:hover {
+.importadoras-hub-card:hover,
+.bolsas-hub-card:hover,
+.importadoras-categories .importadoras-category-card:hover,
+.supplier-profile .supplier-profile-contact:hover {
   filter: none;
   transform: translateY(-2px);
   box-shadow:
@@ -88,7 +108,10 @@
     0 9px 20px #00000030;
 }
 .home-premium .premium-card-arrow,
-.importadoras-hub-card-arrow {
+.importadoras-hub-card-arrow,
+.bolsas-hub-card-arrow,
+.importadoras-category-arrow,
+.supplier-profile-contact-arrow {
   background: #ffffff10;
   border: 1px solid #ffffff38;
   box-shadow:
@@ -148,22 +171,27 @@
     inset 0 1px 0 #ffffff70,
     0 3px 7px #001b4020;
 }
-.importadoras-hub-stat[data-tone] {
+.importadoras-hub-stat[data-tone],
+.bolsas-hub-stat[data-tone] {
   border-color: #ffffff30;
   box-shadow:
     inset 0 1px 0 #ffffff24,
     0 4px 12px #00000024;
 }
-.importadoras-hub-stat[data-tone="0"] {
+.importadoras-hub-stat[data-tone="0"],
+.bolsas-hub-stat[data-tone="0"] {
   background: linear-gradient(135deg, #138b99, #0d697b);
 }
-.importadoras-hub-stat[data-tone="1"] {
+.importadoras-hub-stat[data-tone="1"],
+.bolsas-hub-stat[data-tone="1"] {
   background: linear-gradient(135deg, #407cc2, #244d9a);
 }
-.importadoras-hub-stat[data-tone="2"] {
+.importadoras-hub-stat[data-tone="2"],
+.bolsas-hub-stat[data-tone="2"] {
   background: linear-gradient(135deg, #8b54b5, #593584);
 }
-.importadoras-hub-start {
+.importadoras-hub-start,
+.bolsas-hub-start {
   border-color: #3b758a;
   box-shadow:
     inset 0 1px 0 #ffffff10,
@@ -178,12 +206,75 @@
 @media (prefers-reduced-motion: reduce) {
   .home-premium .premium-tool-card,
   .home-premium .premium-categories img,
-  .importadoras-hub-card {
+  .importadoras-hub-card,
+  .bolsas-hub-card,
+  .importadoras-categories .importadoras-category-card,
+  .supplier-profile .supplier-profile-contact {
     transition: none;
   }
   .home-premium .premium-tool-card:hover,
   .home-premium .premium-categories a:hover img,
-  .importadoras-hub-card:hover {
+  .importadoras-hub-card:hover,
+  .bolsas-hub-card:hover,
+  .importadoras-categories .importadoras-category-card:hover,
+  .supplier-profile .supplier-profile-contact:hover {
     transform: none;
   }
+}
+
+/* Existing category identities remain distinct, including magenta and pink. */
+.importadoras-categories .importadoras-category-card {
+  --finish-midpoint: 30%;
+}
+.supplier-profile .supplier-profile-contact {
+  --finish-midpoint: 24%;
+}
+.importadoras-category-card[data-tone="magenta"] {
+  --finish-light: #b55da9;
+  --finish-base: #8b338b;
+  --finish-deep: #582961;
+}
+.supplier-profile .supplier-profile-contact--instagram {
+  --finish-deep: #553577;
+}
+.importadoras-category-count {
+  background: linear-gradient(130deg, #f4fcfd, #cfe8ed);
+  box-shadow:
+    inset 0 1px 0 #ffffff80,
+    0 3px 7px #001b4020;
+}
+.importadoras-categories-heading::before {
+  background: #63d7df;
+  box-shadow: 0 0 6px #4ec2d220;
+}
+.supplier-profile-identity::before,
+.supplier-profile-identity::after {
+  border-top-color: #58b9c6;
+  filter: drop-shadow(0 0 4px #32b9ce33);
+}
+:is(.importadoras-nicho, .bolsas-listing) {
+  background: radial-gradient(ellipse at 90% 0%, #254f651c, transparent 50%);
+}
+:is(.importadoras-nicho-search, .bolsas-listing-search) {
+  border-color: #458293;
+  background: linear-gradient(110deg, #103349, #082238);
+  box-shadow:
+    inset 0 1px 0 #ffffff0a,
+    0 3px 8px #00000020;
+}
+:is(
+  .importadoras-categories-back,
+  .importadoras-nicho-back,
+  .bolsas-listing-back,
+  .supplier-profile-back
+) {
+  border-color: #427487;
+  background: linear-gradient(135deg, #123b53, #0a293e);
+  box-shadow: inset 0 1px 0 #ffffff12;
+}
+:is(.importadoras-hub-step-number, .bolsas-hub-step-number) {
+  background: linear-gradient(145deg, #148596, #135366);
+}
+:is(.importadoras-hub-start, .bolsas-hub-start) li {
+  border-right-color: #4e8494;
 }
