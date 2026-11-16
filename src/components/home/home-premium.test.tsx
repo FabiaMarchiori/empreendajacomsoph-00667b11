@@ -56,7 +56,7 @@ function Location() {
 }
 
 describe("Home premium — navegação e estados reais dos hooks", () => {
-  it("mantém os nove destinos, sem botão na Hero, e cinco âncoras locais", () => {
+  it("mantém os nove destinos, sem botão na Hero, e os cinco atalhos de áreas", () => {
     renderHome();
     expect(
       screen.getByRole("region", { name: /Olá/ }).querySelector("button"),
@@ -76,14 +76,26 @@ describe("Home premium — navegação e estados reais dos hooks", () => {
     expect(
       tools.getByRole("link", { name: /Sistema de Precificação/ }),
     ).toHaveAttribute("href", "/gestao/precificacao");
-    for (const link of within(
+    const shortcuts = within(
       screen.getByRole("navigation", { name: "Seções da Home" }),
-    ).getAllByRole("link")) {
-      expect(
-        document.getElementById(link.getAttribute("href")!.slice(1)),
-      ).not.toBeNull();
-    }
+    ).getAllByRole("link");
+    expect(shortcuts.map((link) => link.getAttribute("href"))).toEqual([
+      "/fornecedores", "/estruture", "/vendas", "/gestao", "/soph",
+    ]);
     expect(screen.queryByText("Ecossistema Completo")).not.toBeInTheDocument();
+  });
+  it.each([
+    [0, "Fornecedores", "/fornecedores"],
+    [1, "Estruture seu Negócio", "/estruture"],
+    [2, "Vendas e Presença", "/vendas"],
+    [3, "Gestão do Negócio", "/gestao"],
+    [4, "Soph — Sua Sócia Digital", "/soph"],
+  ] as const)("atalho %s — %s abre %s", (index, _title, destination) => {
+    render(<MemoryRouter><HomePage /><Location /></MemoryRouter>);
+    const links = within(screen.getByRole("navigation", { name: "Seções da Home" })).getAllByRole("link");
+    fireEvent.click(links[index]);
+    expect(screen.getByTestId("location")).toHaveTextContent(destination);
+    expect(screen.getByTestId("location").textContent).toBe(destination);
   });
   it("não anuncia liberação enquanto verifica acesso", () => {
     access.loading = true;

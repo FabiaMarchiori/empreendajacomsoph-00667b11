@@ -10,11 +10,11 @@ import { homeAssets } from "@/components/home/assets";
 import "@/components/home/home-premium.css";
 
 const categories = [
-  { title: "Fornecedores", id: "home-fornecedores" },
-  { title: "Estruture seu Negócio", id: "home-estrutura" },
-  { title: "Vendas e Presença", id: "home-vendas" },
-  { title: "Gestão do Negócio", id: "home-gestao" },
-  { title: "Soph — Sua Sócia Digital", id: "home-soph" },
+  { title: "Fornecedores", to: "/fornecedores" },
+  { title: "Estruture seu Negócio", to: "/estruture" },
+  { title: "Vendas e Presença", to: "/vendas" },
+  { title: "Gestão do Negócio", to: "/gestao" },
+  { title: "Soph — Sua Sócia Digital", to: "/soph" },
 ];
 
 const homeCards = [
@@ -142,7 +142,7 @@ export default function HomePage() {
 
       <nav className="premium-categories" aria-label="Seções da Home">
         {categories.map((category, index) => (
-          <a href={`#${category.id}`} key={category.id}>
+          <Link to={category.to} key={category.to}>
             <img
               src={homeAssets.categories[index]}
               alt=""
@@ -160,7 +160,7 @@ export default function HomePage() {
                 category.title
               )}
             </span>
-          </a>
+          </Link>
         ))}
       </nav>
 
