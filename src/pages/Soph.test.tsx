@@ -7,7 +7,6 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import type { ReactNode } from "react";
 import SophPage from "./Soph";
 
 const mocks = vi.hoisted(() => ({
@@ -34,11 +33,7 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 vi.mock("sonner", () => ({ toast: { error: mocks.toast } }));
-vi.mock("@/components/ui/scroll-area", () => ({
-  ScrollArea: ({ children, ...props }: { children: ReactNode }) => (
-    <div {...props}>{children}</div>
-  ),
-}));
+
 
 function setup(initialMessage?: string) {
   return render(
@@ -110,6 +105,7 @@ describe("Soph premium: apresentação e contrato de chat preservado", () => {
     ).toBeInTheDocument();
     expect(screen.queryByText("Atalhos rápidos")).not.toBeInTheDocument();
     expect(document.querySelectorAll(".soph-message")).toHaveLength(1);
+    expect(document.querySelector(".soph-messages")?.contains(screen.getByRole("log"))).toBe(true);
     expect(document.querySelector(".soph-page img")).toBeNull();
     expect(
       screen.getByRole("button", { name: "Enviar mensagem" }),

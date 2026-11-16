@@ -16,7 +16,7 @@ export function SophViewport({ children }: { children: ReactNode }) {
 
     const update = () => {
       const messages = pageRef.current?.querySelector<HTMLElement>(
-        "[data-radix-scroll-area-viewport]",
+        ".soph-messages",
       );
       const followLatest = messages
         ? messages.scrollHeight - messages.clientHeight - messages.scrollTop <

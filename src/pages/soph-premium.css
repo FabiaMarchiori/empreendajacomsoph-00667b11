@@ -31,8 +31,8 @@
   font-family: Inter, system-ui, sans-serif;
 }
 .soph-panel {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-width: 0;
   min-height: 0;
@@ -122,17 +122,19 @@
   border-radius: 50%;
   background: #22e2a2;
 }
+.soph-header,
+.soph-composer {
+  flex: 0 0 auto;
+}
 .soph-messages {
+  flex: 1 1 0;
   min-height: 0;
-}
-.soph-messages [data-radix-scroll-area-viewport] {
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
-}
-.soph-messages [data-radix-scroll-area-scrollbar] {
-  background: #ffffff08;
-}
-.soph-messages [data-radix-scroll-area-thumb] {
-  background: #46778e;
+  scrollbar-width: thin;
+  scrollbar-color: #46778e #ffffff08;
 }
 .soph-message-list {
   display: grid;

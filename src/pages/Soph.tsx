@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
   Sparkles,
   Send,
@@ -9,7 +8,6 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -45,15 +43,13 @@ export default function SophPage() {
   const userName = profile?.first_name || user?.email?.split("@")[0] || "";
 
   useEffect(() => {
-    const end = messagesEndRef.current;
-    const viewport = end?.closest<HTMLElement>(
-      "[data-radix-scroll-area-viewport]",
-    );
-    if (viewport) {
-      viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" });
-    } else {
-      end?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
+    const viewport = messagesEndRef.current?.closest<HTMLElement>(".soph-messages");
+    if (!viewport) return;
+    // Follow every streamed update after layout, without a queued smooth animation.
+    const frame = requestAnimationFrame(() => {
+      viewport.scrollTop = viewport.scrollHeight;
+    });
+    return () => cancelAnimationFrame(frame);
   }, [messages]);
 
   const streamChat = useCallback(
@@ -272,7 +268,7 @@ export default function SophPage() {
           </div>
         </header>
 
-        <ScrollArea
+        <div
           className="soph-messages"
           aria-label="Histórico da conversa"
         >
@@ -291,10 +287,8 @@ export default function SophPage() {
               </div>
             </article>
             {messages.map((msg, i) => (
-              <motion.article
+              <article
                 key={i}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
                 className="soph-message"
                 data-role={msg.role}
                 aria-label={
@@ -318,7 +312,7 @@ export default function SophPage() {
                     )}
                   </div>
                 </div>
-              </motion.article>
+              </article>
             ))}
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="soph-message" data-role="assistant" role="status">
@@ -336,7 +330,7 @@ export default function SophPage() {
             )}
             <div ref={messagesEndRef} />
           </div>
-        </ScrollArea>
+        </div>
 
         <div className="soph-composer">
           <div className="soph-suggestions" aria-label="Sugestões de perguntas">
