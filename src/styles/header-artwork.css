@@ -1,0 +1,103 @@
+/* Recolour only the existing decorative header artwork, never logos or card icons. */
+.suppliers-central-banner-art .supplier-artwork--banner,
+.importadoras-hub-header-art .importadoras-artwork--header,
+.importadoras-categories-header-art .importadoras-artwork--header,
+.importadoras-nicho-header-art,
+.bolsas-hub-header-art .bolsas-artwork--header,
+.bolsas-listing-header-art .bolsas-artwork--header {
+  filter: url("#header-artwork-cool-palette");
+}
+
+/* Reserve real space for the art rather than scaling it over the text. */
+@media (max-width: 767px) {
+  .suppliers-central-header {
+    grid-template-columns: minmax(0, 1fr) 60%;
+    gap: 10px;
+    min-height: 0;
+  }
+  .suppliers-central-heading-copy {
+    display: contents;
+  }
+  .suppliers-central-heading-copy h1 {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .suppliers-central-heading-copy p {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+  .suppliers-central-banner-art {
+    grid-column: 2;
+    grid-row: 2;
+    height: auto;
+    aspect-ratio: 380 / 174;
+  }
+
+  .importadoras-hub-header,
+  .bolsas-hub-header {
+    grid-template-columns: minmax(0, 1fr) 58%;
+    min-height: 0;
+    gap: 8px 12px;
+  }
+  .importadoras-hub-heading,
+  .bolsas-hub-heading {
+    display: contents;
+  }
+  .importadoras-hub-eyebrow,
+  .bolsas-hub-eyebrow {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    margin: 0;
+  }
+  .importadoras-hub-heading h1,
+  .bolsas-hub-heading h1 {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .importadoras-hub-description,
+  .bolsas-hub-description {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: center;
+  }
+  .importadoras-hub-header-art,
+  .bolsas-hub-header-art {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: center;
+  }
+  .bolsas-hub-header-art {
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .importadoras-categories-header {
+    grid-template-columns: 34px minmax(0, 1fr) 60%;
+  }
+
+  .importadoras-nicho-header,
+  .bolsas-listing-header {
+    grid-template-columns: 34px minmax(0, 1fr);
+    min-height: 0;
+    gap: 8px 10px;
+  }
+  .importadoras-nicho-back,
+  .bolsas-listing-back {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .importadoras-nicho-heading,
+  .bolsas-listing-heading {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .importadoras-nicho-header-art,
+  .bolsas-listing-header-art {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: end;
+    width: min(100%, 360px);
+    height: clamp(160px, 44vw, 190px);
+  }
+}
