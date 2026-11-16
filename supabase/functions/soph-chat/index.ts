@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const ALLOWED_ORIGINS = new Set([
+  "https://deploy-preview-12--appempreendajacomsoph.netlify.app",
   "https://appempreendajacomsoph.netlify.app",
   "https://empreendajacomsophi.netlify.app",
   "https://appempreendajacomsoph.lovable.app",
@@ -18,6 +19,7 @@ function buildCorsHeaders(req: Request): Record<string, string> {
   return {
     "Access-Control-Allow-Origin": allowed ? origin : "https://appempreendajacomsoph.netlify.app",
     "Vary": "Origin",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
   };
 }
