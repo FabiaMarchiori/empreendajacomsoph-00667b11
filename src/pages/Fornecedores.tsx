@@ -1,3 +1,4 @@
+import "@/styles/header-artwork.css";
 import { motion } from "framer-motion";
 import { Search, Lock, X } from "lucide-react";
 import { SupplierArtwork } from "@/components/suppliers/SupplierArtwork";

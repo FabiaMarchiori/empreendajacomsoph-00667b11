@@ -1,3 +1,4 @@
+import "@/styles/header-artwork.css";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Store } from "lucide-react";
 import { useNavigate } from "react-router-dom";

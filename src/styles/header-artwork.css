@@ -1,0 +1,44 @@
+/* Only the decorative art of these three pages: retain its original colours. */
+.suppliers-central .suppliers-central-banner-art .supplier-artwork--banner,
+.importadoras-hub .importadoras-hub-header-art .importadoras-artwork--header,
+.importadoras-categories
+  .importadoras-categories-header-art
+  .importadoras-artwork--header {
+  filter: saturate(0.88);
+}
+
+@media (max-width: 767px) {
+  /* A full-width title keeps comfortable copy space beside the illustration. */
+  .suppliers-central .suppliers-central-header {
+    grid-template-columns: minmax(0, 1fr) clamp(132px, 42cqw, 166px);
+    gap: 10px;
+    min-height: 0;
+  }
+  .suppliers-central .suppliers-central-heading-copy {
+    display: contents;
+  }
+  .suppliers-central .suppliers-central-heading-copy h1 {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .suppliers-central .suppliers-central-heading-copy p {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+  .suppliers-central .suppliers-central-banner-art {
+    grid-column: 2;
+    grid-row: 2;
+    height: auto;
+    aspect-ratio: 380 / 174;
+  }
+
+  /* Keep the approved title at its original size and the description full-width. */
+  .importadoras-hub .importadoras-hub-header {
+    grid-template-columns: minmax(0, 1fr) clamp(100px, 28cqw, 136px);
+  }
+
+  .importadoras-categories .importadoras-categories-header {
+    grid-template-columns: 34px minmax(0, 1fr) clamp(124px, 44cqw, 180px);
+  }
+}

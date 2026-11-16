@@ -51,8 +51,8 @@ const headers = [
     slugs: ["embalagens-personalizadas"],
     title: "Embalagens Personalizadas",
     image: embalagens,
-    width: 1448,
-    height: 1086,
+    width: 1536,
+    height: 1024,
   },
   {
     slugs: ["games-e-eletronicos", "games-e-acessorios", "eletronicos"],

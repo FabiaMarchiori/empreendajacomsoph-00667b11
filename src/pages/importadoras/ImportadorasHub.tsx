@@ -1,3 +1,4 @@
+import "@/styles/header-artwork.css";
 import { motion } from "framer-motion";
 import { ArrowRight, Store, LayoutGrid, Bookmark } from "lucide-react";
 import { ImportadorasArtwork } from "@/components/importadoras/ImportadorasArtwork";
