@@ -98,6 +98,13 @@
     grid-row: 2;
     justify-self: end;
     width: min(100%, 360px);
-    height: clamp(160px, 44vw, 190px);
+    height: clamp(228px, 60vw, 270px);
+  }
+}
+
+@media (max-width: 767px) {
+  .importadoras-nicho-header-art,
+  .bolsas-listing-header-art .bolsas-artwork--header img {
+    object-position: right center;
   }
 }
