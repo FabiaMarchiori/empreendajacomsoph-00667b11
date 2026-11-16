@@ -10,8 +10,10 @@
   min-height: 0;
   padding-bottom: var(--soph-nav-space, 0px);
 }
-[data-soph-layout] > .flex-1 > header,
 [data-soph-layout] footer {
+  display: none;
+}
+[data-soph-layout] > .flex-1 > header {
   flex-shrink: 0;
 }
 [data-soph-layout] main {
@@ -24,9 +26,9 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
-  max-width: 1360px;
-  margin-inline: auto;
-  padding: 22px 24px 18px;
+  width: 100%;
+  margin: 0;
+  padding: 8px 12px;
   color: #f4f8fc;
   font-family: Inter, system-ui, sans-serif;
 }
@@ -54,8 +56,8 @@
   isolation: isolate;
   display: flex;
   align-items: center;
-  gap: 22px;
-  padding: 20px 28px;
+  gap: 16px;
+  padding: 12px 20px;
   border-bottom: 1px solid #14617c;
   background: linear-gradient(110deg, #021a2f, #03253b 70%, #034354);
   overflow: hidden;
@@ -81,8 +83,8 @@
   box-shadow: inset 0 1px 2px #30e9ee28;
 }
 .soph-header-mark {
-  width: 58px;
-  height: 58px;
+  width: 46px;
+  height: 46px;
   border-radius: 18px;
 }
 .soph-header-mark svg {
@@ -103,7 +105,7 @@
   color: #25e0e3;
 }
 .soph-header-subtitle {
-  margin-top: 8px;
+  margin-top: 4px;
   color: #d9e6f1;
   font-size: 14px;
   line-height: 1.5;
@@ -258,13 +260,13 @@
 }
 .soph-composer {
   min-width: 0;
-  padding: 12px 28px 24px;
+  padding: 6px 20px 12px;
 }
 .soph-suggestions {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding: 4px 2px 15px;
+  padding: 2px 2px 8px;
   overscroll-behavior-x: contain;
   scrollbar-width: thin;
   scrollbar-color: #2f617b transparent;
@@ -295,7 +297,7 @@
   display: flex;
   align-items: stretch;
   gap: 14px;
-  padding-top: 16px;
+  padding-top: 10px;
   border-top: 1px solid #164157;
 }
 .soph-input-row input {
@@ -350,13 +352,13 @@
     display: none;
   }
   .soph-page {
-    padding: 10px 10px 8px;
+    padding: 4px 6px;
   }
   .soph-panel {
     border-radius: 21px;
   }
   .soph-header {
-    padding: 14px 14px;
+    padding: 10px 12px;
     gap: 12px;
   }
   .soph-header-mark {
@@ -409,11 +411,11 @@
     border-radius: 17px;
   }
   .soph-composer {
-    padding: 5px 12px 14px;
+    padding: 4px 10px 8px;
   }
   .soph-suggestions {
     gap: 8px;
-    padding-bottom: 10px;
+    padding-bottom: 6px;
   }
   .soph-suggestions button {
     min-height: 44px;
