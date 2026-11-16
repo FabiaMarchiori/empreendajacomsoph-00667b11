@@ -206,6 +206,37 @@ describe("Saudação mobile com perfil existente", () => {
   });
 });
 
+describe("Suporte e acessos à Soph", () => {
+  it("mantém o WhatsApp de suporte e os acessos existentes à Soph", async () => {
+    renderHome();
+    const quick = within(
+      screen.getByRole("navigation", { name: "Ações rápidas" }),
+    );
+    expect(quick.getByRole("link", { name: "Suporte" })).toHaveAttribute(
+      "href",
+      "https://wa.me/5511983348749?text=Suporte%20Ecossistema",
+    );
+    expect(
+      screen.getByRole("link", { name: /Conversar com a Soph IA/ }),
+    ).toHaveAttribute("href", "/soph");
+    cleanup();
+    render(
+      <MemoryRouter>
+        <MobileNavigation />
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Mais" }));
+    const dialog = within(await screen.findByRole("dialog"));
+    expect(
+      dialog.getByRole("link", { name: "Soph — Sua Sócia Digital" }),
+    ).toHaveAttribute("href", "/soph");
+    expect(dialog.getByRole("link", { name: "Suporte" })).toHaveAttribute(
+      "href",
+      "https://wa.me/5511983348749?text=Suporte%20Ecossistema",
+    );
+  });
+});
+
 describe("Atalhos reais no menu Mais", () => {
   it("navega para o último acesso salvo e fecha Mais", async () => {
     localStorage.setItem("empreendaja_last_page", "/estrutura/abrir-mei");

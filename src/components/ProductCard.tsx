@@ -11,6 +11,7 @@ interface ProductCardProps {
   status: "liberado" | "bonus" | "disponivel" | "em_breve" | "upgrade";
   icon: React.ReactNode;
   isPremium?: boolean;
+  compact?: boolean;
   onClick?: () => void;
   className?: string;
 }
@@ -21,6 +22,7 @@ export function ProductCard({
   status,
   icon,
   isPremium,
+  compact = false,
   onClick,
   className,
 }: ProductCardProps) {
@@ -29,11 +31,33 @@ export function ProductCard({
   const isUpgrade = status === "upgrade";
   const [interestOpen, setInterestOpen] = useState(false);
 
+  const activate = () => {
+    if (compact && isComingSoon) setInterestOpen(true);
+    else if (!isComingSoon) onClick?.();
+  };
+
   return (
     <>
       <motion.div
         whileHover={{ y: -3 }}
-        onClick={isComingSoon ? undefined : onClick}
+        onClick={activate}
+        role={compact ? "button" : undefined}
+        tabIndex={compact ? 0 : undefined}
+        aria-label={
+          compact
+            ? `${title} — ${isComingSoon ? "Em breve, Avise-me" : isUpgrade ? "Fazer upgrade" : "Acessar"}`
+            : undefined
+        }
+        onKeyDown={
+          compact
+            ? (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  activate();
+                }
+              }
+            : undefined
+        }
         data-status={status}
         className={cn(
           "group relative rounded-2xl border p-6 transition-all duration-200 flex flex-col h-full min-h-[220px]",
@@ -41,6 +65,7 @@ export function ProductCard({
           isPremium
             ? "bg-gradient-card border-primary/15 hover:border-primary/40 shadow-glow-sm hover:shadow-glow"
             : "bg-gradient-card border-border/60 hover:border-primary/20",
+          compact && "product-card--compact",
           className,
         )}
       >
@@ -58,56 +83,63 @@ export function ProductCard({
           >
             {icon}
           </div>
-          <StatusBadge status={status} />
+          {!compact && <StatusBadge status={status} />}
         </div>
         <h3 className="product-card-title font-display font-bold text-sm text-foreground mb-1.5 leading-snug">
           {title}
         </h3>
-        <p className="product-card-description text-xs text-white/80 leading-relaxed mb-5 flex-1">
+        <p
+          className={cn(
+            compact && "sr-only",
+            "product-card-description text-xs text-white/80 leading-relaxed mb-5 flex-1",
+          )}
+        >
           {description}
         </p>
-        <div className="product-card-action flex items-center text-xs font-semibold mt-auto">
-          {isAccessible ? (
-            <span
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
-              style={{
-                background:
-                  "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)",
-              }}
-            >
-              Acessar <ArrowRight className="h-3.5 w-3.5" />
-            </span>
-          ) : isComingSoon ? (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setInterestOpen(true);
-              }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold transition-all hover:opacity-90 cursor-pointer"
-              style={{
-                background:
-                  "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)",
-              }}
-            >
-              <Bell className="h-3.5 w-3.5" /> Avise-me
-            </button>
-          ) : isUpgrade ? (
-            <span
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
-              style={{
-                background:
-                  "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)",
-              }}
-            >
-              <Lock className="h-3.5 w-3.5" /> Fazer upgrade
-            </span>
-          ) : (
-            <span className="text-foreground/50 flex items-center gap-1.5">
-              <Lock className="h-3.5 w-3.5" /> Ativar acesso
-            </span>
-          )}
-        </div>
+        {!compact && (
+          <div className="product-card-action flex items-center text-xs font-semibold mt-auto">
+            {isAccessible ? (
+              <span
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #E8F4F5 0%, #BAD9DF 100%)",
+                }}
+              >
+                Acessar <ArrowRight className="h-3.5 w-3.5" />
+              </span>
+            ) : isComingSoon ? (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setInterestOpen(true);
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold transition-all hover:opacity-90 cursor-pointer"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #E8F4F5 0%, #BAD9DF 100%)",
+                }}
+              >
+                <Bell className="h-3.5 w-3.5" /> Avise-me
+              </button>
+            ) : isUpgrade ? (
+              <span
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[#0A192F] font-bold group-hover:gap-3 transition-all"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #E8F4F5 0%, #BAD9DF 100%)",
+                }}
+              >
+                <Lock className="h-3.5 w-3.5" /> Fazer upgrade
+              </span>
+            ) : (
+              <span className="text-foreground/50 flex items-center gap-1.5">
+                <Lock className="h-3.5 w-3.5" /> Ativar acesso
+              </span>
+            )}
+          </div>
+        )}
       </motion.div>
       {isComingSoon && (
         <InterestModal
