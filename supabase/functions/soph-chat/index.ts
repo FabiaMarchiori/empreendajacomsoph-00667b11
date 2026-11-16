@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const ALLOWED_ORIGINS = new Set([
+  "https://app.empreendajacomsoph.com.br",
   "https://deploy-preview-12--appempreendajacomsoph.netlify.app",
   "https://appempreendajacomsoph.netlify.app",
   "https://empreendajacomsophi.netlify.app",

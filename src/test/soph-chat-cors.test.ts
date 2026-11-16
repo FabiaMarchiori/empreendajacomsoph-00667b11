@@ -65,7 +65,7 @@ beforeEach(() => {
 
 describe("soph-chat — autorização CORS específica", () => {
   it.each([
-    preview, production, "https://empreendajacomsophi.netlify.app",
+    preview, production, "https://app.empreendajacomsoph.com.br", "https://empreendajacomsophi.netlify.app",
     "https://appempreendajacomsoph.lovable.app", "https://example.lovable.app",
     "https://example.lovableproject.com", "http://localhost:8080",
   ])("preserva preflight e POST para %s", async (origin) => {

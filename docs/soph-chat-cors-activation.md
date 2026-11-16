@@ -5,7 +5,7 @@
 Origem observada no navegador: `https://deploy-preview-12--appempreendajacomsoph.netlify.app`.
 A requisição OPTIONS do endpoint `https://ospnuclymrxjoqwyolfn.supabase.co/functions/v1/soph-chat` responde com `Access-Control-Allow-Origin: https://appempreendajacomsoph.netlify.app`. A incompatibilidade bloqueia o POST no navegador e resulta em `Failed to fetch`.
 
-A alteração adiciona somente essa origem exata à lista existente e declara `Access-Control-Allow-Methods: POST, OPTIONS`. Todos os domínios e padrões previamente autorizados permanecem iguais. `buildCorsHeaders` é chamado uma única vez por requisição e seus cabeçalhos já são usados no OPTIONS e em todas as respostas reais: streaming, autenticação, validação, gateway e erro interno.
+A alteração adiciona somente essa origem exata à lista existente e declara `Access-Control-Allow-Methods: POST, OPTIONS`. Todos os domínios e padrões previamente autorizados permanecem iguais. A revisão da função publicada v39 identificou também `https://app.empreendajacomsoph.com.br`, ausente no repositório; essa origem de produção foi preservada explicitamente. `buildCorsHeaders` é chamado uma única vez por requisição e seus cabeçalhos já são usados no OPTIONS e em todas as respostas reais: streaming, autenticação, validação, gateway e erro interno.
 
 Origens não autorizadas continuam recebendo o fallback anterior, que não coincide com a origem solicitante. Isso bloqueia a leitura no navegador; CORS não substitui autenticação e não impede clientes HTTP fora do navegador de fazer requisições. Não há `*`, nova resposta 403, bypass de JWT, proxy ou `no-cors`.
 
