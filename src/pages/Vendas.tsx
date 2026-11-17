@@ -1,24 +1,36 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Globe, ShoppingBag, ArrowRight, Camera, Star, Target, TrendingUp } from "lucide-react";
-
-const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
-const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
+import { ArrowRight, TrendingUp } from "lucide-react";
+import { businessImages } from "@/components/business/assets";
+import {
+  BusinessHero,
+  SophAccess,
+  ToolIllustration,
+} from "@/components/business/BusinessVisuals";
 
 const pathCards = [
   {
     title: "Criar seu Domínio e Site",
-    description: "Aprenda a criar seu site e domínio próprio usando ferramentas gratuitas e inteligência artificial.",
-    icon: <Globe className="h-6 w-6" />,
-    steps: ["Entender domínio e hospedagem", "Escolher nome e registrar", "Criar site com IA"],
+    description:
+      "Aprenda a criar seu site e domínio próprio usando ferramentas gratuitas e inteligência artificial.",
+    image: businessImages.site,
+    steps: [
+      "Entender domínio e hospedagem",
+      "Escolher nome e registrar",
+      "Criar site com IA",
+    ],
     cta: "Iniciar Jornada Digital",
     link: "/vendas/dominio-site",
   },
   {
     title: "Como Vender em Marketplaces",
-    description: "Aprenda a estruturar sua operação para vender em grandes marketplaces com mais clareza e eficiência.",
-    icon: <ShoppingBag className="h-6 w-6" />,
-    steps: ["Pré-requisitos e documentação", "Anúncios de alta performance", "Logística e expedição"],
+    description:
+      "Aprenda a estruturar sua operação para vender em grandes marketplaces com mais clareza e eficiência.",
+    image: businessImages.marketplace,
+    steps: [
+      "Pré-requisitos e documentação",
+      "Anúncios de alta performance",
+      "Logística e expedição",
+    ],
     cta: "Escalar em Marketplaces",
     link: "/vendas/marketplaces",
   },
@@ -26,107 +38,90 @@ const pathCards = [
 
 const tips = [
   {
-    icon: <Camera className="h-5 w-5" />,
+    image: businessImages.camera,
     title: "Fotos que Vendem",
-    description: "Aprenda a criar imagens profissionais que convertem visitantes em compradores reais.",
+    description:
+      "Aprenda a criar imagens profissionais que convertem visitantes em compradores reais.",
   },
   {
-    icon: <Star className="h-5 w-5" />,
+    image: businessImages.star,
     title: "Prova Social",
-    description: "Use depoimentos, avaliações e números para gerar confiança imediata no seu público.",
+    description:
+      "Use depoimentos, avaliações e números para gerar confiança imediata no seu público.",
   },
   {
-    icon: <Target className="h-5 w-5" />,
+    image: businessImages.target,
     title: "Anúncios Estratégicos",
-    description: "Invista de forma inteligente em tráfego pago para escalar suas vendas com previsibilidade.",
+    description:
+      "Invista de forma inteligente em tráfego pago para escalar suas vendas com previsibilidade.",
   },
 ];
 
 export default function VendasPage() {
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-8 sm:space-y-10">
-      {/* HERO */}
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-        <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
-          <span className="text-white">Domine sua </span>
-          <span className="text-gradient-primary inline-block">Presença Digital</span>
-          <br />
-          <span className="text-white">& Venda Mais</span>
-        </h1>
-        <p className="text-white text-sm lg:text-base max-w-2xl leading-relaxed">
-          Não basta estar online. É preciso ser encontrado, gerar confiança e transformar presença digital em vendas reais.
-        </p>
-      </motion.div>
-
-      {/* DOIS CAMINHOS */}
-      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+    <div className="business-premium business-sales">
+      <BusinessHero
+        kind="sales"
+        title={
+          <>
+            Vendas e <span>Presença Digital</span>
+          </>
+        }
+        description="Não basta estar online. É preciso ser encontrado, gerar confiança e transformar presença digital em vendas reais."
+      />
+      <section
+        className="business-sales-grid"
+        aria-label="Caminhos para vender"
+      >
         {pathCards.map((card) => (
-          <motion.div
+          <article
             key={card.title}
-            variants={item}
-            className="relative rounded-2xl border border-primary/20 p-6 flex flex-col bg-gradient-card hover:border-primary/40 transition-all group"
+            className="business-sales-card business-panel"
           >
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-primary-line opacity-80" />
-
-            <div className="h-12 w-12 rounded-xl flex items-center justify-center mb-4 bg-gradient-primary-btn text-primary-foreground">
-              <span>{card.icon}</span>
-            </div>
-
-            <h3 className="font-display font-bold text-lg text-white mb-2">{card.title}</h3>
-            <p className="text-white text-sm leading-relaxed mb-5">{card.description}</p>
-
-            <div className="space-y-4 mb-6 flex-1">
-              {card.steps.map((step, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <div className="flex flex-col items-center">
-                    <div className="h-7 w-7 rounded-full border border-primary/50 flex items-center justify-center flex-shrink-0 bg-gradient-primary-soft">
-                      <div className="h-3 w-3 rounded-full bg-gradient-primary-btn" />
-                    </div>
-                    {idx < card.steps.length - 1 && (
-                      <div className="w-px h-4 mt-1" style={{ background: "#007A7A" }} />
-                    )}
-                  </div>
-                  <div className="pt-1">
-                    <span className="text-white text-sm font-medium">{step}</span>
-                    <p className="text-white text-xs mt-0.5">Não iniciado</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {card.link ? (
-              <Link to={card.link} className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-gradient-primary-btn text-primary-foreground group-hover:gap-3 hover:brightness-110 transition-all">
-                {card.cta} <ArrowRight className="h-4 w-4" />
-              </Link>
-            ) : (
-              <button className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-gradient-primary-btn text-primary-foreground group-hover:gap-3 hover:brightness-110 transition-all">
-                {card.cta} <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
-          </motion.div>
-        ))}
-      </motion.div>
-
-
-      {/* DICAS DE ESPECIALISTA */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="space-y-4">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5" style={{ color: "#00EFFF" }} />
-          <h2 className="font-display font-bold text-lg text-white">Dicas de Especialista</h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {tips.map((tip) => (
-            <div key={tip.title} className="rounded-xl border border-border/60 p-5 bg-gradient-card hover:border-primary/20 transition-all">
-              <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3 bg-gradient-primary-btn text-primary-foreground">
-                <span>{tip.icon}</span>
+            <div className="business-sales-intro">
+              <ToolIllustration src={card.image} />
+              <div>
+                <h2>{card.title}</h2>
+                <p>{card.description}</p>
               </div>
-              <h4 className="font-display font-bold text-sm text-white mb-1.5">{tip.title}</h4>
-              <p className="text-white text-xs leading-relaxed">{tip.description}</p>
             </div>
+            <ol className="business-sales-steps">
+              {card.steps.map((step, index) => (
+                <li key={step}>
+                  <span aria-hidden="true">{index + 1}</span>
+                  <div>{step}</div>
+                </li>
+              ))}
+            </ol>
+            <Link to={card.link} className="business-action">
+              {card.cta} <ArrowRight size={20} />
+            </Link>
+          </article>
+        ))}
+      </section>
+      <section className="business-tips" aria-labelledby="business-tips-title">
+        <div className="business-section-heading">
+          <TrendingUp size={28} />
+          <h2 id="business-tips-title">Dicas de Especialista</h2>
+        </div>
+        <div className="business-tip-grid">
+          {tips.map((tip) => (
+            <article key={tip.title} className="business-tip">
+              <div className="business-tip-icon" aria-hidden="true">
+                <ToolIllustration src={tip.image} />
+              </div>
+              <div className="business-tip-copy">
+                <h3>{tip.title}</h3>
+                <p>{tip.description}</p>
+              </div>
+            </article>
           ))}
         </div>
-      </motion.div>
+      </section>
+      <SophAccess>
+        Converse sobre presença digital, marketplaces e estratégias para o seu
+        negócio.
+      </SophAccess>
     </div>
   );
 }

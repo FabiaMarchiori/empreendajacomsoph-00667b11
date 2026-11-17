@@ -32,7 +32,7 @@ export function AppLayout() {
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0 pb-[calc(100px+env(safe-area-inset-bottom))] md:pb-0">
             <LayoutHeader />
-            <main className="flex-1 overflow-y-auto">
+            <main className="flex-1 overflow-y-auto" data-route-scroll-container="">
               <Outlet />
             </main>
             <Footer />
