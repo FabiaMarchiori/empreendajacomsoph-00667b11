@@ -106,7 +106,10 @@ describe("Soph premium: apresentação e contrato de chat preservado", () => {
     expect(screen.queryByText("Atalhos rápidos")).not.toBeInTheDocument();
     expect(document.querySelectorAll(".soph-message")).toHaveLength(1);
     expect(document.querySelector(".soph-messages")?.contains(screen.getByRole("log"))).toBe(true);
-    expect(document.querySelector(".soph-page img")).toBeNull();
+    const avatars = [...document.querySelectorAll<HTMLImageElement>(".soph-page img")];
+    expect(avatars).toHaveLength(2);
+    expect(avatars.every((image) => image.getAttribute("src")?.includes("09-soph-ia.png"))).toBe(true);
+    expect(document.querySelector(".soph-header-wave")).toBeNull();
     expect(
       screen.getByRole("button", { name: "Enviar mensagem" }),
     ).toBeDisabled();

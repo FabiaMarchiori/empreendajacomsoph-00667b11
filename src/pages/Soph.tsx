@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { SophViewport } from "@/components/soph/SophViewport";
+import sophAvatar from "@/assets/home/cards/09-soph-ia.png";
 import "./soph-premium.css";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/soph-chat`;
@@ -228,39 +229,13 @@ export default function SophPage() {
     <SophViewport>
       <div className="soph-panel">
         <header className="soph-header">
-          <svg
-            className="soph-header-wave"
-            viewBox="0 0 1000 140"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient id="soph-header-glow" x1="0" y1="1" x2="1" y2="0">
-                <stop offset="0" stopColor="#00485c" stopOpacity="0" />
-                <stop offset="1" stopColor="#00dbe0" stopOpacity="0.6" />
-              </linearGradient>
-            </defs>
-            <path
-              d="M380 140 C650 160 680 38 1000 4 L1000 140 Z"
-              fill="url(#soph-header-glow)"
-            />
-            <path
-              d="M380 140 C650 160 680 38 1000 4"
-              fill="none"
-              stroke="#22dce1"
-              strokeOpacity="0.55"
-            />
-          </svg>
           <span className="soph-header-mark" aria-hidden="true">
-            <Sparkles />
+            <img src={sophAvatar} alt="" width={64} height={64} />
           </span>
           <div className="soph-header-copy">
             <h1 id="soph-title">
               Soph — Sua Sócia <span>Digital</span>
             </h1>
-            <p className="soph-header-subtitle">
-              Sua assistente estratégica para cada etapa do seu negócio.
-            </p>
             <p className="soph-availability">
               <span aria-hidden="true" />
               {isLoading ? "Respondendo…" : "Online"}
@@ -279,7 +254,7 @@ export default function SophPage() {
               aria-label="Mensagem da Soph"
             >
               <span className="soph-message-avatar" aria-hidden="true">
-                <Sparkles />
+                <img src={sophAvatar} alt="" width={64} height={64} />
               </span>
               <div className="soph-message-content">
                 <p className="soph-message-author">Soph</p>
@@ -296,7 +271,11 @@ export default function SophPage() {
                 }
               >
                 <span className="soph-message-avatar" aria-hidden="true">
-                  {msg.role === "assistant" ? <Sparkles /> : <UserRound />}
+                  {msg.role === "assistant" ? (
+                    <img src={sophAvatar} alt="" width={64} height={64} />
+                  ) : (
+                    <UserRound />
+                  )}
                 </span>
                 <div className="soph-message-content">
                   <p className="soph-message-author">
@@ -317,7 +296,7 @@ export default function SophPage() {
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="soph-message" data-role="assistant" role="status">
                 <span className="soph-message-avatar" aria-hidden="true">
-                  <Sparkles />
+                  <img src={sophAvatar} alt="" width={64} height={64} />
                 </span>
                 <div className="soph-message-content">
                   <p className="soph-message-author">Soph</p>
