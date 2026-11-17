@@ -1,8 +1,18 @@
 import { motion } from "framer-motion";
 import {
-  BarChart3, Star, ArrowRight, TrendingUp,
-  AlertTriangle, DollarSign, Package,
-  ChevronDown, Activity, Percent, Calculator, HelpCircle, Loader2, Info
+  BarChart3,
+  ArrowRight,
+  TrendingUp,
+  AlertTriangle,
+  DollarSign,
+  Package,
+  ChevronDown,
+  Activity,
+  Percent,
+  Calculator,
+  HelpCircle,
+  Loader2,
+  Info,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -13,15 +23,30 @@ import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-
-const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
-const item = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 } };
+import { businessImages } from "@/components/business/assets";
+import {
+  BusinessHero,
+  SophAccess,
+  ToolIllustration,
+} from "@/components/business/BusinessVisuals";
 
 const faqs = [
-  { q: "Como calcular impostos no preço?", a: "Inclua a alíquota do seu regime tributário (MEI, Simples, etc.) como percentual fixo na composição do preço. O sistema de precificação já calcula isso automaticamente." },
-  { q: "O que é margem de contribuição?", a: "É o valor que sobra de cada venda após descontar os custos variáveis. Esse valor contribui para cobrir os custos fixos e gerar lucro." },
-  { q: "Diferença entre markup e margem?", a: "Markup é o percentual adicionado sobre o custo para formar o preço. Margem é o percentual de lucro sobre o preço de venda. São cálculos diferentes com resultados diferentes." },
-  { q: "Com que frequência devo revisar meus preços?", a: "Idealmente a cada 30 dias ou sempre que houver variação relevante nos custos de insumos, fornecedores ou impostos." },
+  {
+    q: "Como calcular impostos no preço?",
+    a: "Inclua a alíquota do seu regime tributário (MEI, Simples, etc.) como percentual fixo na composição do preço. O sistema de precificação já calcula isso automaticamente.",
+  },
+  {
+    q: "O que é margem de contribuição?",
+    a: "É o valor que sobra de cada venda após descontar os custos variáveis. Esse valor contribui para cobrir os custos fixos e gerar lucro.",
+  },
+  {
+    q: "Diferença entre markup e margem?",
+    a: "Markup é o percentual adicionado sobre o custo para formar o preço. Margem é o percentual de lucro sobre o preço de venda. São cálculos diferentes com resultados diferentes.",
+  },
+  {
+    q: "Com que frequência devo revisar meus preços?",
+    a: "Idealmente a cada 30 dias ou sempre que houver variação relevante nos custos de insumos, fornecedores ou impostos.",
+  },
 ];
 
 export default function GestaoPage() {
@@ -62,247 +87,369 @@ export default function GestaoPage() {
   const hasCosts = fixedCosts && fixedCosts.length > 0;
 
   // Real metrics from simulations
-  const totalRevenue = hasSimulations ? simulations.reduce((acc, s) => acc + (s.preco_sugerido || 0), 0) : 0;
-  const totalCost = hasSimulations ? simulations.reduce((acc, s) => acc + (s.custo_total || 0), 0) : 0;
-  const totalProfit = hasSimulations ? simulations.reduce((acc, s) => acc + (s.lucro_liquido || 0), 0) : 0;
-  const avgMargin = hasSimulations ? simulations.reduce((acc, s) => acc + (s.margem_final || 0), 0) / simulations.length : 0;
-  const totalFixedCosts = hasCosts ? fixedCosts.reduce((acc, c) => acc + (c.valor || 0), 0) : 0;
+  const totalRevenue = hasSimulations
+    ? simulations.reduce((acc, s) => acc + (s.preco_sugerido || 0), 0)
+    : 0;
+  const totalCost = hasSimulations
+    ? simulations.reduce((acc, s) => acc + (s.custo_total || 0), 0)
+    : 0;
+  const totalProfit = hasSimulations
+    ? simulations.reduce((acc, s) => acc + (s.lucro_liquido || 0), 0)
+    : 0;
+  const avgMargin = hasSimulations
+    ? simulations.reduce((acc, s) => acc + (s.margem_final || 0), 0) /
+      simulations.length
+    : 0;
+  const totalFixedCosts = hasCosts
+    ? fixedCosts.reduce((acc, c) => acc + (c.valor || 0), 0)
+    : 0;
 
   // Health score based on real data
   const hasData = hasSimulations || hasCosts;
-  const precificacaoScore = hasSimulations ? (avgMargin > 20 ? 100 : avgMargin > 10 ? 70 : 40) : 0;
+  const precificacaoScore = hasSimulations
+    ? avgMargin > 20
+      ? 100
+      : avgMargin > 10
+        ? 70
+        : 40
+    : 0;
   const custosScore = hasCosts ? 100 : 0;
-  const healthScore = hasData ? Math.round((precificacaoScore + custosScore) / 2) : 0;
+  const healthScore = hasData
+    ? Math.round((precificacaoScore + custosScore) / 2)
+    : 0;
 
   const handleErpClick = () => {
     if (!hasErpAccess) {
-      toast.error("O ERP Soph é um módulo premium do seu Ecossistema. Ative este módulo para acessar gestão completa, financeiro, estoque e operação.", { duration: 6000 });
+      toast.error(
+        "O ERP Soph é um módulo premium do seu Ecossistema. Ative este módulo para acessar gestão completa, financeiro, estoque e operação.",
+        { duration: 6000 },
+      );
       return;
     }
     enterErp();
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8">
-      {/* ── HERO ── */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-        <h1 className="font-display text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
-          <span className="text-foreground">Gestão do </span>
-          <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, #F2FBFF 0%, #9EEBFF 40%, #00EFFF 100%)" }}>Negócio</span>
-        </h1>
-        <p className="text-sm lg:text-base text-white max-w-2xl leading-relaxed">
-          Do ERP à precificação estratégica, organize sua operação e acompanhe a saúde do seu negócio em um único painel.
-        </p>
-        <div className="flex flex-wrap gap-2 pt-1">
-          {["ERP", "Precificação", "Fluxo de Caixa", "Estoque", "DRE"].map(t => (
-            <span key={t} className="px-3 py-1 rounded-full text-[11px] font-semibold border text-white" style={{ borderColor: 'rgba(0,239,255,0.25)', background: 'rgba(0,239,255,0.08)' }}>{t}</span>
-          ))}
+    <div className="business-premium business-management">
+      <BusinessHero
+        kind="management"
+        title={
+          <>
+            Gestão do <span>Negócio</span>
+          </>
+        }
+        description="Do ERP à precificação estratégica, organize sua operação e acompanhe a saúde do seu negócio em um único painel."
+      >
+        <div className="business-chips">
+          {["ERP", "Precificação", "Fluxo de Caixa", "Estoque", "DRE"].map(
+            (text) => (
+              <span key={text}>{text}</span>
+            ),
+          )}
         </div>
-      </motion.div>
-
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-        {/* ── ERP – BLOCO PRINCIPAL ── */}
-        <motion.div variants={item} className="rounded-2xl border border-primary/25 bg-gradient-card p-6 lg:p-8 shadow-glow relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-          <div className="flex items-start gap-4 mb-6">
-            <div className="h-14 w-14 rounded-xl bg-gradient-primary-soft border border-primary/15 flex items-center justify-center flex-shrink-0">
-              <Star className="h-7 w-7 text-primary" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="font-display font-bold text-xl text-foreground">ERP – Soph Gestão</h2>
+      </BusinessHero>
+      <div className="business-management-stack">
+        <section
+          className="business-management-card business-panel"
+          aria-labelledby="erp-title"
+        >
+          <div className="business-management-heading">
+            <ToolIllustration src={businessImages.soph} />
+            <div>
+              <div className="business-title-line">
+                <h2 id="erp-title">ERP – Soph Gestão</h2>
                 <StatusBadge status="bonus" />
               </div>
-              <p className="text-sm text-muted-foreground">Sistema completo de gestão: estoque, vendas, clientes e financeiro em uma única ferramenta.</p>
+              <p>
+                Sistema completo de gestão: estoque, vendas, clientes e
+                financeiro em uma única ferramenta.
+              </p>
             </div>
           </div>
-
-          {/* Mini métricas */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-            {[
-              { icon: DollarSign, label: "Vendas hoje", value: "R$ 1.240", color: "text-emerald-400" },
-              { icon: Package, label: "Alertas estoque", value: "3 itens", color: "text-amber-400" },
-              { icon: AlertTriangle, label: "Contas a pagar", value: "2 pendentes", color: "text-red-400" },
-            ].map(m => (
-              <div key={m.label} className="rounded-xl bg-muted/40 border border-border p-4 text-center">
-                <m.icon className={`h-5 w-5 mx-auto mb-2 ${m.color}`} />
-                <p className={`font-display font-bold text-lg ${m.color}`}>{m.value}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{m.label}</p>
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={handleErpClick}
-            disabled={erpLoading || accessLoading}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {erpLoading ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Conectando ao ERP...
-              </>
-            ) : !hasErpAccess && !accessLoading ? (
-              <>
-                Ativar Módulo ERP <ArrowRight className="h-4 w-4" />
-              </>
-            ) : (
-              <>
-                Acessar Sistema Completo <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </button>
-        </motion.div>
-
-        {/* ── PRECIFICAÇÃO – BLOCO ESTRATÉGICO ── */}
-        <motion.div variants={item} className="rounded-2xl border border-primary/20 bg-gradient-card p-6 lg:p-8 shadow-glow-sm relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-          <div className="flex items-start gap-4 mb-6">
-            <div className="h-14 w-14 rounded-xl bg-gradient-primary-soft border border-primary/15 flex items-center justify-center flex-shrink-0">
-              <Calculator className="h-7 w-7 text-primary" />
+          <div className="business-management-body">
+            <div
+              className="business-metric-grid"
+              aria-label="Informações disponíveis no ERP"
+            >
+              {[
+                { icon: DollarSign, label: "Vendas hoje" },
+                { icon: Package, label: "Alertas estoque" },
+                { icon: AlertTriangle, label: "Contas a pagar" },
+              ].map((metric) => (
+                <div key={metric.label} className="business-metric">
+                  <metric.icon aria-hidden="true" />
+                  <strong>Consulte no ERP</strong>
+                  <p>{metric.label}</p>
+                </div>
+              ))}
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="font-display font-bold text-xl text-foreground">Sistema de Precificação</h2>
+            <button
+              type="button"
+              onClick={handleErpClick}
+              disabled={erpLoading || accessLoading}
+              className="business-action"
+            >
+              {erpLoading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" /> Conectando ao
+                  ERP...
+                </>
+              ) : !hasErpAccess && !accessLoading ? (
+                <>
+                  Ativar Módulo ERP <ArrowRight size={18} />
+                </>
+              ) : (
+                <>
+                  Acessar Sistema Completo <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </div>
+          <p className="business-data-note">
+            <Info size={15} /> Os dados operacionais são consultados no sistema
+            ERP.
+          </p>
+        </section>
+        <section
+          className="business-management-card business-management-card--pricing business-panel"
+          aria-labelledby="pricing-title"
+        >
+          <div className="business-management-heading">
+            <ToolIllustration src={businessImages.pricing} />
+            <div>
+              <div className="business-title-line">
+                <h2 id="pricing-title">Sistema de Precificação</h2>
                 <StatusBadge status="liberado" />
               </div>
-              <p className="text-sm text-muted-foreground">Calcule o preço ideal com margem, custos e competitividade. Ferramenta essencial para lucrar de verdade.</p>
+              <p>
+                Calcule o preço ideal com margem, custos e competitividade.
+                Ferramenta essencial para lucrar de verdade.
+              </p>
             </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            {[
-              { icon: Percent, label: "Markup médio", value: "85%", color: "text-primary" },
-              { icon: TrendingUp, label: "Margem de lucro", value: "32%", color: "text-emerald-400" },
-            ].map(m => (
-              <div key={m.label} className="rounded-xl bg-muted/40 border border-border p-4 text-center">
-                <m.icon className={`h-5 w-5 mx-auto mb-2 ${m.color}`} />
-                <p className={`font-display font-bold text-lg ${m.color}`}>{m.value}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{m.label}</p>
+          <div className="business-management-body">
+            <div className="business-metric-grid business-metric-grid--two">
+              <div className="business-metric">
+                <Percent aria-hidden="true" />
+                <strong>—</strong>
+                <p>Markup médio</p>
+                <p>Consulte suas simulações</p>
               </div>
-            ))}
-          </div>
-
-          <button onClick={() => navigate("/gestao/precificacao")} className="px-6 py-3 rounded-xl bg-gradient-primary-btn text-primary-foreground font-semibold text-sm hover:brightness-110 transition-all flex items-center gap-2">
-            Novo Cálculo de Preço <ArrowRight className="h-4 w-4" />
-          </button>
-        </motion.div>
-
-
-        {/* ── DÚVIDAS FREQUENTES ── */}
-        <motion.div variants={item} className="rounded-2xl border border-border bg-gradient-card p-6 lg:p-8">
-          <div className="flex items-center gap-3 mb-5">
-            <HelpCircle className="h-6 w-6 text-primary" />
-            <h2 className="font-display font-bold text-lg text-foreground">Dúvidas Frequentes</h2>
-          </div>
-          <div className="space-y-2">
-            {faqs.map((f, i) => (
-              <div key={i} className="rounded-xl border border-border overflow-hidden">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/20 transition-colors">
-                  <span className="text-sm font-medium text-foreground">{f.q}</span>
-                  <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform flex-shrink-0 ml-2 ${openFaq === i ? "rotate-180" : ""}`} />
-                </button>
-                {openFaq === i && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="px-4 pb-4">
-                    <p className="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
-                  </motion.div>
-                )}
+              <div className="business-metric">
+                <TrendingUp aria-hidden="true" />
+                <strong>
+                  {hasSimulations
+                    ? `${avgMargin.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
+                    : "Sem simulações"}
+                </strong>
+                <p>Margem de lucro</p>
               </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* ── MÉTRICAS / DASHBOARD — DADOS REAIS ── */}
-        <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Fluxo de Caixa — dados reais de simulações */}
-          <div className="rounded-2xl border border-primary/20 bg-gradient-card p-6 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-            <div className="flex items-center gap-3 mb-5">
-              <Activity className="h-5 w-5 text-primary" />
-              <h3 className="font-display font-bold text-foreground">Resumo Financeiro</h3>
             </div>
-            {hasSimulations ? (
-              <div className="space-y-3">
+            <button
+              type="button"
+              onClick={() => navigate("/gestao/precificacao")}
+              className="business-action business-action--rose"
+            >
+              Novo Cálculo de Preço <ArrowRight size={19} />
+            </button>
+          </div>
+        </section>
+      </div>
+      <section
+        className="business-data-grid"
+        aria-label="Indicadores de gestão"
+      >
+        <article className="business-data-card business-panel">
+          <div className="business-section-heading">
+            <Activity size={26} />
+            <h2>Resumo Financeiro</h2>
+          </div>
+          {hasSimulations ? (
+            <>
+              <div className="business-finance-rows">
                 {[
-                  { label: "Receita estimada", value: `R$ ${totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, pct: 100, color: "bg-emerald-500" },
-                  { label: "Custos totais", value: `R$ ${totalCost.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, pct: totalRevenue > 0 ? Math.round((totalCost / totalRevenue) * 100) : 0, color: "bg-red-400" },
-                  { label: "Lucro estimado", value: `R$ ${totalProfit.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, pct: totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : 0, color: "bg-primary" },
-                ].map(r => (
-                  <div key={r.label}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-muted-foreground">{r.label}</span>
-                      <span className="text-foreground font-semibold">{r.value}</span>
+                  {
+                    label: "Receita estimada",
+                    value: `R$ ${totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+                    pct: 100,
+                    color: "#43d3b2",
+                  },
+                  {
+                    label: "Custos totais",
+                    value: `R$ ${totalCost.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+                    pct:
+                      totalRevenue > 0
+                        ? Math.round((totalCost / totalRevenue) * 100)
+                        : 0,
+                    color: "#f28fa3",
+                  },
+                  {
+                    label: "Lucro estimado",
+                    value: `R$ ${totalProfit.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+                    pct:
+                      totalRevenue > 0
+                        ? Math.round((totalProfit / totalRevenue) * 100)
+                        : 0,
+                    color: "#20dfe2",
+                  },
+                ].map((row) => (
+                  <div key={row.label}>
+                    <div className="business-finance-label">
+                      <span>{row.label}</span>
+                      <strong>{row.value}</strong>
                     </div>
-                    <div className="h-2 rounded-full bg-muted/40 overflow-hidden">
-                      <motion.div initial={{ width: 0 }} animate={{ width: `${r.pct}%` }} transition={{ duration: 1, delay: 0.3 }} className={`h-full rounded-full ${r.color}`} />
+                    <div className="business-progress-track" aria-hidden="true">
+                      <motion.span
+                        initial={{ width: 0 }}
+                        animate={{ width: `${row.pct}%` }}
+                        style={{ background: row.color }}
+                      />
                     </div>
                   </div>
                 ))}
-                <div className="flex items-center gap-1.5 mt-2">
-                  <Info className="h-3.5 w-3.5 text-muted-foreground" />
-                  <p className="text-[11px] text-muted-foreground">Baseado em {simulations.length} simulação(ões) de precificação</p>
-                </div>
               </div>
-            ) : (
-              <div className="text-center py-6">
-                <Activity className="h-8 w-8 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-1">Sem dados financeiros ainda</p>
-                <p className="text-xs text-muted-foreground/60">Crie simulações de precificação para ver seu resumo aqui</p>
-                <button onClick={() => navigate("/gestao/precificacao")} className="mt-3 text-xs text-primary hover:underline font-medium">
-                  Criar primeira simulação →
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Saúde da Gestão — dados reais */}
-          <div className="rounded-2xl border border-primary/20 bg-gradient-card p-6 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-            <div className="flex items-center gap-3 mb-5">
-              <BarChart3 className="h-5 w-5 text-primary" />
-              <h3 className="font-display font-bold text-foreground">Saúde da Gestão</h3>
+              <p className="business-data-note">
+                <Info size={14} /> Baseado em {simulations.length}{" "}
+                simulação(ões) de precificação
+              </p>
+            </>
+          ) : (
+            <div className="business-data-empty">
+              <Activity size={34} />
+              <p>Sem dados financeiros ainda</p>
+              <small>
+                Crie simulações de precificação para ver seu resumo aqui
+              </small>
+              <button
+                type="button"
+                onClick={() => navigate("/gestao/precificacao")}
+              >
+                Criar primeira simulação →
+              </button>
             </div>
-            {hasData ? (
-              <>
-                <div className="flex items-center justify-center mb-4">
-                  <div className="relative h-28 w-28">
-                    <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
-                      <circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
-                      <motion.circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--primary))" strokeWidth="8" strokeLinecap="round" strokeDasharray={2 * Math.PI * 42} initial={{ strokeDashoffset: 2 * Math.PI * 42 }} animate={{ strokeDashoffset: 2 * Math.PI * 42 * (1 - healthScore / 100) }} transition={{ duration: 1.2, delay: 0.3 }} />
-                    </svg>
-                    <span className="absolute inset-0 flex items-center justify-center font-display font-bold text-2xl text-primary">{healthScore}%</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  {[
-                    { label: "Precificação", done: hasSimulations },
-                    { label: "Custos Fixos", done: hasCosts },
-                    { label: "ERP", done: hasErpAccess },
-                  ].map(s => (
-                    <div key={s.label} className="rounded-lg bg-muted/30 border border-border p-2">
-                      <span className="text-base">{s.done ? "✅" : "⚠️"}</span>
-                      <p className="text-muted-foreground mt-1">{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex items-center gap-1.5 mt-3">
-                  <Info className="h-3.5 w-3.5 text-muted-foreground" />
-                  <p className="text-[11px] text-muted-foreground">Score calculado com base nos módulos configurados</p>
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-6">
-                <BarChart3 className="h-8 w-8 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-1">Nenhum dado de gestão registrado</p>
-                <p className="text-xs text-muted-foreground/60">Configure custos fixos e crie simulações para acompanhar a saúde do negócio</p>
-                <button onClick={() => navigate("/gestao/precificacao")} className="mt-3 text-xs text-primary hover:underline font-medium">
-                  Começar a configurar →
-                </button>
-              </div>
-            )}
+          )}
+          {hasCosts && (
+            <p className="business-data-note">
+              <Info size={14} /> Custos fixos cadastrados: R${" "}
+              {totalFixedCosts.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+              })}
+            </p>
+          )}
+        </article>
+        <article className="business-data-card business-panel">
+          <div className="business-section-heading">
+            <BarChart3 size={26} />
+            <h2>Saúde da Gestão</h2>
           </div>
-        </motion.div>
-
-      </motion.div>
+          {hasData ? (
+            <>
+              <div className="business-health-ring">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke="#325576"
+                    strokeWidth="8"
+                  />
+                  <motion.circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke="#20dfe2"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={2 * Math.PI * 42}
+                    initial={{ strokeDashoffset: 2 * Math.PI * 42 }}
+                    animate={{
+                      strokeDashoffset:
+                        2 * Math.PI * 42 * (1 - healthScore / 100),
+                    }}
+                    transition={{ duration: 1.2, delay: 0.3 }}
+                  />
+                </svg>
+                <strong>{healthScore}%</strong>
+              </div>
+              <div className="business-health-states">
+                {[
+                  { label: "Precificação", done: hasSimulations },
+                  { label: "Custos Fixos", done: hasCosts },
+                  { label: "ERP", done: hasErpAccess },
+                ].map((state) => (
+                  <div key={state.label}>
+                    <span aria-hidden="true">{state.done ? "✅" : "⚠️"}</span>
+                    <p>{state.label}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="business-data-note">
+                <Info size={14} /> Score calculado com base nos módulos
+                configurados
+              </p>
+            </>
+          ) : (
+            <div className="business-data-empty">
+              <BarChart3 size={34} />
+              <p>Nenhum dado de gestão registrado</p>
+              <small>
+                Configure custos fixos e crie simulações para acompanhar a saúde
+                do negócio
+              </small>
+              <button
+                type="button"
+                onClick={() => navigate("/gestao/precificacao")}
+              >
+                Começar a configurar →
+              </button>
+            </div>
+          )}
+        </article>
+      </section>
+      <div className="business-management-footer">
+        <SophAccess>
+          Conte com a Soph para entender custos, precificação e os próximos
+          passos do seu negócio.
+        </SophAccess>
+        <section
+          className="business-faq business-panel"
+          aria-labelledby="business-faq-title"
+        >
+          <div className="business-section-heading">
+            <HelpCircle size={27} />
+            <h2 id="business-faq-title">Dúvidas Frequentes</h2>
+          </div>
+          {faqs.map((faq, index) => (
+            <div key={faq.q} className="business-faq-item">
+              <button
+                type="button"
+                aria-expanded={openFaq === index}
+                aria-controls={`business-faq-${index}`}
+                onClick={() => setOpenFaq(openFaq === index ? null : index)}
+              >
+                <span>{faq.q}</span>
+                <ChevronDown
+                  size={18}
+                  style={{
+                    transform: openFaq === index ? "rotate(180deg)" : undefined,
+                  }}
+                />
+              </button>
+              {openFaq === index && (
+                <motion.div
+                  id={`business-faq-${index}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <p>{faq.a}</p>
+                </motion.div>
+              )}
+            </div>
+          ))}
+        </section>
+      </div>
     </div>
   );
 }
