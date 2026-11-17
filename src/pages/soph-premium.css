@@ -28,9 +28,10 @@
   min-height: 0;
   width: 100%;
   margin: 0;
-  padding: 0 8px 4px;
-  color: #f4f8fc;
+  padding: 0 12px 8px;
+  color: #fff;
   font-family: Inter, system-ui, sans-serif;
+  background: #071c2c;
 }
 .soph-panel {
   display: flex;
@@ -38,13 +39,6 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
-  border: 1px solid #12576e;
-  border-radius: 24px;
-  background:
-    radial-gradient(ellipse at 100% 100%, #083b4c24, transparent 60%), #02162c;
-  box-shadow:
-    inset 0 1px 0 #ffffff08,
-    0 12px 35px #00000020;
   overflow: hidden;
 }
 .soph-page :is(h1, button, .soph-message-author) {
@@ -52,24 +46,12 @@
   font-synthesis: none;
 }
 .soph-header {
-  position: relative;
-  isolation: isolate;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 10px 18px;
-  border-bottom: 1px solid #14617c;
-  background: linear-gradient(110deg, #021a2f, #03253b 70%, #034354);
-  overflow: hidden;
-}
-.soph-header-wave {
-  position: absolute;
-  z-index: -1;
-  right: 0;
-  top: 0;
-  width: 80%;
-  height: 100%;
-  pointer-events: none;
+  gap: 12px;
+  padding: 6px 16px;
+  border-bottom: 1px solid #6d4c65;
+  background: linear-gradient(110deg, #123b46, #2e3a4b 55%, #633953);
 }
 
 .soph-header-mark,
@@ -77,53 +59,49 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  border: 1px solid #19a6c1;
-  color: #39e3e8;
-  background: radial-gradient(ellipse at 25% 0%, #086f8a, #02233a 70%);
-  box-shadow: inset 0 1px 2px #30e9ee28;
+  color: #fff;
 }
 .soph-header-mark {
-  width: 46px;
-  height: 46px;
-  border-radius: 18px;
+  width: 40px;
+  height: 40px;
 }
-.soph-header-mark svg {
-  width: 31px;
-  height: 31px;
+.soph-header-mark img,
+.soph-message-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .soph-header-copy {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 16px;
   min-width: 0;
 }
 .soph-header h1 {
   margin: 0;
-  font-size: clamp(23px, 2.2vw, 30px);
+  font-size: clamp(22px, 2vw, 26px);
   line-height: 1.25;
   font-weight: 750;
   letter-spacing: -0.025em;
 }
 .soph-header h1 span {
-  color: #25e0e3;
-}
-.soph-header-subtitle {
-  display: inline-block;
-  margin-top: 4px;
-  color: #d9e6f1;
-  font-size: 14px;
-  line-height: 1.5;
+  color: #f7e6ef;
 }
 .soph-availability {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  margin: 4px 0 0 12px;
+  margin: 0;
   font-size: 12px;
-  color: #e9f5f8;
+  color: #f5eaf0;
 }
 .soph-availability > span {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #22e2a2;
+  background: #20c9c7;
 }
 .soph-header,
 .soph-composer {
@@ -137,12 +115,12 @@
   overflow-x: hidden;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: #46778e #ffffff08;
+  scrollbar-color: #59717d transparent;
 }
 .soph-message-list {
   display: grid;
-  gap: 22px;
-  padding: 24px 28px;
+  gap: 16px;
+  padding: 18px 16px;
 }
 .soph-message {
   display: flex;
@@ -179,9 +157,9 @@
   max-width: 100%;
   padding: 12px 18px;
   border-radius: 20px;
-  border: 1px solid #347399;
-  background: linear-gradient(125deg, #123f69, #0a2b4a);
-  color: #f8fbff;
+  border: 1px solid #30556e;
+  background: #102d49;
+  color: #fff;
   font-size: 15px;
   line-height: 1.55;
   overflow-wrap: anywhere;
@@ -194,12 +172,14 @@
   max-width: min(76%, 700px);
 }
 .soph-message[data-role="user"] .soph-bubble {
-  border-color: #20d9df;
-  background: linear-gradient(125deg, #007e86, #006471);
-  box-shadow: inset 0 1px 0 #77ffff18;
+  border-color: #a95783;
+  background: #873c70;
+  color: #fff;
 }
 .soph-message[data-role="user"] .soph-message-avatar {
-  background: radial-gradient(ellipse at 15% 0%, #078c9c, #02324a 70%);
+  border: 1px solid #91657e;
+  background: #382c3c;
+  color: #f7e6ef;
 }
 .soph-thinking {
   display: flex;
@@ -232,10 +212,10 @@
   margin-bottom: 4px;
 }
 .soph-markdown li::marker {
-  color: #50e3df;
+  color: #20c9c7;
 }
 .soph-markdown a {
-  color: #9df1ee;
+  color: #b9e7e3;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -244,14 +224,14 @@
   padding: 10px;
   border-radius: 8px;
   overflow-x: auto;
-  background: #00182b;
+  background: #0a2339;
 }
 .soph-markdown code {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 .soph-markdown blockquote {
-  border-left: 2px solid #55c7d0;
+  border-left: 2px solid #648894;
   padding-left: 12px;
 }
 .soph-markdown :is(h1, h2, h3) {
@@ -261,7 +241,7 @@
 }
 .soph-composer {
   min-width: 0;
-  padding: 6px 20px 12px;
+  padding: 4px 16px 8px;
 }
 .soph-suggestions {
   display: flex;
@@ -270,7 +250,7 @@
   padding: 2px 2px 8px;
   overscroll-behavior-x: contain;
   scrollbar-width: thin;
-  scrollbar-color: #2f617b transparent;
+  scrollbar-color: #59717d transparent;
 }
 .soph-suggestions button {
   display: inline-flex;
@@ -280,10 +260,10 @@
   gap: 9px;
   min-height: 44px;
   padding: 9px 18px;
-  border: 1px solid #159ab5;
+  border: 1px solid #466574;
   border-radius: 999px;
-  background: linear-gradient(110deg, #05314a, #031c32);
-  color: #edf9fd;
+  background: #123b46;
+  color: #f2f7f8;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
@@ -291,7 +271,7 @@
 .soph-suggestions svg {
   width: 18px;
   height: 18px;
-  color: #2ddde3;
+  color: #20c9c7;
   flex-shrink: 0;
 }
 .soph-input-row {
@@ -299,22 +279,22 @@
   align-items: stretch;
   gap: 10px;
   padding-top: 8px;
-  border-top: 1px solid #164157;
+  border-top: 1px solid #344b60;
 }
 .soph-input-row input {
   flex: 1;
   min-width: 0;
   min-height: 64px;
   padding: 14px 18px;
-  border: 1px solid #408ab1;
+  border: 1px solid #537183;
   border-radius: 18px;
-  background: linear-gradient(110deg, #0d3659, #092a49);
-  color: #f8fbff;
+  background: #102d49;
+  color: #fff;
   font-size: 16px;
   line-height: 1.5;
 }
 .soph-input-row input::placeholder {
-  color: #c8d9e6;
+  color: #d1dfe9;
   opacity: 1;
 }
 .soph-send {
@@ -322,27 +302,35 @@
   place-items: center;
   width: 56px;
   flex-shrink: 0;
-  border: 1px solid #39f0ea;
+  border: 1px solid #a95783;
   border-radius: 18px;
-  background: linear-gradient(135deg, #22e7e0, #04cfd6);
-  color: #00283b;
+  background: #873c70;
+  color: #fff;
 }
 .soph-send svg {
   width: 24px;
   height: 24px;
 }
 .soph-page :is(button, input):focus-visible {
-  outline: 2px solid #9bf4f1;
+  outline: 2px solid #e5b9d2;
   outline-offset: 3px;
 }
 .soph-page button:disabled,
 .soph-page input:disabled {
-  opacity: 0.55;
   cursor: not-allowed;
 }
+.soph-send:disabled {
+  background: #873c70;
+  border-color: #873c70;
+  color: #fff;
+}
 @media (hover: hover) {
-  .soph-page button:not(:disabled):hover {
-    filter: brightness(1.1);
+  .soph-suggestions button:not(:disabled):hover {
+    border-color: #a95783;
+    background: #244451;
+  }
+  .soph-send:not(:disabled):hover {
+    background: #76325f;
   }
 }
 .soph-page button:not(:disabled):active {
@@ -353,56 +341,45 @@
     display: none;
   }
   .soph-page {
-    padding: 0 4px 4px;
-  }
-  .soph-panel {
-    border-radius: 21px;
+    padding: 0 6px 6px;
   }
   .soph-header {
-    padding: 10px 12px;
-    gap: 12px;
+    padding: 6px 10px;
+    gap: 10px;
   }
   .soph-header-mark {
-    width: 40px;
-    height: 40px;
-    border-radius: 13px;
-  }
-  .soph-header-mark svg {
-    width: 25px;
-    height: 25px;
+    width: 36px;
+    height: 36px;
   }
   .soph-header h1 {
     font-size: clamp(17px, 4.7vw, 21px);
     line-height: 1.3;
   }
-  .soph-header-subtitle {
-    display: none;
-  }
   .soph-availability {
     font-size: 11px;
     display: flex;
-    margin: 4px 0 0;
+    margin: 0;
   }
   .soph-message-list {
-    padding: 18px 12px;
-    gap: 18px;
+    padding: 14px 8px;
+    gap: 16px;
   }
   .soph-message {
     gap: 8px;
   }
   .soph-message-avatar {
-    width: 29px;
-    height: 29px;
+    width: 30px;
+    height: 30px;
   }
   .soph-message-avatar svg {
     width: 17px;
     height: 17px;
   }
   .soph-message-content {
-    max-width: calc(100% - 37px);
+    max-width: calc(100% - 38px);
   }
   .soph-message[data-role="user"] .soph-message-content {
-    max-width: calc(100% - 37px);
+    max-width: calc(100% - 38px);
   }
   .soph-message-author {
     font-size: 12px;
@@ -413,7 +390,7 @@
     border-radius: 17px;
   }
   .soph-composer {
-    padding: 4px 10px 8px;
+    padding: 4px 8px 6px;
   }
   .soph-suggestions {
     gap: 8px;
@@ -447,15 +424,14 @@
     height: 22px;
   }
 }
-[data-soph-layout][data-soph-compact] .soph-header-subtitle,
 [data-soph-layout][data-soph-compact] .soph-suggestions {
   display: none;
 }
 [data-soph-layout][data-soph-compact] .soph-header {
-  padding-block: 9px;
+  padding-block: 5px;
 }
 [data-soph-layout][data-soph-compact] .soph-composer {
-  padding-bottom: 10px;
+  padding-bottom: 6px;
 }
 @media (prefers-reduced-motion: reduce) {
   .soph-page .animate-spin {
