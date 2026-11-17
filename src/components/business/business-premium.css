@@ -1256,3 +1256,26 @@
     max-width: none;
   }
 }
+/* Balance the advice and progress panels without dropping per-guide progress. */
+.business-advice {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media (min-width: 1101px) {
+  .business-advice-header .business-tool-art {
+    width: 90px;
+    height: 90px;
+  }
+  .business-progress-breakdown {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .business-progress-breakdown p {
+    display: block;
+    min-height: 50px;
+  }
+  .business-progress-breakdown p span:last-child {
+    display: block;
+    margin-top: 3px;
+  }
+}
