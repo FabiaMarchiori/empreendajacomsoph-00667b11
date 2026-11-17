@@ -1633,3 +1633,150 @@
     overflow-wrap: normal;
   }
 }
+
+/* Increase the visible artwork, reserving room for the original transparent PNGs. */
+.business-structure .business-tool-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 10px 12px;
+  padding: 18px;
+}
+.business-structure .business-tool-link .business-tool-art {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: 100%;
+  height: 190px;
+}
+.business-structure .business-tool-link > div {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+}
+.business-structure .business-tool-link > .business-arrow {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  align-self: end;
+  margin: 0;
+}
+.business-structure .business-journey {
+  background: linear-gradient(115deg, #0b7b88, #166180 48%, #102c4e);
+  border-color: #58b7c7;
+}
+.business-structure .business-journey-summary .business-section-heading > svg {
+  width: 64px;
+  height: 64px;
+}
+.business-structure .business-journey-overall strong {
+  font-size: 24px;
+}
+.business-structure .business-journey-overall .business-progress-track {
+  height: 12px;
+  border-color: #a2e1e666;
+  background: #082c4659;
+}
+.business-structure .business-journey .business-step-number {
+  width: 44px;
+  height: 44px;
+  background: #087b8f;
+  font-size: 20px;
+}
+.business-structure .business-journey .business-checklist button > svg {
+  width: 26px;
+  height: 26px;
+}
+.business-sales .business-sales-intro {
+  grid-template-columns: clamp(132px, calc(14cqw + 20px), 184px) minmax(0, 1fr);
+  gap: 18px;
+}
+.business-sales .business-sales-intro .business-tool-art {
+  width: 100%;
+  height: 196px;
+}
+.business-sales .business-tip {
+  grid-template-columns: clamp(88px, 13cqw, 148px) minmax(0, 1fr);
+  gap: 10px;
+  padding: 18px 12px;
+}
+.business-sales .business-tip-icon {
+  width: 100%;
+  height: 164px;
+}
+@container business (max-width: 1000px) {
+  .business-structure .business-tool-link {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    padding: 16px 12px;
+    column-gap: 10px;
+  }
+  .business-structure .business-tool-link .business-tool-art {
+    height: 164px;
+  }
+}
+@media (max-width: 767px) {
+  .business-structure .business-tool-link {
+    grid-template-columns: 128px minmax(0, 1fr) 30px;
+    gap: 12px;
+    padding: 16px 14px;
+  }
+  .business-structure .business-tool-link .business-tool-art {
+    grid-row: 1;
+    width: 128px;
+    height: 154px;
+  }
+  .business-structure .business-tool-link > .business-arrow {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+  }
+  .business-structure .business-journey .business-guide-copy {
+    flex-basis: calc(100% - 54px);
+  }
+  .business-structure .business-journey .business-guide-count {
+    margin-left: 54px;
+  }
+  .business-sales .business-sales-intro {
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .business-sales .business-sales-intro .business-tool-art {
+    width: 132px;
+    height: 164px;
+  }
+  .business-sales .business-tip {
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 12px;
+    padding: 18px;
+  }
+  .business-sales .business-tip-icon {
+    width: 132px;
+    height: 154px;
+  }
+}
+@media (max-width: 359px) {
+  .business-structure .business-tool-link {
+    grid-template-columns: 108px minmax(0, 1fr) 28px;
+    gap: 10px;
+    padding: 14px 12px;
+  }
+  .business-structure .business-tool-link .business-tool-art {
+    width: 108px;
+    height: 140px;
+  }
+  .business-sales .business-sales-intro {
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .business-sales .business-sales-intro .business-tool-art {
+    width: 108px;
+    height: 140px;
+  }
+  .business-sales .business-tip {
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 10px;
+    padding: 16px;
+  }
+  .business-sales .business-tip-icon {
+    width: 110px;
+    height: 140px;
+  }
+}
