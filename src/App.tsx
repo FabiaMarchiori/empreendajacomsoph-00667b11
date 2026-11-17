@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AppLayout } from "@/components/AppLayout";
+import { RouteScrollReset } from "@/components/RouteScrollReset";
 import LoginPage from "./pages/Login";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
@@ -57,6 +58,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <RouteScrollReset />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />

@@ -57,7 +57,7 @@ export default function PricingLayout() {
       </div>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto pb-8">
+      <main className="flex-1 overflow-y-auto pb-8" data-route-scroll-container="">
         <Outlet />
       </main>
     </div>
