@@ -4,7 +4,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import { businessImages } from "./assets";
 import "./business-premium.css";
 
-const { marketplace, site, erp, checklist, boxes, soph } = businessImages;
+const { structure, sales, management, soph } = businessImages;
 
 export function ToolIllustration({
   src,
@@ -38,9 +38,7 @@ export function BusinessHero({
   kind: "structure" | "sales" | "management";
   children?: ReactNode;
 }) {
-  const main =
-    kind === "structure" ? marketplace : kind === "sales" ? site : erp;
-  const extra = kind === "sales" ? marketplace : checklist;
+  const illustration = { structure, sales, management }[kind];
   return (
     <header className="business-hero">
       <div className="business-hero-copy">
@@ -54,28 +52,12 @@ export function BusinessHero({
         aria-hidden="true"
       >
         <img
-          src={main}
+          src={illustration}
           alt=""
-          width={512}
-          height={512}
-          className="business-hero-main"
+          width={1448}
+          height={1086}
+          className="business-hero-image"
         />
-        <img
-          src={extra}
-          alt=""
-          width={512}
-          height={512}
-          className="business-hero-extra"
-        />
-        {kind === "management" && (
-          <img
-            src={boxes}
-            alt=""
-            width={512}
-            height={512}
-            className="business-hero-boxes"
-          />
-        )}
       </div>
     </header>
   );

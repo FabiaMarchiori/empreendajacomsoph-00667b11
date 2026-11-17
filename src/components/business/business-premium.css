@@ -72,40 +72,11 @@
   height: 218px;
   min-width: 0;
 }
-.business-hero-art::before {
-  content: "";
-  position: absolute;
-  inset: 25% -2% 8%;
-  border-bottom: 2px solid #20dce1;
-  border-radius: 50%;
-  transform: rotate(-14deg);
-  box-shadow: 0 9px 20px -12px #20dce1;
-}
-.business-hero-art img {
-  position: absolute;
-  object-fit: contain;
-}
-.business-hero-main {
-  left: 0;
-  top: 0;
-  width: 76%;
+.business-hero-image {
+  display: block;
+  width: 100%;
   height: 100%;
-}
-.business-hero-extra {
-  right: 0;
-  bottom: 0;
-  width: 41%;
-  height: 68%;
-}
-.business-hero-art--sales .business-hero-extra {
-  width: 38%;
-  height: 55%;
-}
-.business-hero-boxes {
-  left: -3%;
-  bottom: -2%;
-  width: 28%;
-  height: 48%;
+  object-fit: contain;
 }
 .business-tool-art {
   display: block;
@@ -553,17 +524,10 @@
   width: 64px;
   height: 64px;
   margin-bottom: 16px;
-  border-radius: 20px;
-  background: linear-gradient(140deg, #ffffff35, #ffffff08);
-  border: 1px solid #ffffff66;
-  box-shadow:
-    0 8px 14px #00000024,
-    inset 0 1px 0 #ffffff40;
 }
-.business-tip-icon svg {
-  width: 34px;
-  height: 34px;
-  color: #f3fbff;
+.business-tip-icon .business-tool-art {
+  width: 100%;
+  height: 100%;
 }
 .business-tip p {
   margin-top: 10px;

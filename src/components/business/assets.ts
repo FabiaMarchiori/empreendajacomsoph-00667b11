@@ -1,23 +1,31 @@
-import mei from "@/assets/home/cards/02-abrir-mei.png";
-import identity from "@/assets/home/cards/03-identidade-visual.png";
-import brand from "@/assets/home/cards/04-registrar-marca.png";
-import site from "@/assets/home/cards/05-dominio-site.png";
-import marketplace from "@/assets/home/cards/06-marketplaces.png";
-import erp from "@/assets/home/cards/07-erp.png";
-import pricing from "@/assets/home/cards/08-precificacao.png";
+import structure from "@/assets/business/headers/loja-checklist.png";
+import sales from "@/assets/business/headers/compras-online-crescimento.png";
+import management from "@/assets/business/headers/crescimento-logistica.png";
+import mei from "@/assets/business/icons/maleta-roxa.png";
+import identity from "@/assets/business/icons/leque-cores.png";
+import camera from "@/assets/business/icons/camera-roxa.png";
+import star from "@/assets/business/icons/estrela-dourada.png";
+import site from "@/assets/business/icons/laptop-globo.png";
+import marketplace from "@/assets/business/icons/loja-online.png";
+import brand from "@/assets/business/icons/escudo-marca.png";
+import target from "@/assets/business/icons/alvo-dardo.png";
+import erp from "@/assets/business/icons/erp-sistema.png";
+import pricing from "@/assets/business/icons/precificacao-etiquetas-moedas.png";
 import soph from "@/assets/home/cards/09-soph-ia.png";
-import boxes from "@/assets/home/cards/01-central-fornecedores.png";
-import checklist from "@/assets/home/categories/02- Botão circular estruture-seu-negocio.png";
 
 export const businessImages = {
+  structure,
+  sales,
+  management,
   mei,
   identity,
-  brand,
+  camera,
+  star,
   site,
   marketplace,
+  brand,
+  target,
   erp,
   pricing,
   soph,
-  boxes,
-  checklist,
 };

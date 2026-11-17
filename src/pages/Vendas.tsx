@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Camera, Star, Target, TrendingUp } from "lucide-react";
+import { ArrowRight, TrendingUp } from "lucide-react";
 import { businessImages } from "@/components/business/assets";
 import {
   BusinessHero,
@@ -38,19 +38,19 @@ const pathCards = [
 
 const tips = [
   {
-    icon: <Camera className="h-5 w-5" />,
+    image: businessImages.camera,
     title: "Fotos que Vendem",
     description:
       "Aprenda a criar imagens profissionais que convertem visitantes em compradores reais.",
   },
   {
-    icon: <Star className="h-5 w-5" />,
+    image: businessImages.star,
     title: "Prova Social",
     description:
       "Use depoimentos, avaliações e números para gerar confiança imediata no seu público.",
   },
   {
-    icon: <Target className="h-5 w-5" />,
+    image: businessImages.target,
     title: "Anúncios Estratégicos",
     description:
       "Invista de forma inteligente em tráfego pago para escalar suas vendas com previsibilidade.",
@@ -108,7 +108,7 @@ export default function VendasPage() {
           {tips.map((tip) => (
             <article key={tip.title} className="business-tip">
               <div className="business-tip-icon" aria-hidden="true">
-                {tip.icon}
+                <ToolIllustration src={tip.image} />
               </div>
               <h3>{tip.title}</h3>
               <p>{tip.description}</p>

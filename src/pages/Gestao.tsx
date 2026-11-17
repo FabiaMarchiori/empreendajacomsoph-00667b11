@@ -154,7 +154,7 @@ export default function GestaoPage() {
           aria-labelledby="erp-title"
         >
           <div className="business-management-heading">
-            <ToolIllustration src={businessImages.soph} />
+            <ToolIllustration src={businessImages.erp} />
             <div>
               <div className="business-title-line">
                 <h2 id="erp-title">ERP – Soph Gestão</h2>
