@@ -225,8 +225,10 @@ describe("Gestão — indicadores reais e acesso ao ERP", () => {
         "Não há acesso direto a estas ferramentas neste aplicativo.",
       ),
     ).toBeVisible();
-    // The supplied DRE PNG has an opaque checkerboard; no substitute is invented.
-    expect(tools.querySelectorAll("img")).toHaveLength(3);
+    expect(tools.querySelectorAll("img")).toHaveLength(4);
+    expect(tools.querySelectorAll("img")[3].getAttribute("src")).toContain(
+      "dre-relatorio-financeiro.png",
+    );
   });
   it("mantém bloqueio do ERP e a mensagem existente sem conceder acesso", () => {
     page(<GestaoPage />);

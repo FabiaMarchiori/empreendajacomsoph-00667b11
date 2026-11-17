@@ -1,3 +1,4 @@
+import dre from "@/assets/business/icons/dre-relatorio-financeiro.png";
 import stock from "@/assets/business/icons/estoque-caixas.png";
 import cashFlow from "@/assets/business/icons/fluxo-caixa-carteira.png";
 import payable from "@/assets/business/icons/contas-pagar-calendario.png";
@@ -17,6 +18,7 @@ import pricing from "@/assets/business/icons/precificacao-etiquetas-moedas.png";
 import soph from "@/assets/home/cards/09-soph-ia.png";
 
 export const businessImages = {
+  dre,
   stock,
   cashFlow,
   payable,

@@ -148,7 +148,7 @@ export default function GestaoPage() {
       </BusinessHero>
       <div className="business-management-stack">
         <section
-          className="business-management-card business-panel"
+          className="business-management-card business-management-card--erp business-panel"
           aria-labelledby="erp-title"
         >
           <div className="business-management-heading">
@@ -281,7 +281,7 @@ export default function GestaoPage() {
             {
               title: "DRE Simplificado",
               description: "Resultado do negócio.",
-              image: null,
+              image: businessImages.dre,
             },
           ].map((tool) => (
             <article key={tool.title} className="business-management-tool">

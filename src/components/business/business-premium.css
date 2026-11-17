@@ -1513,3 +1513,123 @@
     height: 124px;
   }
 }
+
+/* Approved indicator colours and desktop rows, scoped to these three pages. */
+.business-management-card--erp .business-title-line > span {
+  padding: 6px 12px;
+  border: 1px solid #91eced;
+  border-radius: 999px;
+  background: #12596a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 8px #08263e33;
+}
+.business-management-card--erp .business-metric:nth-child(1) :is(strong, svg) {
+  color: #80ef9e;
+}
+.business-management-card--erp .business-metric:nth-child(2) :is(strong, svg) {
+  color: #ffe084;
+}
+.business-management-card--erp .business-metric:nth-child(3) :is(strong, svg) {
+  color: #ffa9ad;
+}
+.business-management-card--pricing
+  .business-metric:first-child
+  :is(strong, svg, p:first-of-type) {
+  color: #92f0ae;
+}
+.business-management .business-metric strong {
+  background-image: none;
+  -webkit-text-fill-color: currentColor;
+}
+.business-management-heading .business-tool-art {
+  width: 160px;
+  height: 150px;
+}
+@media (min-width: 1024px) {
+  .business-structure .business-primary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .business-structure .business-tool-link {
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 18px 12px;
+  }
+  .business-structure .business-tool-link .business-tool-art {
+    width: clamp(72px, calc(31cqw - 150px), 140px);
+    height: clamp(110px, 13cqw, 150px);
+  }
+  .business-structure .business-tool-link > div {
+    flex-basis: auto;
+  }
+  .business-structure .business-tool-link h2 {
+    font-size: clamp(16px, 1.8cqw, 20px);
+    overflow-wrap: normal;
+  }
+  .business-structure .business-tool-link p {
+    font-size: clamp(12px, 1.2cqw, 13px);
+  }
+  .business-structure .business-tool-link > .business-arrow {
+    width: 28px;
+    height: 28px;
+    margin: 0;
+  }
+  .business-sales .business-tip-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .business-sales .business-tip {
+    grid-template-columns: clamp(78px, 11cqw, 126px) minmax(0, 1fr);
+    gap: 12px;
+    padding: 18px 14px;
+  }
+  .business-sales .business-tip-icon {
+    width: 100%;
+    height: 140px;
+  }
+  .business-sales .business-tip h3 {
+    font-size: clamp(16px, 1.7cqw, 19px);
+    overflow-wrap: normal;
+  }
+  .business-sales .business-tip p {
+    font-size: clamp(12px, 1.2cqw, 14px);
+  }
+  .business-management .business-management-tools-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .business-management-tool h3 {
+    font-size: clamp(16px, 1.7cqw, 19px);
+  }
+  .business-management-tool {
+    padding: 16px 12px;
+  }
+  .business-management-tool .business-tool-art {
+    max-width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .business-management-heading .business-tool-art {
+    width: 126px;
+    height: 126px;
+  }
+  .business-management-heading {
+    grid-template-columns: 126px minmax(0, 1fr);
+  }
+}
+@media (max-width: 359px) {
+  .business-management-heading .business-tool-art {
+    width: 100px;
+    height: 116px;
+  }
+  .business-management-heading {
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .business-sales-card h2 {
+    font-size: clamp(18px, 2.2cqw, 25px);
+    overflow-wrap: normal;
+  }
+}
