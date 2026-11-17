@@ -1,15 +1,13 @@
 import { motion } from "framer-motion";
 import {
-  BarChart3,
+  Layers,
   ArrowRight,
   TrendingUp,
   AlertTriangle,
   DollarSign,
   Package,
   ChevronDown,
-  Activity,
   Percent,
-  Calculator,
   HelpCircle,
   Loader2,
   Info,
@@ -256,157 +254,49 @@ export default function GestaoPage() {
         </section>
       </div>
       <section
-        className="business-data-grid"
-        aria-label="Indicadores de gestão"
+        className="business-management-tools"
+        aria-labelledby="management-tools-title"
       >
-        <article className="business-data-card business-panel">
-          <div className="business-section-heading">
-            <Activity size={26} />
-            <h2>Resumo Financeiro</h2>
-          </div>
-          {hasSimulations ? (
-            <>
-              <div className="business-finance-rows">
-                {[
-                  {
-                    label: "Receita estimada",
-                    value: `R$ ${totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
-                    pct: 100,
-                    color: "#43d3b2",
-                  },
-                  {
-                    label: "Custos totais",
-                    value: `R$ ${totalCost.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
-                    pct:
-                      totalRevenue > 0
-                        ? Math.round((totalCost / totalRevenue) * 100)
-                        : 0,
-                    color: "#f28fa3",
-                  },
-                  {
-                    label: "Lucro estimado",
-                    value: `R$ ${totalProfit.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
-                    pct:
-                      totalRevenue > 0
-                        ? Math.round((totalProfit / totalRevenue) * 100)
-                        : 0,
-                    color: "#20dfe2",
-                  },
-                ].map((row) => (
-                  <div key={row.label}>
-                    <div className="business-finance-label">
-                      <span>{row.label}</span>
-                      <strong>{row.value}</strong>
-                    </div>
-                    <div className="business-progress-track" aria-hidden="true">
-                      <motion.span
-                        initial={{ width: 0 }}
-                        animate={{ width: `${row.pct}%` }}
-                        style={{ background: row.color }}
-                      />
-                    </div>
-                  </div>
-                ))}
+        <div className="business-section-heading">
+          <Layers size={28} aria-hidden="true" />
+          <h2 id="management-tools-title">Ferramentas da Gestão</h2>
+        </div>
+        <div className="business-management-tools-grid">
+          {[
+            {
+              title: "Controle de Estoque",
+              description: "Entradas, saídas e giro de produtos.",
+              image: businessImages.stock,
+            },
+            {
+              title: "Fluxo de Caixa",
+              description: "Receitas, despesas e saldo.",
+              image: businessImages.cashFlow,
+            },
+            {
+              title: "Contas a Pagar",
+              description: "Vencimentos e pagamentos.",
+              image: businessImages.payable,
+            },
+            {
+              title: "DRE Simplificado",
+              description: "Resultado do negócio.",
+              image: null,
+            },
+          ].map((tool) => (
+            <article key={tool.title} className="business-management-tool">
+              <div className="business-management-tool-art" aria-hidden="true">
+                {tool.image && <ToolIllustration src={tool.image} />}
               </div>
-              <p className="business-data-note">
-                <Info size={14} /> Baseado em {simulations.length}{" "}
-                simulação(ões) de precificação
-              </p>
-            </>
-          ) : (
-            <div className="business-data-empty">
-              <Activity size={34} />
-              <p>Sem dados financeiros ainda</p>
-              <small>
-                Crie simulações de precificação para ver seu resumo aqui
-              </small>
-              <button
-                type="button"
-                onClick={() => navigate("/gestao/precificacao")}
-              >
-                Criar primeira simulação →
-              </button>
-            </div>
-          )}
-          {hasCosts && (
-            <p className="business-data-note">
-              <Info size={14} /> Custos fixos cadastrados: R${" "}
-              {totalFixedCosts.toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-              })}
-            </p>
-          )}
-        </article>
-        <article className="business-data-card business-panel">
-          <div className="business-section-heading">
-            <BarChart3 size={26} />
-            <h2>Saúde da Gestão</h2>
-          </div>
-          {hasData ? (
-            <>
-              <div className="business-health-ring">
-                <svg viewBox="0 0 100 100" aria-hidden="true">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="42"
-                    fill="none"
-                    stroke="#325576"
-                    strokeWidth="8"
-                  />
-                  <motion.circle
-                    cx="50"
-                    cy="50"
-                    r="42"
-                    fill="none"
-                    stroke="#20dfe2"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    strokeDasharray={2 * Math.PI * 42}
-                    initial={{ strokeDashoffset: 2 * Math.PI * 42 }}
-                    animate={{
-                      strokeDashoffset:
-                        2 * Math.PI * 42 * (1 - healthScore / 100),
-                    }}
-                    transition={{ duration: 1.2, delay: 0.3 }}
-                  />
-                </svg>
-                <strong>{healthScore}%</strong>
-              </div>
-              <div className="business-health-states">
-                {[
-                  { label: "Precificação", done: hasSimulations },
-                  { label: "Custos Fixos", done: hasCosts },
-                  { label: "ERP", done: hasErpAccess },
-                ].map((state) => (
-                  <div key={state.label}>
-                    <span aria-hidden="true">{state.done ? "✅" : "⚠️"}</span>
-                    <p>{state.label}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="business-data-note">
-                <Info size={14} /> Score calculado com base nos módulos
-                configurados
-              </p>
-            </>
-          ) : (
-            <div className="business-data-empty">
-              <BarChart3 size={34} />
-              <p>Nenhum dado de gestão registrado</p>
-              <small>
-                Configure custos fixos e crie simulações para acompanhar a saúde
-                do negócio
-              </small>
-              <button
-                type="button"
-                onClick={() => navigate("/gestao/precificacao")}
-              >
-                Começar a configurar →
-              </button>
-            </div>
-          )}
-        </article>
+              <h3>{tool.title}</h3>
+              <p>{tool.description}</p>
+            </article>
+          ))}
+        </div>
+        <p className="business-data-note">
+          <Info size={15} aria-hidden="true" /> Não há acesso direto a estas
+          ferramentas neste aplicativo.
+        </p>
       </section>
       <div className="business-management-footer">
         <SophAccess>

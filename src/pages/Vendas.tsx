@@ -110,8 +110,10 @@ export default function VendasPage() {
               <div className="business-tip-icon" aria-hidden="true">
                 <ToolIllustration src={tip.image} />
               </div>
-              <h3>{tip.title}</h3>
-              <p>{tip.description}</p>
+              <div className="business-tip-copy">
+                <h3>{tip.title}</h3>
+                <p>{tip.description}</p>
+              </div>
             </article>
           ))}
         </div>

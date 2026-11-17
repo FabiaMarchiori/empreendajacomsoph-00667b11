@@ -177,8 +177,12 @@ describe("Vendas — conteúdos e destinos", () => {
 describe("Gestão — indicadores reais e acesso ao ERP", () => {
   it("preserva estados vazios sem vendas, alertas ou percentuais demonstrativos", () => {
     page(<GestaoPage />);
-    expect(screen.getByText("Sem dados financeiros ainda")).toBeVisible();
-    expect(screen.getByText("Nenhum dado de gestão registrado")).toBeVisible();
+    expect(
+      screen.queryByRole("heading", { name: "Resumo Financeiro" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Saúde da Gestão" }),
+    ).not.toBeInTheDocument();
     expect(screen.getAllByText("Consulte no ERP")).toHaveLength(3);
     for (const fake of ["R$ 1.240", "3 itens", "2 pendentes", "85%", "32%"])
       expect(screen.queryByText(fake)).not.toBeInTheDocument();
@@ -195,17 +199,34 @@ describe("Gestão — indicadores reais e acesso ao ERP", () => {
     ];
     mocks.fixedCosts = [{ valor: 20 }];
     page(<GestaoPage />);
-    expect(screen.getByText("R$ 100,00")).toBeVisible();
-    expect(screen.getByText("R$ 60,00")).toBeVisible();
-    expect(screen.getByText("R$ 40,00")).toBeVisible();
     expect(screen.getByText("40,0%")).toBeVisible();
-    expect(screen.getByText("100%")).toBeVisible();
+    expect(screen.getByText("Markup médio")).toBeVisible();
+    expect(screen.queryByText("85%")).not.toBeInTheDocument();
+    expect(screen.queryByText("32%")).not.toBeInTheDocument();
     expect(
-      screen.getByText(/Custos fixos cadastrados: R\$ 20,00/),
-    ).toBeVisible();
-    expect(
-      screen.queryByText("Sem dados financeiros ainda"),
+      screen.queryByRole("heading", { name: "Resumo Financeiro" }),
     ).not.toBeInTheDocument();
+  });
+  it("apresenta quatro ferramentas informativas sem criar destinos ou ações inexistentes", () => {
+    page(<GestaoPage />);
+    const tools = screen.getByRole("region", { name: "Ferramentas da Gestão" });
+    const contents = within(tools);
+    for (const name of [
+      "Controle de Estoque",
+      "Fluxo de Caixa",
+      "Contas a Pagar",
+      "DRE Simplificado",
+    ])
+      expect(contents.getByRole("heading", { name })).toBeVisible();
+    expect(contents.queryAllByRole("link")).toHaveLength(0);
+    expect(contents.queryAllByRole("button")).toHaveLength(0);
+    expect(
+      contents.getByText(
+        "Não há acesso direto a estas ferramentas neste aplicativo.",
+      ),
+    ).toBeVisible();
+    // The supplied DRE PNG has an opaque checkerboard; no substitute is invented.
+    expect(tools.querySelectorAll("img")).toHaveLength(3);
   });
   it("mantém bloqueio do ERP e a mensagem existente sem conceder acesso", () => {
     page(<GestaoPage />);

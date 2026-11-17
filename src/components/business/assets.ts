@@ -1,3 +1,6 @@
+import stock from "@/assets/business/icons/estoque-caixas.png";
+import cashFlow from "@/assets/business/icons/fluxo-caixa-carteira.png";
+import payable from "@/assets/business/icons/contas-pagar-calendario.png";
 import structure from "@/assets/business/headers/loja-checklist.png";
 import sales from "@/assets/business/headers/compras-online-crescimento.png";
 import management from "@/assets/business/headers/crescimento-logistica.png";
@@ -14,6 +17,9 @@ import pricing from "@/assets/business/icons/precificacao-etiquetas-moedas.png";
 import soph from "@/assets/home/cards/09-soph-ia.png";
 
 export const businessImages = {
+  stock,
+  cashFlow,
+  payable,
   structure,
   sales,
   management,
