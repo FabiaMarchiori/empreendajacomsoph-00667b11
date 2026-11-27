@@ -232,6 +232,8 @@ describe("Gestão — indicadores reais e acesso ao ERP", () => {
   });
   it("mantém bloqueio do ERP e a mensagem existente sem conceder acesso", () => {
     page(<GestaoPage />);
+    expect(screen.queryByRole("link", { name: /Acessar Soph Gestão 2.0/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Acessar ERP Anterior/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Ativar Módulo ERP/ }));
     expect(mocks.enterErp).not.toHaveBeenCalled();
     expect(mocks.error).toHaveBeenCalledWith(
@@ -242,12 +244,16 @@ describe("Gestão — indicadores reais e acesso ao ERP", () => {
   it("abre o ERP apenas pelo handler existente quando autorizado", () => {
     mocks.hasErpAccess = true;
     page(<GestaoPage />);
-    fireEvent.click(
-      screen.getByRole("button", { name: /Acessar Sistema Completo/ }),
-    );
+    const primary = screen.getByRole("link", { name: /Acessar Soph Gestão 2.0/ });
+    expect(primary).toHaveAttribute("href", "/gestao/soph-gestao");
+    fireEvent.click(primary);
+    expect(screen.getByTestId("location")).toHaveTextContent("/gestao/soph-gestao");
+    expect(mocks.enterErp).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: /Acessar ERP Anterior/ }));
     expect(mocks.enterErp).toHaveBeenCalledTimes(1);
   });
   it("mantém carregamento e bloqueia cliques duplicados durante a conexão", () => {
+    mocks.hasErpAccess = true;
     mocks.erpLoading = true;
     page(<GestaoPage />);
     expect(

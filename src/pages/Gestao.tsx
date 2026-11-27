@@ -158,7 +158,7 @@ export default function GestaoPage() {
             <ToolIllustration src={businessImages.erp} />
             <div>
               <div className="business-title-line">
-                <h2 id="erp-title">ERP – Soph Gestão</h2>
+                <h2 id="erp-title">Soph Gestão 2.0</h2>
                 <StatusBadge status="bonus" />
               </div>
               <p>
@@ -184,36 +184,39 @@ export default function GestaoPage() {
                 </div>
               ))}
             </div>
+            {previewAccess === "allowed" ? (
+              <Link to="/gestao/soph-gestao" className="business-action">
+                Acessar Soph Gestão 2.0 <ArrowRight size={18} />
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={handleErpClick}
+                disabled={accessLoading || previewAccess === "unavailable"}
+                className="business-action"
+              >
+                {accessLoading ? "Verificando acesso…" : previewAccess === "unavailable"
+                  ? "Acesso indisponível no momento"
+                  : "Ativar Módulo ERP"}
+              </button>
+            )}
+          </div>
+          {previewAccess === "allowed" && (
             <button
               type="button"
               onClick={handleErpClick}
-              disabled={erpLoading || accessLoading}
-              className="business-action"
+              disabled={erpLoading}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-primary/30 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10 disabled:opacity-60"
             >
               {erpLoading ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" /> Conectando ao
-                  ERP...
-                </>
-              ) : !hasErpAccess && !accessLoading ? (
-                <>
-                  Ativar Módulo ERP <ArrowRight size={18} />
-                </>
+                <><Loader2 size={18} className="animate-spin" /> Conectando ao ERP…</>
               ) : (
-                <>
-                  Acessar Sistema Completo <ArrowRight size={18} />
-                </>
+                <>Acessar ERP Anterior <ArrowRight size={18} /></>
               )}
             </button>
-          </div>
-          {previewAccess === "allowed" && (
-            <Link to="/gestao/soph-gestao" className="business-action">
-              Abrir Soph Gestão 2.0 (demonstração) <ArrowRight size={18} />
-            </Link>
           )}
           <p className="business-data-note">
-            <Info size={15} /> Os dados operacionais são consultados no sistema
-            ERP.
+            <Info size={15} /> Soph Gestão 2.0 é uma demonstração. Os dados operacionais continuam disponíveis no ERP anterior.
           </p>
         </section>
         <section
