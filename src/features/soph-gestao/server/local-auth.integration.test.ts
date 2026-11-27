@@ -252,15 +252,16 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
   it("reads, creates and edits contacts and products in both companies without exposing or changing foreign rows", async () => {
     const tokenA = (await tokensFor(appUrl, a)).access_token;
     const tokenB = (await tokensFor(appUrl, b)).access_token;
-    const contact = { nome: "Contato fictício", tipo: "cliente", email: "teste@example.com" };
-    const product = { nome: "Produto fictício", categoria: "Teste", custo: "10.10", preco: "20.25" };
+    const contact = { nome: "Contato fictício", tipo: "cliente", email: "teste@example.com", status: "ativo" };
+    const product = { nome: "Produto fictício", categoria: "Teste", custo: "10.10", preco: "20.25", sku: "SKU-01", estoque_minimo: 4 };
     for (const [resource, input, table] of [[catalog.contacts, contact, "contatos"], [catalog.products, product, "produtos"]] as const) {
       const createdA = await resource.create({ ...request(tokenA, companyA), input: { ...input, empresa_id: companyB, quantidade: 500 } });
       const createdB = await resource.create({ ...request(tokenB, companyB), input: { ...input, empresa_id: companyA } });
       expect(createdA).toMatchObject({ status: 201, record: { empresa_id: companyA } });
       expect(createdB).toMatchObject({ status: 201, record: { empresa_id: companyB } });
       if (!("record" in createdA) || !("record" in createdB)) throw new Error("Missing fixture records");
-      if (table === "produtos") expect(createdA.record).toMatchObject({ quantidade: 0, custo: "10.10" });
+      if (table === "produtos") expect(createdA.record).toMatchObject({ quantidade: 0, custo: "10.10", sku: "SKU-01", estoque_minimo: 4 });
+      else expect(createdA.record).toMatchObject({ status: "ativo" });
 
       for (const [token, own, foreignCompany, ownRow, foreignRow] of [
         [tokenA, companyA, companyB, createdA.record, createdB.record],
@@ -278,6 +279,35 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
       expect((await erp.query(`select empresa_id, nome from public.${table} order by empresa_id`)).rows)
         .toEqual([{ empresa_id: companyA, nome: "Editado" }, { empresa_id: companyB, nome: "Editado" }]);
     }
+  });
+
+  it("preserves omitted fields and reloads saved catalog values under RLS", async () => {
+    const token = (await tokensFor(appUrl, a)).access_token;
+    const own = request(token, companyA);
+    const { rows: [legacy] } = await erp.query(
+      "insert into public.contatos (empresa_id, tipo, nome, telefone, endereco, instagram, status) values ($1,'cliente','Legado','1000','Endereço fictício','@legado_ficticio','ativo') returning id",
+      [companyA],
+    );
+    const updated = await catalog.contacts.update({
+      ...own,
+      id: legacy.id,
+      input: { tipo: "cliente", nome: "Legado atualizado", endereco: "Ignorado", instagram: null, status: "em_negociacao" },
+    });
+    expect(updated).toMatchObject({ status: 200, record: {
+      telefone: "1000", endereco: "Endereço fictício", instagram: "@legado_ficticio", status: "em_negociacao",
+    } });
+    const contacts = await catalog.contacts.list(own);
+    expect(contacts).toMatchObject({ status: 200, records: expect.arrayContaining([expect.objectContaining({
+      id: legacy.id, nome: "Legado atualizado", status: "em_negociacao",
+    })]) });
+    const productInput = { nome: "Produto persistido", categoria: "Teste", custo: "10", preco: "20" };
+    const created = await catalog.products.create({ ...own, input: { ...productInput, sku: "SKU-02", estoque_minimo: 6 } });
+    if (!("record" in created)) throw new Error("Missing fixture product");
+    const product = await catalog.products.update({ ...own, id: created.record.id, input: { ...productInput, nome: "Produto atualizado" } });
+    expect(product).toMatchObject({ status: 200, record: { sku: "SKU-02", estoque_minimo: 6, quantidade: 0 } });
+    expect(await catalog.products.list(own)).toMatchObject({ status: 200, records: expect.arrayContaining([
+      expect.objectContaining({ id: created.record.id, nome: "Produto atualizado", sku: "SKU-02", estoque_minimo: 6 }),
+    ]) });
   });
 
   it("enforces both policies even for direct SQL using the restricted test role", async () => {

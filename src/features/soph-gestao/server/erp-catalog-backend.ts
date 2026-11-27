@@ -7,7 +7,7 @@ type Result<Row extends TenantRow> =
   | { status: 200 | 201; record: Row }
   | { status: 400 | 401 | 403 | 404 | 503 };
 
-const contactFields = ["telefone", "email", "documento", "endereco", "instagram"] as const;
+const contactFields = ["telefone", "email", "documento"] as const;
 const money = /^\d{1,10}(?:\.\d{1,2})?$/;
 
 function object(value: unknown): Record<string, unknown> | null {
@@ -20,10 +20,15 @@ function normalizeContact(value: unknown): ContactInput | null {
   const contact: ContactInput = { tipo: input.tipo, nome: input.nome.trim() };
   for (const key of contactFields) {
     const field = input[key];
-    if (field == null) continue;
+    if (field === undefined) continue;
+    if (field === null) { contact[key] = null; continue; }
     if (typeof field !== "string" || field.length > 1024) return null;
     contact[key] = field.trim() || null;
   }
+  const status = input.status;
+  if (status === "ativo" || status === "em_negociacao") contact.status = status;
+  else if (status === null) contact.status = null;
+  else if (status !== undefined) return null;
   return contact;
 }
 
@@ -33,7 +38,17 @@ function normalizeProduct(value: unknown): ProductInput | null {
     || typeof input.categoria !== "string" || !input.categoria.trim() || input.categoria.length > 255
     || typeof input.custo !== "string" || !money.test(input.custo)
     || typeof input.preco !== "string" || !money.test(input.preco)) return null;
-  return { nome: input.nome.trim(), categoria: input.categoria.trim(), custo: input.custo, preco: input.preco };
+  const product: ProductInput = { nome: input.nome.trim(), categoria: input.categoria.trim(), custo: input.custo, preco: input.preco };
+  const sku = input.sku;
+  if (typeof sku === "string" && sku.length <= 255) product.sku = sku.trim() || null;
+  else if (sku === null) product.sku = null;
+  else if (sku !== undefined) return null;
+  const minimum = input.estoque_minimo;
+  if (typeof minimum === "number" && Number.isInteger(minimum) && minimum >= 0 && minimum <= 2147483647) {
+    product.estoque_minimo = minimum;
+  } else if (minimum === null) product.estoque_minimo = null;
+  else if (minimum !== undefined) return null;
+  return product;
 }
 
 export function createErpCatalogBackend(dependencies: ErpBackendDependencies<ErpCatalogReader>) {
