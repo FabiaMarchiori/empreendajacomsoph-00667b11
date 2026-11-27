@@ -64,9 +64,9 @@ const homeCards = [
     access: "ecosystem",
   },
   {
-    title: "ERP — Soph Gestão",
+    title: "Soph Gestão 2.0",
     description: "Organize sua operação, estoque e financeiro.",
-    to: "/gestao",
+    to: "/gestao/soph-gestao",
     color: "#00C83C",
     section: "home-gestao",
     access: "erp",
@@ -171,15 +171,13 @@ export default function HomePage() {
         {homeCards.map((card, index) => {
           // These labels reflect the existing hooks; destination guards remain authoritative.
           const loading =
-            card.access !== "hub" &&
-            (isLoading || (card.access === "erp" && erpLoading));
+            card.access === "erp" ? erpLoading : card.access !== "hub" && isLoading;
           const allowed =
-            card.access === "hub" ||
-            (hasEcosystemAccess && (card.access !== "erp" || hasErpAccess));
+            card.access === "erp" ? hasErpAccess : card.access === "hub" || hasEcosystemAccess;
           const status = loading
             ? "Verificando acesso"
             : !allowed
-              ? card.access === "erp" && hasEcosystemAccess
+              ? card.access === "erp"
                 ? "Módulo adicional"
                 : "Ecossistema Completo"
               : "";

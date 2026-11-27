@@ -69,9 +69,9 @@ describe("Home premium — navegação e estados reais dos hooks", () => {
       "href",
       "/estrutura/abrir-mei",
     );
-    expect(tools.getByRole("link", { name: /ERP/ })).toHaveAttribute(
+    expect(tools.getByRole("link", { name: /Soph Gestão 2.0/ })).toHaveAttribute(
       "href",
-      "/gestao",
+      "/gestao/soph-gestao",
     );
     expect(
       tools.getByRole("link", { name: /Sistema de Precificação/ }),
@@ -99,6 +99,7 @@ describe("Home premium — navegação e estados reais dos hooks", () => {
   });
   it("não anuncia liberação enquanto verifica acesso", () => {
     access.loading = true;
+    access.erpLoading = true;
     renderHome();
     expect(screen.getAllByText("Verificando acesso")).toHaveLength(8);
     expect(screen.queryByText("Ecossistema Completo")).not.toBeInTheDocument();
@@ -106,7 +107,8 @@ describe("Home premium — navegação e estados reais dos hooks", () => {
   it("indica restrições do ecossistema, preservando links para as rotas protegidas", () => {
     access.ecosystem = false;
     renderHome();
-    expect(screen.getAllByText("Ecossistema Completo")).toHaveLength(8);
+    expect(screen.getAllByText("Ecossistema Completo")).toHaveLength(7);
+    expect(screen.getByRole("link", { name: /Soph Gestão 2.0/ })).not.toHaveAttribute("aria-describedby");
     expect(
       screen.getByRole("link", { name: /Conversar com a Soph IA/ }),
     ).toHaveAttribute("href", "/soph");
