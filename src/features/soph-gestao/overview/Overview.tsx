@@ -11,6 +11,7 @@ import bagImage from "@/assets/importadoras/categories/03-bolsas-mochilas-malas.
 import perfumeImage from "@/assets/importadoras/categories/04-cosmeticos-perfumes.png";
 import brushesImage from "@/assets/importadoras/categories/08-maquiagem.png";
 import "./overview.css";
+import { financeDelta, seedSales, useDemoState } from "../screens/demo-state";
 import { ErpScreen, screenConfig, type ScreenName } from "../screens/ErpScreen";
 
 const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
@@ -114,6 +115,10 @@ export default function Overview() {
   const screen = area ? screenConfig[area] : null;
   const ScreenIcon = screen?.icon ?? ChartNoAxesColumnIncreasing;
   const [empty, setEmpty] = useState(false);
+  const demo = useDemoState();
+  const { paid: extraPaid, received: extraReceived, receivable: pendingValue, receivableCount } = financeDelta(demo.entries);
+  const revenueDelta = demo.orders.reduce((sum, sale) => sum + sale.value, 0) - seedSales.reduce((sum, sale) => sum + sale.value, 0);
+  const demoMetricValues = [62450 + revenueDelta, 24160 + extraPaid, 38290 + revenueDelta + extraReceived - extraPaid, 11580 + pendingValue];
   const [detail, setDetail] = useState<string | null>(null);
 
   return <div className={`sg-overview${area ? " sg-inner-screen" : ""}`} id="visao-geral">
@@ -147,13 +152,13 @@ export default function Overview() {
         </div>
       </header>
 
-      {area ? <ErpScreen key={area} area={area} empty={empty} onPeriodChange={setEmpty} /> : <>
+      {area ? <ErpScreen key={area} area={area} empty={empty} onPeriodChange={setEmpty} demo={demo} /> : <>
       <section className="sg-metrics" aria-label="Indicadores do período">
-        {metrics.map(({ label, value, change, icon: Icon, color }) => <article key={label} className={`sg-metric sg-${color}`}>
+        {metrics.map(({ label, change, icon: Icon, color }, index) => <article key={label} className={`sg-metric sg-${color}`}>
           <Icon className="sg-metric-icon" aria-hidden="true" />
-          <div><h2>{label}</h2><strong>{money.format(empty ? 0 : value)}</strong>
+          <div><h2>{label}</h2><strong>{money.format(empty ? 0 : demoMetricValues[index])}</strong>
             {change ? <p>{empty ? "Sem movimentações" : <><b>▲ {change}</b> vs. mês anterior</>}</p>
-              : <p>{empty ? "0" : "8"} recebimentos pendentes</p>}
+              : <p>{empty ? "0" : 8 + receivableCount} recebimentos pendentes</p>}
           </div>
           {change && !empty && <svg className="sg-sparkline" viewBox="0 0 72 47" aria-hidden="true"><path d="M0 45 24 18Q27 14 30 16L42 24Q45 27 48 22L64 2H72" /></svg>}
         </article>)}
@@ -177,7 +182,7 @@ export default function Overview() {
 
         <section className="sg-panel sg-summary" aria-labelledby="sg-summary-title">
           <h2 id="sg-summary-title"><Target /><span>Resumo<br /> do período</span></h2>
-          {[["Vendas", empty ? "0" : "128"], ["Ticket médio", money.format(empty ? 0 : 488.67)], ["Produtos vendidos", empty ? "0" : "384"]].map(([label, value]) =>
+          {[["Vendas", empty ? "0" : String(128 + demo.orders.length - seedSales.length)], ["Ticket médio", money.format(empty ? 0 : 488.67 + (62450 + revenueDelta) / (128 + demo.orders.length - seedSales.length) - 62450 / 128)], ["Produtos vendidos", empty ? "0" : String(384 + demo.orders.reduce((sum, sale) => sum + sale.items, 0) - seedSales.reduce((sum, sale) => sum + sale.items, 0))]].map(([label, value]) =>
             <div key={label}><span>{label}</span><strong>{value}</strong></div>)}
         </section>
 
