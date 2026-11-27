@@ -11,10 +11,10 @@ export type ErpCompanyReader = {
 
 // A future implementation must bind the verified identity and requested company
 // to one transaction and apply RLS on every read.
-export interface ErpDataAdapter {
+export interface ErpDataAdapter<Reader extends ErpCompanyReader = ErpCompanyReader> {
   withCompanyScope<T>(
     identity: ErpIdentity,
     companyId: string,
-    read: (reader: ErpCompanyReader) => Promise<T>,
+    read: (reader: Reader) => Promise<T>,
   ): Promise<T>;
 }
