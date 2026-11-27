@@ -5,3 +5,7 @@ verify_jwt = false
 
 [functions.lookup-subscription]
 verify_jwt = false
+
+[functions.soph-gestao-preview]
+# A função valida o token no Auth do projeto antes de autorizar o acesso.
+verify_jwt = false
