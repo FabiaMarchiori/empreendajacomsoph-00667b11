@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  ArrowRight, Bell, CalendarDays, CalendarClock, ChartNoAxesColumnIncreasing,
+  ArrowLeft, ArrowRight, Bell, CalendarDays, CalendarClock, ChartNoAxesColumnIncreasing,
   ChevronDown, ChevronRight, CircleAlert, Coins, CreditCard, Database, HandCoins, Headset,
   House, Package, PieChart, ReceiptText, ShoppingCart,
   Store, Target, UserRound, UsersRound, Wallet, Zap,
@@ -132,6 +132,10 @@ export default function Overview() {
     </aside>
 
     <main className="sg-main" key={area ?? "overview"}>
+      <Link className="sg-return" to={area ? rootPath : "/"}>
+        <ArrowLeft size={16} aria-hidden="true" />
+        {area ? "Voltar" : "Voltar ao EmpreendaJá"}
+      </Link>
       <header className="sg-header">
         <div className="sg-mobile-brand"><Brand /></div>
         <div className="sg-welcome"><ScreenIcon aria-hidden="true" /><div>

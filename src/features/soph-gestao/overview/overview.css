@@ -77,6 +77,22 @@
 .sg-company small { display: block; color: var(--cyan); font-size: .73em; white-space: nowrap; }
 .sg-help svg { width: 1.4em; }
 .sg-main { min-width: 0; padding: clamp(19px, 2.5vw, 47px) clamp(12px, 1.1vw, 20px) clamp(18px, 5.5vh, 85px); }
+.sg-return {
+  display: inline-flex;
+  align-items: center;
+  gap: .55em;
+  min-height: 44px;
+  padding: .35em .75em;
+  margin-bottom: .55em;
+  border: 1px solid #22657b;
+  border-radius: .65em;
+  color: #c7e3ed;
+  background: #0b293a;
+  font-size: max(.85em, 13px);
+  font-weight: 600;
+}
+.sg-return:hover { color: #08eff7; }
+.sg-return:focus-visible { outline: 2px solid #08eff7; outline-offset: 2px; }
 .sg-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 0 8px 0 2.4%; min-height: 5.4em; margin-bottom: 10px; }
 .sg-welcome { display: flex; align-items: center; gap: 13px; }
 .sg-welcome > svg, .sg-mobile-brand, .sg-mobile-nav { display: none; }
