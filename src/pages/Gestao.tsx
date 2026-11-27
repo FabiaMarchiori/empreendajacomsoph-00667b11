@@ -12,7 +12,7 @@ import {
   Loader2,
   Info,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useState } from "react";
 import { useErpEntry } from "@/hooks/useErpEntry";
@@ -27,6 +27,8 @@ import {
   SophAccess,
   ToolIllustration,
 } from "@/components/business/BusinessVisuals";
+
+import { useSophGestaoPreview } from "@/features/soph-gestao/access/PreviewAccess";
 
 const faqs = [
   {
@@ -53,6 +55,7 @@ export default function GestaoPage() {
   const { enterErp, isLoading: erpLoading } = useErpEntry();
   const { hasErpAccess, isLoading: accessLoading } = useErpAccess();
   const { user } = useAuth();
+  const previewAccess = useSophGestaoPreview();
 
   const { data: simulations } = useQuery({
     queryKey: ["pricing_simulations_dashboard", user?.id],
@@ -203,6 +206,11 @@ export default function GestaoPage() {
               )}
             </button>
           </div>
+          {previewAccess === "allowed" && (
+            <Link to="/gestao/soph-gestao" className="business-action">
+              Abrir Soph Gestão 2.0 (demonstração) <ArrowRight size={18} />
+            </Link>
+          )}
           <p className="business-data-note">
             <Info size={15} /> Os dados operacionais são consultados no sistema
             ERP.

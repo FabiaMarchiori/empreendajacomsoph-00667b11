@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -49,6 +50,10 @@ import { LegalLayout } from "./legal/LegalLayout";
 import NotFound from "./pages/NotFound";
 import ObrigadoPage from "./pages/Obrigado";
 
+import { SophGestaoPreviewAccess } from "./features/soph-gestao/access/PreviewAccess";
+
+const SophGestaoOverview = lazy(() => import("./features/soph-gestao/overview/Overview"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -72,6 +77,9 @@ const App = () => (
               <Route path="/cancelamento-reembolso" element={<CancelamentoReembolsoPage />} />
               <Route path="/aviso-soph-ia" element={<AvisoSophIaPage />} />
             </Route>
+            <Route path="/gestao/soph-gestao/*" element={
+              <SophGestaoPreviewAccess><Suspense fallback={<p role="status">Carregando Visão Geral…</p>}><SophGestaoOverview /></Suspense></SophGestaoPreviewAccess>
+            } />
             <Route element={<AppLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/fornecedores" element={<FornecedoresPage />} />

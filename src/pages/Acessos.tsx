@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useNavigate } from "react-router-dom";
+import { useSophGestaoPreview } from "@/features/soph-gestao/access/PreviewAccess";
 import sophAvatar from "@/assets/soph-avatar.png";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.04 } } };
@@ -100,6 +101,8 @@ function GridCard({ item: a, isPrimary }: { item: AccessItem; isPrimary?: boolea
 }
 
 export default function AcessosPage() {
+  const erpDemoAvailable = useSophGestaoPreview() === "allowed";
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-6 sm:space-y-8">
       {/* ── HERO ── */}
@@ -112,7 +115,7 @@ export default function AcessosPage() {
           Tudo o que está incluído no seu acesso, brindes exclusivos e os próximos módulos do ecossistema.
         </p>
         <div className="flex flex-wrap gap-2 pt-1">
-          {["Produto Principal", "8 Brindes", "Novos Módulos em Breve"].map(t => (
+          {["Produto Principal", `${brindes.length + (erpDemoAvailable ? 1 : 0)} Brindes`, "Novos Módulos em Breve"].map(t => (
             <span key={t} className="px-3 py-1 rounded-full text-[11px] font-semibold border text-white" style={{ borderColor: "rgba(0,239,255,0.25)", background: "rgba(0,239,255,0.08)" }}>{t}</span>
           ))}
         </div>
@@ -137,6 +140,15 @@ export default function AcessosPage() {
           {brindes.map(a => (
             <GridCard key={a.title} item={a} />
           ))}
+          {erpDemoAvailable && (
+            <GridCard item={{
+              title: "Soph Gestão 2.0",
+              description: "Demonstração com dados fictícios",
+              status: "brinde",
+              icon: <Database className="h-5 w-5" />,
+              route: "/gestao/soph-gestao",
+            }} />
+          )}
         </motion.div>
       </section>
 
