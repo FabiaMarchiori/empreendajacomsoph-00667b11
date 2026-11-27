@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   ArrowRight, Bell, CalendarDays, CalendarClock, ChartNoAxesColumnIncreasing,
   ChevronDown, ChevronRight, CircleAlert, Coins, CreditCard, Database, HandCoins, Headset,
@@ -11,6 +11,7 @@ import bagImage from "@/assets/importadoras/categories/03-bolsas-mochilas-malas.
 import perfumeImage from "@/assets/importadoras/categories/04-cosmeticos-perfumes.png";
 import brushesImage from "@/assets/importadoras/categories/08-maquiagem.png";
 import "./overview.css";
+import { ErpScreen, screenConfig, type ScreenName } from "../screens/ErpScreen";
 
 const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const metrics = [
@@ -26,11 +27,11 @@ const actions = [
   { label: "Consultar recebimentos", icon: Coins, color: "purple" },
 ];
 const navigation = [
-  { label: "Visão Geral", icon: House },
-  { label: "Vendas", icon: ShoppingCart },
-  { label: "Produtos e Estoque", short: "Produtos", icon: Package },
-  { label: "Financeiro", icon: Wallet },
-  { label: "Contatos", icon: UsersRound },
+  { label: "Visão Geral", slug: "", icon: House },
+  { label: "Vendas", slug: "vendas", icon: ShoppingCart },
+  { label: "Produtos e Estoque", slug: "produtos-estoque", short: "Produtos", icon: Package },
+  { label: "Financeiro", slug: "financeiro", icon: Wallet },
+  { label: "Contatos", slug: "contatos", icon: UsersRound },
 ];
 const months = [
   { name: "Jun", income: 32000, expense: 16000 }, { name: "Jul", income: 36000, expense: 18000 },
@@ -66,11 +67,14 @@ function Brand() {
   </div></div>;
 }
 
-function OverviewNav({ mobile, onSelect }: { mobile?: boolean; onSelect: (label: string) => void }) {
+const rootPath = "/gestao/soph-gestao";
+
+function OverviewNav({ mobile, current }: { mobile?: boolean; current: string }) {
   return <nav aria-label={mobile ? "Menu inferior do Soph Gestão" : "Menu do Soph Gestão"} className={mobile ? "sg-mobile-nav" : "sg-desktop-nav"}>
-    {navigation.map(({ label, short, icon: Icon }, index) => index === 0
-      ? <a key={label} href="#visao-geral" aria-current="page"><Icon aria-hidden="true" /><span>{label}</span></a>
-      : <button key={label} type="button" onClick={() => onSelect(label)}><Icon aria-hidden="true" /><span>{mobile ? short ?? label : label}</span></button>)}
+    {navigation.map(({ label, short, slug, icon: Icon }) =>
+      <Link key={label} to={slug ? `${rootPath}/${slug}` : rootPath} aria-current={slug === current ? "page" : undefined}>
+        <Icon aria-hidden="true" /><span>{mobile ? short ?? label : label}</span>
+      </Link>)}
   </nav>;
 }
 
@@ -104,24 +108,29 @@ function CategoryChart({ empty }: { empty: boolean }) {
 }
 
 export default function Overview() {
+  const { pathname } = useLocation();
+  const slug = pathname.slice(rootPath.length + 1).replace(/\/$/, "");
+  const area = Object.prototype.hasOwnProperty.call(screenConfig, slug) ? slug as ScreenName : null;
+  const screen = area ? screenConfig[area] : null;
+  const ScreenIcon = screen?.icon ?? ChartNoAxesColumnIncreasing;
   const [empty, setEmpty] = useState(false);
   const [detail, setDetail] = useState<string | null>(null);
 
-  return <div className="sg-overview" id="visao-geral">
+  return <div className={`sg-overview${area ? " sg-inner-screen" : ""}`} id="visao-geral">
     <aside className="sg-sidebar">
       <Brand />
-      <OverviewNav onSelect={setDetail} />
+      <OverviewNav current={area ?? ""} />
       <div className="sg-sidebar-footer">
         <button className="sg-panel sg-company" onClick={() => setDetail("Minha Empresa")}><Store /><span><strong>Minha Empresa</strong><small>CNPJ: 00.000.000/0001-00</small></span><ChevronDown /></button>
         <button className="sg-panel sg-help" onClick={() => setDetail("Ajuda e Suporte")}><Headset />Ajuda e Suporte</button>
       </div>
     </aside>
 
-    <main className="sg-main">
+    <main className="sg-main" key={area ?? "overview"}>
       <header className="sg-header">
         <div className="sg-mobile-brand"><Brand /></div>
-        <div className="sg-welcome"><ChartNoAxesColumnIncreasing aria-hidden="true" /><div>
-          <h1>Olá, empreendedora!</h1><p>Aqui está o resumo do seu negócio hoje.</p>
+        <div className="sg-welcome"><ScreenIcon aria-hidden="true" /><div>
+          <h1>{screen?.title ?? "Olá, empreendedora!"}</h1><p>{screen?.subtitle ?? "Aqui está o resumo do seu negócio hoje."}</p>
         </div></div>
         <div className="sg-tools">
           <label className="sg-period">
@@ -130,7 +139,7 @@ export default function Overview() {
             <select aria-label="Período" value={empty ? "empty" : "current"} onChange={(event) => setEmpty(event.target.value === "empty")}>
               <option value="current">Este mês</option><option value="empty">Mês anterior</option>
             </select>
-            {!empty && <span className="sg-period-dates" aria-hidden="true">(01 a 30 nov)</span>}
+            {!empty && !area && <span className="sg-period-dates" aria-hidden="true">(01 a 30 nov)</span>}
             <ChevronDown aria-hidden="true" />
           </label>
           <button className="sg-round sg-bell" aria-label="Notificações" onClick={() => setDetail("Notificações")}><Bell /></button>
@@ -138,6 +147,7 @@ export default function Overview() {
         </div>
       </header>
 
+      {area ? <ErpScreen key={area} area={area} empty={empty} onPeriodChange={setEmpty} /> : <>
       <section className="sg-metrics" aria-label="Indicadores do período">
         {metrics.map(({ label, value, change, icon: Icon, color }) => <article key={label} className={`sg-metric sg-${color}`}>
           <Icon className="sg-metric-icon" aria-hidden="true" />
@@ -180,8 +190,9 @@ export default function Overview() {
           </div>
         </section>
       </div>
+      </>}
     </main>
-    <OverviewNav mobile onSelect={setDetail} />
+    <OverviewNav mobile current={area ?? ""} />
     <Dialog open={detail !== null} onOpenChange={(open) => { if (!open) setDetail(null); }}>
       <DialogContent>
         <DialogHeader>

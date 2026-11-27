@@ -76,7 +76,7 @@ const App = () => (
               <Route path="/cancelamento-reembolso" element={<CancelamentoReembolsoPage />} />
               <Route path="/aviso-soph-ia" element={<AvisoSophIaPage />} />
             </Route>
-            <Route path="/gestao/soph-gestao" element={
+            <Route path="/gestao/soph-gestao/*" element={
               <ProtectedRoute><Suspense fallback={<p role="status">Carregando Visão Geral…</p>}><SophGestaoOverview /></Suspense></ProtectedRoute>
             } />
             <Route element={<AppLayout />}>
