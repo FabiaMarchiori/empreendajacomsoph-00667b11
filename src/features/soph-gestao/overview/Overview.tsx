@@ -180,8 +180,8 @@ export default function Overview() {
           </div>
         </section>
       </div>
-      <OverviewNav mobile onSelect={setDetail} />
     </main>
+    <OverviewNav mobile onSelect={setDetail} />
     <Dialog open={detail !== null} onOpenChange={(open) => { if (!open) setDetail(null); }}>
       <DialogContent>
         <DialogHeader>
