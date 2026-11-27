@@ -208,7 +208,7 @@ export default function GestaoPage() {
           </div>
           {previewAccess === "allowed" && (
             <Link to="/gestao/soph-gestao" className="business-action">
-              Abrir prévia do Soph Gestão 2.0 <ArrowRight size={18} />
+              Abrir Soph Gestão 2.0 (demonstração) <ArrowRight size={18} />
             </Link>
           )}
           <p className="business-data-note">
