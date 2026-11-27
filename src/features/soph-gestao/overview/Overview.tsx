@@ -151,6 +151,7 @@ export default function Overview() {
           <Link className="sg-round" aria-label="Minha conta do EmpreendaJá" to="/conta"><UserRound /></Link>
         </div>
       </header>
+      <p className="sg-demo-notice">Modo demonstração. Os dados são fictícios e os cadastros e alterações são descartados ao sair ou recarregar.</p>
 
       {area ? <ErpScreen key={area} area={area} empty={empty} onPeriodChange={setEmpty} demo={demo} /> : <>
       <section className="sg-metrics" aria-label="Indicadores do período">

@@ -10,11 +10,12 @@ import { useErpAccess } from "@/hooks/useErpAccess";
  */
 export function useSophGestaoPreview() {
   const { user, loading } = useAuth();
-  const { hasErpAccess, isLoading } = useErpAccess();
+  const { hasErpAccess, isLoading, isError } = useErpAccess();
 
   if (loading) return "loading";
   if (!user) return "signed-out";
   if (isLoading) return "loading";
+  if (isError) return "unavailable";
   return hasErpAccess ? "allowed" : "denied";
 }
 
@@ -23,10 +24,10 @@ export function SophGestaoPreviewAccess({ children }: { children: ReactNode }) {
 
   if (access === "signed-out") return <Navigate to="/login" replace />;
   if (access === "loading") return <p role="status">Verificando acesso ao Soph Gestão 2.0…</p>;
-  if (access === "denied") {
+  if (access === "denied" || access === "unavailable") {
     return (
       <main className="mx-auto max-w-lg space-y-4 p-6">
-        <h1 className="text-xl font-bold">Acesso ao Soph Gestão 2.0 não disponível para seu plano</h1>
+        <h1 className="text-xl font-bold">{access === "unavailable" ? "Não foi possível verificar o acesso ao Soph Gestão 2.0" : "Soph Gestão 2.0 disponível para quem tem o benefício ERP"}</h1>
         <Link to="/gestao" className="underline">Voltar à Gestão do EmpreendaJá</Link>
       </main>
     );
