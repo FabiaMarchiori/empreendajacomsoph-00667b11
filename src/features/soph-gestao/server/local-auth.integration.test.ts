@@ -2,8 +2,10 @@ import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { Pool, type PoolClient } from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createErpBackend, type VerifiedSession } from "./erp-backend";
+import { createErpBackend, type ErpBackendDependencies, type VerifiedSession } from "./erp-backend";
 import type { ErpDataAdapter, ErpIdentity } from "./erp-data";
+import { createErpCatalogBackend } from "./erp-catalog-backend";
+import { createErpCatalogDataAdapter, type ErpCatalogScope } from "./erp-catalog-data";
 
 const companyA = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
 const companyB = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb";
@@ -88,7 +90,7 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
   let backend: ReturnType<typeof createErpBackend>;
   let verifySession: ReturnType<typeof localVerifier>;
   let verifyForeign: ReturnType<typeof localVerifier>;
-  let data: ErpDataAdapter;
+  let catalog: ReturnType<typeof createErpCatalogBackend>;
 
   beforeAll(async () => {
     const loopback = /^http:\/\/127\.0\.0\.1:\d{1,5}$/;
@@ -122,6 +124,7 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
     // Synthetic provisioning only. The request path opens its own restricted login.
     await erp.query(`create role soph_local_reader login nobypassrls password '${readerPassword}'`);
     await erp.query(readFileSync(new URL("../../../../tests/soph-gestao/integration/erp-fixture.sql", import.meta.url), "utf8"));
+    await erp.query(readFileSync(new URL("../../../../tests/soph-gestao/integration/catalog-fixture.sql", import.meta.url), "utf8"));
     await erp.query("insert into soph_fixture.companies values ($1, 'Empresa A'), ($2, 'Empresa B')", [companyA, companyB]);
     await erp.query("insert into soph_fixture.ownership values ($1, $3, $4, true), ($2, $3, $5, true)", [companyA, companyB, issuer, a.id, b.id]);
     reader = new Pool({ ...database, port, user: "soph_local_reader", password: readerPassword, max: 1 });
@@ -136,9 +139,13 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
     benefitReader = new Pool({ ...database, port: appPort, user: "soph_benefit_reader", password: benefitPassword });
     verifySession = localVerifier(appSecret, issuer);
     verifyForeign = localVerifier(erpSecret, erpIssuer);
-    data = {
+    const data: ErpDataAdapter<ErpCatalogScope> = {
       async withCompanyScope(identity, companyId, read) {
         return scoped(identity, companyId, async (client) => read({
+          async query<Row>(sql: string, parameters: readonly (string | null)[]) {
+            const result = await client.query(sql, [...parameters]);
+            return { rows: result.rows as Row[] };
+          },
           async findOwnership() {
             const { rows } = await client.query(`select company_id as "companyId", owner_user_id as "ownerUserId", active
                from soph_fixture.ownership where company_id = $1`, [companyId]);
@@ -148,11 +155,11 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
             const { rows } = await client.query("select id, name from soph_fixture.companies where id = $1", [companyId]);
             return rows[0] ?? null;
           },
-        }));
+        }), true);
       },
     };
 
-    backend = createErpBackend({
+    const dependencies: ErpBackendDependencies<ErpCatalogScope> = {
       issuer, audience, nowMs: Date.now, verifySession, data,
       async findBenefit({ userId }) {
         const { rows } = await benefitReader.query("select expires_at, revoked_at from public.soph_local_benefits where user_id = $1", [userId]);
@@ -162,17 +169,19 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
           revokedAtMs: row.revoked_at?.getTime() ?? null,
         } : null;
       },
-    });
+    };
+    backend = createErpBackend(dependencies);
+    catalog = createErpCatalogBackend({ ...dependencies, data: createErpCatalogDataAdapter(data) });
   }, 20000);
 
   afterAll(async () => {
     await Promise.all([reader?.end(), benefitReader?.end(), app?.end(), erp?.end()]);
   });
 
-  async function scoped<T>(identity: ErpIdentity, company: string, use: (client: PoolClient) => Promise<T>) {
+  async function scoped<T>(identity: ErpIdentity, company: string, use: (client: PoolClient) => Promise<T>, write = false) {
     const client = await reader.connect();
     try {
-      await client.query("begin read only");
+      await client.query(write ? "begin" : "begin read only");
       await client.query("select set_config('soph.issuer', $1, true), set_config('soph.subject', $2, true), set_config('soph.company', $3, true)", [identity.issuer, identity.userId, company]);
       const result = await use(client);
       await client.query("commit");
@@ -238,6 +247,67 @@ describe.skipIf(process.env.SOPH_RUN_LOCAL_AUTH !== "1")("Soph Gestão with disp
       await erp.query("grant select on soph_fixture.ownership to soph_local_reader");
     }
     expect((await backend.readCompany(request(token, companyB))).status).toBe(200);
+  });
+
+  it("reads, creates and edits contacts and products in both companies without exposing or changing foreign rows", async () => {
+    const tokenA = (await tokensFor(appUrl, a)).access_token;
+    const tokenB = (await tokensFor(appUrl, b)).access_token;
+    const contact = { nome: "Contato fictício", tipo: "cliente", email: "teste@example.com" };
+    const product = { nome: "Produto fictício", categoria: "Teste", custo: "10.10", preco: "20.25" };
+    for (const [resource, input, table] of [[catalog.contacts, contact, "contatos"], [catalog.products, product, "produtos"]] as const) {
+      const createdA = await resource.create({ ...request(tokenA, companyA), input: { ...input, empresa_id: companyB, quantidade: 500 } });
+      const createdB = await resource.create({ ...request(tokenB, companyB), input: { ...input, empresa_id: companyA } });
+      expect(createdA).toMatchObject({ status: 201, record: { empresa_id: companyA } });
+      expect(createdB).toMatchObject({ status: 201, record: { empresa_id: companyB } });
+      if (!("record" in createdA) || !("record" in createdB)) throw new Error("Missing fixture records");
+      if (table === "produtos") expect(createdA.record).toMatchObject({ quantidade: 0, custo: "10.10" });
+
+      for (const [token, own, foreignCompany, ownRow, foreignRow] of [
+        [tokenA, companyA, companyB, createdA.record, createdB.record],
+        [tokenB, companyB, companyA, createdB.record, createdA.record],
+      ] as const) {
+        expect(await resource.list(request(token, own))).toEqual({ status: 200, records: [ownRow], next: null });
+        expect(await resource.list(request(token, foreignCompany))).toEqual({ status: 403 });
+        expect(await resource.create({ ...request(token, foreignCompany), input })).toEqual({ status: 403 });
+        expect(await resource.update({ ...request(token, own), id: foreignRow.id, input })).toEqual({ status: 404 });
+        expect(await resource.update({ ...request(token, own), id: "dddddddd-dddd-dddd-dddd-dddddddddddd", input })).toEqual({ status: 404 });
+        expect(await resource.update({ ...request(token, own), id: ownRow.id, input: { ...input, nome: "Editado", empresa_id: foreignCompany, quantidade: 500 } }))
+          .toMatchObject({ status: 200, record: { id: ownRow.id, empresa_id: own, nome: "Editado" } });
+      }
+      expect(await resource.list({ ...request(tokenA, companyA), after: createdA.record.id })).toEqual({ status: 200, records: [], next: null });
+      expect((await erp.query(`select empresa_id, nome from public.${table} order by empresa_id`)).rows)
+        .toEqual([{ empresa_id: companyA, nome: "Editado" }, { empresa_id: companyB, nome: "Editado" }]);
+    }
+  });
+
+  it("enforces both policies even for direct SQL using the restricted test role", async () => {
+    for (const [table, insert, values] of [
+      ["contatos", "insert into public.contatos (empresa_id, tipo, nome) values ($1, 'cliente', 'bloqueado')", [companyB]],
+      ["produtos", "insert into public.produtos (empresa_id, nome) values ($1, 'bloqueado')", [companyB]],
+    ] as const) {
+      const scope = (query: (client: PoolClient) => Promise<unknown>) => scoped({ issuer, userId: a.id }, companyA, query, true);
+      await expect(scope((client) => client.query(insert, [...values]))).rejects.toMatchObject({ code: "42501" });
+      expect(await scope(async (client) => (await client.query(`select id from public.${table} where empresa_id=$1`, [companyB])).rows)).toEqual([]);
+      expect(await scope(async (client) => (await client.query(`update public.${table} set nome='bloqueado' where empresa_id=$1`, [companyB])).rowCount)).toBe(0);
+      await expect(scope((client) => client.query(`update public.${table} set empresa_id=$1 where empresa_id=$2`, [companyB, companyA]))).rejects.toMatchObject({ code: "42501" });
+    }
+  });
+
+  it("blocks catalog operations for invalid sessions, invalid input, and expired ERP benefits", async () => {
+    const token = (await tokensFor(appUrl, a)).access_token;
+    const own = request(token, companyA);
+    const input = { nome: "Teste", categoria: "Teste", custo: "0", preco: "1.30" };
+    expect(await catalog.products.create({ ...request("invalid", companyA), input })).toEqual({ status: 401 });
+    expect(await catalog.products.create({ ...own, input: { ...input, preco: 1.30 } })).toEqual({ status: 400 });
+    expect(await catalog.contacts.list({ ...own, after: "invalid" })).toEqual({ status: 400 });
+    await app.query("update public.soph_local_benefits set expires_at=now() where user_id=$1", [a.id]);
+    try {
+      expect(await catalog.contacts.list(own)).toEqual({ status: 403 });
+      expect(await catalog.products.create({ ...own, input })).toEqual({ status: 403 });
+      expect(await catalog.contacts.update({ ...own, id: companyA, input: { nome: "Teste", tipo: "cliente" } })).toEqual({ status: 403 });
+    } finally {
+      await app.query("update public.soph_local_benefits set expires_at=now()+interval '10 minutes' where user_id=$1", [a.id]);
+    }
   });
 
   it("revokes refresh on logout and rejects the access token once it expires", async () => {
