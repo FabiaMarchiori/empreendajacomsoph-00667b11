@@ -126,3 +126,12 @@
   .sg-finance-record { grid-template-columns: auto minmax(0, 1fr); }
   .sg-finance-record > span:nth-child(3) { grid-column: 2; justify-items: start; }
 }
+.sg-demo-dialog :is(input, select) { min-width: 0; width: 100%; background: #05273a; padding: .55em; border: 1px solid #6a91a7; border-radius: 7px; color: white; }
+.sg-demo-dialog select option { background: #05273a; color: white; }
+.sg-demo-fields, .sg-demo-item { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55em .75em; }
+.sg-demo-items { display: grid; gap: .6em; border: 1px solid #1a5870; padding: .65em; border-radius: 10px; min-width: 0; }
+.sg-demo-items legend { font-weight: 700; padding-inline: .25em; }
+.sg-demo-item > label:first-child { grid-column: 1 / -1; }
+.sg-demo-buttons { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .55em; }
+.sg-demo-error { color: #ff9aa8; }
+.sg-demo-dialog :is(button,input,select):focus-visible { outline: 2px solid #08eff7; outline-offset: 2px; }
