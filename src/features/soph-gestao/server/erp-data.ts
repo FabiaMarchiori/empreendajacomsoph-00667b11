@@ -1,4 +1,4 @@
-import type { VerifiedErpContext } from "../access/access-contract";
+import type { VerifiedErpContext } from "../access/access-contract.ts";
 
 export type ErpIdentity = Readonly<{ issuer: string; userId: string }>;
 
