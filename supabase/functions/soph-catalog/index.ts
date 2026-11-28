@@ -12,7 +12,8 @@ import { Pool, type PoolClient } from "npm:pg@8.16.3";
 import { createErpCatalogBackend } from "../../../src/features/soph-gestao/server/erp-catalog-backend.ts";
 import { createErpCatalogDataAdapter, type ErpCatalogScope } from "../../../src/features/soph-gestao/server/erp-catalog-data.ts";
 import type { ErpDataAdapter, ErpIdentity } from "../../../src/features/soph-gestao/server/erp-data.ts";
-import type { VerifiedSession } from "../../../src/features/soph-gestao/server/erp-backend.ts";
+import { authorizeErpOperation, type VerifiedSession } from "../../../src/features/soph-gestao/server/erp-backend.ts";
+import { createSalesFinanceBackend } from "../../../src/features/soph-gestao/server/erp-sales-finance.ts";
 
 const APP_URL = "https://ospnuclymrxjoqwyolfn.supabase.co";
 const ISSUER = APP_URL + "/auth/v1";
@@ -151,7 +152,7 @@ export async function handler(req: Request): Promise<Response> {
   } catch { return reply(400,{error:"INVALID_BODY"}); }
   const resource = body.resource;
   const action = body.action;
-  if (resource !== "scope" && resource !== "contacts" && resource !== "products") return reply(400,{error:"INVALID_RESOURCE"});
+  if (resource !== "scope" && resource !== "contacts" && resource !== "products" && resource !== "sales" && resource !== "finance") return reply(400,{error:"INVALID_RESOURCE"});
   if (!["GET","POST","PATCH"].includes(String(action))) return reply(400,{error:"INVALID_ACTION"});
   if (resource === "scope" && action !== "GET") return reply(405,{error:"METHOD_NOT_ALLOWED"});
 
@@ -188,6 +189,30 @@ export async function handler(req: Request): Promise<Response> {
         : null,
       data: createErpCatalogDataAdapter(dataAdapter()),
     };
+    if (resource === "sales" || resource === "finance") {
+      const operations = createSalesFinanceBackend();
+      const run = authorizeErpOperation({ ...dependencies, data: dataAdapter() });
+      const request = { authorization: `Bearer ${token}`, companyId };
+      if (action === "GET") {
+        const result = await run(request, "read", async reader =>
+          resource === "sales"
+            ? operations.salesList(reader, companyId, typeof body.after === "string" ? body.after : undefined)
+            : operations.financeList(reader, companyId, typeof body.after === "string" ? body.after : undefined));
+        return reply(result.status, result);
+      }
+      if (action === "POST") {
+        if (!body.input || typeof body.input !== "object" || Array.isArray(body.input)) return reply(400, {error:"INVALID_INPUT"});
+        const result = await run(request, "write", async reader =>
+          resource === "sales"
+            ? operations.salesCreate(reader, companyId, body.input)
+            : operations.financeCreate(reader, companyId, body.input));
+        return reply(result.status, result);
+      }
+      if (resource !== "finance") return reply(405, {error:"METHOD_NOT_ALLOWED"});
+      const result = await run(request, "write", async reader =>
+        operations.financeSettle(reader, companyId, body.id));
+      return reply(result.status, result);
+    }
     const catalog = createErpCatalogBackend(dependencies);
     const endpoint = resource === "contacts" ? catalog.contacts : catalog.products;
     const request = { authorization: `Bearer ${token}`, companyId };
