@@ -1,7 +1,8 @@
 /**
- * Soph Gestão 2.0 catalog API. Deployed as a Netlify Function, never bundled into Vite.
- * Required server-only environment variables:
- * SOPH_APP_SUPABASE_ANON_KEY (the publishable/anon key of the fixed EmpreendaJá project)
+ * Soph Gestão 2.0 catalog API. Hosted by Supabase Edge Functions,
+ * independent of the frontend host (Netlify, Vercel, etc.).
+ * Server-only environment variables:
+ * SUPABASE_ANON_KEY (automatically supplied by the EmpreendaJá Supabase project)
  * SOPH_ERP_CATALOG_DATABASE_URL (Postgres URL for soph_catalogo_transport, NOT postgres/service_role)
  * The transport role has NO password until provisioned separately.
  */
@@ -18,7 +19,6 @@ const ISSUER = APP_URL + "/auth/v1";
 const AUDIENCE = "authenticated";
 const ERP_PROJECT = "qdfjujkfclfoojjofgpq";
 const uuid = /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i;
-const allowedResources = new Set(["scope", "contacts", "products"]);
 const corsHeaders = {
   "Content-Type": "application/json; charset=utf-8",
   "Cache-Control": "no-store, max-age=0",
@@ -201,7 +201,7 @@ export async function handler(req: Request): Promise<Response> {
         result = await endpoint.create({ ...request, input });
       } else {
         const id = body.id;
-        if (!id || !uuid.test(id)) return reply(400, { error: "INVALID_ID" });
+        if (typeof id !== "string" || !uuid.test(id)) return reply(400, { error: "INVALID_ID" });
         result = await endpoint.update({ ...request, id: id as string, input });
       }
     }
