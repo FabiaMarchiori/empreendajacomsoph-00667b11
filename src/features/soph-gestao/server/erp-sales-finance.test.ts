@@ -84,10 +84,10 @@ describe("Soph Gestão sales / finance input contracts", () => {
     expect(queries.find(q=>q.sql.includes("update public.produtos"))?.params).toEqual(["2",product,companyA]);
   });
   it("refuses settling another company's entry", async () => {
-    const calls: readonly (string|null)[][]=[];
+    const calls: Array<readonly (string|null)[]> = [];
     const db={
       query:async (_sql:string,params:readonly (string|null)[])=> {
-        (calls as (readonly (string|null)[][]).push(params);
+        calls.push(params);
         return {rows:[]};
       },findOwnership:async()=>null,readCompany:async()=>null,
     } as ErpCatalogScope;
