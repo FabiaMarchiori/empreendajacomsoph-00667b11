@@ -29,6 +29,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      - run: deno install --entrypoint supabase/functions/soph-catalog/index.ts
       - run: deno check supabase/functions/soph-catalog/index.ts
       - run: npm test -- src/features/soph-gestao
       - run: bash tests/soph-gestao/integration/run-local.sh
