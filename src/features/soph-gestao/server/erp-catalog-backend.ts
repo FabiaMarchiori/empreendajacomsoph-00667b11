@@ -1,5 +1,5 @@
-import { authorizeErpOperation, erpUuid, type ErpBackendDependencies, type ErpCompanyRequest } from "./erp-backend";
-import type { CatalogRepository, ContactInput, ProductInput, ErpCatalogReader } from "./erp-catalog-data";
+import { authorizeErpOperation, erpUuid, type ErpBackendDependencies, type ErpCompanyRequest } from "./erp-backend.ts";
+import type { CatalogRepository, ContactInput, ProductInput, ErpCatalogReader } from "./erp-catalog-data.ts";
 
 type TenantRow = { id: string; empresa_id: string };
 type Result<Row extends TenantRow> =
