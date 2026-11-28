@@ -9,10 +9,10 @@
 import { createClient } from "npm:@supabase/supabase-js@2.101.1";
 import { Buffer } from "node:buffer";
 import { Pool, type PoolClient } from "npm:pg@8.16.3";
-import { createErpCatalogBackend } from "../../../src/features/soph-gestao/server/erp-catalog-backend";
-import { createErpCatalogDataAdapter, type ErpCatalogScope } from "../../../src/features/soph-gestao/server/erp-catalog-data";
-import type { ErpDataAdapter, ErpIdentity } from "../../../src/features/soph-gestao/server/erp-data";
-import type { VerifiedSession } from "../../../src/features/soph-gestao/server/erp-backend";
+import { createErpCatalogBackend } from "../../../src/features/soph-gestao/server/erp-catalog-backend.ts";
+import { createErpCatalogDataAdapter, type ErpCatalogScope } from "../../../src/features/soph-gestao/server/erp-catalog-data.ts";
+import type { ErpDataAdapter, ErpIdentity } from "../../../src/features/soph-gestao/server/erp-data.ts";
+import type { VerifiedSession } from "../../../src/features/soph-gestao/server/erp-backend.ts";
 
 const APP_URL = "https://ospnuclymrxjoqwyolfn.supabase.co";
 const ISSUER = APP_URL + "/auth/v1";
