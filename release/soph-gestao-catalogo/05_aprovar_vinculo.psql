@@ -1,0 +1,17 @@
+\set ON_ERROR_STOP on
+
+-- As duas identidades e a autorização da proprietária devem constar
+-- na aprovação administrativa antes de executar este script.
+begin;
+set local role soph_catalogo_provisionador;
+
+insert into soph_catalogo_privado.vinculos
+  (issuer, subject, empresa_id, aprovado_por)
+values (
+  'https://ospnuclymrxjoqwyolfn.supabase.co/auth/v1',
+  :'subject'::uuid,
+  :'empresa_id'::uuid,
+  :'aprovado_por'
+);
+
+commit;

@@ -1,0 +1,36 @@
+name: Soph Gestão Catalog CI
+on:
+  pull_request:
+    paths:
+      - 'supabase/functions/soph-catalog/**'
+      - 'src/features/soph-gestao/**'
+      - 'tsconfig.soph-catalog.json'
+      - '.github/workflows/soph-catalog-ci.yml'
+      - 'package.json'
+      - 'package-lock.json'
+  push:
+    branches:
+      - codex/soph-gestao-integracao-real
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx tsc --noEmit -p tsconfig.app.json
+      - run: npx tsc --noEmit -p tsconfig.soph-catalog.json
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno install --entrypoint supabase/functions/soph-catalog/index.ts
+      - run: deno check supabase/functions/soph-catalog/index.ts
+      - run: npm test -- src/features/soph-gestao
+      - run: bash tests/soph-gestao/integration/run-local.sh
+      - run: npm run build

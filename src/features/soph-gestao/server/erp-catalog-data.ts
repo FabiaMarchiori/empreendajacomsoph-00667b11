@@ -1,4 +1,4 @@
-import type { ErpCompanyReader, ErpDataAdapter } from "./erp-data";
+import type { ErpCompanyReader, ErpDataAdapter } from "./erp-data.ts";
 
 export type ContactInput = {
   tipo: "cliente" | "fornecedor";
@@ -6,13 +6,12 @@ export type ContactInput = {
   telefone?: string | null;
   email?: string | null;
   documento?: string | null;
-  endereco?: string | null;
-  instagram?: string | null;
+  status?: "ativo" | "em_negociacao" | null;
 };
-export type ProductInput = { nome: string; categoria: string; custo: string; preco: string };
+export type ProductInput = { nome: string; categoria: string; custo: string; preco: string; sku?: string | null; estoque_minimo?: number | null };
 type TenantRow = { id: string; empresa_id: string };
-export type Contact = TenantRow & Omit<ContactInput, "tipo"> & { tipo: string | null };
-export type Product = TenantRow & Pick<ProductInput, "nome"> & { categoria: string | null; custo: string | null; preco: string | null; quantidade: number | null };
+export type Contact = TenantRow & Omit<ContactInput, "tipo"> & { tipo: string | null; endereco: string | null; instagram: string | null };
+export type Product = TenantRow & Pick<ProductInput, "nome"> & { categoria: string | null; custo: string | null; preco: string | null; quantidade: number | null; sku: string | null; estoque_minimo: number | null };
 
 export interface CatalogRepository<Input, Row extends TenantRow> {
   list(after?: string): Promise<Row[]>;
@@ -40,40 +39,56 @@ export function createErpCatalogDataAdapter(scope: ErpDataAdapter<ErpCatalogScop
         contacts: {
           async list(after) {
             return (await db.query<Contact>(
-              "select id, empresa_id, tipo, nome, telefone, email, documento, endereco, instagram from public.contatos where empresa_id = $1 and ($2::uuid is null or id > $2) order by id limit 101",
+              "select id, empresa_id, tipo, nome, telefone, email, documento, endereco, instagram, status from public.contatos where empresa_id = $1 and ($2::uuid is null or id > $2) order by id limit 101",
               [companyId, after ?? null],
             )).rows;
           },
-          async create({ tipo, nome, telefone, email, documento, endereco, instagram }) {
+          async create({ tipo, nome, telefone, email, documento, status }) {
             return (await db.query<Contact>(
-              "insert into public.contatos (empresa_id, tipo, nome, telefone, email, documento, endereco, instagram) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id, empresa_id, tipo, nome, telefone, email, documento, endereco, instagram",
-              [companyId, tipo, nome, telefone ?? null, email ?? null, documento ?? null, endereco ?? null, instagram ?? null],
+              "insert into public.contatos (empresa_id, tipo, nome, telefone, email, documento, status) values ($1,$2,$3,$4,$5,$6,$7) returning id, empresa_id, tipo, nome, telefone, email, documento, endereco, instagram, status",
+              [companyId, tipo, nome, telefone ?? null, email ?? null, documento ?? null, status ?? null],
             )).rows[0] ?? null;
           },
-          async update(id, { tipo, nome, telefone, email, documento, endereco, instagram }) {
+          async update(id, input) {
+            const parameters: (string | null)[] = [companyId, id, input.tipo, input.nome];
+            const assignments = ["tipo=$3", "nome=$4"];
+            for (const field of ["telefone", "email", "documento", "status"] as const) {
+              const value = input[field];
+              if (value === undefined) continue;
+              parameters.push(value);
+              assignments.push(`${field}=$${parameters.length}`);
+            }
             return (await db.query<Contact>(
-              "update public.contatos set tipo=$3, nome=$4, telefone=$5, email=$6, documento=$7, endereco=$8, instagram=$9 where empresa_id=$1 and id=$2 returning id, empresa_id, tipo, nome, telefone, email, documento, endereco, instagram",
-              [companyId, id, tipo, nome, telefone ?? null, email ?? null, documento ?? null, endereco ?? null, instagram ?? null],
+              `update public.contatos set ${assignments.join(", ")} where empresa_id=$1 and id=$2 returning id, empresa_id, tipo, nome, telefone, email, documento, endereco, instagram, status`,
+              parameters,
             )).rows[0] ?? null;
           },
         },
         products: {
           async list(after) {
             return (await db.query<Product>(
-              "select id, empresa_id, nome, categoria, custo::text as custo, preco::text as preco, quantidade from public.produtos where empresa_id=$1 and ($2::uuid is null or id > $2) order by id limit 101",
+              "select id, empresa_id, nome, categoria, custo::text as custo, preco::text as preco, quantidade, sku, estoque_minimo from public.produtos where empresa_id=$1 and ($2::uuid is null or id > $2) order by id limit 101",
               [companyId, after ?? null],
             )).rows;
           },
-          async create({ nome, categoria, custo, preco }) {
+          async create({ nome, categoria, custo, preco, sku, estoque_minimo }) {
             return (await db.query<Product>(
-              "insert into public.produtos (empresa_id, nome, categoria, custo, preco) values ($1,$2,$3,$4,$5) returning id, empresa_id, nome, categoria, custo::text as custo, preco::text as preco, quantidade",
-              [companyId, nome, categoria, custo, preco],
+              "insert into public.produtos (empresa_id, nome, categoria, custo, preco, sku, estoque_minimo) values ($1,$2,$3,$4,$5,$6,$7) returning id, empresa_id, nome, categoria, custo::text as custo, preco::text as preco, quantidade, sku, estoque_minimo",
+              [companyId, nome, categoria, custo, preco, sku ?? null, estoque_minimo == null ? null : String(estoque_minimo)],
             )).rows[0] ?? null;
           },
-          async update(id, { nome, categoria, custo, preco }) {
+          async update(id, input) {
+            const parameters: (string | null)[] = [companyId, id, input.nome, input.categoria, input.custo, input.preco];
+            const assignments = ["nome=$3", "categoria=$4", "custo=$5", "preco=$6"];
+            for (const field of ["sku", "estoque_minimo"] as const) {
+              const value = input[field];
+              if (value === undefined) continue;
+              parameters.push(value === null ? null : String(value));
+              assignments.push(`${field}=$${parameters.length}`);
+            }
             return (await db.query<Product>(
-              "update public.produtos set nome=$3, categoria=$4, custo=$5, preco=$6 where empresa_id=$1 and id=$2 returning id, empresa_id, nome, categoria, custo::text as custo, preco::text as preco, quantidade",
-              [companyId, id, nome, categoria, custo, preco],
+              `update public.produtos set ${assignments.join(", ")} where empresa_id=$1 and id=$2 returning id, empresa_id, nome, categoria, custo::text as custo, preco::text as preco, quantidade, sku, estoque_minimo`,
+              parameters,
             )).rows[0] ?? null;
           },
         },

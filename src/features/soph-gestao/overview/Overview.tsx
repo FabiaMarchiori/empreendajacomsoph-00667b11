@@ -13,6 +13,8 @@ import brushesImage from "@/assets/importadoras/categories/08-maquiagem.png";
 import "./overview.css";
 import { financeDelta, seedSales, useDemoState } from "../screens/demo-state";
 import { ErpScreen, screenConfig, type ScreenName } from "../screens/ErpScreen";
+import { RealCatalog } from "../screens/RealCatalog";
+import { RealOperations } from "../screens/RealOperations";
 
 const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const metrics = [
@@ -155,9 +157,9 @@ export default function Overview() {
           <Link className="sg-round" aria-label="Minha conta do EmpreendaJá" to="/conta"><UserRound /></Link>
         </div>
       </header>
-      <p className="sg-demo-notice">Modo demonstração. Os dados são fictícios e os cadastros e alterações são descartados ao sair ou recarregar.</p>
+      {(!area) && <p className="sg-demo-notice">Modo demonstração. Os dados são fictícios e os cadastros e alterações são descartados ao sair ou recarregar.</p>}
 
-      {area ? <ErpScreen key={area} area={area} empty={empty} onPeriodChange={setEmpty} demo={demo} /> : <>
+      {area ? (area === "contatos" || area === "produtos-estoque" ? <RealCatalog key={area} area={area} /> : <RealOperations key={area} area={area} />) : <>
       <section className="sg-metrics" aria-label="Indicadores do período">
         {metrics.map(({ label, change, icon: Icon, color }, index) => <article key={label} className={`sg-metric sg-${color}`}>
           <Icon className="sg-metric-icon" aria-hidden="true" />

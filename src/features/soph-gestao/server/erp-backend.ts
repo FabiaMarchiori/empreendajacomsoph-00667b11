@@ -1,5 +1,5 @@
-import { decideErpAccess, type VerifiedErpContext } from "../access/access-contract";
-import type { ErpCompany, ErpCompanyReader, ErpDataAdapter, ErpIdentity } from "./erp-data";
+import { decideErpAccess, type VerifiedErpContext } from "../access/access-contract.ts";
+import type { ErpCompany, ErpCompanyReader, ErpDataAdapter, ErpIdentity } from "./erp-data.ts";
 
 export type VerifiedSession = ErpIdentity & {
   audience: string | readonly string[];

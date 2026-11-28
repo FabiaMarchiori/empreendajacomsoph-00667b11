@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "netlify/functions/soph-catalog.ts",
+    "src/features/soph-gestao/server/**/*.ts",
+    "src/features/soph-gestao/access/access-contract.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts"
+  ]
+}
