@@ -14,27 +14,31 @@ Os SQLs de pré-verificação e verificação de permissões passaram. As confer
 
 ## O que foi desenvolvido
 
-- `netlify/functions/soph-catalog.ts`: autentica token no Auth da aplicação, valida e-mail confirmado, verifica o benefício ERP via `has_erp_access` e usa o vínculo privado para determinar a empresa. O `companyId` **não é confiado ao navegador**. Acesso SQL somente em transação com `SET LOCAL ROLE`, parâmetros de escopo locais e RLS.
+- `supabase/functions/soph-catalog/index.ts`: autentica token no Auth da aplicação, valida e-mail confirmado, verifica o benefício ERP via `has_erp_access` e usa o vínculo privado para determinar a empresa. O `companyId` **não é confiado ao navegador**. Acesso SQL somente em transação com `SET LOCAL ROLE`, parâmetros de escopo locais e RLS.
 - `src/features/soph-gestao/screens/RealCatalog.tsx`: telas reais de Contatos e Produtos (listagem, cadastro, edição, paginação). Erro fechado quando credenciais/vínculo faltam; não usa fixtures como substituto silencioso.
 - `Overview.tsx`: Contatos e Produtos usam RealCatalog. Vendas, Financeiro e Dashboard permanecem em demonstração e estão explicitamente identificados.
-- `tsconfig.soph-catalog.json`, `.github/workflows/soph-catalog-ci.yml`: compilação da API, verificação de bundle Netlify, testes unitários, testes de autenticação/RLS com PostgreSQL e GoTrue descartáveis e build do app.
+- `tsconfig.soph-catalog.json`, `.github/workflows/soph-catalog-ci.yml`: verificação da função Edge no Deno, testes unitários, testes de autenticação/RLS com PostgreSQL e GoTrue descartáveis e build do app.
 
 ## Etapas que faltam antes de liberar clientes
 
-1. **Provisionar credencial restrita com segurança.** Role `soph_catalogo_transport` está `LOGIN NOINHERIT NOBYPASSRLS`, **sem senha**. Gerar credencial aleatória com armazenamento seguro, criar senha somente na role restrita e configurar `SOPH_ERP_CATALOG_DATABASE_URL` como segredo de runtime Netlify. Formato: URL PostgreSQL do banco ERP, nunca usar `postgres`, `service_role` ou uma key de alto privilégio. O backend rejeita host e username incompatíveis com o projeto ERP. **Não registrar ou enviar senha por PR, logs ou mensagens.**
-2. Configurar `SOPH_APP_SUPABASE_ANON_KEY` no runtime Netlify para o Auth do EmpreendaJá, cujo emissor está fixado no código. Essa chave é pública, mas deve corresponder ao projeto correto.
+1. **Provisionar credencial restrita com segurança.** Role `soph_catalogo_transport` está `LOGIN NOINHERIT NOBYPASSRLS`, **sem senha**. Gerar credencial aleatória com armazenamento seguro, criar senha somente na role restrita e configurar `SOPH_ERP_CATALOG_DATABASE_URL` como segredo de runtime Supabase Edge no projeto EmpreendaJá. Formato: URL PostgreSQL do banco ERP, nunca usar `postgres`, `service_role` ou uma key de alto privilégio. O backend rejeita host e username incompatíveis com o projeto ERP. **Não registrar ou enviar senha por PR, logs ou mensagens.**
+2. Usar a variável automática `SUPABASE_ANON_KEY` do Supabase Edge do projeto EmpreendaJá; a API fica no Supabase independentemente do host frontend.
 3. **Aprovar vínculos administrativos reais** com `05_aprovar_vinculo.psql`, conferindo o UUID de uma conta Auth **com e-mail confirmado** na aplicação e o UUID da empresa ERP por documentação/autorização da titular. Não usar correspondência por e-mail como prova. Nenhum vínculo foi aprovado até o registro deste documento.
 4. Testar na prévia/ambiente não público: login próprio, ausência de acesso, benefício revogado, conta sem vínculo, outra empresa, CRUD com registros fictícios e releitura após recarregar, paginação, concorrência e conta legada. Testar cliente antigo com autorização e manter registros reais inalterados.
 5. Revisar as 14 concessões diretas antigas ao papel `anon` apontadas pelo Supabase Security Advisor. O REVOKE de `PUBLIC` **não eliminou** esses avisos; alterações adicionais podem afetar o ERP antigo.
 6. Confirmar estratégia de recuperação/backup antes de mudanças potencialmente destrutivas. Nenhuma evidência de restauração foi validada nesta etapa.
 7. Liberar a branch somente após prévia aprovada, sem mesclar automaticamente outras mudanças de segurança ou assinaturas do EmpreendaJá.
 
+## Hospedagem independente
+
+O frontend chama Supabase Edge Functions via `supabase.functions.invoke`. A API e os segredos pertencem ao projeto Supabase do EmpreendaJá, não ao Netlify. Nenhuma senha deve ir para o browser. A função Edge não foi implantada nesta etapa, pois o transporte ainda não possui uma senha segura e os vínculos ainda não foram aprovados.
+
 ## Limitações intencionais
 
 - A API não permite exclusão, ajuste direto de quantidade, movimentos de estoque, vendas ou financeiro. Essas operações exigem contratos próprios e testes adicionais.
 - `has_erp_access` é a fonte comercial atual; a revisão de segurança das assinaturas do EmpreendaJá continua sendo uma frente separada.
-- Os testes em GitHub CI validam código, banco/auth descartáveis e RLS, **não** substituem ensaio ponta a ponta com credenciais de produção em prévia Netlify.
-- Se a conexão estiver ausente ou falhar, a interface informa indisponibilidade em vez de salvar dados no navegador.
+- Os testes em GitHub CI validam código, banco/auth descartáveis e RLS, **não** substituem ensaio ponta a ponta com credenciais de produção em prévia isolada.
+- Se a conexão estiver ausente ou falhar, a interface informa indisponibilidade em vez de salvar dados no navegador. O site poderá mudar de hospedagem sem reconfigurar o backend: a tela usa `supabase.functions.invoke("soph-catalog")`.
 
 ## Verificação pós-release (consultas somente leitura)
 
