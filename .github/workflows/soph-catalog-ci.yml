@@ -2,7 +2,7 @@ name: Soph Gestão Catalog CI
 on:
   pull_request:
     paths:
-      - 'netlify/functions/soph-catalog.ts'
+      - 'supabase/functions/soph-catalog/**'
       - 'src/features/soph-gestao/**'
       - 'tsconfig.soph-catalog.json'
       - '.github/workflows/soph-catalog-ci.yml'
@@ -26,7 +26,10 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npx tsc --noEmit -p tsconfig.app.json
       - run: npx tsc --noEmit -p tsconfig.soph-catalog.json
-      - run: npx esbuild netlify/functions/soph-catalog.ts --bundle --platform=node --target=node22 --outfile=/tmp/soph-catalog.js
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno check supabase/functions/soph-catalog/index.ts
       - run: npm test -- src/features/soph-gestao
       - run: bash tests/soph-gestao/integration/run-local.sh
       - run: npm run build
