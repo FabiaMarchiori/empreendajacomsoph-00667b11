@@ -16,7 +16,6 @@ const APP_URL = "https://ospnuclymrxjoqwyolfn.supabase.co";
 const ISSUER = APP_URL + "/auth/v1";
 const AUDIENCE = "authenticated";
 const ERP_PROJECT = "qdfjujkfclfoojjofgpq";
-const role = "soph_catalogo_backend";
 const uuid = /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i;
 const allowedResources = new Set(["scope", "contacts", "products"]);
 const jsonHeaders = {
@@ -51,8 +50,10 @@ function validateDatabaseUrl(url: string): boolean {
     const parsed = new URL(url);
     if (!["postgres:", "postgresql:"].includes(parsed.protocol)) return false;
     // The dedicated least-privilege login; never accept postgres/service_role credentials.
-    if (!parsed.username.startsWith("soph_catalogo_transport")) return false;
-    return parsed.pathname === "/postgres" && parsed.hostname.endsWith(".supabase.com");
+    const direct = parsed.hostname === `db.${ERP_PROJECT}.supabase.co` && parsed.username === "soph_catalogo_transport";
+    const pooler = parsed.hostname.endsWith(".pooler.supabase.com")
+      && parsed.username === `soph_catalogo_transport.${ERP_PROJECT}`;
+    return parsed.pathname === "/postgres" && (direct || pooler);
   } catch { return false; }
 }
 
