@@ -1,4 +1,4 @@
-import type { ErpCompanyReader, ErpDataAdapter } from "./erp-data";
+import type { ErpCompanyReader, ErpDataAdapter } from "./erp-data.ts";
 
 export type ContactInput = {
   tipo: "cliente" | "fornecedor";
