@@ -32,32 +32,30 @@ const productFields: Field[] = [
   { key: "preco", label: "Preço (ex.: 25.90)", required: true },
   { key: "estoque_minimo", label: "Estoque mínimo", type: "number" },
 ];
-const endpoint = "/.netlify/functions/soph-catalog";
 type ApiError = Error & { status?: number };
+async function catalogRequest<T>(resource: "scope" | "contacts" | "products", action = "GET", input?: object, params?: Record<string, string>): Promise<T> {
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError || !session?.access_token) throw new Error("Faça login novamente no EmpreendaJá.");
 
-async function catalogRequest<T>(resource: "scope" | "contacts" | "products", method = "GET", input?: object, params?: Record<string, string>): Promise<T> {
-  const { data: { session }, error } = await supabase.auth.getSession();
-  if (error || !session?.access_token) throw new Error("Faça login novamente no EmpreendaJá.");
-  const url = new URL(endpoint, window.location.origin);
-  url.searchParams.set("resource", resource);
-  for (const [key, value] of Object.entries(params ?? {})) url.searchParams.set(key, value);
-  const response = await fetch(url.toString(), {
-    method, headers: { Authorization: `Bearer ${session.access_token}`, ...(input ? { "Content-Type": "application/json" } : {}) },
-    body: input ? JSON.stringify(input) : undefined,
-    cache: "no-store",
+  // The API belongs to Supabase. The website can move to another host without changing the backend.
+  const { data, error } = await supabase.functions.invoke("soph-catalog", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${session.access_token}` },
+    body: { resource, action, ...(input ? { input } : {}), ...(params ?? {}) },
   });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const failure = new Error(response.status === 409
+  if (error) {
+    const response = "context" in error ? error.context as Response | undefined : undefined;
+    const status = response?.status;
+    const failure = new Error(status === 409
       ? "O vínculo da sua conta com a empresa ainda precisa de aprovação."
-      : response.status === 403 ? "Seu acesso ao Soph Gestão não está autorizado."
-      : response.status === 503 ? "A conexão segura do Soph Gestão ainda não está disponível."
-      : response.status === 401 ? "Sua sessão expirou. Entre novamente."
+      : status === 403 ? "Seu acesso ao Soph Gestão não está autorizado."
+      : status === 503 ? "A conexão segura do Soph Gestão ainda não está disponível."
+      : status === 401 ? "Sua sessão expirou. Entre novamente."
       : "Não foi possível concluir a operação.") as ApiError;
-    failure.status = response.status;
+    failure.status = status;
     throw failure;
   }
-  return payload as T;
+  return data as T;
 }
 function fieldValue(row: CatalogRow | null, key: string): string {
   if (!row) return "";
