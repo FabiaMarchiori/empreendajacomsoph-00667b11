@@ -1,0 +1,30 @@
+name: Soph Gestão Catalog CI
+on:
+  pull_request:
+    paths:
+      - 'netlify/functions/soph-catalog.ts'
+      - 'src/features/soph-gestao/**'
+      - 'tsconfig.soph-catalog.json'
+      - '.github/workflows/soph-catalog-ci.yml'
+      - 'package.json'
+      - 'package-lock.json'
+  push:
+    branches:
+      - codex/soph-gestao-integracao-real
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx tsc --noEmit -p tsconfig.app.json
+      - run: npx tsc --noEmit -p tsconfig.soph-catalog.json
+      - run: npm test -- src/features/soph-gestao
+      - run: npm run build
